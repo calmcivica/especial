@@ -4,8 +4,6 @@ import json
 import streamlit as st
 import uuid
 from settings import Snowflake_conexion as sc
-from snowflake.snowpark import Session
-import snowflake.connector
 import time
 import threading
 from streamlit.components.v1 import html

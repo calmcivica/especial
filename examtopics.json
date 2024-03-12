@@ -2,15 +2,15 @@
     {
         "question_number": 1,
         "question_area": "Testing",
-        "question": "Currently, in our project we have for the stg_heroku_postgres_events model two tests:\n1)Generic test\n2)Singular test > Test name: validate_events.sql\nWe need to run the singular test to validate that the test works correctly. Note: Only singular tests assigned to this model should be run.\n (2 correct answers)",
+        "question": "Currently, in our project we have for the stg_heroku_postgres_events model two tests: 1)Generic test 2)Singular test > Test name: validate_events.sql We need to run the singular test to validate that the test works correctly. Note: Only singular tests assigned to this model should be run.  (2 correct answers)",
         "answers": [
             "dbt test -s stg_heroku_postgres_events",
-            "dbt test -s stg_heroku_postgres_events,test_type:singular",
-            "dbt test -s stg_heroku_postgres_events test_type:singular",
+            "dbt test -s stg_heroku_postgres_events,test_type: singular",
+            "dbt test -s stg_heroku_postgres_events test_type: singular",
             "dbt test -s stg_heroku_postgres_events,test_name: validate_events"
         ],
         "correct_answer": [
-            "dbt test -s stg_heroku_postgres_events,test_type:singular",
+            "dbt test -s stg_heroku_postgres_events,test_type: singular",
             "dbt test -s stg_heroku_postgres_events,test_name: validate_events"
         ],
         "explanation": "With the comma we are forcing the double condition and the second condition is singular tests or the exact name of the test, and in the question we are being asked to run only the singular tests assigned to this model.",
@@ -19,15 +19,15 @@
     {
         "question_number": 2,
         "question_area": "Testing",
-        "question": "In a test we want to define the following logic:\nif there are 100 or fewer records that fail the test > Warning.\nIf there are more than 100 records that pass the test > Error",
+        "question": "In a test we want to define the following logic: if there are 100 or fewer records that fail the test > Warning. If there are more than 100 records that pass the test > Error",
         "answers": [
-            "severity: warn\nerror_if: \">100\"\nwarn_if: \"<=100\"",
-            "severity: error\nerror_if: \"<100\"\nwarn_if: \">=100\"",
-            "severity: warn\nerror_if: \"<100\"\nwarn_if: \">=100\"",
-            "severity: error\nerror_if: \">100\"\nwarn_if: \"<=100\""
+            "severity: warn error_if:  '>100 ' warn_if:  '<=100 '",
+            "severity: error error_if:  '<100 ' warn_if:  '>=100 '",
+            "severity: warn error_if:  '<100 ' warn_if:  '>=100 '",
+            "severity: error error_if:  '>100 ' warn_if:  '<=100 '"
         ],
         "correct_answer": [
-            "severity: error\nerror_if: \">100\"\nwarn_if: \"<=100\""
+            "severity: error error_if:  '>100 ' warn_if:  '<=100 '"
         ],
         "explanation": "If we want a test fail, when we configure the severity, the error severity is mandatory.",
         "reference": "https://docs.getdbt.com/reference/resource-configs/severity"
@@ -74,7 +74,7 @@
         "correct_answer": [
             "adapter.dispatch"
         ],
-        "explanation": "dbt uses two criteria when searching for the right candidate macro to delegate implementation to: adapter prefix (e.g. snowflake__) and namespace. So, if you define a macro called 'concat' whose implementation is just a call to adapter.dispatch() , and you are running on Snowflake, dbt will look for a macro called 'snowflake__concat' to actually call when you call 'concat'.\nBy default, dbt will search for macro implementations in the root project and internal projects. However, if the optional macro_namespace argument is provided, dbt instead searches the specified namespace/package for implementations. It is also possible to dynamically route namespace searching via the dispatch project config option.",
+        "explanation": "dbt uses two criteria when searching for the right candidate macro to delegate implementation to: adapter prefix (e.g. snowflake__) and namespace. So, if you define a macro called 'concat' whose implementation is just a call to adapter.dispatch() , and you are running on Snowflake, dbt will look for a macro called 'snowflake__concat' to actually call when you call 'concat'. By default, dbt will search for macro implementations in the root project and internal projects. However, if the optional macro_namespace argument is provided, dbt instead searches the specified namespace/package for implementations. It is also possible to dynamically route namespace searching via the dispatch project config option.",
         "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/dispatch"
     },
     {
@@ -90,7 +90,7 @@
         "correct_answer": [
             "dispatch"
         ],
-        "explanation": "The default behavior (since v0.21.1) is to look in the root project first, then in the package named by macro_namespace. This is what allows you to overwrite macros in dbt Core, dbt-utils, etc., with your own simply by defining a new macro with the same name in your local repo.\nOnce use case for changing this behavior is to defer to a platform-specific implementation of a macro before defaulting to the general version with the dispatch configuration.",
+        "explanation": "The default behavior (since v0.21.1) is to look in the root project first, then in the package named by macro_namespace. This is what allows you to overwrite macros in dbt Core, dbt-utils, etc., with your own simply by defining a new macro with the same name in your local repo. Once use case for changing this behavior is to defer to a platform-specific implementation of a macro before defaulting to the general version with the dispatch configuration.",
         "reference": "https://docs.getdbt.com/reference/project-configs/dispatch-config"
     },
     {
@@ -1081,8 +1081,7 @@
             "Select function"
         ],
         "correct_answer": "Source function",
-        "explanation": "The `source` function is used in dbt to reference and build dependencies
-    on raw tables that are defined as sources in your project. It allows models to use these tables as a starting point for transformations.","reference": "https: //docs.getdbt.com/docs/building-a-dbt-project/using-sources"
+        "explanation": "The `source` function is used in dbt to reference and build dependencies on raw tables that are defined as sources in your project. It allows models to use these tables as a starting point for transformations.","reference": "https: //docs.getdbt.com/docs/building-a-dbt-project/using-sources"
     },
     {
         "question_number": 84,
@@ -1120,9 +1119,7 @@
             "Generic tests are configured in YAML and run on specific columns in a model",
             "Singular tests are specific queries run against your models",
             "Generic tests are SQL queries stored in .sql files",
-        "
-        
-        Singular tests are configured in YAML and do not return specific failing rows"
+            "Singular tests are configured in YAML and do not return specific failing rows"
         ],
         "correct_answer": "Generic tests are configured in YAML and run on specific columns in a model",
         "explanation": "Generic tests in dbt are defined in YAML files and are applied to specific columns within models to validate data quality rules like not_null, unique, accepted_values, and relationships. Singular tests, on the other hand, are specific SQL queries stored in .sql files within the tests directory and are designed to test the entire model.",
@@ -1143,9 +1140,7 @@
     {
         "question_number": 88,
         "question_area": "Testing",
-        "question": "In what folder should singular tests be saved in your
-            
-            dbt project?","answers": ["Tests folder","Models folder",
+        "question": "In what folder should singular tests be saved in your dbt project?","answers": ["Tests folder","Models folder",
         "Macros folder",
         "Snapshots folder"
     ],
@@ -1236,13 +1231,13 @@
     "question_area": "Documentation",
     "question": "What is the correct way to reference the doc block called 'orders', contained in a file called docs_jaffle_shop.md?",
     "answers": [
-        "description: '{{ doc(\"orders\") }}'",
+        "description: '{{ doc( 'orders ') }}'",
         "description: 'doc(orders)'",
         "description: '{{ orders }}'",
         "description: 'orders'"
     ],
-    "correct_answer": "description: '{{ doc(\"orders\") }}'",
-    "explanation": "The correct syntax to reference a doc block in dbt documentation is '{{ doc(\"block_name\") }}'. This Jinja notation tells dbt to insert the content of the specified doc block.",
+    "correct_answer": "description: '{{ doc( 'orders ') }}'",
+    "explanation": "The correct syntax to reference a doc block in dbt documentation is '{{ doc( 'block_name ') }}'. This Jinja notation tells dbt to insert the content of the specified doc block.",
     "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/documentation#referencing-docs"
 },
 {
@@ -2688,12 +2683,12 @@
     "question_area": "Project configs",
     "question": "How will you enable --cache-selected-only config using yaml configs?",
     "answers": [
-        "config:\n  cache_selected_only: true",
+        "config:   cache_selected_only: true",
         "cache-selected-only: true",
-        "cache:\n  selected_only: true",
+        "cache:   selected_only: true",
         "enable_cache_selected_only: true"
     ],
-    "correct_answer": "config:\n  cache_selected_only: true",
+    "correct_answer": "config:   cache_selected_only: true",
     "explanation": "To enable the --cache-selected-only config using YAML configs, you need to add the cache_selected_only configuration under the config key in your profiles.yml file.",
     "reference": "https://docs.getdbt.com/reference/global-configs/about-global-configs#available-flags"
 },
@@ -2904,7 +2899,7 @@
 {
     "question_number": 227,
     "question_area": "Git",
-    "question": "A user stage changes by running the 'git add .' command.\n\nStaged files were, dim_products.sql\n\n dim_orders.sql\n\nNow, the user wants to unstage 'dim_orders.sql' file alone, what command does the user need to run?",
+    "question": "A user stage changes by running the 'git add .' command.  Staged files were, dim_products.sql   dim_orders.sql  Now, the user wants to unstage 'dim_orders.sql' file alone, what command does the user need to run?",
     "answers": [
         "git reset dim_orders",
         "git reset HEAD dim_orders.sql",
@@ -2920,12 +2915,12 @@
     "question_area": "Git",
     "question": "How can a user add and commit files at the same time?",
     "answers": [
-        "By using the -am flag in git commit command, i.e. git commit -am \"commit message\"",
+        "By using the -am flag in git commit command, i.e. git commit -am  'commit message '",
         "By using the -a flag in git add command, i.e. git add -a",
-        "By using the -c flag in git commit command, i.e. git commit -c \"commit message\"",
+        "By using the -c flag in git commit command, i.e. git commit -c  'commit message '",
         "By using the -f flag in git add command, i.e. git add -f"
     ],
-    "correct_answer": "By using the -am flag in git commit command, i.e. git commit -am \"commit message\"",
+    "correct_answer": "By using the -am flag in git commit command, i.e. git commit -am  'commit message '",
     "explanation": "The -am flag in the git commit command allows the user to add and commit files at the same time. It stages all modified files and commits them with the specified commit message.",
     "reference": "https://git-scm.com/docs/git-commit#Documentation/git-commit.txt--a"
 },

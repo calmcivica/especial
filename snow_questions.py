@@ -2,8 +2,6 @@ from docx import Document
 import streamlit as st
 from helper import Menu,pregunta,comparar_respuestas,setexam,aux_exam,parse_timestamp
 import json
-from settings import Snowflake_conexion as sc
-import snowflake.connector
 import ast
 import random
 import time
