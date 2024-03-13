@@ -1,8 +1,9 @@
 import random
 import string
 import streamlit as st
-# Debe de ir primero para evitar el error de llamar 
-# a más de una app en el mismo streamlit
+
+# You must launch this first to avoid the calling error
+# of more than one application in the same streamlit
 st.set_page_config(page_title="Especialidades", layout="wide")
 
 import dbt_questions as dbt
@@ -10,12 +11,11 @@ import snow_questions as sn
 
 PAGES = ["Intro 🔰", "Practicar 🥊", "Exámenes 📄", "Progreso 📈", "Parreitor-3000 🤖"]
 
+# Creating perzonalized buttons
 sn_init_button = """
         <style>.element-container:has(#button-after-sn) + div button {"""
-
 dbt_init_button = """
         <style>.element-container:has(#button-after-dbt) + div button {"""
-
 button = """
             border: none;
             color: white;
@@ -33,23 +33,22 @@ button = """
             """
 sn_end_button = """background-color: #1e88e5;
         }</style>"""
-
 dbt_end_button = """background-color: #f4511e;
         }</style>"""
 
+### Session_state to:
+# snowflake
 def go_to_snowflake():
     st.session_state.page = 'snowflake'
-
+# dbt
 def go_to_dbt():
     st.session_state.page = 'dbt'
 
-# Navigation functions
+### Definig Main: ESPECIALIDADES
 def go_to_main():
     st.session_state.page = 'main'
-    # Set a title
+    # Set a title and subtitle
     st.markdown("<h1 style='text-align: center; color: white;'>Especialidades</h1>", unsafe_allow_html=True)
-
-    # Set a question
     st.markdown("<h3 style='text-align: center; color: white;'>¿En qué especialidad quieres volverte un máquina?</h3>", unsafe_allow_html=True)
 
     # Center the buttons within a container
@@ -66,13 +65,14 @@ def go_to_main():
         st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
         st.button('dbt',on_click=go_to_dbt)
     st.markdown('</div>', unsafe_allow_html=True)  # End of container div
-    
 
+######### SESSION_STATE to change between files:
+## Main Page
 # Initialize MAIN if session_state is not present or to return to main
 if 'page' not in st.session_state or st.session_state.page == 'main':
     go_to_main()
 
-# Snowflake Page
+## Snowflake Page
 elif st.session_state.page == 'snowflake':
     st.title('Snowflake')
     if st.button('Back to Main', key='back-to-main-from-snowflake'):
@@ -97,7 +97,7 @@ elif st.session_state.page == 'snowflake':
     elif st.session_state['current_page'] == "Parreitor-3000 🤖":
         sn.parreitor()
 
-# dbt Page
+## dbt Page
 elif st.session_state.page == 'dbt':
     st.title('dbt')
     if st.button('Back to Main', key="back-to-main-from-dbt"):
