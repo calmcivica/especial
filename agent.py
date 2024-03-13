@@ -4,16 +4,16 @@ import os
 from langchain.vectorstores.pinecone import Pinecone
 from settings import Snowflake_conexion as s
 from LangSnow import SnowflakeLoader
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.agents import tool
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.tools.render import format_tool_to_openai_function
+from langchain_core.utils.function_calling import convert_to_openai_function
 from langchain.agents.format_scratchpad.openai_functions import format_to_openai_functions
 from langchain.agents.output_parsers import OpenAIFunctionsAgentOutputParser
 from langchain.schema.agent import AgentFinish
 from langchain.agents import AgentExecutor
 from langchain.schema.messages import HumanMessage, AIMessage
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 import pinecone
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") 
@@ -81,7 +81,7 @@ Answer in the language that the question was formulated please and don't ask que
 
 
 llm_with_tools = llm.bind(
-    functions=[format_tool_to_openai_function(t) for t in tools]
+    functions=[convert_to_openai_function(t) for t in tools]
 )
 
 chat_history = []

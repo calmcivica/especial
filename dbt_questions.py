@@ -11,6 +11,15 @@ import plotly.express as px
 from datetime import datetime, timedelta
 import pandas as pd
 import pyodbc
+#connection_parameters = {
+#"account": sc["account"],
+#"user": sc["user"],
+#"authenticator": sc["authenticator"],
+#"role": sc["role"],  # optional
+#"warehouse": sc["warehouse"],  # optional
+#"database": sc["database"],  # optional
+#"schema": sc["schema"],  # optional
+#} 
 
 # Parámetros de conexión
 server = '172.17.24.35'  
@@ -24,81 +33,77 @@ connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};D
 conn = pyodbc.connect(connection_string)
 
 # Abre el archivo JSON en modo lectura
-with open(r'examtopics.json', 'r', encoding='utf-8') as archivo:
+with open(r'dbt_examtopics.json', 'r', encoding='utf-8') as archivo:
     datos = json.load(archivo)
 
 if 'user' not in st.session_state:
     st.session_state['user'] = None
 user = st.session_state['user']
 
-
 def Comienzo():
     Menu(conn)
     info = """
-# SnowPro® Core Certification 
+# dbt Analytics Engineering Certification Exam
 
 ## Descripción General
-La certificación te hará aprender cosas que no sabías de Snowflake y te ayuda en tu carrera profesional. Además cada certificación que obtenemos mejora la relación de partners con Snowflake mejorando el posicionamiento de la compañia.
+La certificación te hará aprender cosas que no sabías de dbt y te ayuda en tu carrera profesional. Además cada certificación que obtenemos mejora la relación de partners con dbt mejorando el posicionamiento de la compañia.
 
 
 ## Temario
-| Dominio                                          | Ponderación en el Examen |
-| ------------------------------------------------ | -----------------------: |
-| **1.0 Snowflake Data Cloud Features & Architecture** |                   **25%** |
-| **2.0 Account Access and Security**                  |                   **20%** |
-| **3.0 Performance Concepts**                         |                   **15%** |
-| **4.0 Data Loading and Unloading**                   |                   **10%** |
-| **5.0 Data Transformations**                         |                   **20%** |
-| **6.0 Data Protection and Data Sharing**             |                   **10%** |
+| ¿Qué se pide en este examen?                                  |
+| ------------------------------------------------------------- |
+| **1.0 Developing dbt models**                                 |
+| **2.0 Debugging data modeling errors**                        |
+| **3.0 Monitoring data pipelines**                             |
+| **4.0 Implementing dbt tests**                                |
+| **5.0 Deploying dbt jobs**                                    |
+| **6.0 Creating and maintaining dbt documentation**            |
+| **7.0 Promoting code through version control**                |
+| **8.0 Establishing environments in data warehouse for dbt**   |
 
 
 ## Formato del Examen
 
-- **Cantidad de Preguntas:** 100
+- **Cantidad de Preguntas:** 65
 - **Tipo de Preguntas:** Selección múltiple, Opción múltiple o Verdadero/Falso
 - **Duración:** 120 minutos
-- **Puntuación para Aprobar:** 75% o más
-- **Idiomas Disponibles:** Inglés y Japonés
-- **Precio:** $175 USD por intento, pero tranquilo, paga cívica
+- **Puntuación para Aprobar:** 65% o más
+- **Idiomas Disponibles:** Inglés
+- **Precio:** $200 USD por intento, pero tranquilo, paga cívica
 
 """
 
     st.markdown(info)
 
-def examen():
 
+
+    
+
+def examen():
     exam_mode = 0
     if 'exam_mode' not in st.session_state:
         st.session_state['exam_mode'] = exam_mode
     question_set = []
     if 'question_set' not in st.session_state:
         st.session_state['question_set'] = question_set
-
     if st.session_state.get('exam_mode', 0) == 0:
         with st.container():
         #exam_mode = st.session_state['exam_mode']
-
             Menu(conn)
             st.title('Examen')
             st.write('Empieza ajustando los filtros y luego las opciones')
         #exam_mode = st.session_state['exam_mode']
 
-
             with st.container():
-
                 Filtros,settings = st.columns(2, gap = "large")
                 with Filtros:
                     st.subheader("Filtros")
                     values = st.slider('Seleccione rango de preguntas que pueden caer en el examen',0, len(datos), (0, len(datos)),step=1,)
-
                     secciones = st.multiselect('¿ Que secciones quieren tocar ? (Todas por defecto)',["Todas","Snowflake Cloud Data Platform Features and Architecture","Account Access and Security","Performance Concepts","Data Loading and Unloading","Data Transformations","Data Protection and Data Sharing"])
-
                     option = st.multiselect('Otros filtros',["Todas","Sin hacer","Falladas en exámenes","Falladas en práctica"])
-
                     preguntas_filtradas = [item for item in datos if values[0] <= item["question_number"] <= values[1]]
                     if "Todas" not in secciones and secciones !=[]:
                         preguntas_filtradas = [item for item in preguntas_filtradas if item["question_area"] in secciones]
-
                     consulta_preguntas_hechas = f"""    SELECT
                     STRING_AGG(CASE WHEN question_id IS NOT NULL THEN CAST(question_id AS NVARCHAR(10)) END, ',') WITHIN GROUP (ORDER BY question_id) AS Hechas,
                     STRING_AGG(CASE WHEN type = 'Examen' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(10)) END, ',') WITHIN GROUP (ORDER BY question_id) AS Examen_falsas,
@@ -106,43 +111,27 @@ def examen():
                     FROM
                     esnowflake.esnowflake_DEV.Fact_Answers where user_nickname = '{user}';"""
                     aux_opcion = conn.cursor().execute(consulta_preguntas_hechas).fetchall()
-
-
                     no_hechas = []
                     opcion_examen_falsas=[]
                     opcion_practicas_falsas=[]
-
                     total_question = range(len(datos))
                     hechas = aux_opcion[0][0]
-
                     if "Falladas en exámenes" in option:
                         opcion_examen_falsas = ast.literal_eval(aux_opcion[0][1])
-
                     if "Falladas en práctica" in option:
                         opcion_practicas_falsas = ast.literal_eval(aux_opcion[0][2])
-
                     if "Sin hacer" in option:
                         no_hechas = list(set(total_question) - set(hechas))
-
                     opcion_final = list(set(no_hechas + opcion_examen_falsas + opcion_practicas_falsas))
                     # AÑADIR FILTRO OTROS
                     if "Todas" not in option and option != []:
-
                         preguntas_filtradas = [item for item in preguntas_filtradas if item["question_number"] in opcion_final]
-
                     question_set = [item["question_number"] for item in preguntas_filtradas]
-
                     random.shuffle(question_set)
-
-
-
 
                 with settings:
                     st.subheader("Opciones")
-                     # Número de preguntas
-
-
-
+                    # Número de preguntas
                     num_questions = st.number_input('Número de Preguntas', min_value=0, max_value=len(question_set), value=len(question_set),help = "El valor máximo viene dictaminado por el filtrado que hagas")
                     selected_questions = random.sample(question_set, num_questions)
                     st.session_state['question_set'] = selected_questions
@@ -151,18 +140,15 @@ def examen():
                     with st.expander("¿Como es el examen real?"):
                         info = """
         ## Formato del Examen
-
-        - **Cantidad de Preguntas:** 100
+        - **Cantidad de Preguntas:** 65
         - **Tipo de Preguntas:** Selección Múltiple, Opción múltiple o Verdadero/Falso
         - **Duración:** 120 minutos
-        - **Puntuación para Aprobar:** 75% o más
-
+        - **Puntuación para Aprobar:** 65% o más
 
         ### Nota Adicional
         Podrás marcar preguntas para revisarlas más tarde durante el examen. 
-
         """
-                        st.markdown(info)
+                st.markdown(info)
                 with st.container():
                     espaci1,boton,espaci2 = st.columns(3,gap = "large")
                     if num_questions == 0:
@@ -171,19 +157,14 @@ def examen():
                         with boton:
                             st.button("Comenzar examen",use_container_width=1,on_click = aux_exam , args = ('empezar',exam_duration,None))
 
-
     elif st.session_state.get('exam_mode', 0) == 1:
-
-
         with st.container():
-            
             question_set = st.session_state['question_set'] 
             exam_duration = st.session_state['exam_duration']
             setexam(question_set, datos, "examen", conn, user,exam_time = exam_duration)
             
 
     elif st.session_state.get('exam_mode', 0) == 2:
-
         exam_duration = st.session_state['exam_duration']
         exam_id_V = conn.cursor().execute(f"select coalesce(max(id_exam),1) from esnowflake.esnowflake_DEV.FACT_EXAMS where user_nickname = '{user}' ").fetchall()
         exam_id = exam_id_V[0][0]
@@ -194,11 +175,9 @@ def examen():
         for answer in user_answers:
             question_number = answer["question_number"]
             timestamp = answer["timestamp"]
-
             # Comprobar si la pregunta ya tiene una respuesta almacenada
             if question_number not in latest_answers or timestamp > latest_answers[question_number]["timestamp"]:
                 latest_answers[question_number] = answer
-
         # Convertir el diccionario de respuestas más recientes en una lista
         filtered_answers = list(latest_answers.values())
 
@@ -232,7 +211,7 @@ def examen():
                 is_answered = 0  
 
             if i != 0:
-               values_list.append(", ")
+                values_list.append(", ")
             values_list.append(f"({question_number}, '{user}', 'examen', {exam_id}, {int(is_correct)}, {int(is_answered)}, CURRENT_TIMESTAMP)")
             insert += "".join(values_list)
 
@@ -261,7 +240,7 @@ set
         if tiempo_invertido_V:
             tiempo = tiempo_invertido_V[0][0]
         else:
-             tiempo = 0  
+            tiempo = 0  
         minutos = tiempo // 60
         segundos = tiempo % 60
         tiempo_formato = f"{minutos} minutos y {segundos} segundos"
@@ -284,7 +263,7 @@ set
             labels = 'Acertadas', 'Falladas', 'No Respondidas'
             values = [preguntas_acertadas, preguntas_falladas, preguntas_no_respondidas]
             colors = ['green', 'red', 'blue']  # Colores para cada sección
-       #        Crear un gráfico de donut
+        #        Crear un gráfico de donut
             fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.5,marker_colors=colors)])
             fig.update_layout(title_text='Resultados')
             # Mostrar el gráfico en Streamlit
@@ -304,7 +283,6 @@ set
 
     else:
         with st.container():
-
             'nada' 
 
 
@@ -358,7 +336,6 @@ PD: Por si todo esto no fuese suficiente, cada 100 preguntas respondidas tendre�
             hechas_lista = ast.literal_eval(hechas)
             hechas_int = [int(num) for num in list(hechas_lista)]
 
-
             no_hechas = [item["question_number"] for item in preguntas_filtradas if item["question_number"] not in hechas_int]
 
 
@@ -381,7 +358,6 @@ PD: Por si todo esto no fuese suficiente, cada 100 preguntas respondidas tendre�
 
 def progreso():
     Menu(conn)
-
     user = st.session_state['user']
     if user == None:
         st.write('Elige tu usuario para ver tu progreso')
@@ -414,7 +390,7 @@ def progreso():
             df_preguntas = pd.DataFrame(datos)
             total_preguntas_por_seccion = df_preguntas['question_area'].value_counts()
             df_combinado = df.merge(df_preguntas[['question_number', 'question_area']], left_on='question_id', right_on='question_number', how='left')
-             #   Convertir la lista de preguntas en un DataFrame
+            #   Convertir la lista de preguntas en un DataFrame
             df_preguntas_totales = pd.DataFrame(datos)
             # Crear DataFrame de referencia para todas las secciones
             # Crear DataFrame de referencia para todas las secciones
@@ -473,9 +449,6 @@ def progreso():
                         st.plotly_chart(fig,use_container_width=1)
                 # Actualizar el contador de columnas y resetear si es necesario
                 column_counter = (column_counter + 1)
-
-
-
 
 
             secciones,exams = st.columns([2,1],gap = "large")
@@ -548,9 +521,9 @@ def progreso():
                     num_questions = examen['number_of_questions'] if pd.notnull(examen['number_of_questions']) else 0
                     en_blanco = examen['number_of_questions'] - (examen['number_of_correct_questions'] or 0) - (examen['number_of_failed_questions'] or 0)
                     fig = go.Figure(go.Pie(labels=['Acertadas', 'Falladas', 'En Blanco'],
-                                           values=[examen['number_of_correct_questions'], examen['number_of_failed_questions'], en_blanco],
-                                           marker_colors=colores,
-                                           hole=0.4))
+                                        values=[examen['number_of_correct_questions'], examen['number_of_failed_questions'], en_blanco],
+                                        marker_colors=colores,
+                                        hole=0.4))
                     fig.update_traces(textinfo='percent+label')
                     fig.update_layout(width=ancho, height=alto)
 
@@ -600,7 +573,3 @@ def parreitor():
 
         # Añadir respuesta del asistente a la sesión
         st.session_state.messages.append({"role": "assistant", "content": response})
-
-
-
-

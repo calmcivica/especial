@@ -22,4 +22,4 @@ RUN pip install -r compose/requirements.txt
 
 EXPOSE 8501
 
-ENTRYPOINT ["streamlit", "run", "snow_questions.py", "--server.port=8501", "--server.address=0.0.0.0"]
+ENTRYPOINT ["streamlit", "run", "especialidades.py", "--server.port=8501", "--server.address=0.0.0.0"]

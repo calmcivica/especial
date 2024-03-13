@@ -46,9 +46,7 @@ def extract_questions_and_answers(docx_file_path):
 
     return questions_with_answers
 
-
 def Menu(conn):
-
     with st.container():
         
         if 'user' not in st.session_state:
@@ -83,43 +81,12 @@ def Menu(conn):
             st.session_state['user'] = useri
 
 
-    with st.container():
-        
-        c1,c2,c3,c4,c5 = st.columns(5,gap="small")
-
-        pages_dict = { 
-        "Comienzo": ["Intro","🔰","Comienzo()",c1],
-        "Practicar":["Practicar","🥊","practicar()",c2],
-        "Exámenes": ["Exámenes","📄","examen()",c3],
-        "Progreso": ["Progreso"," 📈","progreso()",c4],
-        "Parreitor-3000" : ["Parreitor-3000","🤖","parreitor()",c5]
-        }
-
-        for key in pages_dict:
-            labele = f"""
-{pages_dict[key][0]} 
-
-{pages_dict[key][1]}"""
-            with pages_dict[key][3]:
-                
-                if st.button(labele,use_container_width = True):
-                        st.session_state['current_page'] = key
-                        clear_cache(['current_page','user'])
-                        st.experimental_rerun()
-                if st.session_state['current_page'] == str(key):
-                    st.divider()
-
-        st.divider()
 
 def checkbox_help(unique_key):
     if st.session_state[unique_key] == 0:
         st.session_state[unique_key] = 1
     elif st.session_state[unique_key] == 1:
         st.session_state[unique_key] = 0
-
-
-    
-
 
 def pregunta(jason,n,mode,user,conn):
         
@@ -174,7 +141,7 @@ def pregunta(jason,n,mode,user,conn):
                         try:
                             is_correct_int = 1 if is_correct else 0
                             is_answered_int = 1 if is_answered else 0
-                              
+                            
                             query = f"INSERT INTO esnowflake.esnowflake_DEV.Fact_Answers select {n},'{user}','{mode}',null,{is_correct_int},{is_answered_int},current_timestamp"
                             conn.cursor().execute(query)
                             conn.cursor().commit()
@@ -274,7 +241,7 @@ def aux_exam(accion,exam_duration,users_answers):
             st.session_state['exam_duration'] = exam_duration
 
         st.session_state['exam_mode'] = exam_mode
-         # Muestra el mensaje
+        # Muestra el mensaje
         mensaje_temporal = st.empty()
         mensaje_temporal.write('El examen ha comenzado, si cierras la aplicación sin terminar el examen no podrás ver tus resultados, estos se perderan y no serán registrados. ¡Suerte!')
         
