@@ -8,7 +8,34 @@ import time
 import threading
 from streamlit.components.v1 import html
 import datetime
+import pyodbc
 
+
+
+@st.cache_resource
+def init_connection():
+    return pyodbc.connect(
+        "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
+        + st.secrets["server"]
+        + ";DATABASE="
+        + st.secrets["database"]
+        + ";UID="
+        + st.secrets["username"]
+        + ";PWD="
+        + st.secrets["password"]
+    )
+
+def open_file(json_file):
+    # Abre el archivo JSON en modo lectura
+    with open(json_file, 'r', encoding='utf-8') as archivo:
+        datos = json.load(archivo)
+    return datos
+
+def get_user_none():
+    if 'user' not in st.session_state:
+        st.session_state['user'] = None
+    user = st.session_state['user']
+    return user
 
 def process_qa_block(qa_block):
     # Eliminar líneas vacías
@@ -45,42 +72,6 @@ def extract_questions_and_answers(docx_file_path):
         questions_with_answers.append(processed_qa)
 
     return questions_with_answers
-
-def Menu(conn):
-    with st.container():
-        
-        if 'user' not in st.session_state:
-                st.session_state['user'] = None
-        space,login = st.columns([3,1],gap = "large")
-        user_list_v = conn.cursor().execute("select name from esnowflake.esnowflake_DEV.Dim_Users WHERE name LIKE '%civica%' AND name NOT LIKE '%alumno%' ORDER BY name").fetchall()
-        lista_plana = [item[0] for item in user_list_v]
-        with space:
-            if st.session_state['user'] == None:
-                st.warning('Recuerda elegir tu usuario si quieres que se registren tus avances y poder ver tus progresos')
-            else:
-                rango_v = conn.cursor().execute(f"select rango from esnowflake.esnowflake_DEV.Dim_Users where name  = '{st.session_state['user']}'").fetchall()
-                rango = rango_v[0][0]
-                st.write('')
-                if rango == 'Iniciado':
-                    emoji = '🤓'
-                elif rango == 'Padawan':
-                    emoji = '🤠'
-                elif rango == 'Maestro':
-                    emoji = '🗡️'
-                elif rango == 'Parra':
-                    emoji = '🤖'
-                st.write(f"Rango : {rango} {emoji}")
-        with login:
-            
-            if st.session_state['user'] == None:
-                indice = None
-            else:
-                indice = lista_plana.index(st.session_state['user'])
-
-            useri = st.selectbox("User name :",lista_plana,index = indice)
-            st.session_state['user'] = useri
-
-
 
 def checkbox_help(unique_key):
     if st.session_state[unique_key] == 0:
@@ -272,7 +263,6 @@ def review():
 
 
 def setexam(set,jason,mode,conn,user,exam_time = None):
-
     if mode == "examen":
         if 'exam_answers' not in st.session_state:
                 st.session_state['exam_answers'] = []

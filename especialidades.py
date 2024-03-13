@@ -2,12 +2,12 @@ import random
 import string
 import streamlit as st
 
-# You must launch this first to avoid the calling error
+# Launching this first to avoid the calling error
 # of more than one application in the same streamlit
 st.set_page_config(page_title="Especialidades", layout="wide")
 
-import dbt_questions as dbt
-import snow_questions as sn
+import tools as t
+import helper as h
 
 PAGES = ["Intro 🔰", "Practicar 🥊", "Exámenes 📄", "Progreso 📈", "Parreitor-3000 🤖"]
 
@@ -54,8 +54,10 @@ def go_to_main():
         st.markdown(dbt_button_complete, unsafe_allow_html=True)
         st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
         col3.button('dbt',on_click=go_to_dbt)
-        
-######### SESSION_STATE to change between files:
+
+######################################################################       
+######### PAGES
+######################################################################
 ## Main Page
 # Initialize MAIN if session_state is not present or to return to main
 if 'page' not in st.session_state or st.session_state.page == 'main':
@@ -63,6 +65,12 @@ if 'page' not in st.session_state or st.session_state.page == 'main':
 
 ## Snowflake Page
 elif st.session_state.page == 'snowflake':
+    # Initializations
+    conn = h.init_connection()
+    especialidad = "snowflake"
+    datos = t.get_datos(especialidad)
+    user = h.get_user_none()
+
     st.title('Snowflake')
     if st.button('Back to Main', key='back-to-main-from-snowflake'):
         go_to_main()
@@ -76,37 +84,51 @@ elif st.session_state.page == 'snowflake':
     
     # Execute the function based on the current_page
     if st.session_state['current_page'] == "Intro 🔰":
-        sn.Comienzo()
+        t.comienzo(conn, especialidad)
     elif st.session_state['current_page'] == "Practicar 🥊":
-        sn.practicar()
+        t.practicar(conn, datos, especialidad)
     elif st.session_state['current_page'] == "Exámenes 📄":
-        sn.examen()
+        try:
+            t.examen(conn, datos)
+        except Exception as e:
+            st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
-        sn.progreso()
+        t.progreso(conn,datos)
     elif st.session_state['current_page'] == "Parreitor-3000 🤖":
-        sn.parreitor()
+        t.parreitor(conn)
 
 ## dbt Page
 elif st.session_state.page == 'dbt':
+    # Init connection
+    conn = h.init_connection()
+    # Init json
+    especialidad = "dbt"
+    datos = t.get_datos(especialidad)
+    # Init user
+    user = h.get_user_none()
+
     st.title('dbt')
-    if st.button('Back to Main', key="back-to-main-from-dbt"):
-            go_to_main()
-            st.rerun()
+    if st.button('Back to Main', key='back-to-main-from-dbt'):
+        go_to_main()
+        st.rerun()
     
-    # Add a way to navigate within the dbt page    
-    current_page = st.selectbox("Choose section:", PAGES, key="current_dbt_page")
+    # Add a way to navigate within the dbt page
+    current_page = st.selectbox("Choose section:", PAGES, key='current_dbt_page')
     
-    # Update the session state for the current page in Snowflake
+    # Update the session state for the current page in dbt
     st.session_state['current_page'] = current_page
     
     # Execute the function based on the current_page
     if st.session_state['current_page'] == "Intro 🔰":
-        dbt.Comienzo()
+        t.comienzo(conn, especialidad)
     elif st.session_state['current_page'] == "Practicar 🥊":
-        dbt.practicar()
+        t.practicar(conn, datos, especialidad)
     elif st.session_state['current_page'] == "Exámenes 📄":
-        dbt.examen()
+        try:
+            t.examen(conn, datos)
+        except Exception as e:
+            st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
-        dbt.progreso()
+        t.progreso(conn,datos)
     elif st.session_state['current_page'] == "Parreitor-3000 🤖":
-        dbt.parreitor()
+        t.parreitor(conn)

@@ -710,7 +710,7 @@
         "question": "The Query History in the Snowflake Web Interface (UI) is kept for approximately:",
         "answers": ["60 minutes", "24 hours", "14 days", "30 days", "1 year"],
         "correct_answer": ["14 days"],
-        "explanation": "Query History page available under Activity Menu on Web UI, holds query data for 14 days. And you can Query_history view available in Account_Usage schema holds query data for 365 days",
+        "explanation": "Query History page available under Activity menu on Web UI, holds query data for 14 days. And you can Query_history view available in Account_Usage schema holds query data for 365 days",
         "reference": "https://docs.snowflake.com/en/user-guide/ui-snowsight-activity#query-history"
     },
     {
