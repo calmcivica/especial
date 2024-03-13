@@ -19,14 +19,7 @@ dbt_init_button = """
 button = """
             border: none;
             color: white;
-            padding: 20px 60px;
-            text-align: center;
-            justify-content: center;
-            align-content:center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 30px;
-            margin: 10px;
+            padding: 60px 60px;
             cursor: pointer;
             border-radius: 5px;
             min-width: 60%;
@@ -47,25 +40,21 @@ def go_to_dbt():
 ### Definig Main: ESPECIALIDADES
 def go_to_main():
     st.session_state.page = 'main'
-    # Set a title and subtitle
+    # # Set a title and subtitle
     st.markdown("<h1 style='text-align: center; color: white;'>Especialidades</h1>", unsafe_allow_html=True)
     st.markdown("<h3 style='text-align: center; color: white;'>¿En qué especialidad quieres volverte un máquina?</h3>", unsafe_allow_html=True)
-
-    # Center the buttons within a container
-    st.markdown('<div class="container">', unsafe_allow_html=True)
-    col1, col2 = st.columns(2, gap="small")
-    with col1:
+    col1, col2, col3 = st.columns([0.5,1,1], gap="small")
+    with col2:
         sn_button_complete = str(sn_init_button+button+sn_end_button)
         st.markdown(sn_button_complete, unsafe_allow_html=True)
         st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
-        st.button('Snowflake',on_click=go_to_snowflake)
-    with col2:
+        col2.button('Snowflake',on_click=go_to_snowflake)
+    with col3:
         dbt_button_complete = str(dbt_init_button+button+dbt_end_button)
         st.markdown(dbt_button_complete, unsafe_allow_html=True)
         st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
-        st.button('dbt',on_click=go_to_dbt)
-    st.markdown('</div>', unsafe_allow_html=True)  # End of container div
-
+        col3.button('dbt',on_click=go_to_dbt)
+        
 ######### SESSION_STATE to change between files:
 ## Main Page
 # Initialize MAIN if session_state is not present or to return to main
