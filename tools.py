@@ -1,6 +1,7 @@
+from time import sleep
 import streamlit as st
 import helper as h
-import valores_fijos as vf
+import constantes as c
 import ast
 import random
 import plotly.graph_objects as go
@@ -8,9 +9,21 @@ from agent import chat
 import plotly.express as px
 import pandas as pd
 
+
 def get_datos(especialidad):
+    """
+    Retorna los datos desde un archivo JSON basado en la especialidad especificada.
+    Soporta 'snowflake' y 'dbt', devolviendo los datos de 'sn_examtopics.json' o 'dbt_examtopics.json', respectivamente.
+    En caso de error al localizar los archivos, muestra una advertencia.
+
+    Parámetros:
+    - especialidad (str): La especialidad para la cual se desean obtener los datos.
+
+    Retorna:
+    - dict: Los datos cargados desde el archivo JSON seleccionado.
+    """
     # Get json data
-    archivo = ''
+    archivo = ""
     try:
         if especialidad == "snowflake":
             archivo = "sn_examtopics.json"
@@ -21,7 +34,20 @@ def get_datos(especialidad):
     datos = h.open_file(archivo)
     return datos
 
+
 def menu(conn):
+    """
+    Muestra la interfaz de usuario para la selección y visualización de información de usuario.
+    Crea un menú con información del usuario actual y permite la selección de un nuevo usuario desde una lista filtrada.
+    La lista se obtiene de una consulta SQL a una base de datos Snowflake, excluyendo nombres que contienen 'alumno'
+    y seleccionando aquellos que contienen 'civica'. También muestra el 'rango' del usuario actual con un emoji representativo.
+
+    Parámetros:
+    - conn: Conexión activa a la base de datos Snowflake.
+
+    Retorna:
+    - str: El nombre del usuario seleccionado.
+    """
     # User information
     with st.container():
         h.get_user_none()
@@ -67,27 +93,52 @@ def menu(conn):
             st.session_state["user"] = useri
     return useri
 
+
 def comienzo(conn, especialidad):
-    user = h.get_user_none()
+    """
+    Presenta información inicial y específica de la especialidad seleccionada en Streamlit, luego muestra el menú de usuario.
+
+    La función recupera y concatena mensajes de bienvenida e información sobre el examen para la especialidad específica ('snowflake' o 'dbt').
+    Luego, invoca la función 'menu' para gestionar la interacción del usuario, finalizando con la visualización de la información concatenada usando markdown.
+
+    Parámetros:
+    - conn: Conexión a la base de datos para ser usada en la función 'menu'.
+    - especialidad (str): La especialidad seleccionada por el usuario, usada para determinar la información a mostrar.
+    """
+    h.get_user_none()
     info = ""
     if especialidad == "snowflake":
-        info = vf.COMIENZO_SNOWFLAKE + vf.INFO_EXAMEN_SNOWFLAKE
+        info = c.COMIENZO_SNOWFLAKE + c.INFO_EXAMEN_SNOWFLAKE
     elif especialidad == "dbt":
-        info = vf.COMIENZO_DBT + vf.INFO_EXAMEN_DBT
+        info = c.COMIENZO_DBT + c.INFO_EXAMEN_DBT
     menu(conn)
     st.markdown(info)
 
+
 def practicar(conn, datos, especialidad):
+    """
+    Facilita una sección para practicar preguntas filtradas por criterios específicos,
+    basada en la especialidad seleccionada. Incluye explicaciones de uso, filtros personalizables,
+    y muestra las preguntas según los filtros aplicados.
+
+    Parámetros:
+    - conn: Conexión activa a la base de datos para recuperar datos de usuario y preguntas.
+    - datos: Lista de preguntas disponibles para practicar.
+    - especialidad: Especialidad seleccionada ('snowflake' o 'dbt') para personalizar la sección de práctica.
+    """
     user = h.get_user_none()
     menu(conn)
+    # Init
+    st.session_state["button_order_aleatorio"] = False
+
     with st.expander("¿Como podría usar esta sección? 🤔"):
         if especialidad == "snowflake":
-            st.markdown(vf.USO_SECCION_SNOWFLAKE)
+            st.markdown(c.USO_SECCION_SNOWFLAKE)
         elif especialidad == "dbt":
-            st.markdown(vf.USO_SECCION_DBT)
+            st.markdown(c.USO_SECCION_DBT)
 
-    Filtros, Preguntas = st.columns([1, 3], gap="large")
-    with Filtros:
+    filtros, preguntas = st.columns([1, 3], gap="large")
+    with filtros:
         st.subheader("Filtros")
         values = st.slider(
             "Seleccione rango de preguntas en el que practicar",
@@ -97,18 +148,16 @@ def practicar(conn, datos, especialidad):
             step=1,
         )
 
-        secciones_valor = []
         if especialidad == "snowflake":
             secciones = st.multiselect(
                 "¿ Que secciones quieren tocar ?",
-                vf.SECCIONES_SNOWFLAKE,
+                c.SECCIONES_SNOWFLAKE,
             )
         elif especialidad == "dbt":
             secciones = st.multiselect(
                 "¿ Que secciones quieren tocar ?",
-                vf.SECCIONES_DBT,
+                c.SECCIONES_DBT,
             )
-
 
         option = st.multiselect(
             "Otros filtros",
@@ -136,8 +185,6 @@ def practicar(conn, datos, especialidad):
         no_hechas = []
         opcion_examen_falsas = []
         opcion_practicas_falsas = []
-
-        total_question = range(len(datos))
 
         if "Falladas en exámenes" in option:
             opcion_examen_falsas = ast.literal_eval(aux_opcion[0][1])
@@ -170,16 +217,19 @@ def practicar(conn, datos, especialidad):
 
         question_set = [item["question_number"] for item in preguntas_filtradas]
 
-        if st.toggle("Order aleatorio"):
-            random.shuffle(question_set)
+        # Initialize session state for question set if not already set
+        if 'question_set' not in st.session_state:
+            st.session_state["question_set"] = question_set  # Initial question set assignment
 
-    with Preguntas:
-        if question_set:
-            h.setexam(question_set, datos, "practicar", conn, user)
-        else:
-            st.write(
-                "No hay ninguna pregunta que cuadre con los filtros que has puesto"
-            )
+        h.orden_preguntas(question_set)
+
+    # Update the current page to reflect
+        with preguntas:
+            if st.session_state["question_set"]:
+                h.setexam(st.session_state["question_set"], datos, "practicar", conn, user)
+            else:
+                st.write("No hay ninguna pregunta que cuadre con los filtros que has puesto")
+
 
 def examen(conn, datos):
     user = h.get_user_none()
@@ -196,8 +246,8 @@ def examen(conn, datos):
             st.title("Examen")
             st.write("Empieza ajustando los filtros y luego las opciones")
             with st.container():
-                Filtros, settings = st.columns(2, gap="large")
-                with Filtros:
+                filtros, settings = st.columns(2, gap="large")
+                with filtros:
                     st.subheader("Filtros")
                     values = st.slider(
                         "Seleccione rango de preguntas que pueden caer en el examen",
@@ -209,7 +259,7 @@ def examen(conn, datos):
 
                     secciones = st.multiselect(
                         "¿ Que secciones quieren tocar ? (Todas por defecto)",
-                        vf.SECCIONES_SNOWFLAKE,
+                        c.SECCIONES_SNOWFLAKE,
                     )
 
                     option = st.multiselect(
@@ -221,6 +271,8 @@ def examen(conn, datos):
                             "Falladas en práctica",
                         ],
                     )
+
+                    h.orden_preguntas(question_set)
 
                     preguntas_filtradas = [
                         item
@@ -270,11 +322,13 @@ def examen(conn, datos):
                     ]
                     random.shuffle(question_set)
 
+                    
+
                 with settings:
                     st.subheader("Opciones")
                     # Número de preguntas
                     num_questions = st.number_input(
-                        "Número de Preguntas",
+                        "Número de preguntas",
                         min_value=0,
                         max_value=len(question_set),
                         value=len(question_set),
@@ -290,10 +344,10 @@ def examen(conn, datos):
                         value=60,
                     )
                     with st.expander("¿Como es el examen real?"):
-                        info = vf.INFO_EXAMEN_SNOWFLAKE
+                        info = c.INFO_EXAMEN_SNOWFLAKE
                         st.markdown(info)
                 with st.container():
-                    espaci1, boton, espaci2 = st.columns(3, gap="large")
+                    _, boton, _ = st.columns(3, gap="large")
                     if num_questions == 0:
                         st.warning(
                             "Tus filtros u opciones resultan en una cantidad de 0 preguntas"
@@ -311,18 +365,20 @@ def examen(conn, datos):
         with st.container():
             question_set = st.session_state["question_set"]
             exam_duration = st.session_state["exam_duration"]
-            h.setexam(question_set, datos, "examen", conn, user, exam_time=exam_duration)
+            h.setexam(
+                question_set, datos, "examen", conn, user, exam_time=exam_duration
+            )
 
     elif st.session_state.get("exam_mode", 0) == 2:
         exam_duration = st.session_state["exam_duration"]
-        exam_id_V = (
+        exam_id_v = (
             conn.cursor()
             .execute(
                 f"select coalesce(max(id_exam),1) from esnowflake.esnowflake_DEV.FACT_EXAMS where user_nickname = '{user}' "
             )
             .fetchall()
         )
-        exam_id = exam_id_V[0][0]
+        exam_id = exam_id_v[0][0]
         st.session_state["review_set"] = []
         user_answers = st.session_state["exam_answers"]
         latest_answers = {}
@@ -345,11 +401,11 @@ def examen(conn, datos):
         for i, answer in enumerate(filtered_answers):
             question_number = answer["question_number"]
             user_answer = answer["user_answer"]
-            if type(user_answer) == str:
+            if isinstance(user_answer, str):
                 user_answer = [user_answer]
             correcta = datos[question_number - 2]["correct_answer"]
             question = datos[question_number - 2]["question"]
-            comofue = comparar_respuestas(user_answer, correcta)
+            comofue = h.comparar_respuestas(user_answer, correcta)
             answer["result"] = comofue
             answer["correcta"] = correcta
             answer["question"] = question
@@ -392,15 +448,15 @@ def examen(conn, datos):
         except Exception as e:
             st.write(f"An error occurred: {e} ")
         failed = [answer for answer in filtered_answers if answer["result"] == 0]
-        tiempo_invertido_V = (
+        tiempo_invertido_v = (
             conn.cursor()
             .execute(
                 f"select DATEDIFF(SECOND, start_time, end_time) from esnowflake.esnowflake_DEV.FACT_EXAMS where id_exam = {exam_id}"
             )
             .fetchall()
         )
-        if tiempo_invertido_V:
-            tiempo = tiempo_invertido_V[0][0]
+        if tiempo_invertido_v:
+            tiempo = tiempo_invertido_v[0][0]
         else:
             tiempo = 0
         minutos = tiempo // 60
@@ -445,12 +501,12 @@ def examen(conn, datos):
                 st.write(answer["user_answer"])
                 st.write("La respuesta correcta era:")
                 st.write(answer["correcta"])
-        space1, volver, space2 = st.columns([2, 1, 2], gap="large")
+        _, volver, _ = st.columns([2, 1, 2], gap="large")
         with volver:
             st.button(
                 "Volver al inicio",
                 use_container_width=1,
-                on_click=aux_exam,
+                on_click=h.aux_exam,
                 args=(
                     "Inicio",
                     None,
@@ -460,6 +516,7 @@ def examen(conn, datos):
     else:
         with st.container():
             "nada"
+
 
 def progreso(conn, datos):
     menu(conn)
@@ -485,21 +542,16 @@ def progreso(conn, datos):
             st.warning("Haz al menos una pregunta para poder ver esta sección")
         else:
             # Calcular el número de preguntas respondidas por día
-            df_resumen = (
-                df.groupby("Fecha").size().reset_index(name="Número de Preguntas")
-            )
             racha_actual = 0
             fecha_anterior = None
-            total_preguntas = len(df)
-            total_correctas = df["is_correct"].sum()
-            porcentaje_acierto = (total_correctas / total_preguntas) * 100
             df_preguntas = pd.DataFrame(datos)
-            total_preguntas_por_seccion = df_preguntas["question_area"].value_counts()
+
             df_combinado = df.merge(
                 df_preguntas[["question_number", "question_area"]],
                 left_on="question_id",
                 right_on="question_number",
                 how="left",
+                validate="many_to_many",
             )
             #   Convertir la lista de preguntas en un DataFrame
             df_preguntas_totales = pd.DataFrame(datos)
@@ -518,20 +570,23 @@ def progreso(conn, datos):
                 "is_correct"
             ].agg(["sum", lambda x: len(x) - x.sum()])
             metrics_por_seccion.columns = [
-                "Preguntas Correctas",
-                "Preguntas Incorrectas",
+                "preguntas Correctas",
+                "preguntas Incorrectas",
             ]
             # Realizar un merge con el DataFrame de referencia para incluir todas las secciones
             metrics_final = df_secciones_referencia.merge(
-                metrics_por_seccion, on="question_area", how="left"
+                metrics_por_seccion,
+                on="question_area",
+                how="left",
+                validate="many_to_many",
             )
             # Rellenar valores NaN con 0
             metrics_final.fillna(0, inplace=True)
             # Calcular preguntas no vistas correctamente
-            metrics_final["Preguntas No Vistas"] = (
+            metrics_final["preguntas No Vistas"] = (
                 metrics_final["question_area"].map(total_preguntas_por_seccion)
-                - metrics_final["Preguntas Correctas"]
-                - metrics_final["Preguntas Incorrectas"]
+                - metrics_final["preguntas Correctas"]
+                - metrics_final["preguntas Incorrectas"]
             )
             # Mostrar el resultado en Streamlit sin índice
             # st.write(metrics_final.set_index('question_area'))
@@ -543,14 +598,14 @@ def progreso(conn, datos):
             # Mostrar leyendas una sola vez arriba de las columnas
             for index, row in metrics_final.iterrows():
                 labels = [
-                    "Preguntas Correctas",
-                    "Preguntas Incorrectas",
-                    "Preguntas No Vistas",
+                    "preguntas Correctas",
+                    "preguntas Incorrectas",
+                    "preguntas No Vistas",
                 ]
                 values = [
-                    row["Preguntas Correctas"],
-                    row["Preguntas Incorrectas"],
-                    row["Preguntas No Vistas"],
+                    row["preguntas Correctas"],
+                    row["preguntas Incorrectas"],
+                    row["preguntas No Vistas"],
                 ]
                 # Crear la gráfica de donut
                 fig = go.Figure(
@@ -603,7 +658,7 @@ def progreso(conn, datos):
                 # Crear un DataFrame de pandas
                 # Calcular el número de preguntas respondidas por día
                 df_resumen = (
-                    df.groupby("Fecha").size().reset_index(name="Número de Preguntas")
+                    df.groupby("Fecha").size().reset_index(name="Número de preguntas")
                 )
                 racha_actual = 0
                 fecha_anterior = None
@@ -634,8 +689,8 @@ def progreso(conn, datos):
                     fig = px.bar(
                         df_resumen,
                         x="Fecha",
-                        y="Número de Preguntas",
-                        title="Preguntas Respondidas por Día",
+                        y="Número de preguntas",
+                        title="preguntas Respondidas por Día",
                     )
                     # Formatear el eje x para mostrar solo las fechas (sin horas)
                     fig.update_xaxes(
@@ -740,6 +795,7 @@ def progreso(conn, datos):
                                 st.success("APROBADO")
                             else:
                                 st.error("SUSPENSO")
+
 
 def parreitor(conn):
     menu(conn)

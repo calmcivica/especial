@@ -1,3 +1,4 @@
+import random
 from docx import Document
 
 import json
@@ -208,6 +209,7 @@ def comparar_respuestas(respuesta_usuario, respuesta_correcta):
 
 def aux_questions(accion):
     st.session_state['show_solution'] = 0
+    
     if accion == 'Anterior':
         st.session_state['question_number_internal'] += -1
         
@@ -311,7 +313,6 @@ def setexam(set,jason,mode,conn,user,exam_time = None):
     with ant:
         if i != 0:
             st.button('Anterior',use_container_width=1,on_click = aux_questions , args = ('Anterior',))
-
     with sig:           
         if i != len(set)-1:
             st.button('Siguiente',use_container_width=1,on_click = aux_questions , args = ('Siguiente',))
@@ -324,8 +325,7 @@ def setexam(set,jason,mode,conn,user,exam_time = None):
             else:
                 st.button('Revisar preguntas y finalizar',use_container_width=1,on_click = review)
 
-        
-            
+
     with st.container():
         i = st.session_state['question_number_internal']
         
@@ -357,8 +357,36 @@ def setexam(set,jason,mode,conn,user,exam_time = None):
                             review_set.append(elemento)
 
                     st.session_state['review_set'] = review_set
-        
 
+def orden_preguntas(question_set):
+    order_init_button = """
+        <style>.element-container:has(#button-order) + div button {"""
+    random_init_button = """
+        <style>.element-container:has(#button-random) + div button {"""    
+    button = """
+                border: none;
+                color: white;
+                padding: 5px 5px;
+                cursor: pointer;
+                border-radius: 5px;
+                min-width: 10%;
+                background-color: Tomato;
+            }</style>"""
+    
+    order_button = str(order_init_button+button)
+    random_button = str(random_init_button+button)
 
-
-        
+    col2, col3 = st.columns([1,1], gap="small")
+    with col2:
+        st.markdown(order_button, unsafe_allow_html=True)
+        st.markdown('<span id="button-order"></span>', unsafe_allow_html=True)
+        if col2.button("Preguntas en Orden", use_container_width=True):
+            st.session_state["question_set"] = sorted(question_set)
+            st.warning("True")
+    with col3:
+        st.markdown(random_button, unsafe_allow_html=True)
+        st.markdown('<span id="button-random"></span>', unsafe_allow_html=True)
+        if col3.button("Orden aleatorio", on_click=random.shuffle(question_set), use_container_width=True):
+            st.session_state["question_set"] = question_set
+            st.warning("True")
+    st.divider()

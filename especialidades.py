@@ -43,17 +43,17 @@ def go_to_main():
     # # Set a title and subtitle
     st.markdown("<h1 style='text-align: center; color: white;'>Especialidades</h1>", unsafe_allow_html=True)
     st.markdown("<h3 style='text-align: center; color: white;'>¿En qué especialidad quieres volverte un máquina?</h3>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([0.5,1,1], gap="small")
-    with col2:
+    col1, col2 = st.columns([1,1], gap="medium")
+    with col1:
         sn_button_complete = str(sn_init_button+button+sn_end_button)
         st.markdown(sn_button_complete, unsafe_allow_html=True)
         st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
-        col2.button('Snowflake',on_click=go_to_snowflake)
-    with col3:
+        col1.button('Snowflake',on_click=go_to_snowflake, use_container_width=True)
+    with col2:
         dbt_button_complete = str(dbt_init_button+button+dbt_end_button)
         st.markdown(dbt_button_complete, unsafe_allow_html=True)
         st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
-        col3.button('dbt',on_click=go_to_dbt)
+        col2.button('dbt',on_click=go_to_dbt, use_container_width=True)
 
 ######################################################################       
 ######### PAGES
