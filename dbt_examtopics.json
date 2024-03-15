@@ -878,7 +878,7 @@
     },
     {
         "question_number": 65,
-        "question_area": "Resource configs and properties",
+        "question_area": "Developing dbt models",
         "question": "What characterizes a Type 1 Slowly Changing Dimension (SCD)?",
         "answers": [
             "Overwrites existing data with new data",
@@ -892,7 +892,7 @@
     },
     {
         "question_number": 66,
-        "question_area": "Resource configs and properties",
+        "question_area": "Developing dbt models",
         "question": "What characterizes a Type 2 Slowly Changing Dimension (SCD)?",
         "answers": [
             "Adds a new row for historical data tracking",
@@ -948,7 +948,7 @@
     },
     {
         "question_number": 76,
-        "question_area": "Resource configs and properties",
+        "question_area": "Developing dbt models",
         "question": "What is the default materialization of a model if you don't proactively configure the materialization for a model?",
         "answers": [
             "View",
@@ -962,7 +962,7 @@
     },
     {
         "question_number": 77,
-        "question_area": "Resource configs and properties",
+        "question_area": "Developing dbt models",
         "question": "A given model called `events` is configured to be materialized as a view in dbt_project.yml and as a table in a config block at the top of the model. When you execute dbt run, what will happen?",
         "answers": [
             "dbt will build the events model as a table",
@@ -1162,7 +1162,7 @@
 },
 {
     "question_number": 93,
-    "question_area": "Documentation",
+    "question_area":  "Creating and maintaining dbt documentation",
     "question": "T|F: Doc blocks must be stored as .yml files.",
     "answers": [
         "True",
@@ -1186,7 +1186,7 @@
 },
 {
     "question_number": 95,
-    "question_area": "Documentation",
+    "question_area":  "Creating and maintaining dbt documentation",
     "question": "T|F: dbt automatically pulls descriptions from your dbt project and metadata about your models and sources into the documentation site.",
     "answers": [
         "True",
@@ -1198,7 +1198,7 @@
 },
 {
     "question_number": 96,
-    "question_area": "Documentation",
+    "question_area":  "Creating and maintaining dbt documentation",
     "question": "What is the correct way to reference the doc block called 'orders', contained in a file called docs_jaffle_shop.md?",
     "answers": [
         "description: '{{ doc( 'orders ') }}'",
@@ -1434,7 +1434,7 @@
 },
 {
     "question_number": 113,
-    "question_area": "Documentation",
+    "question_area":  "Creating and maintaining dbt documentation",
     "question": "What does the `dbt docs generate` command do?",
     "answers": [
         "Generates documentation for a project",
@@ -1602,7 +1602,7 @@
 },
 {
     "question_number": 125,
-    "question_area": "Modeling Concepts",
+    "question_area": "Developing dbt models",
     "question": "What does the 'table' materialization do in dbt?",
     "answers": [
         "Physically stores the results of the model's SQL query as a table in your database",
@@ -1616,7 +1616,7 @@
 },
 {
     "question_number": 126,
-    "question_area": "Modeling Concepts",
+    "question_area": "Developing dbt models",
     "question": "What is the purpose of 'incremental' materialization in dbt?",
     "answers": [
         "To add new records to an existing table or view, potentially overwriting old records based on a unique key",
@@ -1630,7 +1630,7 @@
 },
 {
     "question_number": 127,
-    "question_area": "Modeling Concepts",
+    "question_area": "Developing dbt models",
     "question": "How do dbt 'snapshots' function?",
     "answers": [
         "Snapshots capture and track changes to source data over time, adding new rows for changed data",
@@ -1658,7 +1658,7 @@
 },
 {
     "question_number": 129,
-    "question_area": "Development Practices",
+    "question_area": "Establishing environments in data warehouse for dbt",
     "question": "True or False: It is recommended that each dbt developer working in development should have a unique target schema.",
     "answers": [
         "True",
@@ -1672,7 +1672,7 @@
 },
 {
     "question_number": 130,
-    "question_area": "Project Setup",
+    "question_area": "Developing dbt models",
     "question": "What is required to materialize a model in your data platform with dbt?",
     "answers": [
         "A dbt project with .sql files saved in a models directory, and a connection to a data warehouse with raw data",
@@ -1686,7 +1686,7 @@
 },
 {
     "question_number": 131,
-    "question_area": "Best Practices",
+    "question_area": "Developing dbt models",
     "question": "True or False: Data is stored in the data platform and code is stored in the git repository for a dbt project.",
     "answers": [
         "True",
@@ -1700,7 +1700,7 @@
 },
 {
     "question_number": 132,
-    "question_area": "Source Configurations",
+    "question_area": "Developing dbt models",
     "question": "Where does dbt look for source configs?",
     "answers": [
         "In a .yml file, in the models file path",
@@ -1728,7 +1728,7 @@
 },
 {
     "question_number": 134,
-    "question_area": "Documentation",
+    "question_area":  "Creating and maintaining dbt documentation",
     "question": "Can you make a doc block in a .sql file and reference it in a description?",
     "answers": [
         "False, you need to make doc blocks in markdown files, then you can reference them in a description",
@@ -1742,7 +1742,7 @@
 },
 {
     "question_number": 135,
-    "question_area": "Documentation",
+    "question_area":  "Creating and maintaining dbt documentation",
     "question": "Can the `doc` function be used to reference a doc block in a description?",
     "answers": [
         "True, the doc function can reference a defined doc block in a description",
@@ -1756,7 +1756,7 @@
 },
 {
     "question_number": 136,
-    "question_area": "Node Selection",
+    "question_area": "Developing dbt models",
     "question": "What will `dbt run --select 3+my_model+4` do?",
     "answers": [
         "Select my_model, its parents up to the 3rd degree, and its children down to the 4th degree",
@@ -1770,7 +1770,7 @@
 },
 {
     "question_number": 137,
-    "question_area": "Modeling Concepts",
+    "question_area": "Developing dbt models",
     "question": "What is executed before a model, seed, or snapshot is built in dbt?",
     "answers": [
         "pre-hook",
@@ -1784,7 +1784,7 @@
 },
 {
     "question_number": 138,
-    "question_area": "Modeling Concepts",
+    "question_area": "Developing dbt models",
     "question": "What is executed after a model, seed, or snapshot is built in dbt?",
     "answers": [
         "post-hook",
@@ -1826,7 +1826,7 @@
 },
 {
     "question_number": 141,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "True or False: Operations are a separate resource in a dbt project.",
     "answers": [
         "True",
@@ -1838,7 +1838,7 @@
 },
 {
     "question_number": 142,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the required properties in defining an exposure in dbt?",
     "answers": [
         "Name, Type, Owner",
@@ -1852,7 +1852,7 @@
 },
 {
     "question_number": 143,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the different values of the 'type' property of an exposure in dbt?",
     "answers": [
         "dashboard, notebook, analysis, ml, application",
@@ -1866,7 +1866,7 @@
 },
 {
     "question_number": 147,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the different strategies used in creating a snapshot?",
     "answers": [
         "Timestamp & Check",
@@ -1880,7 +1880,7 @@
 },
 {
     "question_number": 148,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What is the required config when a 'check' strategy is used in creating a snapshot?",
     "answers": [
         "check_cols",
@@ -1894,7 +1894,7 @@
 },
 {
     "question_number": 149,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "When should a check strategy be used when creating a snapshot?",
     "answers": [
         "For tables which do not have a reliable updated_at column",
@@ -1908,7 +1908,7 @@
 },
 {
     "question_number": 150,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What is the required config when a 'timestamp' strategy is used in creating a snapshot?",
     "answers": [
         "updated_at",
@@ -1922,7 +1922,7 @@
 },
 {
     "question_number": 151,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the different snapshot meta fields?",
     "answers": [
         "dbt_valid_from, dbt_valid_to, dbt_scd_id, dbt_updated_at",
@@ -1936,7 +1936,7 @@
 },
 {
     "question_number": 152,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What happens when the 'invalidate_hard_deletes' config is set to 'true' while defining a snapshot?",
     "answers": [
         "Finds hard deleted records in source, and set dbt_valid_to current time if no longer exists",
@@ -1950,7 +1950,7 @@
 },
 {
     "question_number": 153,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "T|F Seeds can be configured in the .csv file",
     "answers": [
         "True",
@@ -1962,7 +1962,7 @@
 },
 {
     "question_number": 154,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "T|F Sources are declared in the dbt_project.yml file.",
     "answers": [
         "False",
@@ -1976,7 +1976,7 @@
 },
 {
     "question_number": 155,
-    "question_area": "Deploying dbt jobs",
+    "question_area": "Creating and maintaining dbt documentation",
     "question": "How can the landing page of the generated documentation website be customized?",
     "answers": [
         "By supplying your own docs block called overview",
@@ -1990,7 +1990,7 @@
 },
 {
     "question_number": 156,
-    "question_area": "Deploying dbt jobs",
+    "question_area": "Implementing dbt tests",
     "question": "What happens when command 'dbt test --store-failures' is invoked?",
     "answers": [
         "This will store failures in a configured location",
@@ -2018,7 +2018,7 @@
 },
 {
     "question_number": 161,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "{{ config( materialized='incremental', unique_key='date_day', on_schema_change='append_new_columns' )}} Based on the above config, what happens when a new column is added to the incremental model?",
     "answers": [
         "Append new columns to the existing table without removing any columns not present in the new data.",
@@ -2032,7 +2032,7 @@
 },
 {
     "question_number": 162,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "{{ config( materialized='incremental', unique_key='date_day', on_schema_change='sync_all_columns' )}} Based on the above config, what happens when an existing column is removed from the incremental model?",
     "answers": [
         "Adds any new columns and removes any columns that are now missing from the existing table.",
@@ -2046,7 +2046,7 @@
 },
 {
     "question_number": 163,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "In a model, 'fct_orders.sql' the following config is defined, {{ config(schema = 'marketing') }}, the target schema defined in the profiles.yml file is dbt_jdoe. Now under which schema the model will get built?",
     "answers": [
         "dbt_jdoe_marketing",
@@ -2060,7 +2060,7 @@
 },
 {
     "question_number": 164,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "In a model, 'fct_orders.sql' the following config is defined, {{ config(database = 'jaffle_shop') }}, the target database defined in the profiles.yml file is dbt_analytics. Now under which database the model will get built?",
     "answers": [
         "jaffle_shop",
@@ -2144,7 +2144,7 @@
 },
 {
     "question_number": 170,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "T|F Analyses will be materialized as a model in the database.",
     "answers": [
         "False. Analyses are not materialized as models.",
@@ -2158,7 +2158,7 @@
 },
 {
     "question_number": 171,
-    "question_area": "Deploying dbt jobs",
+    "question_area": "Developing dbt models",
     "question": "How do you generate but not execute the formatted SQL for a given dbt model?",
     "answers": [
         "Run dbt compile.",
@@ -2172,7 +2172,7 @@
 },
 {
     "question_number": 172,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "Metric",
     "answers": [
         "A timeseries aggregation over a table supporting zero or more dimensions.",
@@ -2186,7 +2186,7 @@
 },
 {
     "question_number": 173,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "In what color do metrics appear in a DAG?",
     "answers": [
         "Pink",
@@ -2200,7 +2200,7 @@
 },
 {
     "question_number": 174,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the required properties for defining a metric?",
     "answers": [
         "Name, Model (not required for expression metrics), Type, SQL, Timestamp, time_grains",
@@ -2214,7 +2214,7 @@
 },
 {
     "question_number": 175,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "This metric type is defined as any non-aggregating calculation of 1 or more metrics",
     "answers": [
         "Expression metrics",
@@ -2228,7 +2228,7 @@
 },
 {
     "question_number": 176,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What kind of metrics can be created using expression metrics?",
     "answers": [
         "Ratios, subtractions, any arbitrary calculation",
@@ -2242,7 +2242,7 @@
 },
 {
     "question_number": 177,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "If a filter is defined in a metric, what are the required properties?",
     "answers": [
         "Field, Operator, Value",
@@ -2458,7 +2458,7 @@
 },
 {
     "question_number": 193,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "T|F Ephemeral models can be deferred.",
     "answers": [
         "True",
@@ -2816,7 +2816,7 @@
 },
 {
     "question_number": 223,
-    "question_area": "Git",
+    "question_area": "Promoting code through version control",
     "question": "A user is currently working on a branch 'freature_products' and realizes that the word feature is misspelt, How will the user modify the branch name?",
     "answers": [
         "The user will run the following command, git branch -m feature_products",
@@ -2830,7 +2830,7 @@
 },
 {
     "question_number": 224,
-    "question_area": "Git",
+    "question_area": "Promoting code through version control",
     "question": "How will you list all remote branches in CLI?",
     "answers": [
         "git branch -r",
@@ -2844,7 +2844,7 @@
 },
 {
     "question_number": 225,
-    "question_area": "Git",
+    "question_area": "Promoting code through version control",
     "question": "T|F Running git branch --ls is one of the ways to list local branches.",
     "answers": [
         "True",
@@ -2856,7 +2856,7 @@
 },
 {
     "question_number": 226,
-    "question_area": "Git",
+    "question_area": "Promoting code through version control",
     "question": "T|F A user can create a branch using 'git branch <branchname>' and start adding commits right away?",
     "answers": [
         "True",
@@ -2868,7 +2868,7 @@
 },
 {
     "question_number": 227,
-    "question_area": "Git",
+    "question_area": "Promoting code through version control",
     "question": "A user stage changes by running the 'git add .' command.  Staged files were, dim_products.sql   dim_orders.sql  Now, the user wants to unstage 'dim_orders.sql' file alone, what command does the user need to run?",
     "answers": [
         "git reset dim_orders",
@@ -2882,7 +2882,7 @@
 },
 {
     "question_number": 228,
-    "question_area": "Git",
+    "question_area": "Promoting code through version control",
     "question": "How can a user add and commit files at the same time?",
     "answers": [
         "By using the -am flag in git commit command, i.e. git commit -am  'commit message '",
@@ -2896,7 +2896,7 @@
 },
 {
     "question_number": 229,
-    "question_area": "Git",
+    "question_area": "Promoting code through version control",
     "question": "A user has made two commits and hasn't pushed the commits to the remote repository yet. Now, the user wants to un-commit the changes. What is the user supposed to do?",
     "answers": [
         "git reset HEAD~2",
@@ -2910,7 +2910,7 @@
 },
 {
     "question_number": 231,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the two components of Grants config?",
     "answers": [
         "Privilege and Grantees",
@@ -2924,7 +2924,7 @@
 },
 {
     "question_number": 232,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the two arguments used with persist_docs config?",
     "answers": [
         "columns and relations",
@@ -2938,7 +2938,7 @@
 },
 {
     "question_number": 233,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "T|F freshness is a source configuration.",
     "answers": [
         "True",
@@ -2952,7 +2952,7 @@
 },
 {
     "question_number": 234,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the configurations specific to sources?",
     "answers": [
         "Sources only support one configuration, enabled.",
@@ -2966,7 +2966,7 @@
 },
 {
     "question_number": 235,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the configurations specific to seeds?",
     "answers": [
         "quote_columns, column_types",
@@ -2980,7 +2980,7 @@
 },
 {
     "question_number": 236,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the configurations specific to models?",
     "answers": [
         "sql_header and materialized",
@@ -2994,7 +2994,7 @@
 },
 {
     "question_number": 237,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the configurations specific to tests?",
     "answers": [
         "where, severity, warn_if,error_if, limit,fail_calc,store_failures",
@@ -3008,7 +3008,7 @@
 },
 {
     "question_number": 238,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "What are the configurations specific to snapshots?",
     "answers": [
         "target_schema,target_database,unique_key, strategy, updated_at,check_cols, invalidate_hard_deletes",
@@ -3022,7 +3022,7 @@
 },
 {
     "question_number": 239,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "T|F A test with warn severity will never return an error.",
     "answers": [
         "True.",
@@ -3036,7 +3036,7 @@
 },
 {
     "question_number": 240,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "In a model, the full_refresh config is set to false, i.e. {{ config( full_refresh = false) }}. When running the model, the full-refresh flag is invoked, i.e. dbt run --full-refresh. What will be the end result?",
     "answers": [
         "The configured model(s) will not full-refresh when dbt run --full-refresh is invoked. The config takes precedence over the flag.",
@@ -3050,7 +3050,7 @@
 },
 {
     "question_number": 241,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "T|F Tags are additive in nature.",
     "answers": [
         "True.",
@@ -3064,7 +3064,7 @@
 },
 {
     "question_number": 242,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "T|F The + prefix can be used in any yml file.",
     "answers": [
         "False. It is only compatible with dbt_project.yml files that use `config-version: 2`",
@@ -3078,7 +3078,7 @@
 },
 {
     "question_number": 243,
-    "question_area": "Resource configs and properties",
+    "question_area": "Developing dbt models",
     "question": "When is the + prefix used?",
     "answers": [
         "The leading + is in fact only required when you need to disambiguate between resource paths and configs.",
