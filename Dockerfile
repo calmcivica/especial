@@ -1,6 +1,6 @@
 FROM python:3.9.13-slim
 
-WORKDIR /app
+WORKDIR /especialidades-app
 
 COPY ./ ./
 
@@ -14,12 +14,12 @@ RUN apt-get update && apt-get install -y \
     && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
     && ACCEPT_EULA=Y apt-get install -y msodbcsql17 \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get clean
-
-RUN pip install -r compose/requirements.txt
+RUN pip install -r requirements.txt
 
 EXPOSE 8501
 
 ENTRYPOINT ["streamlit", "run", "especialidades.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
