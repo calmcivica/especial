@@ -3540,5 +3540,295 @@
         ],
         "explanation": "The + prefix is used to disambiguate between resource paths and configs in dbt. It is required when you need to provide configurations that are specific to certain resources or directories, ensuring that dbt correctly interprets the intent of the configuration.",
         "reference": "https://docs.getdbt.com/reference/resource-configs/plus-prefix"
+    },
+    {
+        "question_number": 244,
+        "question_area": "Creating and maintaining dbt documentation",
+        "question": "When it comes to materializing our marts models in our data lake in snowflake, our team of analytics engineers has doubts. Which of the following options is appropriate?",
+        "answers": [
+            "Snowflake is fast enough and it doesn't matter how to materialize these models.",
+            "Always start with a view, once that view takes too long, build it into a table, and finally once that table takes too long, configure it as an incremental model.",
+            "Marts models must always be materialized as tables for reasons of efficiency for our visualization tools."
+        ],
+        "correct_answer": [
+            "Always start with a view, once that view takes too long, build it into a table, and finally once that table takes too long, configure it as an incremental model."
+        ],
+        "explanation": "Materialize marts models as tables or incremental models. This approach provides faster performance for end users and saves costs by avoiding recomputing entire chains of models.",
+        "reference": "https://docs.getdbt.com/best-practices/how-we-structure/4-marts#marts-models"
+    },
+    {
+        "question_number": 245,
+        "question_area": "Developing dbt models",
+        "question": "What is the recommended materialization for a base model with standard renaming and casting transformations?",
+        "subquestions": [
+            {
+                "description": "Ephemeral",
+                "correct_answer": false
+            },
+            {
+                "description": "Table",
+                "correct_answer": false
+            },
+            {
+                "description": "View",
+                "correct_answer": true
+            }
+        ],
+        "explanation": "For a base model with standard renaming and casting transformations, the recommended materialization is a view. Views provide flexibility and ensure that the most up-to-date results are always available without taking up additional storage.",
+        "reference": "https://docs.getdbt.com/best-practices/materializations#materialization-types"
+    },
+    {
+        "question_number": 246,
+        "question_area": "Implementing dbt tests",
+        "question": "If there's a schema change in an incremental model, you can backfill the newly added columns configuring on_schema_change='sync_all_columns’",
+        "answers": [
+            "True",
+            "False"
+        ],
+        "correct_answer": [
+            "True"
+        ],
+        "explanation": "True. When there's a schema change in an incremental model, you can backfill the newly added columns by configuring on_schema_change='sync_all_columns'.",
+        "reference": "https://docs.getdbt.com/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change"
+    },
+    {
+        "question_number": 247,
+        "question_area": "Developing dbt models",
+        "question": "According to dbt best practices, staging models should have a 1-to-1 relationship to source tables.",
+        "answers": [
+            "T",
+            "F"
+        ],
+        "correct_answer": [
+            "F"
+        ],
+        "explanation": "False. According to dbt best practices, staging models should have a 1-to-1 relationship to source tables.",
+        "reference": "https://www.notion.so/Test-Equipo-21-07-2023-9a8b2a323121400f870aa2fcaaaa4894?pvs=21"
+    },
+    {
+        "question_number": 248,
+        "question_area": "Monitoring data pipelines",
+        "question": "When selecting nodes using the --select flag, which operator allows you to select the INTERSECTION of your arguments?",
+        "answers": [
+            ",",
+            "+",
+            "*",
+            "@"
+        ],
+        "correct_answer": [
+            ","
+        ],
+        "explanation": "The comma operator allows you to select the INTERSECTION of your arguments when selecting nodes using the --select flag.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
+    },
+    {
+        "question_number": 249,
+        "question_area": "Developing dbt models",
+        "question": "How to run my_model and its first-degree parents?",
+        "answers": [
+            "dbt run --select my_model+1",
+            "dbt run --select my_model+",
+            "dbt run --select 1+my_model",
+            "dbt run --select +1my_model"
+        ],
+        "correct_answer": [
+            "dbt run --select my_model+"
+        ],
+        "explanation": "To run my_model and its first-degree parents, you should use the command: dbt run --select my_model+.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/graph-operators"
+    },
+    {
+        "question_number": 250,
+        "question_area": "Developing dbt models",
+        "question": "What's the difference between sql_header and pre-hooks?",
+        "answers": [
+            "sql_header is the same than pre-hook, but sql_header is the way to define in the dbt_project for a concrete path, and the pre-hook can be defined in the config of a model and in the dbt_project.",
+            "sql_header is run before pre-hook.",
+            "sql_header is run in the same query as the create table|view statement and pre-hook is run before the create table|view statement of a model.",
+            "sql_header is the way to call a pre-hook if we are using BigQuery."
+        ],
+        "correct_answer": [
+            "sql_header is run in the same query as the create table|view statement and pre-hook is run before the create table|view statement of a model."
+        ],
+        "explanation": "sql_header is run in the same query as the create table|view statement, while pre-hook is run before the create table|view statement of a model. They serve different purposes in the dbt workflow.",
+        "reference": "https://docs.getdbt.com/reference/resource-configs/sql_header#comparison-to-pre-hooks"
+    },
+    {
+        "question_number": 251,
+        "question_area": "Debugging data modeling errors",
+        "question": "What is an example of a direct selection method when using dbt test?",
+        "answers": [
+            "dbt test --select \"+stg_customers\"",
+            "dbt test --select \"source:jaffle_shop\"",
+            "dbt test --select \"test_type:generic\"",
+            "dbt test --select \"config.materialized:table\""
+        ],
+        "correct_answer": [
+            "dbt test --select \"test_type:generic\""
+        ],
+        "explanation": "An example of a direct selection method when using dbt test is: dbt test --select \"test_type:generic\". This command selects tests based on their test type directly.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/test-selection-examples"
+    },
+    {
+        "question_number": 252,
+        "question_area": "Project config",
+        "question": "In what order will the following commands be executed when launching a dbt build?",
+        "answers": [
+            "on-run-start",
+            "pre-hook",
+            "post-hook",
+            "on-run-end"
+        ],
+        "correct_answer": [
+            "on-run-start --> pre-hook --> post-hook --> on-run-end"
+        ],
+        "explanation": "The correct order of execution is: on-run-start --> pre-hook --> post-hook --> on-run-end when launching a dbt build.",
+        "reference": "https://docs.getdbt.com/reference/resource-configs/pre-hook-post-hook#execution-ordering"
+    },
+    {
+        "question_number": 253,
+        "question_area": "Developing dbt models",
+        "question": "In your project you have a pre-hook defined that affects a model in the config block of the model and in the dbt_project.yml. What will be the behavior to follow?",
+        "answers": [
+            "If you have a pre-hook defined in the config block and in the dbt_project.yml, only the pre-hook of the config block will be run",
+            "dbt first run the pre-hook of the config block and after the pre-hook of the dbt_project.yml",
+            "dbt first run the pre-hook of the dbt_project.yml and after the pre-hook of the config block",
+            "It's a compilation error"
+        ],
+        "correct_answer": [
+            "dbt first run the pre-hook of the dbt_project.yml and after the pre-hook of the config block"
+        ],
+        "explanation": "In this scenario, dbt first runs the pre-hook of the dbt_project.yml and then the pre-hook of the config block. This order is followed when pre-hooks are defined in both locations.",
+        "reference": "https://docs.getdbt.com/reference/resource-configs/pre-hook-post-hook#execution-ordering"
+    },
+    {
+        "question_number": 254,
+        "question_area": "Monitoring data pipelines",
+        "question": "In the case of a job, if we run a dbt build command, but we want all possible verifications and resources to be also made, what is the only command that is required to run beforehand to accomplish the demand task?",
+        "answers": [
+            "dbt seed",
+            "dbt run",
+            "dbt test",
+            "dbt source freshness",
+            "dbt snapshot"
+        ],
+        "correct_answer": [
+            "dbt source freshness"
+        ],
+        "explanation": "To ensure all possible verifications and resources are also made before running a dbt build command in a job, you need to run dbt source freshness to check the freshness of your source data.",
+        "reference": "https://docs.getdbt.com/docs/deploy/source-freshness"
+    },
+    {
+        "question_number": 255,
+        "question_area": "Deploying dbt jobs",
+        "question": "The marketing team later requests that you exclude a specific model, customer_lifetime_value, while still executing the other customer_analytics tagged models and their dependencies. How would you modify your dbt command to accommodate this request?",
+        "answers": [
+            "dbt run --select tag:customer_analytics+ --select -customer_lifetime_value",
+            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value",
+            "dbt run --select tag:customer_analytics+ --select -+customer_lifetime_value",
+            "dbt run --select tag:customer_analytics+ -customer_lifetime_value"
+        ],
+        "correct_answer": [
+            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value"
+        ],
+        "explanation": "To exclude a specific model, customer_lifetime_value, while still executing the other customer_analytics tagged models and their dependencies, you should modify the dbt command by adding --exclude customer_lifetime_value.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
+    },
+    {
+        "question_number": 256,
+        "question_area": "Deploying dbt jobs",
+        "question": "You have been asked to run a specific set of models related to the daily financial reports (tagged as d_financial_report), but some of those models are also tagged as nightly and it’s not necessary to run them. Also, you want to run all tests of the executed models. What will be the command on dbt?",
+        "answers": [
+            "dbt build --select tag:d_financial_report,tag:nightly",
+            "dbt build --select tag:d_financial_report --exclude nightly",
+            "dbt run --select tag:d_financial_report --exclude tag:nightly",
+            "dbt build --select tag:d_financial_report --exclude tag:nightly"
+        ],
+        "correct_answer": [
+            "dbt run --select tag:d_financial_report --exclude tag:nightly"
+        ],
+        "explanation": "To run a specific set of models related to the daily financial reports (tagged as d_financial_report), excluding models tagged as nightly, and run all tests of the executed models, you should use the command: dbt run --select tag:d_financial_report --exclude tag:nightly.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
+    },
+    {
+        "question_number": 257,
+        "question_area": "Deploying dbt jobs",
+        "question": "You have been asked to run a specific set of models related to the daily financial reports, but you need to exclude models tagged as “nightly” and those with a materialized configuration set to “table”. What command would you use to run the models contained in the “daily_reports” directory, excluding those with the “nightly” tag and materialized as “table”?",
+        "answers": [
+            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table",
+            "dbt run --select path:models/daily_reports --select -tag:nightly,config.materialized:table",
+            "dbt run --select path:models/daily_reports,tag:nightly,config.materialized:table",
+            "dbt run --select path:models/daily_reports --exclude tag:nightly config.materialized:table"
+        ],
+        "correct_answer": [
+            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table"
+        ],
+        "explanation": "To run the models contained in the daily_reports directory, excluding those with the nightly tag and materialized as table, you should use the command: dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
+    },
+    {
+        "question_number": 258,
+        "question_area": "Monitoring data pipelines",
+        "question": "Imagine that in a project, you have set the DBT_STATE environment variable to point to the main branch manifest, which is the result of running the production version of the DBT project. Then, you create a new branch named 'users_data' to work on adding new staging models. To test only the new models implemented and a few tests that were modified, we need to execute:",
+        "answers": [
+            "dbt build --select 'state:new'",
+            "dbt test --select 'state:modified'",
+            "dbt test --state modified",
+            "dbt build -s 'state:modified.relation'"
+        ],
+        "correct_answer": [
+            "dbt test --select 'state:modified'"
+        ],
+        "explanation": "To test only the new models implemented and a few tests that were modified after creating a new branch named 'users_data' and setting the DBT_STATE environment variable, you should execute: dbt test --select 'state:modified'.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
+    },
+    {
+        "question_number": 259,
+        "question_area": "Monitoring data pipelines",
+        "question": "A developer has modified a dbt model and wants to identify and test only the changes made. Which dbt command should be used to select and run only the modified models?",
+        "answers": [
+            "dbt run --models state:modified",
+            "dbt run --select state:modified",
+            "dbt run -s state:modified",
+            "dbt test --models state:modified"
+        ],
+        "correct_answer": [
+            "dbt run --select state:modified"
+        ],
+        "explanation": "To identify and test only the modified models, a developer should use the dbt command: dbt run --select state:modified.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
+    },
+    {
+        "question_number": 260,
+        "question_area": "Debugging data modeling errors",
+        "question": "Currently, in our project we have for the stg_heroku_postgres_events model two tests: Generic test and Singular test > Test name: validate_events.sql. We need to run the singular test to validate that the test works correctly. Note: Only singular tests assigned to this model should be run.",
+        "answers": [
+            "dbt test -s stg_heroku_postgres_events",
+            "dbt test -s stg_heroku_postgres_events,test_type:singular",
+            "dbt test -s stg_heroku_postgres_events test_type:singular",
+            "dbt test -s stg_heroku_postgres_events,test_name:validate_events"
+        ],
+        "correct_answer": [
+            "dbt run --select state:modified",
+            "dbt test -s stg_heroku_postgres_events,test_name:validate_events"
+        ],
+        "explanation": "To identify and test only the modified models, a developer should use the dbt command: dbt run --select state:modified.",
+        "reference": "https://docs.getdbt.com/docs/build/data-tests#singular-tests"
+    },
+    {
+        "question_number": 261,
+        "question_area": "Debugging data modeling errors",
+        "question": "How can you indirectly select tests related to specific dbt models?",
+        "answers": [
+            "dbt test --select \"test_name:generic\"",
+            "dbt test --select \"customers orders\"",
+            "dbt test --select \"tag:my_model_tag+\"",
+            "dbt test --select \"tag:my_test_tag\""
+        ],
+        "correct_answer": [
+            "dbt test --select \"customers orders\""
+        ],
+        "explanation": "You can indirectly select tests related to specific dbt models by using the command: dbt test --select \"customers orders\". This command selects tests related to the models 'customers' and 'orders'.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/test-selection-examples"
     }
 ]
