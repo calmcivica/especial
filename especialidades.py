@@ -86,7 +86,10 @@ elif st.session_state.page == 'snowflake':
     if st.session_state['current_page'] == "Intro 🔰":
         t.comienzo(conn, especialidad)
     elif st.session_state['current_page'] == "Practicar 🥊":
-        t.practicar(conn, datos, especialidad)
+        try:
+            t.practicar(conn, datos, especialidad)
+        except Exception as e:
+            st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Exámenes 📄":
         try:
             t.examen(conn, datos)
@@ -122,7 +125,10 @@ elif st.session_state.page == 'dbt':
     if st.session_state['current_page'] == "Intro 🔰":
         t.comienzo(conn, especialidad)
     elif st.session_state['current_page'] == "Practicar 🥊":
-        t.practicar(conn, datos, especialidad)
+        try:
+            t.practicar(conn, datos, especialidad)
+        except Exception as e:
+            st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Exámenes 📄":
         try:
             t.examen(conn, datos)

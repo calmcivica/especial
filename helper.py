@@ -10,6 +10,7 @@ import threading
 from streamlit.components.v1 import html
 import datetime
 import pyodbc
+from pathlib import Path
 
 @st.cache_resource
 def init_connection():
@@ -78,7 +79,7 @@ def checkbox_help(unique_key):
     elif st.session_state[unique_key] == 1:
         st.session_state[unique_key] = 0
 
-def pregunta(jason,n,mode,user,conn):
+def pregunta(jason,n,mode,user,conn, especialidad):
         
         json_question = jason[n-1]
         # Extrae los datos necesarios del JSON
@@ -89,9 +90,14 @@ def pregunta(jason,n,mode,user,conn):
         if mode == 'practicar':
             st.write(f'Pregunta {numero} de ExamTopics')
         st.write(pregunta)
+        imagen = str(Path.cwd()) +'\\images\\'+'\\' + especialidad + '\\' + str(numero) + ".png"
+        if imagen != None:
+            try:
+                st.image(imagen)
+            except:
+                pass
         user_respuestas= [False]*len(respuestas)
 
-        
         if 'checkbox' not in st.session_state:
             st.session_state['checkbox'] = False
         for i in range(len(respuestas)):
@@ -262,7 +268,7 @@ def review():
         st.session_state['review_mode'] = True
 
 
-def setexam(set,jason,mode,conn,user,exam_time = None):
+def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
     if mode == "examen":
         if 'exam_answers' not in st.session_state:
                 st.session_state['exam_answers'] = []
@@ -337,9 +343,9 @@ def setexam(set,jason,mode,conn,user,exam_time = None):
         #pregunta_container = st.empty()
         #with pregunta_container.container():
         if mode == 'practicar':
-            pregunta(jason, set[i], mode, user, conn)            
+            pregunta(jason, set[i], mode, user, conn, especialidad)            
         if mode == 'examen':
-            pregunta(jason, set[i], mode, user, conn)
+            pregunta(jason, set[i], mode, user, conn, especialidad)
             st.write("")
             space,marca = st.columns([3.5,1], gap = "large")
             with space:

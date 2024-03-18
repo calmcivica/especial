@@ -3879,27 +3879,6 @@
         "reference": "https://docs.getdbt.com/best-practices/how-we-structure/4-marts#marts-models"
     },
     {
-        "question_number": 245,
-        "question_area": "Developing dbt models",
-        "question": "What is the recommended materialization for a base model with standard renaming and casting transformations?",
-        "subquestions": [
-            {
-                "description": "Ephemeral",
-                "correct_answer": false
-            },
-            {
-                "description": "Table",
-                "correct_answer": false
-            },
-            {
-                "description": "View",
-                "correct_answer": true
-            }
-        ],
-        "explanation": "For a base model with standard renaming and casting transformations, the recommended materialization is a view. Views provide flexibility and ensure that the most up-to-date results are always available without taking up additional storage.",
-        "reference": "https://docs.getdbt.com/best-practices/materializations#materialization-types"
-    },
-    {
         "question_number": 246,
         "question_area": "Implementing dbt tests",
         "question": "If there's a schema change in an incremental model, you can backfill the newly added columns configuring on_schema_change='sync_all_columns’",
@@ -3933,8 +3912,8 @@
         "question": "When selecting nodes using the --select flag, which operator allows you to select the INTERSECTION of your arguments?",
         "answers": [
             ",",
-            "+",
-            "*",
+            "\\+",
+            "\\*",
             "@"
         ],
         "correct_answer": [
@@ -3981,14 +3960,683 @@
         "question": "What is an example of a direct selection method when using dbt test?",
         "answers": [
             "dbt test --select \"+stg_customers\"",
-            "dbt test --select \"source:jaffle_shop\"",
-            "dbt test --select \"test_type:generic\"",
-            "dbt test --select \"config.materialized:table\""
+            "dbt test --select \"source: jaffle_shop\"",
+            "dbt test --select \"test_type: generic\"",
+            "dbt test --select \"config.materialized: table\""
         ],
         "correct_answer": [
-            "dbt test --select \"test_type:generic\""
+            "dbt test --select \"test_type: generic\""
         ],
         "explanation": "An example of a direct selection method when using dbt test is: dbt test --select \"test_type:generic\". This command selects tests based on their test type directly.",
         "reference": "https://docs.getdbt.com/reference/node-selection/test-selection-examples"
+    },
+    {
+        "question_number": 252,
+        "question_area": "Debugging data modeling errors",
+        "question": "What type of error is indicated by a 'Syntax error near line 18' message in dbt when saving a YAML file?",
+        "answers": [
+            "Runtime Error > Cannot connect",
+            "Compilation Error > Indentation, Jinja",
+            "Dependency Error > Circular dependencies",
+            "Database Error > SQL, Connection"
+        ],
+        "correct_answer": [
+            "Compilation Error > Indentation, Jinja"
+        ],
+        "explanation": "A 'Syntax error near line 18' in dbt when working with YAML files typically indicates a Compilation Error. It can arise from issues with indentation, incorrect use of hyphens, or improper Jinja templating. Since YAML files are used to configure dbt models, sources, and tests, syntax must be correct for dbt to parse and compile the project's code successfully.",
+        "reference": "https://docs.getdbt.com/docs/running-a-dbt-project/debugging-errors"
+    },
+    {
+        "question_number": 253,
+        "question_area": "Debugging data modeling errors",
+        "question": "After developing a new source and attempting to save it in dbt, you encounter a 'Syntax error near line 18'. How should you resolve the error?",
+        "answers": [
+            "Review SQL",
+            "Review the YAML indentation",
+            "Review the Jinja templating",
+            "Review the connection to the data warehouse"
+        ],
+        "correct_answer": [
+            "Review the YAML indentation"
+        ],
+        "explanation": "The error displayed suggests a syntax issue in the YAML file, typically caused by incorrect indentation. Reviewing the YAML indentation should resolve the parsing error encountered in the dbt development environment.",
+        "reference": "https://docs.getdbt.com/docs/running-a-dbt-project/debugging-errors"
+    },
+    {
+        "question_number": 254,
+        "question_area": "Debugging data modeling errors",
+        "question": "After executing 'dbt run -s int_google_sheets_budget', the run fails due to a SQL compilation error stating that 'STG_GOOGLE_SHEETS_BUDGET' does not exist or is not authorized. What steps should be taken to resolve this error? Select two correct answers.",
+        "answers": [
+            "Review the model's SQL to use the correct reference.",
+            "Execute the command 'dbt build -s int_google_sheets_budget'.",
+            "Execute the command 'dbt run -s +int_google_sheets_budget'.",
+            "Execute the command 'dbt run -s stg_google_sheets_budget'."
+        ],
+        "correct_answer": [
+            "Review the model's SQL to use the correct reference.",
+            "Execute the command 'dbt run -s +int_google_sheets_budget'."
+        ],
+        "explanation": "The error indicates a missing or unauthorized source table. To resolve this, review the SQL code for correct references. Also, executing 'dbt run -s +int_google_sheets_budget' ensures that dbt runs the specified model and all of its parents (dependencies), which may include the missing or unauthorized 'STG_GOOGLE_SHEETS_BUDGET'.",
+        "reference": "https://docs.getdbt.com/reference/commands/run"
+    },
+    {
+        "question_number": 255,
+        "question_area": "Developing dbt models",
+        "question": "In an incremental dbt model, if a new record is inserted for an existing product_id, will the next execution of the model result in two records for the same product_id?",
+        "answers": [
+            "True",
+            "False"
+        ],
+        "correct_answer": [
+            "False"
+        ],
+        "explanation": "In an incremental model, dbt inserts or updates records based on a unique key, which in this model is 'product_id'. If a new record is inserted with the same 'product_id', dbt will update the existing record rather than insert a new one, preventing duplicate records for the same 'product_id'.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/incremental-models"
+    },
+    {
+        "question_number": 256,
+        "question_area": "Deploying dbt jobs",
+        "question": "Given an updated configuration of an incremental dbt model with 'full_refresh' set to false, what will happen if you execute 'dbt run --select int_google_sheets_budget --full-refresh'?",
+        "answers": [
+            "True",
+            "False"
+        ],
+        "correct_answer": [
+            "True"
+        ],
+        "explanation": "Executing 'dbt run --select int_google_sheets_budget --full-refresh' will override the 'full_refresh' configuration set in the model, and it will materialize the complete model from scratch.",
+        "reference": "https://docs.getdbt.com/reference/commands/run"
+    },
+    {
+        "question_number": 257,
+        "question_area": "Project configuration",
+        "question": "With the overridden 'generate_schema_name' macro and the 'dbt_project.yml' configuration, what schema names will dbt generate for 'pepegonzalez' when running a command in their user dev environment?",
+        "answers": [
+            "pepegonzalez_stage for staging models and pepegonzalez_marketing for marts models",
+            "stage for staging models and pepegonzalez_marketing for marts models",
+            "stage for staging models and pepegonzalez for marts models",
+            "pepegonzalez_stage for staging models and pepegonzalez for marts models"
+        ],
+        "correct_answer": [
+            "pepegonzalez_stage for staging models and pepegonzalez for marts models"
+        ],
+        "explanation": "According to the 'generate_schema_name' macro and the 'dbt_project.yml' configuration, if the developer's target name is 'dev', the staging models will be built in the 'pepegonzalez_stage' schema, as the custom schema name will be appended with '_stage'. Marts models will be built in the 'pepegonzalez' schema because the target name is in the ['pro', 'dev'] list, so the default schema will be used without appending the custom schema name.",
+        "reference": "https://docs.getdbt.com/docs/build/custom-schemas"
+    },
+    {
+        "question_number": 258,
+        "question_area": "Project configuration",
+        "question": "If a user's project credentials set the schema as 'public' and the dbt_project.yml is configured as shown, which two options correctly describe the schema where models will materialize?",
+        "answers": [
+            "Models in the production_sch folder will materialize in the schema public",
+            "Models in the purchases_sch folder will materialize in the schema purchases_sch",
+            "Models in the production_sch folder will materialize in the schema public_production_sch",
+            "Models in the production_sch folder will materialize in the schema production_sch",
+            "Models in the purchases_sch folder will materialize in the schema public"
+        ],
+        "correct_answer": [
+            "Models in the production_sch folder will materialize in the schema public_production_sch",
+            "Models in the purchases_sch folder will materialize in the schema public"
+        ],
+        "explanation": "By default, dbt appends the custom schema name to the target schema from the project's credentials. Since the target schema is 'public', the models in production_sch will materialize in 'public_production_sch', and since there is no custom schema for purchases_sch, it will default to 'public'.",
+        "reference": "https://docs.getdbt.com/docs/build/custom-schemas"
+    },
+    {
+        "question_number": 259,
+        "question_area": "Project configuration",
+        "question": "Given a 'generate_schema_name' macro override and 'dbt_project.yml' configuration, where will models materialize if the target name is 'dev' and the default schema is 'public'?",
+        "answers": [
+            "Models in the production_sch folder will materialize in the schema public",
+            "Models in the purchases_sch folder will materialize in the schema purchases_sch",
+            "Models in the production_sch folder will materialize in the schema public_production_sch",
+            "Models in the production_sch folder will materialize in the schema production_sch",
+            "Models in the purchases_sch folder will materialize in the schema dev_public"
+        ],
+        "correct_answer": [
+            "Models in the production_sch folder will materialize in the schema production_sch",
+            "Models in the purchases_sch folder will materialize in the schema dev_public"
+        ],
+        "explanation": "With the given macro logic, when the target is 'dev', the custom schema name defined in the 'dbt_project.yml' will be used directly. For the 'production_sch' folder, models will materialize in 'production_sch'. For the 'purchases_sch' folder, since no custom schema is specified, the default 'public' will be prefixed with 'dev_', resulting in 'dev_public'.",
+        "reference": "https://docs.getdbt.com/docs/build/custom-schemas"
+    },
+    {
+        "question_number": 260,
+        "question_area": "Developing dbt models",
+        "question": "In a dbt project structure, which option is better for creating a dimensional table that joins user information with address data to obtain the address for each user?",
+        "answers": [
+            "Both lineages are correct.",
+            "The second lineage is better because we reduce computing and storage.",
+            "The first lineage is better because we maintain the integrity of each source in a staging model.",
+            "The first lineage is better because in marts models, it is not recommended to use the source macro."
+        ],
+        "correct_answer": [
+            "The first lineage is better because we maintain the integrity of each source in a staging model.",
+            "The first lineage is better because in marts models, it is not recommended to use the source macro."
+        ],
+        "explanation": "The first lineage is recommended because it adheres to dbt best practices where staging models maintain a 1-to-1 relationship with source tables and serve as the entry point for downstream use, ensuring integrity of the sources. It's also aligned with best practices to only use the 'source' macro within staging models and not directly in marts models.",
+        "reference": "https://docs.getdbt.com/best-practices/how-we-structure/2-staging#staging-models"
+    },
+    {
+        "question_number": 261,
+        "question_area": "Deploying dbt jobs",
+        "question": "If all models in the project have tests, which command would execute all tests and materialize all models?",
+        "answers": [
+            "dbt test + dbt run",
+            "dbt test + dbt snapshot",
+            "dbt build",
+            "dbt run"
+        ],
+        "correct_answer": [
+            "dbt build"
+        ],
+        "explanation": "The 'dbt build' command is a combination of 'dbt run', 'dbt test', and 'dbt snapshot'. It executes models, tests, and snapshots in the correct order with one command.",
+        "reference": "https://docs.getdbt.com/reference/commands/build"
+    },
+    {
+        "question_number": 262,
+        "question_area": "Developing dbt models",
+        "question": "Given the lineage of dbt models, which command should be executed to run only the selected models (stg_budget, dim_portfolio, fct_budget, and fct_metricas_agrupadas)?",
+        "answers": [
+            "dbt run -s +fct_budget+",
+            "dbt run -s @dim_portfolio+",
+            "dbt run -s dim_portfolio+,stg_budget",
+            "dbt run -s dim_portfolio+ stg_budget"
+        ],
+        "correct_answer": [
+            "dbt run -s dim_portfolio+ stg_budget"
+        ],
+        "explanation": "The correct command to run the selected models along with their dependencies is 'dbt run -s dim_portfolio+ stg_budget', which will include all models that are upstream or downstream of 'dim_portfolio' and 'stg_budget'.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
+    },
+    {
+        "question_number": 263,
+        "question_area": "Developing dbt models",
+        "question": "If you want to run only the selected models shown in the lineage diagram, which dbt run command should you use?",
+        "answers": [
+            "dbt run -s 2+int_produccion_ingresos+ dim_portfolio+",
+            "dbt run -s base_sap_zdig001+,int_produccion_ingresos+",
+            "dbt run -s base_sap_zdig001 stg_produccion_ingresos+1 dim_portfolio+",
+            "dbt run -s base_sap_zdig001+,dim_portfolio+"
+        ],
+        "correct_answer": [
+            "dbt run -s base_sap_zdig001 stg_produccion_ingresos+1 dim_portfolio+"
+        ],
+        "explanation": "The correct command to run the selected models along with their dependencies is 'dbt run -s base_sap_zdig001 stg_produccion_ingresos+1 dim_portfolio+'. This command includes the 'base_sap_zdig001' model and all downstream models up to and including 'dim_portfolio', plus the upstream models from 'stg_produccion_ingresos'.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
+    },
+    {
+        "question_number": 264,
+        "question_area": "Project configuration",
+        "question": "In a dbt project with a defined environment variable, which syntax correctly accesses the 'DBT_ENVIRONMENT' variable?",
+        "answers": [
+            "{{env_var('DBT_ENVIRONMENT')}}",
+            "{{env_var('dbt_environment')}}",
+            "{{var('DBT_ENVIRONMENT')}}",
+            "{{var('dbt_environment')}}"
+        ],
+        "correct_answer": ["{{env_var('DBT_ENVIRONMENT')}}"],
+        "explanation": "The correct way to access an environment variable in dbt is using the 'env_var' function with the exact name of the variable as it is defined in the environment, which is case-sensitive.",
+        "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/env_var"
+    },
+    {
+        "question_number": 265,
+        "question_area": "Project configuration",
+        "question": "Given a dbt_project.yml configuration that specifies a database using an environment variable and a user's project credentials set to a 'public' schema, what database and schema will the staging models use when the 'DBT_ENVIRONMENT' variable is set to 'USER_DEV'?",
+        "answers": [
+            "The staging models will use the USER_DEV_DEMO_SLVR_DB database and the public schema.",
+            "The staging models will use the DEMO_SLVR_DB database with the USER_DEV schema prefix.",
+            "The staging models will use the USER_DEV_DEMO_SLVR_DB database and the production_sch schema.",
+            "The staging models will use the default database and the schema specified in the project's credentials."
+        ],
+        "correct_answer": ["The staging models will use the USER_DEV_DEMO_SLVR_DB database and the public schema."],
+        "explanation": "The 'env_var' function in the dbt_project.yml file dynamically sets the database based on the 'DBT_ENVIRONMENT' variable. With 'DBT_ENVIRONMENT' set to 'USER_DEV', the database resolves to USER_DEV_DEMO_SLVR_DB. Models will default to using the 'public' schema unless overridden in the configuration.",
+        "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/env_var"
+    },
+    {
+        "question_number": 266,
+        "question_area": "Project configuration",
+        "question": "In a dbt project with a defined environment variable, which syntax correctly accesses the 'DBT_ENVIRONMENT' variable?",
+        "answers": [
+            "{{env_var('DBT_ENVIRONMENT')}}",
+            "{{env_var('dbt_environment')}}",
+            "{{var('DBT_ENVIRONMENT')}}",
+            "{{var('dbt_environment')}}"
+        ],
+        "correct_answer": ["{{env_var('DBT_ENVIRONMENT')}}"],
+        "explanation": "The correct way to access an environment variable in dbt is using the 'env_var' function with the exact name of the variable as it is defined in the environment, which is case-sensitive.",
+        "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/env_var"
+    },
+    {
+        "question_number": 267,
+        "question_area": "dbt Python models",
+        "question": "In a dbt Python model, what is the concept of 'lazy evaluation'?",
+        "answers": [
+            "The ability to preview data using methods like .show() or .head() in development.",
+            "The ability to execute Python code remotely on a data platform.",
+            "The ability to create a series of meaningful transformations using CTEs.",
+            "The output of each dataframe operation not being immediately calculated, but only computed when explicitly asked for."
+        ],
+        "correct_answer": ["The output of each dataframe operation not being immediately calculated, but only computed when explicitly asked for."],
+        "explanation": "Lazy evaluation in programming, including dbt Python models, refers to the technique where the evaluation of expressions is delayed until their value is needed. It avoids repeated evaluations (D).",
+        "reference": "Concept can be checked in the official dbt documentation or relevant Python resources."
+    },
+    {
+        "question_number": 268,
+        "question_area": "Establishing environments in data warehouse for dbt",
+        "question": "In a dbt project, how can you change the default location of the profiles.yml file to a different directory?",
+        "answers": [
+            "Modify the dbt_project.yml file to include a reference to the new directory.",
+            "Use the DBT_PROFILES_DIR environment variable to change the default location of the profiles.yml file.",
+            "Include a --profiles-dir option in the dbt_project.yml file.",
+            "Move the profiles.yml file to the new directory and update the file path in each model’s configuration."
+        ],
+        "correct_answer": [
+            "Use the DBT_PROFILES_DIR environment variable to change the default location of the profiles.yml file."
+        ],
+        "explanation": "Using the DBT_PROFILES_DIR environment variable allows you to change the default location of the profiles.yml file, which is essential for customizing the dbt environment setup.",
+        "reference": "https://docs.getdbt.com/reference/profiles.yml"
+    },
+    {
+        "question_number": 269,
+        "question_area": "Developing dbt models",
+        "question": "What is the reason why dbt Python models have limited access to the context of the project?",
+        "answers": [
+            "Python models do not support passing context as an argument to the model() function.",
+            "Python models use a different templating language that does not have access to the project’s context.",
+            "Jinja, the templation language used by dbt SQL models, provides access to the project’s context, which is not available to Python models.",
+            "The context is not relevant or necessary for Python models to perform their functions."
+        ],
+        "correct_answer": [
+            "Jinja, the templation language used by dbt SQL models, provides access to the project’s context, which is not available to Python models."
+        ],
+        "explanation": "Jinja, the templating language used by dbt for SQL models, provides a way to access project context like variables and macros, which is a feature not available in Python models due to the language differences.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-python"
+    },
+    {
+        "question_number": 270,
+        "question_area": "Developing dbt models",
+        "question": "In dbt, which method is used to configure a Python model within the model’s.py file?",
+        "answers": [
+            "dbt.configure()",
+            "dbt.setup()",
+            "dbt.config()",
+            "dbt.define()"
+        ],
+        "correct_answer": [
+            "dbt.config()"
+        ],
+        "explanation": "The dbt.config() method is used within the model’s Python file to specify configuration options for Python models, allowing you to adjust settings like materialization directly in the code.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-python#configuring-python-models"
+    },
+    {
+        "question_number": 271,
+        "question_area": "Deploying dbt jobs",
+        "question": "How can you specify a schema other than the target schema in your profiles.yml for building models in dbt, and where can you specify this information?",
+        "answers": [
+            "You can specify the schema in the dbt_project.yml file using the model-paths configuration.",
+            "You can specify the schema in the model file using the ref function.",
+            "You can specify the schema in the dbt_project.yml file using the schema configuration block, or in the model file using a config block.",
+            "You can specify the schema in the model file using the schema keyword."
+        ],
+        "correct_answer": [
+            "You can specify the schema in the dbt_project.yml file using the schema configuration block, or in the model file using a config block."
+        ],
+        "explanation": "Specifying a schema other than the target schema in dbt can be done either through the dbt_project.yml file using the schema configuration block, or directly in the model file using a config block, providing flexibility in schema management.",
+        "reference": "https://docs.getdbt.com/reference/model-configs#the-config-block"
+    },
+    {
+        "question_number": 272,
+        "question_area": "Developing dbt models",
+        "question": "Which of the following is a valid use case for using variables in dbt models?",
+        "answers": [
+            "Generating reports and visualizations from SQL queries.",
+            "Storing configuration data for use in dbt projects.",
+            "Defining data transformations in a graphical user interface.",
+            "Configuring timezones or avoiding hardcoded table names."
+        ],
+        "correct_answer": [
+            "Configuring timezones or avoiding hardcoded table names."
+        ],
+        "explanation": "Using variables in dbt models is particularly useful for dynamic configurations like adjusting timezones or avoiding hardcoded references, such as table names, enhancing the flexibility and reusability of the models.",
+        "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/target"
+    },
+    {
+        "question_number": 273,
+        "question_area": "Monitoring data pipelines",
+        "question": "What will happen if you specify threads: 1 when running dbt?",
+        "answers": [
+            "dbt will start building only one model, and finish it, before moving onto the next model.",
+            "dbt will start building all models at once, without finishing any of them.",
+            "dbt will start building all models in a sequential order.",
+            "dbt will start building only one model, and finish it, before moving onto the next model, but the run time of the project will increase."
+        ],
+        "correct_answer": [
+            "dbt will start building only one model, and finish it, before moving onto the next model."
+        ],
+        "explanation": "Specifying threads: 1 in dbt configures the tool to process one model at a time, which can be useful for debugging or limiting resource usage, but may increase the total runtime of the dbt run.",
+        "reference": "https://docs.getdbt.com/docs/running-a-dbt-project/using-threads"
+    },
+    {
+        "question_number": 274,
+        "question_area": "Implementing dbt tests",
+        "question": "Which of the following types of files are best suited for loading using dbt’s seed functionality, according to dbt documentation?",
+        "answers": [
+            "Large CSV exports from a production database.",
+            "Raw data files in JSON or XML format.",
+            "Files containing business-specific logic, such as a list of country codes or employee IDs.",
+            "Files containing sensitive information, such as PII or passwords."
+        ],
+        "correct_answer": [
+            "Files containing business-specific logic, such as a list of country codes or employee IDs."
+        ],
+        "explanation": "dbt’s seed functionality is best used for loading small, reference data files like those containing business logic or static data such as country codes or employee IDs, facilitating their use in transformations and tests.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/seeds"
+    },
+    {
+        "question_number": 275,
+        "question_area": "Debugging data modeling errors",
+        "question": "You are working on a dbt project where you have defined custom schemas for some models. During a dbt run, you notice that one of the models is not being created in the database. What is a possible reason for this issue?",
+        "answers": [
+            "The generate_alias_name macro has been overridden.",
+            "There is an ambiguous model name in the schema.",
+            "The model does not have an alias defined.",
+            "The target schema is not defined in the project configuration file."
+        ],
+        "correct_answer": [
+            "There is an ambiguous model name in the schema.",
+            "The target schema is not defined in the project configuration file."
+        ],
+        "explanation": "Issues such as ambiguous model names or the lack of a target schema definition in the project configuration can lead to models not being created during a dbt run, indicating the importance of clear naming and proper configuration.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models"
+    },
+    {
+        "question_number": 276,
+        "question_area": "Developing dbt models",
+        "question": "You are a data scientist working on a data pipeline and you want to write a model in dbt that doesn’t directly build into the database. Which materialization option should you use for this purpose?",
+        "answers": [
+            "Table.",
+            "View.",
+            "Incremental.",
+            "Ephemeral."
+        ],
+        "correct_answer": [
+            "Ephemeral."
+        ],
+        "explanation": "Ephemeral materialization is used when you want to define models that are compiled and executed within the context of other models but are not directly built into the database. This is useful for creating intermediate transformations.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/materializations#ephemeral"
+    },
+    {
+        "question_number": 277,
+        "question_area": "Deploying dbt jobs",
+        "question": "As a data engineer, you are concerned about securely storing credentials for your dbt project. What method is considered more secure for storing credentials in dbt?",
+        "answers": [
+            "Storing credentials directly in the profiles.yml file.",
+            "Using environment variables to load credentials.",
+            "Saving credentials in a separate plain-text file within the project directory.",
+            "Storing credentials in the dbt_project.yml file."
+        ],
+        "correct_answer": [
+            "Using environment variables to load credentials."
+        ],
+        "explanation": "Using environment variables to store and load credentials in dbt projects is considered more secure than hardcoding them in files, as it reduces the risk of exposing sensitive information in version control.",
+        "reference": "https://docs.getdbt.com/docs/build/environment-variables"
+    },
+    {
+        "question_number": 278,
+        "question_area": "Deploying dbt jobs",
+        "question": "What is the purpose of the --vars command line option in dbt?",
+        "answers": [
+            "To define variables in a dbt project.",
+            "To override variables for a run of dbt.",
+            "To configure timezones and avoid hardcoded table names.",
+            "To generate reports and visualizations from SQL queries."
+        ],
+        "correct_answer": [
+            "To override variables for a run of dbt."
+        ],
+        "explanation": "The --vars command line option allows you to override variables for a single run of dbt, making it possible to change configurations without altering the dbt_project.yml file.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-variables"
+    },
+    {
+        "question_number": 279,
+        "question_area": "Implementing dbt tests",
+        "question": "When implementing data integrity checks in dbt, which of the following methods should be avoided?",
+        "answers": [
+            "Running data integrity tests against the data warehouse.",
+            "Running data integrity tests against individual models.",
+            "Automating data integrity checks.",
+            "Performing manual checks on the data."
+        ],
+        "correct_answer": [
+            "Performing manual checks on the data."
+        ],
+        "explanation": "While dbt supports automating data integrity checks, relying on manual checks is less efficient and more prone to error, hence should be avoided.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/tests"
+    },
+    {
+        "question_number": 280,
+        "question_area": "Developing dbt models",
+        "question": "Which of the following statements are true about the ref function in dbt?",
+        "answers": [
+            "The ref function allows you to build models on top of other models.",
+            "The ref function allows you to modularize your models.",
+            "The ref function allows you to make your models reusable.",
+            "All of the above."
+        ],
+        "correct_answer": [
+            "All of the above."
+        ],
+        "explanation": "The ref function is a cornerstone of dbt's functionality, enabling model modularization, reusability, and the ability to build upon other models.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-ref"
+    },
+    {
+        "question_number": 281,
+        "question_area": "Monitoring data pipelines",
+        "question": "A company wants to use the check strategy to detect changes in their product inventory. Which configuration must be specified to use the check strategy in dbt?",
+        "answers": [
+            "updated_at",
+            "check_cols",
+            "unique_key",
+            "None of the above"
+        ],
+        "correct_answer": [
+            "check_cols"
+        ],
+        "explanation": "The check strategy in dbt Snapshots requires specifying the `check_cols` configuration to identify which columns should be checked for changes.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots#configuring-snapshots"
+    },
+    {
+        "question_number": 282,
+        "question_area": "Developing dbt models",
+        "question": "Which of the following best describes how dbt optimizes your workflow?",
+        "answers": [
+            "By creating a new database with each dbt run.",
+            "By processing raw data in real-time.",
+            "By building up reusable, modular data models.",
+            "By storing data in a more efficient format like avro and parquet."
+        ],
+        "correct_answer": [
+            "By building up reusable, modular data models."
+        ],
+        "explanation": "dbt optimizes your workflow by enabling the development of reusable, modular data models that streamline the data transformation process.",
+        "reference": "https://docs.getdbt.com/docs/introduction"
+    },
+    {
+        "question_number": 283,
+        "question_area": "Monitoring data pipelines",
+        "question": "A team is working on a dbt project where they are using snapshots to track changes to their product inventory. They want to prevent accidental deletion of their snapshots. What is the recommended approach for setting privileges on the snapshot tables?",
+        "answers": [
+            "Run the snapshots as the same user or role as other models in the warehouse.",
+            "Run the snapshots as a different user or role in the warehouse.",
+            "Don’t set any privileges on the snapshots.",
+            "Give all users full access to the snapshots."
+        ],
+        "correct_answer": [
+            "Run the snapshots as the same user or role as other models in the warehouse."
+        ],
+        "explanation": "To maintain consistency and security, snapshots should be run using the same user or role as other models in the data warehouse, ensuring proper access control and preventing accidental deletions.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots"
+    },
+    {
+        "question_number": 284,
+        "question_area": "Implementing dbt tests",
+        "question": "When using dbt to test a model, what does dbt do with the queries it constructs for each test?",
+        "answers": [
+            "It saves them to the YAML file for future reference.",
+            "It discards them after the test is run.",
+            "It executes them and returns the number of records that failed the test.",
+            "It compiles them into a single executable query."
+        ],
+        "correct_answer": [
+            "It executes them and returns the number of records that failed the test."
+        ],
+        "explanation": "dbt executes the test queries it constructs for each test, then reports the number of records that did not pass the test, providing immediate feedback on data integrity.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/tests"
+    },
+    {
+        "question_number": 285,
+        "question_area": "Deploying dbt jobs",
+        "question": "What command should you use to initiate a new dbt project?",
+        "answers": [
+            "dbt new dbt_project_name.",
+            "dbt init dbt_project_name.",
+            "dbt create dbt_project_name.",
+            "dbt start dbt_project_name."
+        ],
+        "correct_answer": [
+            "dbt init dbt_project_name."
+        ],
+        "explanation": "The `dbt init` command is used to create a new dbt project with the specified name, setting up the necessary project structure for development.",
+        "reference": "https://docs.getdbt.com/reference/commands/init"
+    },
+    {
+        "question_number": 286,
+        "question_area": "Establishing environments in data warehouse for dbt",
+        "question": "Sarah is a data analyst who works with a dbt Cloud project. She needs to define an environment variable to store the database password. Which prefix should she use for the variable name to define it as an environment secret variable in dbt Cloud?",
+        "answers": [
+            "DBT",
+            "DBT_ENV",
+            "DBT_ENV_SECRET",
+            "DBT_SECRET"
+        ],
+        "correct_answer": [
+            "DBT_ENV_SECRET"
+        ],
+        "explanation": "In dbt Cloud, environment variables intended to be kept secret should be prefixed with `DBT_ENV_SECRET` to ensure they are securely stored and managed.",
+        "reference": "https://docs.getdbt.com/docs/dbt-cloud/using-dbt-cloud/cloud-environment-variables"
+    },
+    {
+        "question_number": 287,
+        "question_area": "Creating and maintaining dbt documentation",
+        "question": "You are reviewing a dbt project that has a source schema defined in the schema.yml file. The source schema has a name in the database that looks like machine generated name which is not easily readable, you want to use a more sensible name in dbt. How can you implement this and still ensure dbt compiles using the actual source schema name?",
+        "answers": [
+            "Use DDL and DML statements to change the schema name to one that can be easily read and makes sense.",
+            "Use the schema property to define the actual names as per the database, and use your name: property for the name that makes sense and is easily readable.",
+            "Use the ‘database’ property to define the actual names as per the database, and use your name: property for the name that makes sense and is easily readable.",
+            "Use the ‘table’ property to define the actual name as per the database, and use your name: property for the name that makes sense and is easily readable."
+        ],
+        "correct_answer": [
+            "Use the schema property to define the actual names as per the database, and use your name: property for the name that makes sense and is easily readable."
+        ],
+        "explanation": "In dbt, the `schema` property in the schema.yml file allows you to define the actual schema name as it exists in the database, while the `name` property can be used to refer to this schema in a more readable or sensible way within your dbt project.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/using-sources"
+    },
+    {
+        "question_number": 288,
+        "question_area": "Developing dbt models",
+        "question": "As a data engineer working on a dbt project, you need to install a package from a tarball URL hosted internally within your organization. What information do you need to provide in order to install this package?",
+        "answers": [
+            "The tarball URL and the package version.",
+            "The tarball URL and the subfolder name where the package source code is installed.",
+            "The tarball URL and the branch name of the package repository.",
+            "The tarball URL and the name of the data warehouse used in the project."
+        ],
+        "correct_answer": ["The tarball URL and the subfolder name where the package source code is installed."],
+        "explanation": "When installing a dbt package from a tarball URL, you need to provide the tarball URL and potentially the subfolder name where the package's source code is located, if it's not at the root of the tarball.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/package-management#installing-local-packages"
+    },
+    {
+        "question_number": 289,
+        "question_area": "Creating and maintaining dbt documentation",
+        "question": "Maria is working on a dbt project and needs to create snapshots for a table that does not have a reliable updated_at column. Which snapshot strategy should she use to compare a list of columns between their current and historical values?",
+        "answers": [
+            "Timestamp strategy",
+            "Merge strategy",
+            "Check strategy",
+            "Incremental strategy"
+        ],
+        "correct_answer": ["Check strategy"],
+        "explanation": "For tables lacking a reliable updated_at column, the Check strategy allows for the comparison of specified columns' current and historical values to determine changes.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots#check-snapshots"
+    },
+    {
+        "question_number": 290,
+        "question_area": "Debugging data modeling errors",
+        "question": "You are running dbt and want to check the connection to your warehouse. What should you do?",
+        "answers": [
+            "Use the debug command within the dbt project.",
+            "Use the test command within the dbt project.",
+            "Use the run command within the dbt project.",
+            "Use the check command within the dbt project."
+        ],
+        "correct_answer": ["Use the debug command within the dbt project."],
+        "explanation": "The debug command is used within a dbt project to check the connection to your data warehouse, among other configuration settings.",
+        "reference": "https://docs.getdbt.com/reference/commands/debug"
+    },
+    {
+        "question_number": 291,
+        "question_area": "Creating and maintaining dbt documentation",
+        "question": "What is the purpose of the dbt analysis folder?",
+        "answers": [
+            "To store SQL queries for use in dbt models.",
+            "To store SQL queries for use in dbt tests.",
+            "To organize analytical SQL queries in a dbt project.",
+            "To store SQL queries for use in dbt seeds."
+        ],
+        "correct_answer": ["To organize analytical SQL queries in a dbt project."],
+        "explanation": "The dbt analysis folder is intended to organize and store analytical SQL queries, which are not directly part of the transformation pipeline but are used for data analysis within a dbt project.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/analyses"
+    },
+    {
+        "question_number": 292,
+        "question_area": "Implementing dbt tests",
+        "question": "A data analyst wants to create a snapshot configuration to track changes in a customer table that contains sensitive information. They want to ensure that the snapshot configuration provides the best handling of changes to the source data, including the addition and deletion of columns. Which strategy should they use when working with snapshot tables in dbt?",
+        "answers": [
+            "The timestamp strategy.",
+            "The check_cols strategy.",
+            "The unique key strategy.",
+            "The hard delete strategy."
+        ],
+        "correct_answer": ["The timestamp strategy."],
+        "explanation": "The timestamp strategy is suited for tracking changes over time, including additions and deletions of columns, by using a timestamp column to determine when records have been added or changed.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots#timestamp-snapshots"
+    },
+    {
+        "question_number": 293,
+        "question_area": "Developing dbt models",
+        "question": "Which of the following statements is true about the Python model in dbt?",
+        "answers": [
+            "The Python model is stored in a database table.",
+            "The Python model is stored in a .py file in the models folder.",
+            "The Python model is a class compiled by dbt Core.",
+            "The Python model defines a function named dbt()."
+        ],
+        "correct_answer": ["The Python model is stored in a .py file in the models folder."],
+        "explanation": "In dbt, Python models allow you to write transformations in Python and are stored as .py files within the models directory of your dbt project.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-python"
+    },
+    {
+        "question_number": 294,
+        "question_area": "Monitoring data pipelines",
+        "question": "How can using dbt sources improve data analysis workflows? Choose ALL answers that apply.",
+        "answers": [
+            "It allows for easy dependency tracing.",
+            "It allows for source freshness reporting.",
+            "It allows for better data visualization.",
+            "It allows for easier data cleansing."
+        ],
+        "correct_answer": ["It allows for easy dependency tracing.", "It allows for source freshness reporting."],
+        "explanation": "Using dbt sources enables easy tracing of data dependencies and freshness reporting, which are essential for maintaining and monitoring data pipelines.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/using-sources"
     }
 ]

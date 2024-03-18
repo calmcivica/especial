@@ -226,12 +226,12 @@ def practicar(conn, datos, especialidad):
     # Update the current page to reflect
         with preguntas:
             if st.session_state["question_set"]:
-                h.setexam(st.session_state["question_set"], datos, "practicar", conn, user)
+                h.setexam(st.session_state["question_set"], datos, "practicar", conn, user, especialidad)
             else:
                 st.write("No hay ninguna pregunta que cuadre con los filtros que has puesto")
 
 
-def examen(conn, datos):
+def examen(conn, datos, especialidad):
     user = h.get_user_none()
     exam_mode = 0
     if "exam_mode" not in st.session_state:
@@ -365,9 +365,7 @@ def examen(conn, datos):
         with st.container():
             question_set = st.session_state["question_set"]
             exam_duration = st.session_state["exam_duration"]
-            h.setexam(
-                question_set, datos, "examen", conn, user, exam_time=exam_duration
-            )
+            h.setexam(question_set, datos, "examen", conn, user, especialidad, exam_time=exam_duration)
 
     elif st.session_state.get("exam_mode", 0) == 2:
         exam_duration = st.session_state["exam_duration"]
