@@ -33,7 +33,7 @@
         "reference": "https://docs.getdbt.com/reference/resource-configs/severity"
     },
     {
-        "question_number": 4,
+        "question_number": 3,
         "question_area": "Creating and maintaining dbt documentation",
         "question": "Which command generates the catalog.json artifact?",
         "answers": [
@@ -49,7 +49,7 @@
         "reference": "https://docs.getdbt.com/reference/artifacts/catalog-json"
     },
     {
-        "question_number": 5,
+        "question_number": 4,
         "question_area": "Developing dbt models",
         "question": "Seeds can be configured in the .csv file",
         "answers": [
@@ -63,7 +63,7 @@
         "reference": "https://docs.getdbt.com/reference/seed-configs#configuring-seeds"
     },
     {
-        "question_number": 6,
+        "question_number": 5,
         "question_area": "Developing dbt models",
         "question": "What Jinja adapter method enables you to delegate the functionality of a macro interface to any number of adapter-specific implementations?",
         "answers": [
@@ -78,7 +78,7 @@
         "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/dispatch"
     },
     {
-        "question_number": 7,
+        "question_number": 6,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml field is used to override dbt's default macro dispatch search behavior?",
         "answers": [
@@ -94,7 +94,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/dispatch-config"
     },
     {
-        "question_number": 8,
+        "question_number": 7,
         "question_area": "Creating and maintaining dbt documentation",
         "question": "What dbt_project.yml field is used to specify a custom list of directories where docs blocks are located?",
         "answers": [
@@ -110,7 +110,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/docs-paths"
     },
     {
-        "question_number": 9,
+        "question_number": 8,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml field is used to specify a custom directory where dbt will write logs?",
         "answers": [
@@ -126,7 +126,7 @@
         "reference": "https://docs.getdbt.com/reference/global-configs/logs#log-and-target-paths"
     },
     {
-        "question_number": 10,
+        "question_number": 9,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml field is used to specify a custom list of directories where macros are located?",
         "answers": [
@@ -142,7 +142,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/macro-paths"
     },
     {
-        "question_number": 11,
+        "question_number": 10,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml field is used to specify a custom directory where packages are installed when you run dbt deps?",
         "answers": [
@@ -158,7 +158,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/packages-install-path"
     },
     {
-        "question_number": 12,
+        "question_number": 11,
         "question_area": "Developing dbt models",
         "question": "Which of the next names are correct for a name project?",
         "answers": [
@@ -175,7 +175,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/name"
     },
     {
-        "question_number": 13,
+        "question_number": 12,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml fields are used to specify custom SQL statements to be run at the start and/or end of various dbt commands?",
         "answers": [
@@ -191,7 +191,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/on-run-start-on-run-end"
     },
     {
-        "question_number": 14,
+        "question_number": 13,
         "question_area": "Establishing environments in data warehouse for dbt",
         "question": "What dbt_project.yml field is used to specify what profile your dbt project should use to connect to your data warehouse?",
         "answers": [
@@ -207,7 +207,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/profile"
     },
     {
-        "question_number": 15,
+        "question_number": 14,
         "question_area": "Implementing dbt tests",
         "question": "Can you limit the number of failure results returned by a failed test?",
         "answers": [
@@ -223,7 +223,7 @@
         "reference": "https://docs.getdbt.com/reference/resource-configs/limit"
     },
     {
-        "question_number": 16,
+        "question_number": 15,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml field is used to specify a custom comment to be injected into each query that dbt runs against your database?",
         "answers": [],
@@ -234,7 +234,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/query-comment"
     },
     {
-        "question_number": 17,
+        "question_number": 16,
         "question_area": "Project configs",
         "question": "What are the three things you specify for each environment?",
         "answers": [
@@ -251,7 +251,7 @@
         "reference": "https://docs.getdbt.com/docs/dbt-cloud-environments"
     },
     {
-        "question_number": 18,
+        "question_number": 17,
         "question_area": "Project configs",
         "question": "What dbt_project.yml field is used to specify whether dbt should quote databases, schemas, and identifiers? What is the default? In what contexts will quoting happen (if specified)?",
         "answers": [
@@ -267,7 +267,7 @@
         "reference": "https: //docs.getdbt.com/reference/project-configs/quoting"
     },
     {
-        "question_number": 19,
+        "question_number": 18,
         "question_area": "Project configs",
         "question": "What dbt_project.yml field is used to specify the version of dbt_project.yml 'syntax' that you are using?",
         "answers": [
@@ -282,7 +282,7 @@
         "reference": "https: //docs.getdbt.com/reference/project-configs/config-version"
     },
     {
-        "question_number": 20,
+        "question_number": 19,
         "question_area": "Project configs",
         "question": "What dbt_project.yml field is used to restrict your project to only work with a specific range of dbt versions? What is the default? Can this check be situationally disabled?",
         "answers": [
@@ -297,7 +297,7 @@
         "reference": "https: //docs.getdbt.com/reference/project-configs/require-dbt-version"
     },
     {
-        "question_number": 21,
+        "question_number": 20,
         "question_area": "Project configs",
         "question": "What is the environment variable order of precedence in dbt Cloud?",
         "answers": [
@@ -316,7 +316,7 @@
         "reference": "https: //docs.getdbt.com/docs/build/environment-variables"
     },
     {
-        "question_number": 22,
+        "question_number": 21,
         "question_area": "Project configs",
         "question": "What dbt_project.yml field is used to specify a custom list of directories where seed files are located? What is the default?",
         "answers": [
@@ -331,7 +331,7 @@
         "reference": "https: //docs.getdbt.com/reference/project-configs/seed-paths"
     },
     {
-        "question_number": 23,
+        "question_number": 22,
         "question_area": "Project configs",
         "question": "What dbt_project.yml field is used to specify a custom list of directories from which files will be copied into the target directory as part of the docs generate command? What is the default?",
         "answers": [
@@ -346,7 +346,7 @@
         "reference": "https: //docs.getdbt.com/reference/project-configs/asset-paths"
     },
     {
-        "question_number": 24,
+        "question_number": 23,
         "question_area": "Project configs",
         "question": "What dbt_project.yml field is used to specify a custom list of directories where snapshots are located? What is the default?",
         "answers": [
@@ -361,7 +361,7 @@
         "reference": "https: //docs.getdbt.com/reference/project-configs/snapshot-paths"
     },
     {
-        "question_number": 25,
+        "question_number": 24,
         "question_area": "Project configs",
         "question": "How can you configure dbt to completely ignore certain files in your repo?",
         "answers": [
@@ -376,7 +376,7 @@
         "reference": "https: //docs.getdbt.com/reference/dbtignore"
     },
     {
-        "question_number": 26,
+        "question_number": 25,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml field is used to specify a custom list of directories where models and sources are located? What is the default?",
         "answers": [
@@ -392,7 +392,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/model-paths"
     },
     {
-        "question_number": 27,
+        "question_number": 26,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml field is used to specify a custom list of directories where analyses are located, and what is the default value?",
         "answers": [
@@ -408,7 +408,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/analysis-paths"
     },
     {
-        "question_number": 28,
+        "question_number": 27,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml field is used to specify a custom directory where compiled files will be written when you run dbt run, dbt compile, or dbt test commands? What is the default? How else can this be configured?",
         "answers": [
@@ -424,7 +424,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/target-path"
     },
     {
-        "question_number": 29,
+        "question_number": 28,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml field is used to specify a custom list of directories to be removed by the dbt clean command? What is the default? What is the use case?",
         "answers": [
@@ -440,7 +440,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/clean-targets"
     },
     {
-        "question_number": 30,
+        "question_number": 29,
         "question_area": "Implementing dbt tests",
         "question": "What dbt_project.yml field is used to specify a custom list of directories where data tests are located? What is the default?",
         "answers": [
@@ -454,6 +454,22 @@
         ],
         "explanation": "The default directory for tests is tests. This configuration allows specifying custom directories for locating data tests, differentiating between singular and generic tests based on file placement.",
         "reference": "https://docs.getdbt.com/reference/project-configs/test-paths"
+    },
+    {
+        "question_number": 30,
+        "question_area": "Debugging data modeling errors",
+        "question": "How can you indirectly select tests related to specific dbt models?",
+        "answers": [
+            "dbt test --select \"test_name:generic\"",
+            "dbt test --select \"customers orders\"",
+            "dbt test --select \"tag:my_model_tag+\"",
+            "dbt test --select \"tag:my_test_tag\""
+        ],
+        "correct_answer": [
+            "dbt test --select \"customers orders\""
+        ],
+        "explanation": "You can indirectly select tests related to specific dbt models by using the command: dbt test --select \"customers orders\". This command selects tests related to the models 'customers' and 'orders'.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/test-selection-examples"
     },
     {
         "question_number": 31,
@@ -538,7 +554,7 @@
     {
         "question_number": 36,
         "question_area": "Implementing dbt tests",
-        "question": "T|F: dbt tests can only be run against models",
+        "question": "dbt tests can only be run against models",
         "answers": [
             "True",
             "False"
@@ -826,22 +842,6 @@
         "reference": "https://docs.getdbt.com/reference/node-selection/exclude"
     },
     {
-        "question_number": 53,
-        "question_area": "Developing dbt models",
-        "question": "How do you select the intersection of two selectors?",
-        "answers": [
-            "`dbt run --select +snowplow_sessions,+fct_orders`",
-            "`dbt run --select snowplow_sessions & fct_orders`",
-            "`dbt run --select snowplow_sessions && fct_orders`",
-            "`dbt run --select snowplow_sessions,fct_orders`"
-        ],
-        "correct_answer": [
-            "`dbt run --select +snowplow_sessions,+fct_orders`"
-        ],
-        "explanation": "To select the intersection of two selectors, separate the selectors with a comma. This syntax selects nodes that are common ancestors of both specified selectors, effectively applying an 'AND' logical operator.",
-        "reference": "https://docs.getdbt.com/reference/node-selection/exclude"
-    },
-    {
         "question_number": 54,
         "question_area": "Developing dbt models",
         "question": "How do you select the union of two selectors?",
@@ -986,6 +986,22 @@
         "reference": "https://docs.getdbt.com/docs/deploy/artifacts"
     },
     {
+        "question_number": 63,
+        "question_area": "Developing dbt models",
+        "question": "How do you select the intersection of two selectors?",
+        "answers": [
+            "`dbt run --select +snowplow_sessions,+fct_orders`",
+            "`dbt run --select snowplow_sessions & fct_orders`",
+            "`dbt run --select snowplow_sessions && fct_orders`",
+            "`dbt run --select snowplow_sessions,fct_orders`"
+        ],
+        "correct_answer": [
+            "`dbt run --select +snowplow_sessions,+fct_orders`"
+        ],
+        "explanation": "To select the intersection of two selectors, separate the selectors with a comma. This syntax selects nodes that are common ancestors of both specified selectors, effectively applying an 'AND' logical operator.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/exclude"
+    },
+    {
         "question_number": 64,
         "question_area": "Debugging data modeling errors",
         "question": "Run results are produced by which commands?",
@@ -1082,6 +1098,102 @@
         "reference": "https://docs.getdbt.com/reference/node-selection/defer"
     },
     {
+        "question_number": 70,
+        "question_area": "Implementing dbt tests",
+        "question": "What is a parametrized query that accepts arguments in dbt known as, which is defined in a special test block?",
+        "answers": [
+            "generic test",
+            "dynamic test",
+            "parameterized test",
+            "argument test"
+        ],
+        "correct_answer": [
+            "generic test"
+        ],
+        "explanation": "A generic test in dbt is a parametrized query that accepts arguments, defined in a special test block, similar to how a macro functions.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/tests#generic-tests"
+    },
+    {
+        "question_number": 71,
+        "question_area": "Implementing dbt tests",
+        "question": "In dbt, what is the type of SQL query that returns failing rows, typically stored in a .sql file within the test directory?",
+        "answers": [
+            "singular test",
+            "unique test",
+            "failing rows test",
+            "error test"
+        ],
+        "correct_answer": [
+            "singular test"
+        ],
+        "explanation": "A singular test in dbt is an SQL query stored in a .sql file within the test directory, designed to return rows that fail the test criteria.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/tests#singular-tests"
+    },
+    {
+        "question_number": 72,
+        "question_area": "Developing dbt models",
+        "question": "What term describes the degree to which a system's components may be separated and recombined in dbt?",
+        "answers": [
+            "modularity",
+            "flexibility",
+            "separability",
+            "combinability"
+        ],
+        "correct_answer": [
+            "modularity"
+        ],
+        "explanation": "Modularity in dbt refers to the degree to which the components of a dbt project can be separated and recombined, enhancing maintainability and scalability.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models#modularity"
+    },
+    {
+        "question_number": 73,
+        "question_area": "Developing dbt models",
+        "question": "What file type is used for building a model in dbt?",
+        "answers": [
+            ".sql",
+            ".yaml",
+            ".json",
+            ".md"
+        ],
+        "correct_answer": [
+            ".sql"
+        ],
+        "explanation": ".sql file type is used for defining models in dbt, where the SQL queries for creating views or tables are written.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models"
+    },
+    {
+        "question_number": 74,
+        "question_area": "Monitoring data pipelines",
+        "question": "What acronym is used in dbt to describe the flow of data through models?",
+        "answers": [
+            "DAG",
+            "DAP",
+            "ADC",
+            "GAD"
+        ],
+        "correct_answer": [
+            "DAG"
+        ],
+        "explanation": "DAG stands for Directed Acyclic Graph, an acronym used in dbt to describe how data flows through the models without any cycles, ensuring a deterministic order of execution.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models#understanding-the-dag"
+    },
+    {
+        "question_number": 75,
+        "question_area": "Developing dbt models",
+        "question": "What does the term 'normalized' refer to in the context of dbt modeling techniques?",
+        "answers": [
+            "normalized",
+            "optimized",
+            "minimized",
+            "simplified"
+        ],
+        "correct_answer": [
+            "normalized"
+        ],
+        "explanation": "In the context of dbt modeling, 'normalized' refers to techniques designed to reduce storage and compute costs by minimizing the number of repeats in the database.",
+        "reference": "https://discourse.getdbt.com/t/data-modeling-approaches-in-modern-data-times/1128/3"
+    },
+    {
         "question_number": 76,
         "question_area": "Developing dbt models",
         "question": "What is the default materialization of a model if you don't proactively configure the materialization for a model?",
@@ -1164,7 +1276,7 @@
     {
         "question_number": 81,
         "question_area": "Developing dbt models",
-        "question": "T|F: Subdirectories allow you to configure materializations at the folder level.",
+        "question": "Subdirectories allow you to configure materializations at the folder level.",
         "answers": [
             "True",
             "False"
@@ -1178,7 +1290,7 @@
     {
         "question_number": 82,
         "question_area": "Developing dbt models",
-        "question": "T|F: Subdirectories change the schema where a model is built, based on the name of the folder the model is located in.",
+        "question": "Subdirectories change the schema where a model is built, based on the name of the folder the model is located in.",
         "answers": [
             "True",
             "False"
@@ -1256,7 +1368,7 @@
     {
         "question_number": 87,
         "question_area": "Implementing dbt tests",
-        "question": "T|F: Tests in dbt are compiled as SQL files.",
+        "question": "Tests in dbt are compiled as SQL files.",
         "answers": [
             "True",
             "False"
@@ -1316,6 +1428,23 @@
         "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
     },
     {
+        "question_number": 91,
+        "question_area": "Debugging data modeling errors",
+        "question": "Currently, in our project we have for the stg_heroku_postgres_events model two tests: Generic test and Singular test > Test name: validate_events.sql. We need to run the singular test to validate that the test works correctly. Note: Only singular tests assigned to this model should be run.",
+        "answers": [
+            "dbt test -s stg_heroku_postgres_events",
+            "dbt test -s stg_heroku_postgres_events,test_type:singular",
+            "dbt test -s stg_heroku_postgres_events test_type:singular",
+            "dbt test -s stg_heroku_postgres_events,test_name:validate_events"
+        ],
+        "correct_answer": [
+            "dbt run --select state:modified",
+            "dbt test -s stg_heroku_postgres_events,test_name:validate_events"
+        ],
+        "explanation": "To identify and test only the modified models, a developer should use the dbt command: dbt run --select state:modified.",
+        "reference": "https://docs.getdbt.com/docs/build/data-tests#singular-tests"
+    },
+    {
         "question_number": 92,
         "question_area": "Developing dbt models",
         "question": "Which materialization in your config block is most like a Common Table Expression (CTE)?",
@@ -1334,7 +1463,7 @@
     {
         "question_number": 93,
         "question_area": "Creating and maintaining dbt documentation",
-        "question": "T|F: Doc blocks must be stored as .yml files.",
+        "question": "Doc blocks must be stored as .yml files.",
         "answers": [
             "True",
             "False"
@@ -1348,7 +1477,7 @@
     {
         "question_number": 94,
         "question_area": "Developing dbt models",
-        "question": "T|F: Hooks, like configuration settings, are hierarchical, and dbt runs the hooks in your config block in lieu of those in your dbt_project.yml file.",
+        "question": "Hooks, like configuration settings, are hierarchical, and dbt runs the hooks in your config block in lieu of those in your dbt_project.yml file.",
         "answers": [
             "True",
             "False"
@@ -1362,7 +1491,7 @@
     {
         "question_number": 95,
         "question_area": "Creating and maintaining dbt documentation",
-        "question": "T|F: dbt automatically pulls descriptions from your dbt project and metadata about your models and sources into the documentation site.",
+        "question": "dbt automatically pulls descriptions from your dbt project and metadata about your models and sources into the documentation site.",
         "answers": [
             "True",
             "False"
@@ -1472,7 +1601,7 @@
     {
         "question_number": 102,
         "question_area": "Developing dbt models",
-        "question": "T|F: profiles.yml files are database specific.",
+        "question": "profiles.yml files are database specific.",
         "answers": [
             "True",
             "False"
@@ -2138,6 +2267,54 @@
         "reference": "https://docs.getdbt.com/reference/exposure-properties"
     },
     {
+        "question_number": 144,
+        "question_area": "Deploying dbt jobs",
+        "question": "You have been asked to run a specific set of models related to the daily financial reports, but you need to exclude models tagged as “nightly” and those with a materialized configuration set to “table”. What command would you use to run the models contained in the “daily_reports” directory, excluding those with the “nightly” tag and materialized as “table”?",
+        "answers": [
+            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table",
+            "dbt run --select path:models/daily_reports --select -tag:nightly,config.materialized:table",
+            "dbt run --select path:models/daily_reports,tag:nightly,config.materialized:table",
+            "dbt run --select path:models/daily_reports --exclude tag:nightly config.materialized:table"
+        ],
+        "correct_answer": [
+            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table"
+        ],
+        "explanation": "To run the models contained in the daily_reports directory, excluding those with the nightly tag and materialized as table, you should use the command: dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
+    },
+    {
+        "question_number": 145,
+        "question_area": "Monitoring data pipelines",
+        "question": "Imagine that in a project, you have set the DBT_STATE environment variable to point to the main branch manifest, which is the result of running the production version of the DBT project. Then, you create a new branch named 'users_data' to work on adding new staging models. To test only the new models implemented and a few tests that were modified, we need to execute:",
+        "answers": [
+            "dbt build --select 'state:new'",
+            "dbt test --select 'state:modified'",
+            "dbt test --state modified",
+            "dbt build -s 'state:modified.relation'"
+        ],
+        "correct_answer": [
+            "dbt test --select 'state:modified'"
+        ],
+        "explanation": "To test only the new models implemented and a few tests that were modified after creating a new branch named 'users_data' and setting the DBT_STATE environment variable, you should execute: dbt test --select 'state:modified'.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
+    },
+    {
+        "question_number": 146,
+        "question_area": "Monitoring data pipelines",
+        "question": "A developer has modified a dbt model and wants to identify and test only the changes made. Which dbt command should be used to select and run only the modified models?",
+        "answers": [
+            "dbt run --models state:modified",
+            "dbt run --select state:modified",
+            "dbt run -s state:modified",
+            "dbt test --models state:modified"
+        ],
+        "correct_answer": [
+            "dbt run --select state:modified"
+        ],
+        "explanation": "To identify and test only the modified models, a developer should use the dbt command: dbt run --select state:modified.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
+    },
+    {
         "question_number": 147,
         "question_area": "Developing dbt models",
         "question": "What are the different strategies used in creating a snapshot?",
@@ -2236,7 +2413,7 @@
     {
         "question_number": 153,
         "question_area": "Developing dbt models",
-        "question": "T|F Seeds can be configured in the .csv file",
+        "question": "Seeds can be configured in the .csv file",
         "answers": [
             "True",
             "False"
@@ -2250,7 +2427,7 @@
     {
         "question_number": 154,
         "question_area": "Developing dbt models",
-        "question": "T|F Sources are declared in the dbt_project.yml file.",
+        "question": "Sources are declared in the dbt_project.yml file.",
         "answers": [
             "False",
             "True",
@@ -2310,6 +2487,71 @@
         ],
         "explanation": "By default, dbt stores the results of test failures in a schema named 'dbt_test__audit', which can be customized in your dbt project's configuration.",
         "reference": "https://docs.getdbt.com/reference/commands/test#storing-test-failures"
+    },
+    {
+        "question_number": 158,
+        "question_area": "Developing dbt models",
+        "question": "In your project you have a pre-hook defined that affects a model in the config block of the model and in the dbt_project.yml. What will be the behavior to follow?",
+        "answers": [
+            "If you have a pre-hook defined in the config block and in the dbt_project.yml, only the pre-hook of the config block will be run",
+            "dbt first run the pre-hook of the config block and after the pre-hook of the dbt_project.yml",
+            "dbt first run the pre-hook of the dbt_project.yml and after the pre-hook of the config block",
+            "It's a compilation error"
+        ],
+        "correct_answer": [
+            "dbt first run the pre-hook of the dbt_project.yml and after the pre-hook of the config block"
+        ],
+        "explanation": "In this scenario, dbt first runs the pre-hook of the dbt_project.yml and then the pre-hook of the config block. This order is followed when pre-hooks are defined in both locations.",
+        "reference": "https://docs.getdbt.com/reference/resource-configs/pre-hook-post-hook#execution-ordering"
+    },
+    {
+        "question_number": 157,
+        "question_area": "Monitoring data pipelines",
+        "question": "In the case of a job, if we run a dbt build command, but we want all possible verifications and resources to be also made, what is the only command that is required to run beforehand to accomplish the demand task?",
+        "answers": [
+            "dbt seed",
+            "dbt run",
+            "dbt test",
+            "dbt source freshness",
+            "dbt snapshot"
+        ],
+        "correct_answer": [
+            "dbt source freshness"
+        ],
+        "explanation": "To ensure all possible verifications and resources are also made before running a dbt build command in a job, you need to run dbt source freshness to check the freshness of your source data.",
+        "reference": "https://docs.getdbt.com/docs/deploy/source-freshness"
+    },
+    {
+        "question_number": 159,
+        "question_area": "Deploying dbt jobs",
+        "question": "The marketing team later requests that you exclude a specific model, customer_lifetime_value, while still executing the other customer_analytics tagged models and their dependencies. How would you modify your dbt command to accommodate this request?",
+        "answers": [
+            "dbt run --select tag:customer_analytics+ --select -customer_lifetime_value",
+            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value",
+            "dbt run --select tag:customer_analytics+ --select -+customer_lifetime_value",
+            "dbt run --select tag:customer_analytics+ -customer_lifetime_value"
+        ],
+        "correct_answer": [
+            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value"
+        ],
+        "explanation": "To exclude a specific model, customer_lifetime_value, while still executing the other customer_analytics tagged models and their dependencies, you should modify the dbt command by adding --exclude customer_lifetime_value.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
+    },
+    {
+        "question_number": 160,
+        "question_area": "Deploying dbt jobs",
+        "question": "You have been asked to run a specific set of models related to the daily financial reports (tagged as d_financial_report), but some of those models are also tagged as nightly and it’s not necessary to run them. Also, you want to run all tests of the executed models. What will be the command on dbt?",
+        "answers": [
+            "dbt build --select tag:d_financial_report,tag:nightly",
+            "dbt build --select tag:d_financial_report --exclude nightly",
+            "dbt run --select tag:d_financial_report --exclude tag:nightly",
+            "dbt build --select tag:d_financial_report --exclude tag:nightly"
+        ],
+        "correct_answer": [
+            "dbt run --select tag:d_financial_report --exclude tag:nightly"
+        ],
+        "explanation": "To run a specific set of models related to the daily financial reports (tagged as d_financial_report), excluding models tagged as nightly, and run all tests of the executed models, you should use the command: dbt run --select tag:d_financial_report --exclude tag:nightly.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
     },
     {
         "question_number": 161,
@@ -2442,7 +2684,7 @@
     {
         "question_number": 169,
         "question_area": "Deploying dbt jobs",
-        "question": "T|F Removing a package from packages.yml will uninstall the package.",
+        "question": "Removing a package from packages.yml will uninstall the package.",
         "answers": [
             "False. The package remains in the dbt_packages directory.",
             "True. Removing a package from packages.yml automatically uninstalls it.",
@@ -2458,7 +2700,7 @@
     {
         "question_number": 170,
         "question_area": "Developing dbt models",
-        "question": "T|F Analyses will be materialized as a model in the database.",
+        "question": "Analyses will be materialized as a model in the database.",
         "answers": [
             "False. Analyses are not materialized as models.",
             "True. Analyses are treated the same as models and are materialized.",
@@ -2586,7 +2828,7 @@
     {
         "question_number": 178,
         "question_area": "Deploying dbt jobs",
-        "question": "T|F Running total is an available type of metric in dbt?",
+        "question": "Running total is an available type of metric in dbt?",
         "answers": [
             "True",
             "False"
@@ -2600,7 +2842,7 @@
     {
         "question_number": 179,
         "question_area": "Deploying dbt jobs",
-        "question": "T|F Multiple arguments can be provided to --select flag?",
+        "question": "Multiple arguments can be provided to --select flag?",
         "answers": [
             "True",
             "False"
@@ -2630,7 +2872,7 @@
     {
         "question_number": 181,
         "question_area": "Deploying dbt jobs",
-        "question": "T|F You can use --defer argument in dbt snapshot command?",
+        "question": "You can use --defer argument in dbt snapshot command?",
         "answers": [
             "True",
             "False"
@@ -2772,7 +3014,7 @@
     {
         "question_number": 190,
         "question_area": "Deploying dbt jobs",
-        "question": "T|F Selectors are defined in the dbt_project.yml file.",
+        "question": "Selectors are defined in the dbt_project.yml file.",
         "answers": [
             "True",
             "False"
@@ -2818,7 +3060,7 @@
     {
         "question_number": 193,
         "question_area": "Developing dbt models",
-        "question": "T|F Ephemeral models can be deferred.",
+        "question": "Ephemeral models can be deferred.",
         "answers": [
             "True",
             "False"
@@ -2832,7 +3074,7 @@
     {
         "question_number": 194,
         "question_area": "Deploying dbt jobs",
-        "question": "T|F Deferral requires both --defer and --state flags to be set.",
+        "question": "Deferral requires both --defer and --state flags to be set.",
         "answers": [
             "True",
             "False"
@@ -2908,6 +3150,70 @@
         "reference": "https://docs.getdbt.com/reference/commands/cmd-docs"
     },
     {
+        "question_number": 199,
+        "question_area": "Debugging data modeling errors",
+        "question": "What purpose does the --config-dir flag serve in dbt?",
+        "answers": [
+            "Shows where the .dbt configuration directory is located",
+            "Lists all the configuration files used by dbt",
+            "Generates a new configuration directory for dbt projects",
+            "Checks the integrity of the dbt configuration directory"
+        ],
+        "correct_answer": [
+            "Shows where the .dbt configuration directory is located"
+        ],
+        "explanation": "The --config-dir flag with the dbt debug command is used to display the location of the .dbt configuration directory, helping users understand where dbt is reading its configuration from.",
+        "reference": "https://docs.getdbt.com/reference/commands/debug#config-dir"
+    },
+    {
+        "question_number": 200,
+        "question_area": "Monitoring data pipelines",
+        "question": "When dbt parse is run, into which file is the detailed timing information written?",
+        "answers": [
+            "target/perf_info.json",
+            "target/parse_log.json",
+            "logs/parse_details.json",
+            "logs/performance.json"
+        ],
+        "correct_answer": [
+            "target/perf_info.json"
+        ],
+        "explanation": "When the dbt parse command is run, detailed timing information about the parsing process is written into the target/perf_info.json file.",
+        "reference": "https://docs.getdbt.com/reference/commands/parse"
+    },
+    {
+        "question_number": 201,
+        "question_area": "Developing dbt models",
+        "question": "What command is used to invoke a macro in dbt?",
+        "answers": [
+            "dbt run-operation",
+            "dbt invoke-macro",
+            "dbt execute-macro",
+            "dbt run-macro"
+        ],
+        "correct_answer": [
+            "dbt run-operation"
+        ],
+        "explanation": "The dbt run-operation command is used to invoke a macro in dbt, allowing for the execution of dbt macros directly from the command line.",
+        "reference": "https://docs.getdbt.com/reference/commands/run-operation"
+    },
+    {
+        "question_number": 202,
+        "question_area": "Monitoring data pipelines",
+        "question": "When does the sources.json artifact get created in dbt?",
+        "answers": [
+            "When dbt source freshness command is invoked",
+            "After every successful dbt run",
+            "During dbt project initialization",
+            "When any dbt compile command is executed"
+        ],
+        "correct_answer": [
+            "When dbt source freshness command is invoked"
+        ],
+        "explanation": "The sources.json artifact is created when the dbt source freshness command is invoked, providing details on the freshness of the data sources used in the dbt project.",
+        "reference": "https://docs.getdbt.com/reference/artifacts/sources-json"
+    },
+    {
         "question_number": 203,
         "question_area": "Monitoring data pipelines",
         "question": "By default, when dbt source freshness completes, a JSON file containing information about the freshness of your sources will be saved to?",
@@ -2958,7 +3264,7 @@
     {
         "question_number": 206,
         "question_area": "Deploying dbt jobs",
-        "question": "T|F -x and --fail-fast flags are equivalent?",
+        "question": "-x and --fail-fast flags are equivalent?",
         "answers": [
             "True",
             "False",
@@ -3102,7 +3408,7 @@
     {
         "question_number": 215,
         "question_area": "Deploying dbt jobs",
-        "question": "T|F Every dbt project needs dbt_project.yml file.",
+        "question": "Every dbt project needs dbt_project.yml file.",
         "answers": [
             "True",
             "False",
@@ -3118,7 +3424,7 @@
     {
         "question_number": 216,
         "question_area": "Deploying dbt jobs",
-        "question": "T|F 555_xxx_reporting is an acceptable project name.",
+        "question": "555_xxx_reporting is an acceptable project name.",
         "answers": [
             "True",
             "False",
@@ -3198,7 +3504,7 @@
     {
         "question_number": 221,
         "question_area": "Deploying dbt jobs",
-        "question": "T|F run_results.json is produced by running dbt ls command?",
+        "question": "run_results.json is produced by running dbt ls command?",
         "answers": [
             "True",
             "False"
@@ -3260,7 +3566,7 @@
     {
         "question_number": 225,
         "question_area": "Promoting code through version control",
-        "question": "T|F Running git branch --ls is one of the ways to list local branches.",
+        "question": "Running git branch --ls is one of the ways to list local branches.",
         "answers": [
             "True",
             "False"
@@ -3274,7 +3580,7 @@
     {
         "question_number": 226,
         "question_area": "Promoting code through version control",
-        "question": "T|F A user can create a branch using 'git branch <branchname>' and start adding commits right away?",
+        "question": "A user can create a branch using 'git branch <branchname>' and start adding commits right away?",
         "answers": [
             "True",
             "False"
@@ -3334,7 +3640,7 @@
         "reference": "https://git-scm.com/docs/git-reset#Documentation/git-reset.txt"
     },
     {
-        "question_number": 231,
+        "question_number": 230,
         "question_area": "Developing dbt models",
         "question": "What are the two components of Grants config?",
         "answers": [
@@ -3350,7 +3656,7 @@
         "reference": "https://docs.getdbt.com/reference/resource-configs/grants"
     },
     {
-        "question_number": 232,
+        "question_number": 231,
         "question_area": "Developing dbt models",
         "question": "What are the two arguments used with persist_docs config?",
         "answers": [
@@ -3366,9 +3672,9 @@
         "reference": "https://docs.getdbt.com/reference/resource-configs/persist_docs"
     },
     {
-        "question_number": 233,
+        "question_number": 232,
         "question_area": "Developing dbt models",
-        "question": "T|F freshness is a source configuration.",
+        "question": "freshness is a source configuration.",
         "answers": [
             "True",
             "False",
@@ -3382,7 +3688,7 @@
         "reference": "https://docs.getdbt.com/reference/source-configs"
     },
     {
-        "question_number": 234,
+        "question_number": 233,
         "question_area": "Developing dbt models",
         "question": "What are the configurations specific to sources?",
         "answers": [
@@ -3398,7 +3704,7 @@
         "reference": "https://docs.getdbt.com/reference/source-configs"
     },
     {
-        "question_number": 235,
+        "question_number": 234,
         "question_area": "Developing dbt models",
         "question": "What are the configurations specific to seeds?",
         "answers": [
@@ -3412,6 +3718,22 @@
         ],
         "explanation": "Configurations specific to seeds include 'quote_columns', which controls whether column names should be quoted, and 'column_types', which specifies the data types for the columns in the seed file.",
         "reference": "https://docs.getdbt.com/reference/seed-configs"
+    },
+    {
+        "question_number": 235,
+        "question_area": "Project config",
+        "question": "In what order will the following commands be executed when launching a dbt build?",
+        "answers": [
+            "on-run-start",
+            "pre-hook",
+            "post-hook",
+            "on-run-end"
+        ],
+        "correct_answer": [
+            "on-run-start --> pre-hook --> post-hook --> on-run-end"
+        ],
+        "explanation": "The correct order of execution is: on-run-start --> pre-hook --> post-hook --> on-run-end when launching a dbt build.",
+        "reference": "https://docs.getdbt.com/reference/resource-configs/pre-hook-post-hook#execution-ordering"
     },
     {
         "question_number": 236,
@@ -3464,7 +3786,7 @@
     {
         "question_number": 239,
         "question_area": "Developing dbt models",
-        "question": "T|F A test with warn severity will never return an error.",
+        "question": "A test with warn severity will never return an error.",
         "answers": [
             "True.",
             "False. A warning severity test can also result in an error.",
@@ -3496,7 +3818,7 @@
     {
         "question_number": 241,
         "question_area": "Developing dbt models",
-        "question": "T|F Tags are additive in nature.",
+        "question": "Tags are additive in nature.",
         "answers": [
             "True.",
             "False. Tags are mutually exclusive.",
@@ -3512,7 +3834,7 @@
     {
         "question_number": 242,
         "question_area": "Developing dbt models",
-        "question": "T|F The + prefix can be used in any yml file.",
+        "question": "The + prefix can be used in any yml file.",
         "answers": [
             "False. It is only compatible with dbt_project.yml files that use `config-version: 2`",
             "True. The + prefix is a universal selector in dbt.",
@@ -3667,168 +3989,6 @@
             "dbt test --select \"test_type:generic\""
         ],
         "explanation": "An example of a direct selection method when using dbt test is: dbt test --select \"test_type:generic\". This command selects tests based on their test type directly.",
-        "reference": "https://docs.getdbt.com/reference/node-selection/test-selection-examples"
-    },
-    {
-        "question_number": 252,
-        "question_area": "Project config",
-        "question": "In what order will the following commands be executed when launching a dbt build?",
-        "answers": [
-            "on-run-start",
-            "pre-hook",
-            "post-hook",
-            "on-run-end"
-        ],
-        "correct_answer": [
-            "on-run-start --> pre-hook --> post-hook --> on-run-end"
-        ],
-        "explanation": "The correct order of execution is: on-run-start --> pre-hook --> post-hook --> on-run-end when launching a dbt build.",
-        "reference": "https://docs.getdbt.com/reference/resource-configs/pre-hook-post-hook#execution-ordering"
-    },
-    {
-        "question_number": 253,
-        "question_area": "Developing dbt models",
-        "question": "In your project you have a pre-hook defined that affects a model in the config block of the model and in the dbt_project.yml. What will be the behavior to follow?",
-        "answers": [
-            "If you have a pre-hook defined in the config block and in the dbt_project.yml, only the pre-hook of the config block will be run",
-            "dbt first run the pre-hook of the config block and after the pre-hook of the dbt_project.yml",
-            "dbt first run the pre-hook of the dbt_project.yml and after the pre-hook of the config block",
-            "It's a compilation error"
-        ],
-        "correct_answer": [
-            "dbt first run the pre-hook of the dbt_project.yml and after the pre-hook of the config block"
-        ],
-        "explanation": "In this scenario, dbt first runs the pre-hook of the dbt_project.yml and then the pre-hook of the config block. This order is followed when pre-hooks are defined in both locations.",
-        "reference": "https://docs.getdbt.com/reference/resource-configs/pre-hook-post-hook#execution-ordering"
-    },
-    {
-        "question_number": 254,
-        "question_area": "Monitoring data pipelines",
-        "question": "In the case of a job, if we run a dbt build command, but we want all possible verifications and resources to be also made, what is the only command that is required to run beforehand to accomplish the demand task?",
-        "answers": [
-            "dbt seed",
-            "dbt run",
-            "dbt test",
-            "dbt source freshness",
-            "dbt snapshot"
-        ],
-        "correct_answer": [
-            "dbt source freshness"
-        ],
-        "explanation": "To ensure all possible verifications and resources are also made before running a dbt build command in a job, you need to run dbt source freshness to check the freshness of your source data.",
-        "reference": "https://docs.getdbt.com/docs/deploy/source-freshness"
-    },
-    {
-        "question_number": 255,
-        "question_area": "Deploying dbt jobs",
-        "question": "The marketing team later requests that you exclude a specific model, customer_lifetime_value, while still executing the other customer_analytics tagged models and their dependencies. How would you modify your dbt command to accommodate this request?",
-        "answers": [
-            "dbt run --select tag:customer_analytics+ --select -customer_lifetime_value",
-            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value",
-            "dbt run --select tag:customer_analytics+ --select -+customer_lifetime_value",
-            "dbt run --select tag:customer_analytics+ -customer_lifetime_value"
-        ],
-        "correct_answer": [
-            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value"
-        ],
-        "explanation": "To exclude a specific model, customer_lifetime_value, while still executing the other customer_analytics tagged models and their dependencies, you should modify the dbt command by adding --exclude customer_lifetime_value.",
-        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
-    },
-    {
-        "question_number": 256,
-        "question_area": "Deploying dbt jobs",
-        "question": "You have been asked to run a specific set of models related to the daily financial reports (tagged as d_financial_report), but some of those models are also tagged as nightly and it’s not necessary to run them. Also, you want to run all tests of the executed models. What will be the command on dbt?",
-        "answers": [
-            "dbt build --select tag:d_financial_report,tag:nightly",
-            "dbt build --select tag:d_financial_report --exclude nightly",
-            "dbt run --select tag:d_financial_report --exclude tag:nightly",
-            "dbt build --select tag:d_financial_report --exclude tag:nightly"
-        ],
-        "correct_answer": [
-            "dbt run --select tag:d_financial_report --exclude tag:nightly"
-        ],
-        "explanation": "To run a specific set of models related to the daily financial reports (tagged as d_financial_report), excluding models tagged as nightly, and run all tests of the executed models, you should use the command: dbt run --select tag:d_financial_report --exclude tag:nightly.",
-        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
-    },
-    {
-        "question_number": 257,
-        "question_area": "Deploying dbt jobs",
-        "question": "You have been asked to run a specific set of models related to the daily financial reports, but you need to exclude models tagged as “nightly” and those with a materialized configuration set to “table”. What command would you use to run the models contained in the “daily_reports” directory, excluding those with the “nightly” tag and materialized as “table”?",
-        "answers": [
-            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table",
-            "dbt run --select path:models/daily_reports --select -tag:nightly,config.materialized:table",
-            "dbt run --select path:models/daily_reports,tag:nightly,config.materialized:table",
-            "dbt run --select path:models/daily_reports --exclude tag:nightly config.materialized:table"
-        ],
-        "correct_answer": [
-            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table"
-        ],
-        "explanation": "To run the models contained in the daily_reports directory, excluding those with the nightly tag and materialized as table, you should use the command: dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table.",
-        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
-    },
-    {
-        "question_number": 258,
-        "question_area": "Monitoring data pipelines",
-        "question": "Imagine that in a project, you have set the DBT_STATE environment variable to point to the main branch manifest, which is the result of running the production version of the DBT project. Then, you create a new branch named 'users_data' to work on adding new staging models. To test only the new models implemented and a few tests that were modified, we need to execute:",
-        "answers": [
-            "dbt build --select 'state:new'",
-            "dbt test --select 'state:modified'",
-            "dbt test --state modified",
-            "dbt build -s 'state:modified.relation'"
-        ],
-        "correct_answer": [
-            "dbt test --select 'state:modified'"
-        ],
-        "explanation": "To test only the new models implemented and a few tests that were modified after creating a new branch named 'users_data' and setting the DBT_STATE environment variable, you should execute: dbt test --select 'state:modified'.",
-        "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
-    },
-    {
-        "question_number": 259,
-        "question_area": "Monitoring data pipelines",
-        "question": "A developer has modified a dbt model and wants to identify and test only the changes made. Which dbt command should be used to select and run only the modified models?",
-        "answers": [
-            "dbt run --models state:modified",
-            "dbt run --select state:modified",
-            "dbt run -s state:modified",
-            "dbt test --models state:modified"
-        ],
-        "correct_answer": [
-            "dbt run --select state:modified"
-        ],
-        "explanation": "To identify and test only the modified models, a developer should use the dbt command: dbt run --select state:modified.",
-        "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
-    },
-    {
-        "question_number": 260,
-        "question_area": "Debugging data modeling errors",
-        "question": "Currently, in our project we have for the stg_heroku_postgres_events model two tests: Generic test and Singular test > Test name: validate_events.sql. We need to run the singular test to validate that the test works correctly. Note: Only singular tests assigned to this model should be run.",
-        "answers": [
-            "dbt test -s stg_heroku_postgres_events",
-            "dbt test -s stg_heroku_postgres_events,test_type:singular",
-            "dbt test -s stg_heroku_postgres_events test_type:singular",
-            "dbt test -s stg_heroku_postgres_events,test_name:validate_events"
-        ],
-        "correct_answer": [
-            "dbt run --select state:modified",
-            "dbt test -s stg_heroku_postgres_events,test_name:validate_events"
-        ],
-        "explanation": "To identify and test only the modified models, a developer should use the dbt command: dbt run --select state:modified.",
-        "reference": "https://docs.getdbt.com/docs/build/data-tests#singular-tests"
-    },
-    {
-        "question_number": 261,
-        "question_area": "Debugging data modeling errors",
-        "question": "How can you indirectly select tests related to specific dbt models?",
-        "answers": [
-            "dbt test --select \"test_name:generic\"",
-            "dbt test --select \"customers orders\"",
-            "dbt test --select \"tag:my_model_tag+\"",
-            "dbt test --select \"tag:my_test_tag\""
-        ],
-        "correct_answer": [
-            "dbt test --select \"customers orders\""
-        ],
-        "explanation": "You can indirectly select tests related to specific dbt models by using the command: dbt test --select \"customers orders\". This command selects tests related to the models 'customers' and 'orders'.",
         "reference": "https://docs.getdbt.com/reference/node-selection/test-selection-examples"
     }
 ]
