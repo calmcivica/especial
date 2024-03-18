@@ -11,8 +11,6 @@ from streamlit.components.v1 import html
 import datetime
 import pyodbc
 
-
-
 @st.cache_resource
 def init_connection():
     return pyodbc.connect(

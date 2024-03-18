@@ -248,7 +248,7 @@
             "dbt version, git branch, data location"
         ],
         "explanation": "For each environment, you specify the dbt version (what version of dbt should be used), the git branch (what branch should be pulled from), and the data location (where to build the data). The development environment has a standardized setup for all developers on the project, while deployment environments have these as environment-level settings.",
-        "reference": null
+        "reference": "https://docs.getdbt.com/docs/dbt-cloud-environments"
     },
     {
         "question_number": 18,
