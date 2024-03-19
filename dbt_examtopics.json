@@ -4174,7 +4174,9 @@
             "{{var('DBT_ENVIRONMENT')}}",
             "{{var('dbt_environment')}}"
         ],
-        "correct_answer": ["{{env_var('DBT_ENVIRONMENT')}}"],
+        "correct_answer": [
+            "{{env_var('DBT_ENVIRONMENT')}}"
+        ],
         "explanation": "The correct way to access an environment variable in dbt is using the 'env_var' function with the exact name of the variable as it is defined in the environment, which is case-sensitive.",
         "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/env_var"
     },
@@ -4188,7 +4190,9 @@
             "The staging models will use the USER_DEV_DEMO_SLVR_DB database and the production_sch schema.",
             "The staging models will use the default database and the schema specified in the project's credentials."
         ],
-        "correct_answer": ["The staging models will use the USER_DEV_DEMO_SLVR_DB database and the public schema."],
+        "correct_answer": [
+            "The staging models will use the USER_DEV_DEMO_SLVR_DB database and the public schema."
+        ],
         "explanation": "The 'env_var' function in the dbt_project.yml file dynamically sets the database based on the 'DBT_ENVIRONMENT' variable. With 'DBT_ENVIRONMENT' set to 'USER_DEV', the database resolves to USER_DEV_DEMO_SLVR_DB. Models will default to using the 'public' schema unless overridden in the configuration.",
         "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/env_var"
     },
@@ -4202,7 +4206,9 @@
             "{{var('DBT_ENVIRONMENT')}}",
             "{{var('dbt_environment')}}"
         ],
-        "correct_answer": ["{{env_var('DBT_ENVIRONMENT')}}"],
+        "correct_answer": [
+            "{{env_var('DBT_ENVIRONMENT')}}"
+        ],
         "explanation": "The correct way to access an environment variable in dbt is using the 'env_var' function with the exact name of the variable as it is defined in the environment, which is case-sensitive.",
         "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/env_var"
     },
@@ -4216,7 +4222,9 @@
             "The ability to create a series of meaningful transformations using CTEs.",
             "The output of each dataframe operation not being immediately calculated, but only computed when explicitly asked for."
         ],
-        "correct_answer": ["The output of each dataframe operation not being immediately calculated, but only computed when explicitly asked for."],
+        "correct_answer": [
+            "The output of each dataframe operation not being immediately calculated, but only computed when explicitly asked for."
+        ],
         "explanation": "Lazy evaluation in programming, including dbt Python models, refers to the technique where the evaluation of expressions is delayed until their value is needed. It avoids repeated evaluations (D).",
         "reference": "Concept can be checked in the official dbt documentation or relevant Python resources."
     },
@@ -4551,7 +4559,9 @@
             "The tarball URL and the branch name of the package repository.",
             "The tarball URL and the name of the data warehouse used in the project."
         ],
-        "correct_answer": ["The tarball URL and the subfolder name where the package source code is installed."],
+        "correct_answer": [
+            "The tarball URL and the subfolder name where the package source code is installed."
+        ],
         "explanation": "When installing a dbt package from a tarball URL, you need to provide the tarball URL and potentially the subfolder name where the package's source code is located, if it's not at the root of the tarball.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/package-management#installing-local-packages"
     },
@@ -4565,7 +4575,9 @@
             "Check strategy",
             "Incremental strategy"
         ],
-        "correct_answer": ["Check strategy"],
+        "correct_answer": [
+            "Check strategy"
+        ],
         "explanation": "For tables lacking a reliable updated_at column, the Check strategy allows for the comparison of specified columns' current and historical values to determine changes.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots#check-snapshots"
     },
@@ -4579,7 +4591,9 @@
             "Use the run command within the dbt project.",
             "Use the check command within the dbt project."
         ],
-        "correct_answer": ["Use the debug command within the dbt project."],
+        "correct_answer": [
+            "Use the debug command within the dbt project."
+        ],
         "explanation": "The debug command is used within a dbt project to check the connection to your data warehouse, among other configuration settings.",
         "reference": "https://docs.getdbt.com/reference/commands/debug"
     },
@@ -4593,7 +4607,9 @@
             "To organize analytical SQL queries in a dbt project.",
             "To store SQL queries for use in dbt seeds."
         ],
-        "correct_answer": ["To organize analytical SQL queries in a dbt project."],
+        "correct_answer": [
+            "To organize analytical SQL queries in a dbt project."
+        ],
         "explanation": "The dbt analysis folder is intended to organize and store analytical SQL queries, which are not directly part of the transformation pipeline but are used for data analysis within a dbt project.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/analyses"
     },
@@ -4607,7 +4623,9 @@
             "The unique key strategy.",
             "The hard delete strategy."
         ],
-        "correct_answer": ["The timestamp strategy."],
+        "correct_answer": [
+            "The timestamp strategy."
+        ],
         "explanation": "The timestamp strategy is suited for tracking changes over time, including additions and deletions of columns, by using a timestamp column to determine when records have been added or changed.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots#timestamp-snapshots"
     },
@@ -4621,7 +4639,9 @@
             "The Python model is a class compiled by dbt Core.",
             "The Python model defines a function named dbt()."
         ],
-        "correct_answer": ["The Python model is stored in a .py file in the models folder."],
+        "correct_answer": [
+            "The Python model is stored in a .py file in the models folder."
+        ],
         "explanation": "In dbt, Python models allow you to write transformations in Python and are stored as .py files within the models directory of your dbt project.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-python"
     },
@@ -4635,8 +4655,243 @@
             "It allows for better data visualization.",
             "It allows for easier data cleansing."
         ],
-        "correct_answer": ["It allows for easy dependency tracing.", "It allows for source freshness reporting."],
+        "correct_answer": [
+            "It allows for easy dependency tracing.",
+            "It allows for source freshness reporting."
+        ],
         "explanation": "Using dbt sources enables easy tracing of data dependencies and freshness reporting, which are essential for maintaining and monitoring data pipelines.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/using-sources"
+    },
+    {
+        "question_number": 295,
+        "question_area": "Implementing dbt tests",
+        "question": "A data team wants to reduce the number of columns that need to be checked in their database when using the check strategy in dbt. What is the recommended technique they can use to achieve this?",
+        "answers": [
+            "Include all columns in the check_cols configuration.",
+            "Exclude columns from the check_cols configuration.",
+            "Use a surrogate key to condense many columns into a single column.",
+            "None of the above."
+        ],
+        "correct_answer": [
+            "Use a surrogate key to condense many columns into a single column."
+        ],
+        "explanation": "Using a surrogate key to condense many columns into a single column is a recommended technique for reducing the number of columns that need to be checked, making the check strategy more efficient.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/tests#configuring-tests"
+    },
+    {
+        "question_number": 296,
+        "question_area": "Developing dbt models",
+        "question": "You have created a metric that uses multiple dimensions, but when you run the metric, the resulting number is not providing useful information. What is the most likely reason for this issue?",
+        "answers": [
+            "The metric is not defined correctly in the dbt project.",
+            "The dimensions being used in the metric calculation are not relevant to the data being analyzed.",
+            "The table being used to calculate the metric does not contain enough data to make the calculation meaningful.",
+            "The metric is being calculated using an incorrect formula."
+        ],
+        "correct_answer": [
+            "The dimensions being used in the metric calculation are not relevant to the data being analyzed."
+        ],
+        "explanation": "If the resulting number from a metric calculation is not useful, it's often because the dimensions used in the calculation are not relevant to the data being analyzed, which impacts the metric's effectiveness and accuracy.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/metrics"
+    },
+    {
+        "question_number": 297,
+        "question_area": "Deploying dbt jobs",
+        "question": "What is the command used to specify a target other than the default when using DBT?",
+        "answers": [
+            "--target",
+            "--prod",
+            "--dev",
+            "--target_schema"
+        ],
+        "correct_answer": [
+            "--target"
+        ],
+        "explanation": "The --target command is used to specify a target environment other than the default when running dbt commands, allowing for flexibility in deployments and testing across different environments.",
+        "reference": "https://docs.getdbt.com/reference/dbt-commands/run#specify-a-target"
+    },
+    {
+        "question_number": 298,
+        "question_area": "Developing dbt models",
+        "question": "How can you specify column types in dbt?",
+        "answers": [
+            "Use the type configuration block in the dbt_project.yml file to specify the column types for each model.",
+            "Use the dtype function to specify column types in the SQL select statement.",
+            "Cast the column to the correct type in your model using SQL syntax.",
+            "Use the column_type configuration block in the model file to specify the column types for each column."
+        ],
+        "correct_answer": [
+            "Use the column_type configuration block in the model file to specify the column types for each column."
+        ],
+        "explanation": "In dbt, you can use the column_type configuration within a model file to define the data types for each column. This allows for precise control over the resulting schema when dbt creates or updates the model in the data warehouse.",
+        "reference": "https://docs.getdbt.com/reference/resource-configs/column_types"
+    },
+    {
+        "question_number": 299,
+        "question_area": "Monitoring data pipelines",
+        "question": "In a dbt project, you need to build a model using data sources that are no older than their previous state. Which selector should you use to achieve this?",
+        "answers": [
+            "source_status: fresher",
+            "source_status: fresher+",
+            "source_status: equal",
+            "source_status: stale"
+        ],
+        "correct_answer": [
+            "source_status: fresher+"
+        ],
+        "explanation": "The 'source_status: fresher+' selector is used to build models with data sources that are as fresh or fresher than their previous state, ensuring that the data being used is up-to-date.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
+    },
+    {
+        "question_number": 300,
+        "question_area": "Monitoring data pipelines",
+        "question": "A data analyst in your team wants to analyze data sources that have become stale compared to their previous state. Which selector should you use in your dbt command to meet this requirement?",
+        "answers": [
+            "source_status: fresher",
+            "source_status: fresher+",
+            "source_status: stale",
+            "source_status: stale+"
+        ],
+        "correct_answer": "source_status: stale",
+        "explanation": "The 'source_status:stale' selector is used in dbt to select data sources that are less fresh than their previous state, which may be useful for identifying data that has not been updated as expected.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
+    },
+    {
+        "question_number": 301,
+        "question_area": "Monitoring data pipelines",
+        "question": "You are working on a dbt project and need to exclude data sources that have become stale compared to their previous state. Which selector should you use in your dbt command?",
+        "answers": [
+            "source_status: exclude_stale",
+            "source_status: fresher",
+            "source_status: stale",
+            "source_status: fresher+"
+        ],
+        "correct_answer": "source_status: exclude_stale",
+        "explanation": "The selector to exclude stale data sources is not a built-in feature in dbt. However, to achieve this, you would write custom logic in your model to exclude sources based on their freshness status.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
+    },
+    {
+        "question_number": 302,
+        "question_area": "Monitoring data pipelines",
+        "question": "In a dbt project, you want to select data sources that are as fresh as their previous state, but not fresher. Which selector should you use in your dbt command?",
+        "answers": [
+            "source_status: equal",
+            "source_status: fresher",
+            "source_status: stale",
+            "source_status: fresher+"
+        ],
+        "correct_answer": "source_status: equal",
+        "explanation": "The 'source_status:equal' selector is used to select data sources that are exactly as fresh as their previous state, not fresher or staler.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
+    },
+    {
+        "question_number": 303,
+        "question_area": "Developing dbt models",
+        "question": "You have the DAG below showing the 3 models, how do you ensure you run just the stg_covid_cases model?",
+        "answers": [
+            "dbt run -s stg_covid_cases",
+            "dbt run --select model=+stg_covid_cases+",
+            "dbt run -s stg_covid_cases",
+            "dbt run --select stg_covid_cases"
+        ],
+        "correct_answer": "dbt run -s stg_covid_cases",
+        "explanation": "The command 'dbt run -s stg_covid_cases' specifies that dbt should run the 'stg_covid_cases' model only.",
+        "reference": "https://docs.getdbt.com/reference/dbt-commands/run#selecting-models-to-run"
+    },
+    {
+        "question_number": 304,
+        "question_area": "Developing dbt models",
+        "question": "In a dbt Python model, what is the concept of 'lazy evaluation'?",
+        "answers": [
+            "The ability to preview data using methods like .show() or .head() in development.",
+            "The ability to execute Python code remotely on a data platform.",
+            "The ability to create a series of meaningful transformations using CTEs.",
+            "The output of each dataframe operation not being immediately calculated, but only computed when explicitly asked for."
+        ],
+        "correct_answer": [
+            "The output of each dataframe operation not being immediately calculated, but only computed when explicitly asked for."
+        ],
+        "explanation": "Lazy evaluation in programming generally refers to the concept where the computation on data is deferred until the result is actually needed. In the context of dbt Python models, this means operations on dataframes are not immediately executed, and the computation only takes place when the data is explicitly required.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/configuring-models"
+    },
+    {
+        "question_number": 305,
+        "question_area": "Monitoring data pipelines",
+        "question": "How can you reference the source freshness results in a subsequent dbt command?",
+        "answers": [
+            "Use the --source-status flag",
+            "Use the --select flag with the source_status selector",
+            "Use the --refresh flag",
+            "Use the --state flag with the DBT_ARTIFACT_STATE_PATH environment variable"
+        ],
+        "correct_answer": [
+            "Use the --state flag with the DBT_ARTIFACT_STATE_PATH environment variable"
+        ],
+        "explanation": "To reference the source freshness results in a subsequent dbt command, you use the --state flag along with the DBT_ARTIFACT_STATE_PATH environment variable, which points to the directory containing the state artifacts from a previous run.",
+        "reference": "https://docs.getdbt.com/reference/artifacts/state-artifacts"
+    },
+    {
+        "question_number": 306,
+        "question_area": "Monitoring data pipelines",
+        "question": "You are working on a dbt project and want to ensure that only the data sources with freshness greater than the previous state are used for the transformation. Which selector should you use in your dbt command?",
+        "answers": [
+            "source_status:fresher",
+            "source_status:fresher+",
+            "source_status:stale",
+            "source_status:stale+"
+        ],
+        "correct_answer": [
+            "source_status:fresher+"
+        ],
+        "explanation": "The 'source_status:fresher+' selector in dbt is used to ensure that only data sources with freshness greater than the previous state are used for the transformation.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
+    },
+    {
+        "question_number": 307,
+        "question_area": "Deploying dbt jobs",
+        "question": "You want to select models in the 'sales' package that have a materialization setting of 'incremental' but exclude those tagged as 'deprecated'. Which of the following YAML selectors will achieve this?",
+        "answers": [
+            "Use an intersection definition with 'package:sales' and 'config.materialized:incremental', and exclude 'tag:deprecated'.",
+            "Use a union definition with 'package:sales' and 'config.materialized:incremental', without an exclude clause.",
+            "Use an intersection definition with 'package:sales' and 'config.materialized:incremental', without an exclude clause.",
+            "Use an exclude clause on 'tag:deprecated' without specifying materialization."
+        ],
+        "correct_answer": [
+            "Use an intersection definition with 'package:sales' and 'config.materialized:incremental', and exclude 'tag:deprecated'."
+        ],
+        "explanation": "To select models with a specific tag and materialization setting while excluding others, you should use an intersection definition to combine the criteria you're including and an exclude clause for the criteria you want to omit.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/yaml-selectors"
+    },
+    {
+        "question_number": 308,
+        "question_area": "Deploying dbt jobs",
+        "question": "The marketing team later requests that you exclude a specific model, customer_lifetime_value, while still executing the other customer_analytics tagged models and their dependencies. How would you modify your dbt command to accommodate this request?",
+        "answers": [
+            "dbt run --select tag:customer_analytics+ --select -customer_lifetime_value",
+            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value",
+            "dbt run --select tag:customer_analytics+ --select +customer_lifetime_value",
+            "dbt run --select tag:customer_analytics+ -customer_lifetime_value"
+        ],
+        "correct_answer": [
+            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value"
+        ],
+        "explanation": "To exclude a specific model while running other models with a certain tag and their dependencies, you use the '--exclude' flag followed by the model name you want to exclude.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
+    },
+    {
+        "question_number": 309,
+        "question_area": "Deploying dbt jobs",
+        "question": "You have been asked to run a specific set of models related to the daily financial reports, but you need to exclude models tagged as 'nightly' and those with a materialized configuration set to 'table.' What command would you use to run the models contained in the 'daily_reports' directory, excluding those with the 'nightly' tag and materialized as 'table'?",
+        "answers": [
+            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table",
+            "dbt run --select path:models/daily_reports --select -tag:nightly,config.materialized:table",
+            "dbt run --select path:models/daily_reports tag:nightly,config.materialized:table",
+            "dbt run --select path:models/daily_reports --select -tag:nightly --select -config.materialized:table"
+        ],
+        "correct_answer": [
+            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table"
+        ],
+        "explanation": "To run a set of models while excluding those with a specific tag and materialization, you can chain '--exclude' arguments in your dbt run command, specifying each criterion you want to exclude.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
     }
 ]

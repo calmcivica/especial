@@ -90,7 +90,7 @@ def pregunta(jason,n,mode,user,conn, especialidad):
         if mode == 'practicar':
             st.write(f'Pregunta {numero} de ExamTopics')
         st.write(pregunta)
-        imagen = str(Path.cwd()) +'\\images\\'+'\\' + especialidad + '\\' + str(numero) + ".png"
+        imagen = 'especialidades-app\\static\\' + especialidad + '\\' + str(numero) + ".png"
         if imagen != None:
             try:
                 st.image(imagen)

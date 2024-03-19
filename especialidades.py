@@ -92,7 +92,7 @@ elif st.session_state.page == 'snowflake':
             st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Exámenes 📄":
         try:
-            t.examen(conn, datos)
+            t.examen(conn, datos, especialidad)
         except Exception as e:
             st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
@@ -131,7 +131,7 @@ elif st.session_state.page == 'dbt':
             st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Exámenes 📄":
         try:
-            t.examen(conn, datos)
+            t.examen(conn, datos, especialidad)
         except Exception as e:
             st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":

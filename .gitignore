@@ -3,4 +3,4 @@ env/*
 *.pyc
 .streamlit/secrets.toml
 launch_docker.txt
-images/*
+static/dbt/*

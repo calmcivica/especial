@@ -1,2 +1,4 @@
 [theme]
 base="dark"
+[server]
+STREAMLIT_SERVER_ENABLE_STATIC_SERVING=true
