@@ -138,12 +138,11 @@ def pregunta(jason,n,mode,user,conn, especialidad):
                             is_correct_int = 1 if is_correct else 0
                             is_answered_int = 1 if is_answered else 0
                             
-                            query = f"INSERT INTO esnowflake.esnowflake_DEV.Fact_Answers select {n},'{user}','{mode}',null,{is_correct_int},{is_answered_int},current_timestamp"
+                            query = f"INSERT INTO [esnowflake].[dbo].Fact_Answers select {n},'{user}','{mode}',null,{is_correct_int},{is_answered_int},current_timestamp"
                             conn.cursor().execute(query)
                             conn.cursor().commit()
                         except Exception as e:
                             st.write(f"An error occurred: {e} ") 
-
 
                     # Muestra la solución si la variable de estado es True
                     if st.session_state['show_solution']:
@@ -276,7 +275,7 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
             st.session_state['aux_exam_insert'] = 0
         aux_exam_insert = st.session_state['aux_exam_insert']
         if aux_exam_insert == 0:
-            conn.cursor().execute(f"insert into esnowflake.esnowflake_DEV.FACT_EXAMS select NEXT VALUE FOR dbo.SEQ_EXAMS,null,'{user}',{exam_time},null,current_timestamp,null,null,null")
+            conn.cursor().execute(f"insert into [esnowflake].[dbo].FACT_EXAMS select NEXT VALUE FOR dbo.SEQ_EXAMS,null,'{user}',{exam_time},null,current_timestamp,null,null,null")
             st.session_state['aux_exam_insert'] = 1
         exam_mode = 1
         st.session_state['exam_mode'] = exam_mode

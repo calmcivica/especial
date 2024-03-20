@@ -55,7 +55,7 @@ def menu(conn):
         user_list_v = (
             conn.cursor()
             .execute(
-                "select name from esnowflake.esnowflake_DEV.Dim_Users WHERE name LIKE '%civica%' AND name NOT LIKE '%alumno%' ORDER BY name"
+                "select name from [esnowflake].[dbo].Dim_Users WHERE name LIKE '%civica%' AND name NOT LIKE '%alumno%' ORDER BY name"
             )
             .fetchall()
         )
@@ -69,7 +69,7 @@ def menu(conn):
                 rango_v = (
                     conn.cursor()
                     .execute(
-                        f"select rango from esnowflake.esnowflake_DEV.Dim_Users where name  = '{st.session_state['user']}'"
+                        f"select rango from [esnowflake].[dbo].Dim_Users where name  = '{st.session_state['user']}'"
                     )
                     .fetchall()
                 )
@@ -178,7 +178,7 @@ def practicar(conn, datos, especialidad):
         STRING_AGG(CAST(question_id AS NVARCHAR(MAX)), ',') WITHIN GROUP (ORDER BY question_id) AS Hechas, 
         STRING_AGG(CASE WHEN type = 'Examen' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(MAX)) ELSE NULL END, ',') WITHIN GROUP (ORDER BY question_id) AS Examen_falsas, 
         STRING_AGG(CASE WHEN type = 'practicar' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(MAX)) ELSE NULL END, ',') WITHIN GROUP (ORDER BY question_id) AS Practicar_falsas 
-        FROM (SELECT DISTINCT question_id, type, is_correct FROM esnowflake.esnowflake_DEV.Fact_Answers WHERE user_nickname = '{user}') AS filtered_answers;"""
+        FROM (SELECT DISTINCT question_id, type, is_correct FROM [esnowflake].[dbo].Fact_Answers WHERE user_nickname = '{user}') AS filtered_answers;"""
 
         aux_opcion = conn.cursor().execute(consulta_preguntas_hechas).fetchall()
 
@@ -297,7 +297,7 @@ def examen(conn, datos, especialidad):
                     STRING_AGG(CASE WHEN type = 'Examen' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(10)) END, ',') WITHIN GROUP (ORDER BY question_id) AS Examen_falsas,
                     STRING_AGG(CASE WHEN type = 'practicar' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(10)) END, ',') WITHIN GROUP (ORDER BY question_id) AS Practicar_falsas
                     FROM
-                    esnowflake.esnowflake_DEV.Fact_Answers where user_nickname = '{user}';"""
+                    [esnowflake].[dbo].Fact_Answers where user_nickname = '{user}';"""
                     aux_opcion = (
                         conn.cursor().execute(consulta_preguntas_hechas).fetchall()
                     )
@@ -378,7 +378,7 @@ def examen(conn, datos, especialidad):
         exam_id_v = (
             conn.cursor()
             .execute(
-                f"select coalesce(max(id_exam),1) from esnowflake.esnowflake_DEV.FACT_EXAMS where user_nickname = '{user}' "
+                f"select coalesce(max(id_exam),1) from [esnowflake].[dbo].FACT_EXAMS where user_nickname = '{user}' "
             )
             .fetchall()
         )
@@ -398,7 +398,7 @@ def examen(conn, datos, especialidad):
                 latest_answers[question_number] = answer
         # Convertir el diccionario de respuestas más recientes en una lista
         filtered_answers = list(latest_answers.values())
-        insert = "INSERT INTO esnowflake.esnowflake_DEV.Fact_Answers VALUES "
+        insert = "INSERT INTO [esnowflake].[dbo].Fact_Answers VALUES "
         values_list = []
         preguntas_acertadas = 0
         preguntas_falladas = 0
@@ -433,7 +433,7 @@ def examen(conn, datos, especialidad):
             insert += "".join(values_list)
 
         update = f"""
-                update esnowflake.esnowflake_DEV.FACT_EXAMS 
+                update [esnowflake].[dbo].FACT_EXAMS 
                 set 
                 end_time = current_timestamp,
                 number_of_questions = {len(filtered_answers)},
@@ -455,7 +455,7 @@ def examen(conn, datos, especialidad):
         tiempo_invertido_v = (
             conn.cursor()
             .execute(
-                f"select DATEDIFF(SECOND, start_time, end_time) from esnowflake.esnowflake_DEV.FACT_EXAMS where id_exam = {exam_id}"
+                f"select DATEDIFF(SECOND, start_time, end_time) from [esnowflake].[dbo].FACT_EXAMS where id_exam = {exam_id}"
             )
             .fetchall()
         )
@@ -529,7 +529,7 @@ def progreso(conn, datos):
         st.write("Elige tu usuario para ver tu progreso")
     else:
         st.subheader("Avance por secciones")
-        questions_info = f"select question_id,is_correct,is_answered,cast(answer_timestamp as date) as Fecha from esnowflake.esnowflake_DEV.FACT_ANSWERS where user_nickname = '{user}' order by answer_timestamp desc"
+        questions_info = f"select question_id,is_correct,is_answered,cast(answer_timestamp as date) as Fecha from [esnowflake].[dbo].FACT_ANSWERS where user_nickname = '{user}' order by answer_timestamp desc"
         questions_info_snow = conn.cursor().execute(questions_info).fetchall()
         questions_info_snow_list = [list(row) for row in questions_info_snow]
 
@@ -652,7 +652,7 @@ def progreso(conn, datos):
 
             secciones, exams = st.columns([2, 1], gap="large")
             with secciones:
-                questions_info = f"select question_id,is_correct,is_answered,cast(answer_timestamp as date) as Fecha from esnowflake.esnowflake_DEV.FACT_ANSWERS where user_nickname = '{user}' order by answer_timestamp desc"
+                questions_info = f"select question_id,is_correct,is_answered,cast(answer_timestamp as date) as Fecha from [esnowflake].[dbo].FACT_ANSWERS where user_nickname = '{user}' order by answer_timestamp desc"
                 questions_info_snow = conn.cursor().execute(questions_info).fetchall()
                 questions_info_snow_list = [list(row) for row in questions_info_snow]
                 columns = ["question_id", "is_correct", "is_answered", "Fecha"]
@@ -707,7 +707,7 @@ def progreso(conn, datos):
             with exams:
                 st.subheader("Historial de exámenes")
                 # Datos ficticios para los tres últimos exámenes
-                exam_info = f"select top 6 id_exam,start_time,duration_minutes,number_of_questions,number_of_correct_questions,number_of_failed_questions from esnowflake.esnowflake_DEV.FACT_EXAMS where user_nickname = '{user}' order by start_time desc"
+                exam_info = f"select top 6 id_exam,start_time,duration_minutes,number_of_questions,number_of_correct_questions,number_of_failed_questions from [esnowflake].[dbo].FACT_EXAMS where user_nickname = '{user}' order by start_time desc"
                 exam_info_snow = conn.cursor().execute(exam_info).fetchall()
                 exam_info_snow_list = [list(row) for row in exam_info_snow]
                 columns = [
