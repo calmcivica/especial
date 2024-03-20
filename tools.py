@@ -150,12 +150,12 @@ def practicar(conn, datos, especialidad):
 
         if especialidad == "snowflake":
             secciones = st.multiselect(
-                "¿ Que secciones quieren tocar ?",
+                "¿ Qué secciones quieres tocar ?",
                 c.SECCIONES_SNOWFLAKE,
             )
         elif especialidad == "dbt":
             secciones = st.multiselect(
-                "¿ Que secciones quieren tocar ?",
+                "¿ Qué secciones quieres tocar ?",
                 c.SECCIONES_DBT,
             )
 
@@ -257,10 +257,16 @@ def examen(conn, datos, especialidad):
                         step=1,
                     )
 
-                    secciones = st.multiselect(
-                        "¿ Que secciones quieren tocar ? (Todas por defecto)",
-                        c.SECCIONES_SNOWFLAKE,
-                    )
+                    if especialidad == "snowflake":
+                        secciones = st.multiselect(
+                            "¿ Qué secciones quieres tocar ? (Todas por defecto)",
+                            c.SECCIONES_SNOWFLAKE,
+                        )
+                    elif especialidad == "dbt":
+                        secciones = st.multiselect(
+                            "¿ Qué secciones quieres tocar ? (Todas por defecto)",
+                            c.SECCIONES_DBT,
+                        )
 
                     option = st.multiselect(
                         "Otros filtros",
