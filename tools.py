@@ -130,7 +130,8 @@ def practicar(conn, datos, especialidad):
     menu(conn)
     # Init
     st.session_state["button_order_aleatorio"] = False
-
+    if "exam_mode" not in st.session_state:
+        st.session_state["exam_mode"] = ""
     with st.expander("¿Como podría usar esta sección? 🤔"):
         if especialidad == "snowflake":
             st.markdown(c.USO_SECCION_SNOWFLAKE)
@@ -138,91 +139,18 @@ def practicar(conn, datos, especialidad):
             st.markdown(c.USO_SECCION_DBT)
 
     filtros, preguntas = st.columns([1, 3], gap="large")
+    # Filtros
     with filtros:
-        st.subheader("Filtros")
-        values = st.slider(
-            "Seleccione rango de preguntas en el que practicar",
-            0,
-            len(datos),
-            (0, len(datos)),
-            step=1,
-        )
-
-        if especialidad == "snowflake":
-            secciones = st.multiselect(
-                "¿ Qué secciones quieres tocar ?",
-                c.SECCIONES_SNOWFLAKE,
-            )
-        elif especialidad == "dbt":
-            secciones = st.multiselect(
-                "¿ Qué secciones quieres tocar ?",
-                c.SECCIONES_DBT,
-            )
-
-        option = st.multiselect(
-            "Otros filtros",
-            ["Todas", "Sin hacer", "Falladas en exámenes", "Falladas en práctica"],
-        )
-
-        preguntas_filtradas = [
-            item for item in datos if values[0] <= item["question_number"] <= values[1]
-        ]
-        if "Todas" not in secciones and secciones != []:
-            preguntas_filtradas = [
-                item
-                for item in preguntas_filtradas
-                if item["question_area"] in secciones
-            ]
-
-        consulta_preguntas_hechas = f"""SELECT 
-        STRING_AGG(CAST(question_id AS NVARCHAR(MAX)), ',') WITHIN GROUP (ORDER BY question_id) AS Hechas, 
-        STRING_AGG(CASE WHEN type = 'Examen' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(MAX)) ELSE NULL END, ',') WITHIN GROUP (ORDER BY question_id) AS Examen_falsas, 
-        STRING_AGG(CASE WHEN type = 'practicar' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(MAX)) ELSE NULL END, ',') WITHIN GROUP (ORDER BY question_id) AS Practicar_falsas 
-        FROM (SELECT DISTINCT question_id, type, is_correct FROM [esnowflake].[dbo].Fact_Answers WHERE user_nickname = '{user}') AS filtered_answers;"""
-
-        aux_opcion = conn.cursor().execute(consulta_preguntas_hechas).fetchall()
-
-        no_hechas = []
-        opcion_examen_falsas = []
-        opcion_practicas_falsas = []
-
-        if "Falladas en exámenes" in option:
-            opcion_examen_falsas = ast.literal_eval(aux_opcion[0][1])
-
-        if "Falladas en práctica" in option:
-            opcion_practicas_falsas = ast.literal_eval(aux_opcion[0][2])
-
-        if "Sin hacer" in option:
-            hechas = aux_opcion[0][0]
-            hechas_lista = ast.literal_eval(hechas)
-            hechas_int = [int(num) for num in list(hechas_lista)]
-
-            no_hechas = [
-                item["question_number"]
-                for item in preguntas_filtradas
-                if item["question_number"] not in hechas_int
-            ]
-
-        opcion_final = list(
-            set(no_hechas + opcion_examen_falsas + opcion_practicas_falsas)
-        )
-        # AÑADIR FILTRO OTROS
-        if "Todas" not in option and option != []:
-
-            preguntas_filtradas = [
-                item
-                for item in preguntas_filtradas
-                if item["question_number"] in opcion_final
-            ]
+        preguntas_filtradas = h.filtros(especialidad, datos, conn, user)
 
         question_set = [item["question_number"] for item in preguntas_filtradas]
 
         # Initialize session state for question set if not already set
         if 'question_set' not in st.session_state:
             st.session_state["question_set"] = question_set  # Initial question set assignment
-
+        
+        # Vuelve a recargar st.session_state["question_set"]
         h.orden_preguntas(question_set)
-
     # Update the current page to reflect
         with preguntas:
             if st.session_state["question_set"]:
@@ -234,11 +162,13 @@ def practicar(conn, datos, especialidad):
 def examen(conn, datos, especialidad):
     user = h.get_user_none()
     exam_mode = 0
-    if "exam_mode" not in st.session_state:
+    if "exam_mode" not in st.session_state or st.session_state["exam_mode"]=='':
         st.session_state["exam_mode"] = exam_mode
     question_set = []
-    if "question_set" not in st.session_state:
-        st.session_state["question_set"] = question_set
+
+    # Initialize session state for question set if not already set
+    if 'question_set' not in st.session_state:
+        st.session_state["question_set"] = question_set  # Initial question set assignment
 
     if st.session_state.get("exam_mode", 0) == 0:
         with st.container():
@@ -248,111 +178,18 @@ def examen(conn, datos, especialidad):
             with st.container():
                 filtros, settings = st.columns(2, gap="large")
                 with filtros:
-                    st.subheader("Filtros")
-                    values = st.slider(
-                        "Seleccione rango de preguntas que pueden caer en el examen",
-                        0,
-                        len(datos),
-                        (0, len(datos)),
-                        step=1,
-                    )
-
-                    if especialidad == "snowflake":
-                        secciones = st.multiselect(
-                            "¿ Qué secciones quieres tocar ? (Todas por defecto)",
-                            c.SECCIONES_SNOWFLAKE,
-                        )
-                    elif especialidad == "dbt":
-                        secciones = st.multiselect(
-                            "¿ Qué secciones quieres tocar ? (Todas por defecto)",
-                            c.SECCIONES_DBT,
-                        )
-
-                    option = st.multiselect(
-                        "Otros filtros",
-                        [
-                            "Todas",
-                            "Sin hacer",
-                            "Falladas en exámenes",
-                            "Falladas en práctica",
-                        ],
-                    )
-
-                    h.orden_preguntas(question_set)
-
-                    preguntas_filtradas = [
-                        item
-                        for item in datos
-                        if values[0] <= item["question_number"] <= values[1]
-                    ]
-                    if "Todas" not in secciones and secciones != []:
-                        preguntas_filtradas = [
-                            item
-                            for item in preguntas_filtradas
-                            if item["question_area"] in secciones
-                        ]
-
-                    consulta_preguntas_hechas = f"""    SELECT
-                    STRING_AGG(CASE WHEN question_id IS NOT NULL THEN CAST(question_id AS NVARCHAR(10)) END, ',') WITHIN GROUP (ORDER BY question_id) AS Hechas,
-                    STRING_AGG(CASE WHEN type = 'Examen' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(10)) END, ',') WITHIN GROUP (ORDER BY question_id) AS Examen_falsas,
-                    STRING_AGG(CASE WHEN type = 'practicar' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(10)) END, ',') WITHIN GROUP (ORDER BY question_id) AS Practicar_falsas
-                    FROM
-                    [esnowflake].[dbo].Fact_Answers where user_nickname = '{user}';"""
-                    aux_opcion = (
-                        conn.cursor().execute(consulta_preguntas_hechas).fetchall()
-                    )
-
-                    no_hechas = []
-                    opcion_examen_falsas = []
-                    opcion_practicas_falsas = []
-                    total_question = range(len(datos))
-                    hechas = aux_opcion[0][0]
-                    if "Falladas en exámenes" in option:
-                        opcion_examen_falsas = ast.literal_eval(aux_opcion[0][1])
-                    if "Falladas en práctica" in option:
-                        opcion_practicas_falsas = ast.literal_eval(aux_opcion[0][2])
-                    if "Sin hacer" in option:
-                        no_hechas = list(set(total_question) - set(hechas))
-                    opcion_final = list(
-                        set(no_hechas + opcion_examen_falsas + opcion_practicas_falsas)
-                    )
-                    # AÑADIR FILTRO OTROS
-                    if "Todas" not in option and option != []:
-                        preguntas_filtradas = [
-                            item
-                            for item in preguntas_filtradas
-                            if item["question_number"] in opcion_final
-                        ]
-                    question_set = [
-                        item["question_number"] for item in preguntas_filtradas
-                    ]
-                    random.shuffle(question_set)
-
-                    
-
+                    preguntas_filtradas = h.filtros(especialidad, datos, conn, user, True)
                 with settings:
-                    st.subheader("Opciones")
-                    # Número de preguntas
-                    num_questions = st.number_input(
-                        "Número de preguntas",
-                        min_value=0,
-                        max_value=len(question_set),
-                        value=len(question_set),
-                        help="El valor máximo viene dictaminado por el filtrado que hagas",
-                    )
-                    selected_questions = random.sample(question_set, num_questions)
-                    st.session_state["question_set"] = selected_questions
-                    # Duración del examen
-                    exam_duration = st.slider(
-                        "Tiempo de Examen (minutos)",
-                        min_value=5,
-                        max_value=120,
-                        value=60,
-                    )
-                    with st.expander("¿Como es el examen real?"):
-                        info = c.INFO_EXAMEN_SNOWFLAKE
+                    # en exam_settings actualizamos st.session_state["question_set"]
+                    # y st.session_state["exam_duration"]
+                    num_questions, exam_duration = h.exam_settings(preguntas_filtradas)
+                with st.expander("¿Como es el examen real?"):
+                        if especialidad == "snowflake":
+                            info = c.INFO_EXAMEN_SNOWFLAKE
+                        elif especialidad == "dbt":
+                            info = c.INFO_EXAMEN_DBT
                         st.markdown(info)
-                with st.container():
+            with st.container():
                     _, boton, _ = st.columns(3, gap="large")
                     if num_questions == 0:
                         st.warning(
@@ -371,8 +208,8 @@ def examen(conn, datos, especialidad):
         with st.container():
             question_set = st.session_state["question_set"]
             exam_duration = st.session_state["exam_duration"]
-            h.setexam(question_set, datos, "examen", conn, user, especialidad, exam_time=exam_duration)
-
+            h.setexam(st.session_state["question_set"], datos, "examen", conn, user, especialidad, exam_time=exam_duration)
+        
     elif st.session_state.get("exam_mode", 0) == 2:
         exam_duration = st.session_state["exam_duration"]
         exam_id_v = (

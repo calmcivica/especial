@@ -11,6 +11,8 @@ from streamlit.components.v1 import html
 import datetime
 import pyodbc
 from pathlib import Path
+import ast
+import constantes as c
 
 @st.cache_resource
 def init_connection():
@@ -80,16 +82,15 @@ def checkbox_help(unique_key):
         st.session_state[unique_key] = 0
 
 def pregunta(jason,n,mode,user,conn, especialidad):
-        
         json_question = jason[n-1]
         # Extrae los datos necesarios del JSON
         numero = json_question["question_number"]
         pregunta = json_question["question"]
         respuestas = json_question["answers"]
-        
-        if mode == 'practicar':
-            st.write(f'Pregunta {numero} de ExamTopics')
-        st.write(pregunta)
+        question_area = json_question["question_area"]
+        st.write(f'Pregunta {numero} de ExamTopics')
+        st.write(":orange[Question area:]",question_area)
+        st.write(pregunta)        
         imagen = './static/' + especialidad + '/' + str(numero) + ".png"
         if imagen != None:
             try:
@@ -123,7 +124,7 @@ def pregunta(jason,n,mode,user,conn, especialidad):
                 s = 'show_solution'
                 if 'show_solution' not in st.session_state:
                     st.session_state['show_solution'] = 0
-                    
+
                 with st.container():
                     # Botón para mostrar la solución
                     is_correct = sol(jason,n,user_answer,1)
@@ -133,7 +134,6 @@ def pregunta(jason,n,mode,user,conn, especialidad):
                     st.button('Ver solución', key=uuid.uuid4(),on_click= checkbox_help, args = (s,))
 
                     if st.session_state['show_solution'] == 1:
-                    
                         try:
                             is_correct_int = 1 if is_correct else 0
                             is_answered_int = 1 if is_answered else 0
@@ -149,13 +149,11 @@ def pregunta(jason,n,mode,user,conn, especialidad):
                         sol(jason, n, user_answer)  # Llama a la función sol
 
             elif mode == 'examen':
-                
                 jsoni = {
                     "question_number": numero,
                     "user_answer": user_answer,
                     "timestamp": datetime.datetime.now()
                 }
-
                 st.session_state['exam_answers'].append(jsoni)
 
 
@@ -246,15 +244,9 @@ def aux_exam(accion,exam_duration,users_answers):
         
         # Borra el mensaje
         mensaje_temporal.empty()
-        
-
-
-        
     elif accion == 'acabar':
         exam_mode = 2
         st.session_state['exam_mode'] = exam_mode
-
-    
     elif accion == 'Inicio':
         exam_mode = 0
         clear_cache(['current_page','user'])
@@ -262,7 +254,7 @@ def aux_exam(accion,exam_duration,users_answers):
 
 def review():
     if 'review_mode' not in st.session_state:
-            st.session_state['review_mode'] = True
+        st.session_state['review_mode'] = True
     else:
         st.session_state['review_mode'] = True
 
@@ -274,9 +266,11 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
         if 'aux_exam_insert' not in st.session_state:
             st.session_state['aux_exam_insert'] = 0
         aux_exam_insert = st.session_state['aux_exam_insert']
+        
         if aux_exam_insert == 0:
             conn.cursor().execute(f"insert into [esnowflake].[dbo].FACT_EXAMS select NEXT VALUE FOR dbo.SEQ_EXAMS,null,'{user}',{exam_time},null,current_timestamp,null,null,null")
             st.session_state['aux_exam_insert'] = 1
+        
         exam_mode = 1
         st.session_state['exam_mode'] = exam_mode
         
@@ -287,18 +281,16 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
         remaining_time = max(0, (exam_time * 60) - elapsed_time)  # Asegúrate de que exam_time esté en minutos
         mm, ss = divmod(remaining_time, 60)
         with st.container():
-                    
-                    crono,space,marca = st.columns([1,2,1], gap = "large")
-                    with crono:
-                        st.metric("Tiempo restante", f"{int(mm):02d}:{int(ss):02d}",help = "Este tiempo restante es a título informativo, no finalizará el examen si se te acaba, luego podrás ver cuanto has tardado en hacerlo. El contador se irá actualizando cuando avances o retrocedas una pregunta, también si haces un RERUN de la app")
-                    with marca:
-                        st.button('Salir sin guardar',use_container_width=True,on_click = aux_exam , args = ('Inicio',None,None,))
-
+            crono,space,marca = st.columns([1,2,1], gap = "large")
+            with crono:
+                st.metric("Tiempo restante", f"{int(mm):02d}:{int(ss):02d}",help = "Este tiempo restante es a título informativo, no finalizará el examen si se te acaba, luego podrás ver cuanto has tardado en hacerlo. El contador se irá actualizando cuando avances o retrocedas una pregunta, también si haces un RERUN de la app")
+            with marca:
+                st.button('Salir sin guardar',use_container_width=True,on_click = aux_exam , args = ('Inicio',None,None,))
 
     if 'review_mode' not in st.session_state:
             st.session_state['review_mode'] = 0
-    
     review_mode = st.session_state['review_mode']
+    
     if review_mode:
         set = st.session_state['review_set']
         io = st.session_state['question_number_internal']
@@ -313,6 +305,7 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
 
     if i > len(set)-1:
         st.session_state['question_number_internal'] = 0
+
     with ant:
         if i != 0:
             st.button('Anterior',use_container_width=1,on_click = aux_questions , args = ('Anterior',))
@@ -328,23 +321,19 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
             else:
                 st.button('Revisar preguntas y finalizar',use_container_width=1,on_click = review)
 
-
     with st.container():
         i = st.session_state['question_number_internal']
-        
         if mode == 'examen':
             if 'exam_answers' not in st.session_state:
                 st.session_state['exam_answers'] = []
-
             if 'review_set' not in st.session_state:
                     st.session_state['review_set'] = []
-
         #pregunta_container = st.empty()
         #with pregunta_container.container():
         if mode == 'practicar':
-            pregunta(jason, set[i], mode, user, conn, especialidad)            
-        if mode == 'examen':
             pregunta(jason, set[i], mode, user, conn, especialidad)
+        if mode == 'examen':
+            pregunta(jason, set[i]['question_number'], mode, user, conn, especialidad)
             st.write("")
             space,marca = st.columns([3.5,1], gap = "large")
             with space:
@@ -385,11 +374,112 @@ def orden_preguntas(question_set):
         st.markdown('<span id="button-order"></span>', unsafe_allow_html=True)
         if col2.button("Preguntas en Orden", use_container_width=True):
             st.session_state["question_set"] = sorted(question_set)
-            st.warning("True")
+            st.warning("Activado")
+            st.rerun()
     with col3:
         st.markdown(random_button, unsafe_allow_html=True)
         st.markdown('<span id="button-random"></span>', unsafe_allow_html=True)
         if col3.button("Orden aleatorio", on_click=random.shuffle(question_set), use_container_width=True):
             st.session_state["question_set"] = question_set
-            st.warning("True")
+            st.warning("Activado")
+            st.rerun()
     st.divider()
+
+def filtros(especialidad, datos, conn, user, examen=None):
+    st.subheader("Filtros")
+    values = st.slider(
+        "Seleccione rango de preguntas en el que practicar",
+        0,
+        len(datos),
+        (0, len(datos)),
+        step=1,
+    )
+    if especialidad == "snowflake":
+        secciones = st.multiselect(
+            "¿ Qué secciones quieres tocar ?",
+            c.SECCIONES_SNOWFLAKE,
+        )
+    elif especialidad == "dbt":
+        secciones = st.multiselect(
+            "¿ Qué secciones quieres tocar ?",
+            c.SECCIONES_DBT,
+        )
+    option = st.multiselect(
+        "Otros filtros",
+        ["Todas", "Sin hacer", "Falladas en exámenes", "Falladas en práctica"],
+    )
+    preguntas_filtradas = [
+        item for item in datos if values[0] <= item["question_number"] <= values[1]
+    ]
+    
+    if examen:
+        consulta_preguntas_hechas = f"""SELECT 
+        STRING_AGG(CAST(question_id AS NVARCHAR(MAX)), ',') WITHIN GROUP (ORDER BY question_id) AS Hechas, 
+        STRING_AGG(CASE WHEN type = 'Examen' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(MAX)) ELSE NULL END, ',') WITHIN GROUP (ORDER BY question_id) AS Examen_falsas, 
+        STRING_AGG(CASE WHEN type = 'practicar' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(MAX)) ELSE NULL END, ',') WITHIN GROUP (ORDER BY question_id) AS Practicar_falsas 
+        FROM (SELECT DISTINCT question_id, type, is_correct FROM [esnowflake].[dbo].Fact_Answers WHERE user_nickname = '{user}') AS filtered_answers;"""
+        
+        aux_opcion = conn.cursor().execute(consulta_preguntas_hechas).fetchall()
+        no_hechas = []
+        opcion_examen_falsas = []
+        opcion_practicas_falsas = []
+        if st.session_state["exam_mode"] == 0:
+            total_question = range(len(datos))
+
+        if "Falladas en exámenes" in option:
+            opcion_examen_falsas = ast.literal_eval(aux_opcion[0][1])
+        if "Falladas en práctica" in option:
+            opcion_practicas_falsas = ast.literal_eval(aux_opcion[0][2])
+        if "Sin hacer" in option:
+            hechas = aux_opcion[0][0]
+            hechas_lista = ast.literal_eval(hechas)
+            hechas_int = [int(num) for num in list(hechas_lista)]
+            if st.session_state["exam_mode"] == 0:
+                no_hechas = list(set(total_question) - set(hechas))
+            else:
+                no_hechas = [
+                    item["question_number"]
+                    for item in preguntas_filtradas
+                    if item["question_number"] not in hechas_int
+                ]
+        opcion_final = list(
+            set(no_hechas + opcion_examen_falsas + opcion_practicas_falsas)
+        )
+        # AÑADIR FILTRO OTROS
+        if "Todas" not in option and option != []:
+            preguntas_filtradas = [
+                item
+                for item in preguntas_filtradas
+                if item["question_number"] in opcion_final
+            ]
+    if "Todas" not in secciones and secciones != []:
+        preguntas_filtradas = [
+            item
+            for item in preguntas_filtradas
+            if item["question_area"] in secciones
+        ]
+    return preguntas_filtradas
+
+def exam_settings(question_set):
+    st.subheader("Opciones")
+    # Número de preguntas
+    num_questions = st.number_input(
+        "Número de preguntas",
+        min_value=0,
+        max_value=len(question_set),
+        value=len(question_set),
+        help="El valor máximo viene dictaminado por el filtrado que hagas",
+    )
+    selected_questions = random.sample(question_set, num_questions)
+    # Duración del examen
+    exam_duration = st.slider(
+        "Tiempo de Examen (minutos)",
+        min_value=5,
+        max_value=120,
+        value=60,
+    )
+
+    st.session_state["question_set"] = selected_questions
+    st.session_state["exam_duration"] = exam_duration
+    
+    return num_questions, exam_duration
