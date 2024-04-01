@@ -88,10 +88,8 @@ def pregunta(jason,n,mode,user,conn, especialidad):
         pregunta = json_question["question"]
         respuestas = json_question["answers"]
         question_area = json_question["question_area"]
-        
-        if mode == 'practicar':
-            st.write(f'Pregunta {numero} de ExamTopics')
-        st.write(":orange[Question area]",question_area)
+        st.write(f'Pregunta {numero} de ExamTopics')
+        st.write(":orange[Question area:]",question_area)
         st.write(pregunta)        
         imagen = './static/' + especialidad + '/' + str(numero) + ".png"
         if imagen != None:
@@ -126,7 +124,7 @@ def pregunta(jason,n,mode,user,conn, especialidad):
                 s = 'show_solution'
                 if 'show_solution' not in st.session_state:
                     st.session_state['show_solution'] = 0
-                    
+
                 with st.container():
                     # Botón para mostrar la solución
                     is_correct = sol(jason,n,user_answer,1)
@@ -136,7 +134,6 @@ def pregunta(jason,n,mode,user,conn, especialidad):
                     st.button('Ver solución', key=uuid.uuid4(),on_click= checkbox_help, args = (s,))
 
                     if st.session_state['show_solution'] == 1:
-                    
                         try:
                             is_correct_int = 1 if is_correct else 0
                             is_answered_int = 1 if is_answered else 0
@@ -247,15 +244,9 @@ def aux_exam(accion,exam_duration,users_answers):
         
         # Borra el mensaje
         mensaje_temporal.empty()
-        
-
-
-        
     elif accion == 'acabar':
         exam_mode = 2
         st.session_state['exam_mode'] = exam_mode
-
-    
     elif accion == 'Inicio':
         exam_mode = 0
         clear_cache(['current_page','user'])
@@ -263,7 +254,7 @@ def aux_exam(accion,exam_duration,users_answers):
 
 def review():
     if 'review_mode' not in st.session_state:
-            st.session_state['review_mode'] = True
+        st.session_state['review_mode'] = True
     else:
         st.session_state['review_mode'] = True
 
@@ -314,6 +305,7 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
 
     if i > len(set)-1:
         st.session_state['question_number_internal'] = 0
+
     with ant:
         if i != 0:
             st.button('Anterior',use_container_width=1,on_click = aux_questions , args = ('Anterior',))
@@ -336,13 +328,12 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
                 st.session_state['exam_answers'] = []
             if 'review_set' not in st.session_state:
                     st.session_state['review_set'] = []
-
         #pregunta_container = st.empty()
         #with pregunta_container.container():
         if mode == 'practicar':
             pregunta(jason, set[i], mode, user, conn, especialidad)
         if mode == 'examen':
-            pregunta(jason, set[i], mode, user, conn, especialidad)
+            pregunta(jason, set[i]['question_number'], mode, user, conn, especialidad)
             st.write("")
             space,marca = st.columns([3.5,1], gap = "large")
             with space:
@@ -470,7 +461,6 @@ def filtros(especialidad, datos, conn, user, examen=None):
     return preguntas_filtradas
 
 def exam_settings(question_set):
-    st.warning(len(question_set))
     st.subheader("Opciones")
     # Número de preguntas
     num_questions = st.number_input(

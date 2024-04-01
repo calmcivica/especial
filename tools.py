@@ -179,7 +179,6 @@ def examen(conn, datos, especialidad):
                 filtros, settings = st.columns(2, gap="large")
                 with filtros:
                     preguntas_filtradas = h.filtros(especialidad, datos, conn, user, True)
-                    st.warning(len(preguntas_filtradas))
                 with settings:
                     # en exam_settings actualizamos st.session_state["question_set"]
                     # y st.session_state["exam_duration"]
