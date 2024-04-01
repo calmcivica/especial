@@ -184,10 +184,12 @@ def examen(conn, datos, especialidad):
                     # en exam_settings actualizamos st.session_state["question_set"]
                     # y st.session_state["exam_duration"]
                     num_questions, exam_duration = h.exam_settings(preguntas_filtradas)
-                    st.warning('num_questions:' + str(len(exam_duration)) +' - ' + 'num_questions:' + str(len(exam_duration)))
                 with st.expander("¿Como es el examen real?"):
-                    info = c.INFO_EXAMEN_SNOWFLAKE
-                    st.markdown(info)
+                        if especialidad == "snowflake":
+                            info = c.INFO_EXAMEN_SNOWFLAKE
+                        elif especialidad == "dbt":
+                            info = c.INFO_EXAMEN_DBT
+                        st.markdown(info)
             with st.container():
                     _, boton, _ = st.columns(3, gap="large")
                     if num_questions == 0:
