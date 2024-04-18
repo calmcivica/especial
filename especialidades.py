@@ -39,21 +39,24 @@ def go_to_dbt():
 
 ### Definig Main: ESPECIALIDADES
 def go_to_main():
-    st.session_state.page = 'main'
-    # # Set a title and subtitle
-    st.markdown("<h1 style='text-align: center; color: white;'>Especialidades</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center; color: white;'>¿En qué especialidad quieres volverte un máquina?</h3>", unsafe_allow_html=True)
-    col1, col2 = st.columns([1,1], gap="medium")
-    with col1:
-        sn_button_complete = str(sn_init_button+button+sn_end_button)
-        st.markdown(sn_button_complete, unsafe_allow_html=True)
-        st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
-        col1.button('Snowflake',on_click=go_to_snowflake, use_container_width=True)
-    with col2:
-        dbt_button_complete = str(dbt_init_button+button+dbt_end_button)
-        st.markdown(dbt_button_complete, unsafe_allow_html=True)
-        st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
-        col2.button('dbt',on_click=go_to_dbt, use_container_width=True)
+    try:
+        st.session_state.page = 'main'
+        # # Set a title and subtitle
+        st.markdown("<h1 style='text-align: center; color: white;'>Especialidades</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; color: white;'>¿En qué especialidad quieres volverte un máquina?</h3>", unsafe_allow_html=True)
+        col1, col2 = st.columns([1,1], gap="medium")
+        with col1:
+            sn_button_complete = str(sn_init_button+button+sn_end_button)
+            st.markdown(sn_button_complete, unsafe_allow_html=True)
+            st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
+            col1.button('Snowflake',on_click=go_to_snowflake, use_container_width=True)
+        with col2:
+            dbt_button_complete = str(dbt_init_button+button+dbt_end_button)
+            st.markdown(dbt_button_complete, unsafe_allow_html=True)
+            st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
+            col2.button('dbt',on_click=go_to_dbt, use_container_width=True)
+    except Exception as e:
+        st.warning("Error: " + str(e.args))
 
 ######################################################################       
 ######### PAGES
@@ -84,7 +87,10 @@ elif st.session_state.page == 'snowflake':
     
     # Execute the function based on the current_page
     if st.session_state['current_page'] == "Intro 🔰":
-        t.comienzo(conn, especialidad)
+        try:
+            t.comienzo(conn, especialidad)
+        except Exception as e:
+            st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Practicar 🥊":
         try:
             t.practicar(conn, datos, especialidad)
@@ -96,7 +102,10 @@ elif st.session_state.page == 'snowflake':
         except Exception as e:
             st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
-        t.progreso(conn,datos)
+        try:
+            t.progreso(conn,datos)
+        except Exception as e:
+            st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Parreitor-3000 🤖":
         t.parreitor(conn)
 
