@@ -1,3 +1,4 @@
+import os
 import random
 from docx import Document
 
@@ -81,46 +82,54 @@ def checkbox_help(unique_key):
     elif st.session_state[unique_key] == 1:
         st.session_state[unique_key] = 0
 
-def pregunta(jason,n,mode,user,conn, especialidad):
+def reset_counter():
+    st.session_state.counter = 0
+
+def increment_counter():
+    st.session_state.counter += 1
+
+def pregunta(jason, n, mode, user, conn, especialidad):
         json_question = jason[n-1]
-        # Extrae los datos necesarios del JSON
         numero = json_question["question_number"]
         pregunta = json_question["question"]
         respuestas = json_question["answers"]
-        # Change the order of the answers
-        random.shuffle(respuestas)
         question_area = json_question["question_area"]
-        st.write(f'Pregunta {numero} de ExamTopics')
-        st.write(":orange[Question area:]",question_area)
-        st.write(pregunta)        
-        imagen = './static/' + especialidad + '/' + str(numero) + ".png"
-        if imagen != None:
-            try:
-                st.image(imagen)
-            except:
-                pass
-        user_respuestas= [False]*len(respuestas)
 
-        if 'checkbox' not in st.session_state:
-            st.session_state['checkbox'] = False
-        for i in range(len(respuestas)):
-            unique_key = f"{numero}.{i}"
-            if unique_key not in st.session_state:
-                st.session_state[unique_key] = False
-            user_respuestas[i] = st.checkbox(f'{respuestas[i]}',value = st.session_state[unique_key],key= uuid.uuid4(),on_change=checkbox_help,args = (unique_key,))
-            st.session_state[unique_key] = user_respuestas[i]
-        
-        true_count = user_respuestas.count(True)
-        if true_count == 1:
-            # Solo hay un 'True', almacenar la respuesta correspondiente en user_answer
-            indice = user_respuestas.index(True)
-            user_answer = respuestas[indice]
-        elif true_count > 1:
-            # Hay múltiples 'True', almacenar las respuestas correspondientes en user_answer
-            user_answer = [respuestas[i] for i in range(len(respuestas)) if user_respuestas[i]]
+        # Ensure answers are randomized only once per question
+        unique_answer_key = f"randomized_answers_{numero}"
+        if unique_answer_key not in st.session_state:
+            random.shuffle(respuestas)
+            st.session_state[unique_answer_key] = respuestas.copy()
         else:
-            # No hay ningún 'True'
-            user_answer = None
+            respuestas = st.session_state[unique_answer_key]
+
+        st.write(f'Pregunta {numero} de ExamTopics')
+        st.write(":orange[Question area:]", question_area)
+        st.write(pregunta)
+        imagen = './static/' + especialidad + '/' + str(numero) + ".png"
+        if os.path.exists(imagen):
+            st.image(imagen)
+
+        # Se inicializa el array de respuestas del usuario para evitar problemas de modificación directa
+        response_key = f"user_respuestas_{numero}"
+        if response_key not in st.session_state:
+            st.session_state[response_key] = [False] * len(respuestas)
+
+        for i, respuesta in enumerate(respuestas):
+            unique_key = f"{numero}.{i}"
+            # Se crean los checkbox con el estado predefinido
+            user_response = st.checkbox(f'{respuesta}', value=st.session_state[response_key][i], key=unique_key)
+            st.session_state[response_key][i] = user_response
+
+        # Logica para procesar las respuestas
+        user_respuestas = st.session_state[response_key]
+        # Esto recoge el testo de las respuestas donde el checkbox está marcado (True)
+        user_answer = [resp for resp, checked in zip(respuestas, user_respuestas) if checked]
+        
+        # Determina si la respuesta es correcta
+        is_correct = sol(jason, n, user_answer, 1) if user_answer else False
+        is_answered = bool(user_answer)
+        # Muestra la solución
         with st.container():
             if mode == "practicar":
                 s = 'show_solution'
@@ -334,11 +343,13 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
         #with pregunta_container.container():
         if mode == 'practicar':
             try:
+                st.session_state.counter = 0
                 pregunta(jason, set[i], mode, user, conn, especialidad)
             except Exception as e:
                 st.warning("Error: " + str(e.args))
         if mode == 'examen':
             try:
+                st.session_state.counter = 0
                 pregunta(jason, set[i]['question_number'], mode, user, conn, especialidad)
             except Exception as e:
                 st.warning("Error: " + str(e.args))
