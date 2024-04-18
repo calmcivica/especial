@@ -226,7 +226,12 @@
         "question_number": 15,
         "question_area": "Developing dbt models",
         "question": "What dbt_project.yml field is used to specify a custom comment to be injected into each query that dbt runs against your database?",
-        "answers": [],
+        "answers": [
+            "query-comment",
+            "query-tag",
+            "model-comment",
+            "custom-query-comment"
+        ],
         "correct_answer": [
             "query-comment"
         ],
@@ -301,16 +306,13 @@
         "question_area": "Project configs",
         "question": "What is the environment variable order of precedence in dbt Cloud?",
         "answers": [
-            "Personal/Job override",
-            "Environment",
-            "Project default",
-            "Jinja function default arg"
+            "Personal/Job override>Environment>Project default>Jinja function default arg",
+            "Environment>Personal/Job override>Jinja function default arg>Project default",
+            "Project default>Jinja function default arg>Environment>Personal/Job override",
+            "Jinja function default arg>Project default>Environment>Personal/Job override"
         ],
         "correct_answer": [
-            "Personal/Job override",
-            "Environment",
-            "Project default",
-            "Jinja function default arg"
+            "Personal/Job override>Environment>Project default>Jinja function default arg"
         ],
         "explanation": "In dbt Cloud, environment variables follow a specific order of precedence: Personal/Job override, Environment, Project default, and finally the Jinja function default argument.",
         "reference": "https://docs.getdbt.com/docs/build/environment-variables"

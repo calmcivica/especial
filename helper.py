@@ -87,6 +87,8 @@ def pregunta(jason,n,mode,user,conn, especialidad):
         numero = json_question["question_number"]
         pregunta = json_question["question"]
         respuestas = json_question["answers"]
+        # Change the order of the answers
+        random.shuffle(respuestas)
         question_area = json_question["question_area"]
         st.write(f'Pregunta {numero} de ExamTopics')
         st.write(":orange[Question area:]",question_area)
