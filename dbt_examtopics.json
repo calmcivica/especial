@@ -264,7 +264,7 @@
             "quoting: database: true | false, schema: true | false, identifier: true | false"
         ],
         "explanation": "For most adapters, quoting is set to 'true' by default, except for Snowflake where it's 'false'. Identifiers will be quoted when creating relations and resolving a 'ref' function to a direct reference.",
-        "reference": "https: //docs.getdbt.com/reference/project-configs/quoting"
+        "reference": "https://docs.getdbt.com/reference/project-configs/quoting"
     },
     {
         "question_number": 18,
@@ -279,7 +279,7 @@
             "config-version"
         ],
         "explanation": "Without specifying config-version: 2, dbt will assume that your dbt_project.yml uses version 1 syntax, which was deprecated in dbt v0.19.0.",
-        "reference": "https: //docs.getdbt.com/reference/project-configs/config-version"
+        "reference": "https://docs.getdbt.com/reference/project-configs/config-version"
     },
     {
         "question_number": 19,
@@ -294,7 +294,7 @@
             "require-dbt-version"
         ],
         "explanation": "The require-dbt-version configuration restricts your project to work only with specified dbt versions, using standard comparison operators. By default, no such version check is performed. The check can be disabled for a given run using the --no-version-check CLI option.",
-        "reference": "https: //docs.getdbt.com/reference/project-configs/require-dbt-version"
+        "reference": "https://docs.getdbt.com/reference/project-configs/require-dbt-version"
     },
     {
         "question_number": 20,
@@ -313,7 +313,7 @@
             "Jinja function default arg"
         ],
         "explanation": "In dbt Cloud, environment variables follow a specific order of precedence: Personal/Job override, Environment, Project default, and finally the Jinja function default argument.",
-        "reference": "https: //docs.getdbt.com/docs/build/environment-variables"
+        "reference": "https://docs.getdbt.com/docs/build/environment-variables"
     },
     {
         "question_number": 21,
@@ -328,7 +328,7 @@
             "seed-paths"
         ],
         "explanation": "The seed-paths configuration specifies custom directories where seed files are located. The default value is seeds. This configuration allows for flexibility in organizing seed files within a project.",
-        "reference": "https: //docs.getdbt.com/reference/project-configs/seed-paths"
+        "reference": "https://docs.getdbt.com/reference/project-configs/seed-paths"
     },
     {
         "question_number": 22,
@@ -343,7 +343,7 @@
             "asset-paths"
         ],
         "explanation": "The asset-paths configuration specifies a custom list of directories from which files are copied into the target directory as part of the docs generate command. By default, dbt does not compile any additional files as part of docs generate.",
-        "reference": "https: //docs.getdbt.com/reference/project-configs/asset-paths"
+        "reference": "https://docs.getdbt.com/reference/project-configs/asset-paths"
     },
     {
         "question_number": 23,
@@ -358,7 +358,7 @@
             "snapshot-paths"
         ],
         "explanation": "The snapshot-paths configuration specifies custom directories where snapshot files are located. The default value is snapshots. This allows for the organization of snapshot files within the dbt project.",
-        "reference": "https: //docs.getdbt.com/reference/project-configs/snapshot-paths"
+        "reference": "https://docs.getdbt.com/reference/project-configs/snapshot-paths"
     },
     {
         "question_number": 24,
@@ -373,7 +373,7 @@
             ".dbtignore"
         ],
         "explanation": "You can create a .dbtignore file in the root of your dbt project to specify files that should be entirely ignored by dbt. The .dbtignore file behaves like a .gitignore file, using the same syntax to exclude specified files and subdirectories from being read, parsed, or detected by dbt.",
-        "reference": "https: //docs.getdbt.com/reference/dbtignore"
+        "reference": "https://docs.getdbt.com/reference/dbtignore"
     },
     {
         "question_number": 25,
@@ -460,10 +460,10 @@
         "question_area": "Debugging data modeling errors",
         "question": "How can you indirectly select tests related to specific dbt models?",
         "answers": [
-            "dbt test --select \"test_name:generic\"",
+            "dbt test --select \"test_name: generic\"",
             "dbt test --select \"customers orders\"",
-            "dbt test --select \"tag:my_model_tag+\"",
-            "dbt test --select \"tag:my_test_tag\""
+            "dbt test --select \"tag: my_model_tag+\"",
+            "dbt test --select \"tag: my_test_tag\""
         ],
         "correct_answer": [
             "dbt test --select \"customers orders\""
@@ -1433,13 +1433,13 @@
         "question": "Currently, in our project we have for the stg_heroku_postgres_events model two tests: Generic test and Singular test > Test name: validate_events.sql. We need to run the singular test to validate that the test works correctly. Note: Only singular tests assigned to this model should be run.",
         "answers": [
             "dbt test -s stg_heroku_postgres_events",
-            "dbt test -s stg_heroku_postgres_events,test_type:singular",
-            "dbt test -s stg_heroku_postgres_events test_type:singular",
-            "dbt test -s stg_heroku_postgres_events,test_name:validate_events"
+            "dbt test -s stg_heroku_postgres_events,test_type: singular",
+            "dbt test -s stg_heroku_postgres_events test_type: singular",
+            "dbt test -s stg_heroku_postgres_events,test_name: validate_events"
         ],
         "correct_answer": [
             "dbt run --select state:modified",
-            "dbt test -s stg_heroku_postgres_events,test_name:validate_events"
+            "dbt test -s stg_heroku_postgres_events,test_name: validate_events"
         ],
         "explanation": "To identify and test only the modified models, a developer should use the dbt command: dbt run --select state:modified.",
         "reference": "https://docs.getdbt.com/docs/build/data-tests#singular-tests"
@@ -3967,7 +3967,7 @@
         "correct_answer": [
             "dbt test --select \"test_type: generic\""
         ],
-        "explanation": "An example of a direct selection method when using dbt test is: dbt test --select \"test_type:generic\". This command selects tests based on their test type directly.",
+        "explanation": "An example of a direct selection method when using dbt test is: dbt test --select \"test_type: generic\". This command selects tests based on their test type directly.",
         "reference": "https://docs.getdbt.com/reference/node-selection/test-selection-examples"
     },
     {
@@ -4893,5 +4893,118 @@
         ],
         "explanation": "To run a set of models while excluding those with a specific tag and materialization, you can chain '--exclude' arguments in your dbt run command, specifying each criterion you want to exclude.",
         "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
+    },
+    {
+        "question_number": 310,
+        "question_area": "Deploying dbt models",
+        "question": "Which macro is used to determine if a dbt model should run incrementally?",
+        "answers": [
+            "run_incremental()",
+            "is_updated()",
+            "is_incremental()",
+            "incremental_update()"
+        ],
+        "correct_answer": [
+            "is_incremental()"
+        ],
+        "explanation": "The `is_incremental()` macro is used in dbt to conditionally apply logic for incremental models, determining when only new or changed data should be added to an existing model.",
+        "reference": "https://docs.getdbt.com/docs/build/incremental-models"
+    },
+    {
+        "question_number": 311,
+        "question_area": "Deploying dbt models",
+        "question": "What is the purpose of defining a `unique_key` in an incremental model?",
+        "answers": [
+            "To specify the primary key of the source data",
+            "To ensure data is appended without consideration for duplicates",
+            "To enable the updating of existing rows instead of appending new rows",
+            "To define the model's version control system"
+        ],
+        "correct_answer": [
+            "To enable the updating of existing rows instead of appending new rows"
+        ],
+        "explanation": "Defining a `unique_key` in an incremental model allows dbt to update existing records based on this key, rather than appending duplicate data, improving data accuracy and efficiency.",
+        "reference": "https://docs.getdbt.com/docs/build/incremental-models"
+    },
+    {
+        "question_number": 312,
+        "question_area": "Deploying dbt models",
+        "question": "What does the `on_schema_change` configuration do in a dbt model?",
+        "answers": [
+            "Triggers a model rebuild when the source data schema changes",
+            "Automatically generates schema documentation",
+            "Notifies the user of any schema changes in source data",
+            "Creates a new schema in the database for the model"
+        ],
+        "correct_answer": [
+            "Triggers a model rebuild when the source data schema changes",
+            "Notifies the user of any schema changes in source data"
+        ],
+        "explanation": "The `on_schema_change` configuration in a dbt model allows for automatic handling of schema changes in source data, triggering model rebuilds to accommodate these changes.",
+        "reference": "https://docs.getdbt.com/docs/build/incremental-models"
+    },
+    {
+        "question_number": 313,
+        "question_area": "Deploying dbt models",
+        "question": "What is the purpose of the `--full-refresh` flag when running a dbt model?",
+        "answers": [
+            "To force the model to run incrementally",
+            "To skip the model's run",
+            "To update the model's documentation",
+            "To rebuild the model from scratch, ignoring incremental logic"
+        ],
+        "correct_answer": [
+            "To rebuild the model from scratch, ignoring incremental logic"
+        ],
+        "explanation": "The `--full-refresh` flag is used to ignore the incremental logic of a model and rebuild it from scratch, ensuring all data is processed even if previously done incrementally.",
+        "reference": "https://docs.getdbt.com/docs/build/incremental-models"
+    },
+    {
+        "question_number": 314,
+        "question_area": "Deploying dbt jobs",
+        "question": "Imagine you have a 'usuarios' table with fields: 'id', 'email', 'nombre', 'fecha_ultima_modificacion'. You perform a snapshot using the 'timestamp' strategy. If you update the user's name to 'Juan García' and 'fecha_ultima_modificacion' to '2023-04-11', and then take another snapshot, what would the snapshot table look like after this update?",
+        "answers": [
+            "Two rows with the same 'id' (1), one with 'Juan Pérez' and the other with 'Juan García', both with a null 'dbt_valid_to'.",
+            "Two rows with 'id' 1, the first with 'dbt_valid_to' not null, the second with 'dbt_valid_to' null and 'nombre' 'Juan García'.",
+            "A single row with 'id' 1 and 'nombre' 'Juan García', with 'dbt_valid_to' not null.",
+            "No rows because the snapshot does not include updates, only inserts."
+        ],
+        "correct_answer": [
+            "Two rows with 'id' 1, the first with 'dbt_valid_to' not null, the second with 'dbt_valid_to' null and 'nombre' 'Juan García'."
+        ],
+        "explanation": "The timestamp strategy tracks changes over time. When 'nombre' is updated, a new snapshot row is created, preserving the historical record with 'dbt_valid_to' set to null for the most recent entry, indicating it is the current version.",
+        "reference": "https://docs.getdbt.com/docs/build/snapshots"
+    },
+    {
+        "question_number": 315,
+        "question_area": "Deploying dbt jobs",
+        "question": "If 'invalidate_hard_deletes' is enabled and the user with 'id' 1 is deleted from the source table and a snapshot is taken, what happens to the snapshot table?",
+        "answers": [
+            "The snapshot table still retains the record with 'id' 1 but ‘dbt_valid_to’ field is null.",
+            "The record with 'id' 1 is deleted from the snapshot table.",
+            "The snapshot table still retains the record with 'id' 1 but ‘dbt_valid_to’ field has the date of the deletion.",
+            "The snapshot table becomes empty."
+        ],
+        "correct_answer": [
+            "The snapshot table still retains the record with 'id' 1 but ‘dbt_valid_to’ field has the date of the deletion."
+        ],
+        "explanation": "When 'invalidate_hard_deletes' is enabled (set to True), any deletions in the source table are mirrored in the snapshot table. Additionally, the 'dbt_valid_to' field is updated to reflect the date when the corresponding row became invalid.",
+        "reference": "https://docs.getdbt.com/docs/build/snapshots"
+    },
+    {
+        "question_number": 316,
+        "question_area": "Deploying dbt jobs",
+        "question": "Using the 'check_cols' strategy with 'email' and 'nombre' as columns to check, if you change the 'email' of the user with 'id' 1 to 'nuevo@example.com' without updating 'fecha_ultima_modificacion', and take a snapshot, what happens?",
+        "answers": [
+            "The snapshot table updates the email without creating a new row.",
+            "The snapshot table remains unchanged because the timestamp was not updated.",
+            "A new row is created in the snapshot table for 'id' 1 with the new 'email'.",
+            "The email update is ignored as it is not a significant change."
+        ],
+        "correct_answer": [
+            "A new row is created in the snapshot table for 'id' 1 with the new 'email'."
+        ],
+        "explanation": "The 'check_cols' strategy tracks changes in specific columns, regardless of the timestamp column. Any change in the specified columns results in a new row in the snapshot table, capturing the update.",
+        "reference": "https://docs.getdbt.com/docs/build/snapshots"
     }
 ]

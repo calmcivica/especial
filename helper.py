@@ -331,9 +331,15 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
         #pregunta_container = st.empty()
         #with pregunta_container.container():
         if mode == 'practicar':
-            pregunta(jason, set[i], mode, user, conn, especialidad)
+            try:
+                pregunta(jason, set[i], mode, user, conn, especialidad)
+            except Exception as e:
+                st.warning("Error: " + str(e.args))
         if mode == 'examen':
-            pregunta(jason, set[i]['question_number'], mode, user, conn, especialidad)
+            try:
+                pregunta(jason, set[i]['question_number'], mode, user, conn, especialidad)
+            except Exception as e:
+                st.warning("Error: " + str(e.args))
             st.write("")
             space,marca = st.columns([3.5,1], gap = "large")
             with space:
@@ -374,14 +380,12 @@ def orden_preguntas(question_set):
         st.markdown('<span id="button-order"></span>', unsafe_allow_html=True)
         if col2.button("Preguntas en Orden", use_container_width=True):
             st.session_state["question_set"] = sorted(question_set)
-            st.warning("Activado")
             st.rerun()
     with col3:
         st.markdown(random_button, unsafe_allow_html=True)
         st.markdown('<span id="button-random"></span>', unsafe_allow_html=True)
         if col3.button("Orden aleatorio", on_click=random.shuffle(question_set), use_container_width=True):
             st.session_state["question_set"] = question_set
-            st.warning("Activado")
             st.rerun()
     st.divider()
 

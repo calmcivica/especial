@@ -141,34 +141,121 @@ def practicar(conn, datos, especialidad):
     filtros, preguntas = st.columns([1, 3], gap="large")
     # Filtros
     with filtros:
-        preguntas_filtradas = h.filtros(especialidad, datos, conn, user)
+        st.subheader("Filtros")
+        values = st.slider(
+            "Seleccione rango de preguntas en el que practicar",
+            0,
+            len(datos),
+            (0, len(datos)),
+            step=1,
+        )
+
+        if especialidad == "snowflake":
+            secciones = st.multiselect(
+                "¿ Qué secciones quieres tocar ?",
+                c.SECCIONES_SNOWFLAKE,
+            )
+        elif especialidad == "dbt":
+            secciones = st.multiselect(
+                "¿ Qué secciones quieres tocar ?",
+                c.SECCIONES_DBT,
+            )
+
+        option = st.multiselect(
+            "Otros filtros",
+            ["Todas", "Sin hacer", "Falladas en exámenes", "Falladas en práctica"],
+        )
+
+        preguntas_filtradas = [
+            item for item in datos if values[0] <= item["question_number"] <= values[1]
+        ]
+        if "Todas" not in secciones and secciones != []:
+            preguntas_filtradas = [
+                item
+                for item in preguntas_filtradas
+                if item["question_area"] in secciones
+            ]
+
+        consulta_preguntas_hechas = f"""SELECT 
+                STRING_AGG(CAST(question_id AS NVARCHAR(MAX)), ',') WITHIN GROUP (ORDER BY question_id) AS Hechas, 
+                STRING_AGG(CASE WHEN type = 'Examen' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(MAX)) ELSE NULL END, ',') WITHIN GROUP (ORDER BY question_id) AS Examen_falsas, 
+                STRING_AGG(CASE WHEN type = 'practicar' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(MAX)) ELSE NULL END, ',') WITHIN GROUP (ORDER BY question_id) AS Practicar_falsas 
+                FROM (SELECT DISTINCT question_id, type, is_correct FROM [esnowflake].[dbo].Fact_Answers WHERE user_nickname = '{user}') AS filtered_answers;"""
+
+        aux_opcion = conn.cursor().execute(consulta_preguntas_hechas).fetchall()
+
+        no_hechas = []
+        opcion_examen_falsas = []
+        opcion_practicas_falsas = []
+
+        if "Falladas en exámenes" in option:
+            opcion_examen_falsas = ast.literal_eval(aux_opcion[0][1])
+
+        if "Falladas en práctica" in option:
+            opcion_practicas_falsas = ast.literal_eval(aux_opcion[0][2])
+
+        if "Sin hacer" in option:
+            hechas = aux_opcion[0][0]
+            hechas_lista = ast.literal_eval(hechas)
+            hechas_int = [int(num) for num in list(hechas_lista)]
+
+            no_hechas = [
+                item["question_number"]
+                for item in preguntas_filtradas
+                if item["question_number"] not in hechas_int
+            ]
+
+        opcion_final = list(
+            set(no_hechas + opcion_examen_falsas + opcion_practicas_falsas)
+        )
+        # AÑADIR FILTRO OTROS
+        if "Todas" not in option and option != []:
+
+            preguntas_filtradas = [
+                item
+                for item in preguntas_filtradas
+                if item["question_number"] in opcion_final
+            ]
 
         question_set = [item["question_number"] for item in preguntas_filtradas]
 
         # Initialize session state for question set if not already set
-        if 'question_set' not in st.session_state:
-            st.session_state["question_set"] = question_set  # Initial question set assignment
-        
+        if "question_set" not in st.session_state:
+            st.session_state["question_set"] = (
+                question_set  # Initial question set assignment
+            )
+
         # Vuelve a recargar st.session_state["question_set"]
         h.orden_preguntas(question_set)
     # Update the current page to reflect
-        with preguntas:
-            if st.session_state["question_set"]:
-                h.setexam(st.session_state["question_set"], datos, "practicar", conn, user, especialidad)
-            else:
-                st.write("No hay ninguna pregunta que cuadre con los filtros que has puesto")
+    with preguntas:
+        if st.session_state["question_set"]:
+            h.setexam(
+                st.session_state["question_set"],
+                datos,
+                "practicar",
+                conn,
+                user,
+                especialidad,
+            )
+        else:
+            st.write(
+                "No hay ninguna pregunta que cuadre con los filtros que has puesto"
+            )
 
 
 def examen(conn, datos, especialidad):
     user = h.get_user_none()
     exam_mode = 0
-    if "exam_mode" not in st.session_state or st.session_state["exam_mode"]=='':
+    if "exam_mode" not in st.session_state or st.session_state["exam_mode"] == "":
         st.session_state["exam_mode"] = exam_mode
     question_set = []
 
     # Initialize session state for question set if not already set
-    if 'question_set' not in st.session_state:
-        st.session_state["question_set"] = question_set  # Initial question set assignment
+    if "question_set" not in st.session_state:
+        st.session_state["question_set"] = (
+            question_set  # Initial question set assignment
+        )
 
     if st.session_state.get("exam_mode", 0) == 0:
         with st.container():
@@ -184,32 +271,40 @@ def examen(conn, datos, especialidad):
                     # y st.session_state["exam_duration"]
                     num_questions, exam_duration = h.exam_settings(preguntas_filtradas)
                 with st.expander("¿Como es el examen real?"):
-                        if especialidad == "snowflake":
-                            info = c.INFO_EXAMEN_SNOWFLAKE
-                        elif especialidad == "dbt":
-                            info = c.INFO_EXAMEN_DBT
-                        st.markdown(info)
+                    if especialidad == "snowflake":
+                        info = c.INFO_EXAMEN_SNOWFLAKE
+                    elif especialidad == "dbt":
+                        info = c.INFO_EXAMEN_DBT
+                    st.markdown(info)
             with st.container():
-                    _, boton, _ = st.columns(3, gap="large")
-                    if num_questions == 0:
-                        st.warning(
-                            "Tus filtros u opciones resultan en una cantidad de 0 preguntas"
+                _, boton, _ = st.columns(3, gap="large")
+                if num_questions == 0:
+                    st.warning(
+                        "Tus filtros u opciones resultan en una cantidad de 0 preguntas"
+                    )
+                else:
+                    with boton:
+                        st.button(
+                            "Comenzar examen",
+                            use_container_width=1,
+                            on_click=h.aux_exam,
+                            args=("empezar", exam_duration, None),
                         )
-                    else:
-                        with boton:
-                            st.button(
-                                "Comenzar examen",
-                                use_container_width=1,
-                                on_click=h.aux_exam,
-                                args=("empezar", exam_duration, None),
-                            )
 
     elif st.session_state.get("exam_mode", 0) == 1:
         with st.container():
             question_set = st.session_state["question_set"]
             exam_duration = st.session_state["exam_duration"]
-            h.setexam(st.session_state["question_set"], datos, "examen", conn, user, especialidad, exam_time=exam_duration)
-        
+            h.setexam(
+                st.session_state["question_set"],
+                datos,
+                "examen",
+                conn,
+                user,
+                especialidad,
+                exam_time=exam_duration,
+            )
+
     elif st.session_state.get("exam_mode", 0) == 2:
         exam_duration = st.session_state["exam_duration"]
         exam_id_v = (
@@ -244,8 +339,8 @@ def examen(conn, datos, especialidad):
             user_answer = answer["user_answer"]
             if isinstance(user_answer, str):
                 user_answer = [user_answer]
-            correcta = datos[question_number - 2]["correct_answer"]
-            question = datos[question_number - 2]["question"]
+            correcta = datos[question_number - 1]["correct_answer"]
+            question = datos[question_number - 1]["question"]
             comofue = h.comparar_respuestas(user_answer, correcta)
             answer["result"] = comofue
             answer["correcta"] = correcta
@@ -261,12 +356,13 @@ def examen(conn, datos, especialidad):
             else:
                 is_correct = 0
                 is_answered = 0
-
-            if i != 0:
+            
                 values_list.append(", ")
             values_list.append(
                 f"({question_number}, '{user}', 'examen', {exam_id}, {int(is_correct)}, {int(is_answered)}, CURRENT_TIMESTAMP)"
             )
+            if values_list[-1] == ', ':
+                values_list.pop()
             insert += "".join(values_list)
 
         update = f"""

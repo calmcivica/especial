@@ -1,4 +1,5 @@
 from __future__ import annotations
+import streamlit as st
 
 from typing import Any, Dict, Iterator, List, Optional, Tuple
 
@@ -71,7 +72,6 @@ class SnowflakeLoader(BaseLoader):
                 "Please install it with `pip install snowflake-connector-python`."
             ) from ex
 
-        print(self.sso)
         if self.sso =='y':
             conn = snowflake.connector.connect(
                 user=self.user,
@@ -105,7 +105,7 @@ class SnowflakeLoader(BaseLoader):
             column_names = [column[0] for column in cur.description]
             query_result = [dict(zip(column_names, row)) for row in query_result]
         except Exception as e:
-            print(f"An error occurred: {e}")
+            st.write(f"An error occurred: {e}")
             query_result = []
         finally:
             cur.close()
@@ -127,7 +127,7 @@ class SnowflakeLoader(BaseLoader):
     def lazy_load(self) -> Iterator[Document]:
         query_result = self._execute_query()
         if isinstance(query_result, Exception):
-            print(f"An error occurred during the query: {query_result}")
+            st.write(f"An error occurred during the query: {query_result}")
             return []
         page_content_columns, metadata_columns = self._get_columns(query_result)
         if "*" in page_content_columns:
