@@ -1,4 +1,5 @@
 from time import sleep
+import time
 import streamlit as st
 import helper as h
 import constantes as c
@@ -39,8 +40,8 @@ def menu(conn):
     """
     Muestra la interfaz de usuario para la selección y visualización de información de usuario.
     Crea un menú con información del usuario actual y permite la selección de un nuevo usuario desde una lista filtrada.
-    La lista se obtiene de una consulta SQL a una base de datos Snowflake, excluyendo nombres que contienen 'alumno'
-    y seleccionando aquellos que contienen 'civica'. También muestra el 'rango' del usuario actual con un emoji representativo.
+    La lista se obtiene de una consulta SQL a una base de datos Snowflake. También muestra el 'rango' del usuario actual con un emoji representativo.
+    Así mismo, se puede crear, resetear y borrar un usuario.
 
     Parámetros:
     - conn: Conexión activa a la base de datos Snowflake.
@@ -51,46 +52,76 @@ def menu(conn):
     # User information
     with st.container():
         h.get_user_none()
-        space, login = st.columns([3, 1], gap="large")
-        user_list_v = (
-            conn.cursor()
-            .execute(
-                "select name from [esnowflake].[dbo].Dim_Users WHERE name LIKE '%civica%' AND name NOT LIKE '%alumno%' ORDER BY name"
-            )
-            .fetchall()
-        )
-        lista_plana = [item[0] for item in user_list_v]
+        space, login, actions = st.columns([3, 1, 1], gap="large")
+        space, login, actions = st.columns([2,2,0.5], gap="medium")
+        if 'lista_plana' not in st.session_state:
+            st.session_state['lista_plana'] = h.recharge_user_list(conn)
         with space:
-            if st.session_state["user"] == None:
-                st.warning(
-                    "Recuerda elegir tu usuario si quieres que se registren tus avances y poder ver tus progresos"
-                )
-            else:
-                rango_v = (
-                    conn.cursor()
-                    .execute(
-                        f"select rango from [esnowflake].[dbo].Dim_Users where name  = '{st.session_state['user']}'"
+            try:
+                if st.session_state.get("user") is None:
+                    st.warning(
+                        "Recuerda elegir tu usuario si quieres que se registren tus avances y poder ver tus progresos."
                     )
-                    .fetchall()
-                )
-                rango = rango_v[0][0]
-                st.write("")
-                if rango == "Iniciado":
-                    emoji = "🤓"
-                elif rango == "Padawan":
-                    emoji = "🤠"
-                elif rango == "Maestro":
-                    emoji = "🗡️"
-                elif rango == "Parra":
-                    emoji = "🤖"
-                st.write(f"Rango : {rango} {emoji}")
+                else:
+                    query = f"SELECT rango FROM [esnowflake].[dbo].Dim_Users WHERE name = '{st.session_state['user']}'"
+                    rango_v = (
+                        conn.cursor()
+                        .execute(query)
+                        .fetchall()
+                    )
+                    if rango_v:
+                        rango = rango_v[0][0]
+                        emoji_map = {"Iniciado": "🤓", "Padawan": "🤠", "Maestro": "🗡️", "Parra": "🤖"}
+                        emoji = emoji_map.get(rango, "")
+                        st.write(f"Rango: {rango} {emoji}")
+                    else:
+                        st.error("User rank not found.")
+            except Exception as e:
+                st.error(f'Error create user: {e}')
+
         with login:
-            if st.session_state["user"] == None:
-                indice = None
-            else:
-                indice = lista_plana.index(st.session_state["user"])
-            useri = st.selectbox("User name :", lista_plana, index=indice)
+            if st.session_state["user"] not in st.session_state['lista_plana']:
+                st.session_state['lista_plana'] = h.recharge_user_list(conn)
+            indice = st.session_state['lista_plana'].index(st.session_state["user"]) if st.session_state.get("user") else None
+            useri = st.selectbox("User name:", st.session_state['lista_plana'], index=indice)
             st.session_state["user"] = useri
+            if st.session_state.get("user") is None:
+                new_user = st.text_input("Or enter a new username:")
+                if new_user:
+                    if new_user not in st.session_state['lista_plana']:
+                        if st.button('Add new user'):
+                            h.new_user(conn,st.session_state['lista_plana'], new_user, True)
+                            useri = st.session_state["user"]
+                    else:
+                        st.error('Username already exists.')
+
+        with actions:
+            if 'count' not in st.session_state:
+                st.session_state['count'] = 0
+            
+            if st.session_state.get("user"):
+                reset_clicked = st.button("Reset user")
+                if reset_clicked:
+                    st.session_state['count'] += 1
+                    st.write("Are you sure? Click again if you want to reset your user")
+                    if st.session_state['count'] == 2:
+                        h.reset_delete_user(conn,useri, False)
+                        useri = st.session_state["user"]
+                        st.success(f'User {useri} reset successfully.')
+                        time.sleep(1)
+                        st.rerun()
+                        
+                delete_clicked = st.button("Delete user")
+                if delete_clicked:
+                    st.session_state['count'] += 1
+                    st.write(":red[Are you sure? Click again if you want to reset your user]")
+                    if st.session_state['count'] == 2:
+                        h.reset_delete_user(conn,useri, True)
+                        st.session_state['count'] = 0
+                        st.success(f'User {useri} deleted successfully.')
+                        useri = None
+                        time.sleep(1)
+                        st.rerun()
     return useri
 
 

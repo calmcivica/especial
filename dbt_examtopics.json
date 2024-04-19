@@ -122,7 +122,7 @@
         "correct_answer": [
             "log-path"
         ],
-        "explanation": "log-path optionally specify a custom directory where dbt will write logs. By default, dbt will write to the logs directory, i.e. log-path: logs",
+        "explanation": "log-path optionally specify a custom directory where dbt will write logs. By default, dbt will write to the logs directory, i.e. log-path:  logs",
         "reference": "https://docs.getdbt.com/reference/global-configs/logs#log-and-target-paths"
     },
     {
@@ -154,7 +154,7 @@
         "correct_answer": [
             "packages-install-path"
         ],
-        "explanation": "packages-install-path optionally specifies a custom directory where packages are installed when you run the dbt deps command. By default, dbt will install packages in the dbt_packages directory, i.e., packages-install-path: dbt_packages",
+        "explanation": "packages-install-path optionally specifies a custom directory where packages are installed when you run the dbt deps command. By default, dbt will install packages in the dbt_packages directory, i.e., packages-install-path:  dbt_packages",
         "reference": "https://docs.getdbt.com/reference/project-configs/packages-install-path"
     },
     {
@@ -258,7 +258,7 @@
     {
         "question_number": 17,
         "question_area": "Project configs",
-        "question": "What dbt_project.yml field is used to specify whether dbt should quote databases, schemas, and identifiers? What is the default? In what contexts will quoting happen (if specified)?",
+        "question": "What dbt_project.yml field is used to specify whether dbt should quote databases, schemas, and identifiers?",
         "answers": [
             "quoting: database: true | false, schema: true | false, identifier: true | false",
             "quoting: true, false",
@@ -289,7 +289,7 @@
     {
         "question_number": 19,
         "question_area": "Project configs",
-        "question": "What dbt_project.yml field is used to restrict your project to only work with a specific range of dbt versions? What is the default? Can this check be situationally disabled?",
+        "question": "What dbt_project.yml field is used to restrict your project to only work with a specific range of dbt versions?",
         "answers": [
             "require-dbt-version",
             "dbt-version-range",
@@ -320,7 +320,7 @@
     {
         "question_number": 21,
         "question_area": "Project configs",
-        "question": "What dbt_project.yml field is used to specify a custom list of directories where seed files are located? What is the default?",
+        "question": "What dbt_project.yml field is used to specify a custom list of directories where seed files are located?",
         "answers": [
             "seed-paths",
             "seed-directories",
@@ -335,7 +335,7 @@
     {
         "question_number": 22,
         "question_area": "Project configs",
-        "question": "What dbt_project.yml field is used to specify a custom list of directories from which files will be copied into the target directory as part of the docs generate command? What is the default?",
+        "question": "What dbt_project.yml field is used to specify a custom list of directories from which files will be copied into the target directory as part of the docs generate command?",
         "answers": [
             "asset-paths",
             "asset-directories",
@@ -350,7 +350,7 @@
     {
         "question_number": 23,
         "question_area": "Project configs",
-        "question": "What dbt_project.yml field is used to specify a custom list of directories where snapshots are located? What is the default?",
+        "question": "What dbt_project.yml field is used to specify a custom list of directories where snapshots are located?",
         "answers": [
             "snapshot-paths",
             "snapshot-directories",
@@ -380,7 +380,7 @@
     {
         "question_number": 25,
         "question_area": "Developing dbt models",
-        "question": "What dbt_project.yml field is used to specify a custom list of directories where models and sources are located? What is the default?",
+        "question": "What dbt_project.yml field is used to specify a custom list of directories where models and sources are located?",
         "answers": [
             "model-paths",
             "source-paths",
@@ -412,7 +412,7 @@
     {
         "question_number": 27,
         "question_area": "Developing dbt models",
-        "question": "What dbt_project.yml field is used to specify a custom directory where compiled files will be written when you run dbt run, dbt compile, or dbt test commands? What is the default? How else can this be configured?",
+        "question": "What dbt_project.yml field is used to specify a custom directory where compiled files will be written when you run dbt run, dbt compile, or dbt test commands?",
         "answers": [
             "target-path",
             "compile-path",
@@ -428,7 +428,7 @@
     {
         "question_number": 28,
         "question_area": "Developing dbt models",
-        "question": "What dbt_project.yml field is used to specify a custom list of directories to be removed by the dbt clean command? What is the default? What is the use case?",
+        "question": "What dbt_project.yml field is used to specify a custom list of directories to be removed by the dbt clean command?",
         "answers": [
             "clean-targets",
             "remove-paths",
@@ -444,7 +444,7 @@
     {
         "question_number": 29,
         "question_area": "Implementing dbt tests",
-        "question": "What dbt_project.yml field is used to specify a custom list of directories where data tests are located? What is the default?",
+        "question": "What dbt_project.yml field is used to specify a custom list of directories where data tests are located?",
         "answers": [
             "test-paths",
             "data-test-locations",
@@ -463,14 +463,14 @@
         "question": "How can you indirectly select tests related to specific dbt models?",
         "answers": [
             "dbt test --select \"test_name: generic\"",
-            "dbt test --select \"customers orders\"",
-            "dbt test --select \"tag: my_model_tag+\"",
-            "dbt test --select \"tag: my_test_tag\""
+            "dbt test --select \"my_model_1 my_model_2\"",
+            "dbt test --select \"tag:  my_model_tag+\"",
+            "dbt test --select \"tag:  my_test_tag\""
         ],
         "correct_answer": [
-            "dbt test --select \"customers orders\""
+            "dbt test --select \"my_model_1 my_model_2\""
         ],
-        "explanation": "You can indirectly select tests related to specific dbt models by using the command: dbt test --select \"customers orders\". This command selects tests related to the models 'customers' and 'orders'.",
+        "explanation": "You can indirectly select tests related to specific dbt models by using the command: dbt test --select \"my_model_1 my_model_2\". This command selects tests related to the models 'my_model_1' and 'my_model_2'.",
         "reference": "https://docs.getdbt.com/reference/node-selection/test-selection-examples"
     },
     {
@@ -534,7 +534,7 @@
         "correct_answer": [
             "Matched by -select criteria, then graph operators, then set operators"
         ],
-        "explanation": "dbt first gathers all the resources matched by one or more of the -select criteria, in the order of selection methods (e.g., tag: ), then graph operators (e.g., +), and finally set operators (unions, intersections, exclusions).",
+        "explanation": "dbt first gathers all the resources matched by one or more of the -select criteria, in the order of selection methods (e.g., tag:  ), then graph operators (e.g., +), and finally set operators (unions, intersections, exclusions).",
         "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
     },
     {
@@ -717,17 +717,17 @@
         "question_area": "Developing dbt models",
         "question": "How can you select models within a specific package?",
         "answers": [
-            "`dbt run --select package: snowplow`",
+            "`dbt run --select package:  snowplow`",
             "`dbt run --select snowplow`",
             "`dbt run --select snowplow.*`",
-            "`dbt run --select package: finance`"
+            "`dbt run --select package:  finance`"
         ],
         "correct_answer": [
-            "`dbt run --select package: snowplow`",
+            "`dbt run --select package:  snowplow`",
             "`dbt run --select snowplow`",
             "`dbt run --select snowplow.*`"
         ],
-        "explanation": "You can select models within a specific package using either the `package: ` prefix or directly by the package name, followed by `.*` to specify all models within that package. This allows for targeted execution of models belonging to a specific package.",
+        "explanation": "You can select models within a specific package using either the `package:  ` prefix or directly by the package name, followed by `.*` to specify all models within that package. This allows for targeted execution of models belonging to a specific package.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -800,15 +800,15 @@
         "question_area": "Developing dbt models",
         "question": "How do you select models matching a specific tag?",
         "answers": [
-            "`dbt run --select tag: <tag_name>`",
-            "`dbt run --select @tag: <tag_name>`",
-            "`dbt run --select tag: <tag_name>+`",
-            "`dbt run --select *tag: <tag_name>`"
+            "`dbt run --select tag:  <tag_name>`",
+            "`dbt run --select @tag:  <tag_name>`",
+            "`dbt run --select tag:  <tag_name>+`",
+            "`dbt run --select *tag:  <tag_name>`"
         ],
         "correct_answer": [
-            "`dbt run --select tag: <tag_name>`"
+            "`dbt run --select tag:  <tag_name>`"
         ],
-        "explanation": "To select models matching a specific tag, you use the `tag: <tag_name>` syntax. This selects all nodes tagged with the specified tag name.",
+        "explanation": "To select models matching a specific tag, you use the `tag:  <tag_name>` syntax. This selects all nodes tagged with the specified tag name.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -816,15 +816,15 @@
         "question_area": "Developing dbt models",
         "question": "How do you select nodes stored in a particular file/directory?",
         "answers": [
-            "`dbt run --select path: models/staging/sales`",
+            "`dbt run --select path:  models/staging/sales`",
             "`dbt run --select directory: models/staging/sales`",
             "`dbt run --select file: models/staging/sales.sql`",
             "`dbt run --select models/staging/sales`"
         ],
         "correct_answer": [
-            "`dbt run --select path: models/staging/sales`"
+            "`dbt run --select path:  models/staging/sales`"
         ],
-        "explanation": "To select nodes stored in a particular file or directory, you use the `path: ` method followed by the directory or file path. This method selects all models stored within the specified path.",
+        "explanation": "To select nodes stored in a particular file or directory, you use the `path:  ` method followed by the directory or file path. This method selects all models stored within the specified path.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -1691,7 +1691,7 @@
         "correct_answer": [
             "{% set tasks = ['clean kitchen', 'fold laundry'] %}"
         ],
-        "explanation": "Before using a variable in a Jinja loop, you need to define or set that variable. The correct way to define a list of tasks to be used in the loop is using the `{% set %}` tag: `{% set tasks = ['clean kitchen', 'fold laundry'] %}`. This sets up the `tasks` variable to be iterated over in the loop.",
+        "explanation": "Before using a variable in a Jinja loop, you need to define or set that variable. The correct way to define a list of tasks to be used in the loop is using the `{% set %}` tag:  `{% set tasks = ['clean kitchen', 'fold laundry'] %}`. This sets up the `tasks` variable to be iterated over in the loop.",
         "reference": "https://docs.getdbt.com/docs/build/jinja-macros#getting-started"
     },
     {
@@ -2273,15 +2273,15 @@
         "question_area": "Deploying dbt jobs",
         "question": "You have been asked to run a specific set of models related to the daily financial reports, but you need to exclude models tagged as “nightly” and those with a materialized configuration set to “table”. What command would you use to run the models contained in the “daily_reports” directory, excluding those with the “nightly” tag and materialized as “table”?",
         "answers": [
-            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table",
-            "dbt run --select path:models/daily_reports --select -tag:nightly,config.materialized:table",
-            "dbt run --select path:models/daily_reports,tag:nightly,config.materialized:table",
-            "dbt run --select path:models/daily_reports --exclude tag:nightly config.materialized:table"
+            "dbt run --select path: models/daily_reports --exclude tag: nightly --exclude config.materialized: table",
+            "dbt run --select path: models/daily_reports --select -tag: nightly,config.materialized: table",
+            "dbt run --select path: models/daily_reports,tag: nightly,config.materialized: table",
+            "dbt run --select path: models/daily_reports --exclude tag: nightly config.materialized: table"
         ],
         "correct_answer": [
-            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table"
+            "dbt run --select path: models/daily_reports --exclude tag: nightly --exclude config.materialized: table"
         ],
-        "explanation": "To run the models contained in the daily_reports directory, excluding those with the nightly tag and materialized as table, you should use the command: dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table.",
+        "explanation": "To run the models contained in the daily_reports directory, excluding those with the nightly tag and materialized as table, you should use the command: dbt run --select path: models/daily_reports --exclude tag: nightly --exclude config.materialized: table.",
         "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
     },
     {
@@ -2528,13 +2528,13 @@
         "question_area": "Deploying dbt jobs",
         "question": "The marketing team later requests that you exclude a specific model, customer_lifetime_value, while still executing the other customer_analytics tagged models and their dependencies. How would you modify your dbt command to accommodate this request?",
         "answers": [
-            "dbt run --select tag:customer_analytics+ --select -customer_lifetime_value",
-            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value",
-            "dbt run --select tag:customer_analytics+ --select -+customer_lifetime_value",
-            "dbt run --select tag:customer_analytics+ -customer_lifetime_value"
+            "dbt run --select tag: customer_analytics+ --select -customer_lifetime_value",
+            "dbt run --select tag: customer_analytics+ --exclude customer_lifetime_value",
+            "dbt run --select tag: customer_analytics+ --select -+customer_lifetime_value",
+            "dbt run --select tag: customer_analytics+ -customer_lifetime_value"
         ],
         "correct_answer": [
-            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value"
+            "dbt run --select tag: customer_analytics+ --exclude customer_lifetime_value"
         ],
         "explanation": "To exclude a specific model, customer_lifetime_value, while still executing the other customer_analytics tagged models and their dependencies, you should modify the dbt command by adding --exclude customer_lifetime_value.",
         "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
@@ -2544,15 +2544,15 @@
         "question_area": "Deploying dbt jobs",
         "question": "You have been asked to run a specific set of models related to the daily financial reports (tagged as d_financial_report), but some of those models are also tagged as nightly and it’s not necessary to run them. Also, you want to run all tests of the executed models. What will be the command on dbt?",
         "answers": [
-            "dbt build --select tag:d_financial_report,tag:nightly",
-            "dbt build --select tag:d_financial_report --exclude nightly",
-            "dbt run --select tag:d_financial_report --exclude tag:nightly",
-            "dbt build --select tag:d_financial_report --exclude tag:nightly"
+            "dbt build --select tag: d_financial_report,tag: nightly",
+            "dbt build --select tag: d_financial_report --exclude nightly",
+            "dbt run --select tag: d_financial_report --exclude tag: nightly",
+            "dbt build --select tag: d_financial_report --exclude tag: nightly"
         ],
         "correct_answer": [
-            "dbt run --select tag:d_financial_report --exclude tag:nightly"
+            "dbt run --select tag: d_financial_report --exclude tag: nightly"
         ],
-        "explanation": "To run a specific set of models related to the daily financial reports (tagged as d_financial_report), excluding models tagged as nightly, and run all tests of the executed models, you should use the command: dbt run --select tag:d_financial_report --exclude tag:nightly.",
+        "explanation": "To run a specific set of models related to the daily financial reports (tagged as d_financial_report), excluding models tagged as nightly, and run all tests of the executed models, you should use the command: dbt run --select tag: d_financial_report --exclude tag: nightly.",
         "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
     },
     {
@@ -2940,13 +2940,13 @@
         "answers": [
             "dbt run -s staging.harvest.*",
             "dbt run -s models/staging/harvest",
-            "dbt run -s path: models/staging/harvest",
+            "dbt run -s path:  models/staging/harvest",
             "All of the above"
         ],
         "correct_answer": [
             "All of the above"
         ],
-        "explanation": "To select all models within the staging/harvest directory, you can use package syntax 'staging.harvest.*', the directory path 'models/staging/harvest', or explicitly specify it's a path with 'path: models/staging/harvest'. All commands target the same set of models.",
+        "explanation": "To select all models within the staging/harvest directory, you can use package syntax 'staging.harvest.*', the directory path 'models/staging/harvest', or explicitly specify it's a path with 'path:  models/staging/harvest'. All commands target the same set of models.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -2970,13 +2970,13 @@
         "question_area": "Deploying dbt jobs",
         "question": "Write the command to run models that are in the marts/finance subdirectory and tagged nightly.",
         "answers": [
-            "dbt run -s marts.finance tag: nightly",
-            "dbt run -s marts.finance + tag: nightly",
-            "dbt run -s marts.finance, tag: nightly",
-            "dbt run -s 'marts.finance tag: nightly'"
+            "dbt run -s marts.finance tag:  nightly",
+            "dbt run -s marts.finance + tag:  nightly",
+            "dbt run -s marts.finance, tag:  nightly",
+            "dbt run -s 'marts.finance tag:  nightly'"
         ],
         "correct_answer": [
-            "dbt run -s marts.finance, tag: nightly"
+            "dbt run -s marts.finance, tag:  nightly"
         ],
         "explanation": "The correct command uses a comma to apply the intersection set operator, selecting models that are both in the marts/finance subdirectory and tagged with 'nightly'.",
         "reference": "https://docs.getdbt.com/reference/node-selection/set-operators"
@@ -4733,15 +4733,15 @@
         "question_area": "Monitoring data pipelines",
         "question": "In a dbt project, you need to build a model using data sources that are no older than their previous state. Which selector should you use to achieve this?",
         "answers": [
-            "source_status: fresher",
-            "source_status: fresher+",
-            "source_status: equal",
-            "source_status: stale"
+            "source_status:  fresher",
+            "source_status:  fresher+",
+            "source_status:  equal",
+            "source_status:  stale"
         ],
         "correct_answer": [
-            "source_status: fresher+"
+            "source_status:  fresher+"
         ],
-        "explanation": "The 'source_status: fresher+' selector is used to build models with data sources that are as fresh or fresher than their previous state, ensuring that the data being used is up-to-date.",
+        "explanation": "The 'source_status:  fresher+' selector is used to build models with data sources that are as fresh or fresher than their previous state, ensuring that the data being used is up-to-date.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
     },
     {
@@ -4749,13 +4749,13 @@
         "question_area": "Monitoring data pipelines",
         "question": "A data analyst in your team wants to analyze data sources that have become stale compared to their previous state. Which selector should you use in your dbt command to meet this requirement?",
         "answers": [
-            "source_status: fresher",
-            "source_status: fresher+",
-            "source_status: stale",
-            "source_status: stale+"
+            "source_status:  fresher",
+            "source_status:  fresher+",
+            "source_status:  stale",
+            "source_status:  stale+"
         ],
-        "correct_answer": "source_status: stale",
-        "explanation": "The 'source_status:stale' selector is used in dbt to select data sources that are less fresh than their previous state, which may be useful for identifying data that has not been updated as expected.",
+        "correct_answer": "source_status:  stale",
+        "explanation": "The 'source_status: stale' selector is used in dbt to select data sources that are less fresh than their previous state, which may be useful for identifying data that has not been updated as expected.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
     },
     {
@@ -4763,12 +4763,12 @@
         "question_area": "Monitoring data pipelines",
         "question": "You are working on a dbt project and need to exclude data sources that have become stale compared to their previous state. Which selector should you use in your dbt command?",
         "answers": [
-            "source_status: exclude_stale",
-            "source_status: fresher",
-            "source_status: stale",
-            "source_status: fresher+"
+            "source_status:  exclude_stale",
+            "source_status:  fresher",
+            "source_status:  stale",
+            "source_status:  fresher+"
         ],
-        "correct_answer": "source_status: exclude_stale",
+        "correct_answer": "source_status:  exclude_stale",
         "explanation": "The selector to exclude stale data sources is not a built-in feature in dbt. However, to achieve this, you would write custom logic in your model to exclude sources based on their freshness status.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
     },
@@ -4777,13 +4777,13 @@
         "question_area": "Monitoring data pipelines",
         "question": "In a dbt project, you want to select data sources that are as fresh as their previous state, but not fresher. Which selector should you use in your dbt command?",
         "answers": [
-            "source_status: equal",
-            "source_status: fresher",
-            "source_status: stale",
-            "source_status: fresher+"
+            "source_status:  equal",
+            "source_status:  fresher",
+            "source_status:  stale",
+            "source_status:  fresher+"
         ],
-        "correct_answer": "source_status: equal",
-        "explanation": "The 'source_status:equal' selector is used to select data sources that are exactly as fresh as their previous state, not fresher or staler.",
+        "correct_answer": "source_status:  equal",
+        "explanation": "The 'source_status: equal' selector is used to select data sources that are exactly as fresh as their previous state, not fresher or staler.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
     },
     {
@@ -4837,15 +4837,15 @@
         "question_area": "Monitoring data pipelines",
         "question": "You are working on a dbt project and want to ensure that only the data sources with freshness greater than the previous state are used for the transformation. Which selector should you use in your dbt command?",
         "answers": [
-            "source_status:fresher",
-            "source_status:fresher+",
-            "source_status:stale",
-            "source_status:stale+"
+            "source_status: fresher",
+            "source_status: fresher+",
+            "source_status: stale",
+            "source_status: stale+"
         ],
         "correct_answer": [
-            "source_status:fresher+"
+            "source_status: fresher+"
         ],
-        "explanation": "The 'source_status:fresher+' selector in dbt is used to ensure that only data sources with freshness greater than the previous state are used for the transformation.",
+        "explanation": "The 'source_status: fresher+' selector in dbt is used to ensure that only data sources with freshness greater than the previous state are used for the transformation.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
     },
     {
@@ -4853,13 +4853,13 @@
         "question_area": "Deploying dbt jobs",
         "question": "You want to select models in the 'sales' package that have a materialization setting of 'incremental' but exclude those tagged as 'deprecated'. Which of the following YAML selectors will achieve this?",
         "answers": [
-            "Use an intersection definition with 'package:sales' and 'config.materialized:incremental', and exclude 'tag:deprecated'.",
-            "Use a union definition with 'package:sales' and 'config.materialized:incremental', without an exclude clause.",
-            "Use an intersection definition with 'package:sales' and 'config.materialized:incremental', without an exclude clause.",
-            "Use an exclude clause on 'tag:deprecated' without specifying materialization."
+            "Use an intersection definition with 'package: sales' and 'config.materialized: incremental', and exclude 'tag: deprecated'.",
+            "Use a union definition with 'package: sales' and 'config.materialized: incremental', without an exclude clause.",
+            "Use an intersection definition with 'package: sales' and 'config.materialized: incremental', without an exclude clause.",
+            "Use an exclude clause on 'tag: deprecated' without specifying materialization."
         ],
         "correct_answer": [
-            "Use an intersection definition with 'package:sales' and 'config.materialized:incremental', and exclude 'tag:deprecated'."
+            "Use an intersection definition with 'package: sales' and 'config.materialized: incremental', and exclude 'tag: deprecated'."
         ],
         "explanation": "To select models with a specific tag and materialization setting while excluding others, you should use an intersection definition to combine the criteria you're including and an exclude clause for the criteria you want to omit.",
         "reference": "https://docs.getdbt.com/reference/node-selection/yaml-selectors"
@@ -4869,13 +4869,13 @@
         "question_area": "Deploying dbt jobs",
         "question": "The marketing team later requests that you exclude a specific model, customer_lifetime_value, while still executing the other customer_analytics tagged models and their dependencies. How would you modify your dbt command to accommodate this request?",
         "answers": [
-            "dbt run --select tag:customer_analytics+ --select -customer_lifetime_value",
-            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value",
-            "dbt run --select tag:customer_analytics+ --select +customer_lifetime_value",
-            "dbt run --select tag:customer_analytics+ -customer_lifetime_value"
+            "dbt run --select tag: customer_analytics+ --select -customer_lifetime_value",
+            "dbt run --select tag: customer_analytics+ --exclude customer_lifetime_value",
+            "dbt run --select tag: customer_analytics+ --select +customer_lifetime_value",
+            "dbt run --select tag: customer_analytics+ -customer_lifetime_value"
         ],
         "correct_answer": [
-            "dbt run --select tag:customer_analytics+ --exclude customer_lifetime_value"
+            "dbt run --select tag: customer_analytics+ --exclude customer_lifetime_value"
         ],
         "explanation": "To exclude a specific model while running other models with a certain tag and their dependencies, you use the '--exclude' flag followed by the model name you want to exclude.",
         "reference": "https://docs.getdbt.com/reference/node-selection/syntax"
@@ -4885,13 +4885,13 @@
         "question_area": "Deploying dbt jobs",
         "question": "You have been asked to run a specific set of models related to the daily financial reports, but you need to exclude models tagged as 'nightly' and those with a materialized configuration set to 'table.' What command would you use to run the models contained in the 'daily_reports' directory, excluding those with the 'nightly' tag and materialized as 'table'?",
         "answers": [
-            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table",
-            "dbt run --select path:models/daily_reports --select -tag:nightly,config.materialized:table",
-            "dbt run --select path:models/daily_reports tag:nightly,config.materialized:table",
-            "dbt run --select path:models/daily_reports --select -tag:nightly --select -config.materialized:table"
+            "dbt run --select path: models/daily_reports --exclude tag: nightly --exclude config.materialized: table",
+            "dbt run --select path: models/daily_reports --select -tag: nightly,config.materialized: table",
+            "dbt run --select path: models/daily_reports tag: nightly,config.materialized: table",
+            "dbt run --select path: models/daily_reports --select -tag: nightly --select -config.materialized: table"
         ],
         "correct_answer": [
-            "dbt run --select path:models/daily_reports --exclude tag:nightly --exclude config.materialized:table"
+            "dbt run --select path: models/daily_reports --exclude tag: nightly --exclude config.materialized: table"
         ],
         "explanation": "To run a set of models while excluding those with a specific tag and materialization, you can chain '--exclude' arguments in your dbt run command, specifying each criterion you want to exclude.",
         "reference": "https://docs.getdbt.com/reference/node-selection/syntax"

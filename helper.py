@@ -40,6 +40,53 @@ def get_user_none():
     user = st.session_state['user']
     return user
 
+def recharge_user_list(conn):
+    query = "select name from [esnowflake].[dbo].Dim_Users ORDER BY name"
+    user_list_v = (
+    conn.cursor()
+            .execute(
+                query
+            )
+            .fetchall()
+    )
+    lista_plana = [item[0] for item in user_list_v]
+    return lista_plana
+
+def new_user(conn, lista_plana, new_user, message):
+    try:
+        query = f"INSERT INTO [esnowflake].[dbo].Dim_Users (name, rango) VALUES ('{new_user}', 'Iniciado')"
+        conn.cursor().execute(query)
+        conn.commit()
+        if message:
+            st.success('New user added successfully!')
+        st.session_state["user"] = new_user
+        st.session_state['lista_plana'] = recharge_user_list(conn)
+        time.sleep(1)
+        st.rerun()
+    except Exception as e:
+        st.error(f'Error adding new user: {e}')
+
+def reset_delete_user(conn,useri, delete):
+    action = ''
+    if delete:
+        action = ['delete','deleting']
+    else:
+        action = ['reset','reseting']
+    try:
+        query = f"DELETE FROM [esnowflake].[dbo].Dim_Users WHERE name = '{useri}'"
+        conn.cursor().execute(query)
+        conn.commit()
+        if delete == True:
+            st.session_state["user"] = None
+        else:
+            new_user(conn,st.session_state['lista_plana'],useri, False)
+        st.rerun()
+    except Exception as e:
+        st.error(f'Error {action[1]} user: {e}')
+    finally:
+        st.session_state['count'] = 0
+
+
 def process_qa_block(qa_block):
     # Eliminar líneas vacías
     qa_block = [line for line in qa_block if line]
