@@ -52,7 +52,7 @@ def recharge_user_list(conn):
     lista_plana = [item[0] for item in user_list_v]
     return lista_plana
 
-def new_user(conn, lista_plana, new_user, message):
+def new_user(conn, new_user, message=None):
     try:
         query = f"INSERT INTO [esnowflake].[dbo].Dim_Users (name, rango) VALUES ('{new_user}', 'Iniciado')"
         conn.cursor().execute(query)
@@ -74,17 +74,21 @@ def reset_delete_user(conn,useri, delete):
         action = ['reset','reseting']
     try:
         query = f"DELETE FROM [esnowflake].[dbo].Dim_Users WHERE name = '{useri}'"
+        print(query)
         conn.cursor().execute(query)
         conn.commit()
+        # Tiene que estar aquí porque si no, no sale el texto
+        st.success("Action completed!")
         if delete == True:
             st.session_state["user"] = None
         else:
-            new_user(conn,st.session_state['lista_plana'],useri, False)
+            new_user(conn,useri)
+        st.session_state['count_reset'] = 0
+        st.session_state['count_delete'] = 0
+        time.sleep(1)
         st.rerun()
     except Exception as e:
         st.error(f'Error {action[1]} user: {e}')
-    finally:
-        st.session_state['count'] = 0
 
 
 def process_qa_block(qa_block):

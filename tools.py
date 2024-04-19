@@ -90,35 +90,39 @@ def menu(conn):
                 if new_user:
                     if new_user not in st.session_state['lista_plana']:
                         if st.button('Add new user'):
-                            h.new_user(conn,st.session_state['lista_plana'], new_user, True)
+                            h.new_user(conn, new_user, 'message')
                             useri = st.session_state["user"]
                     else:
                         st.error('Username already exists.')
 
         with actions:
-            if 'count' not in st.session_state:
-                st.session_state['count'] = 0
-            
+            if 'count_reset' not in st.session_state or st.session_state['count_reset']>=2:
+                st.session_state['count_reset'] = 0
+            if 'count_delete' not in st.session_state or st.session_state['count_delete']>=2:
+                st.session_state['count_delete'] = 0    
+
             if st.session_state.get("user"):
                 reset_clicked = st.button("Reset user")
                 if reset_clicked:
-                    st.session_state['count'] += 1
-                    st.write("Are you sure? Click again if you want to reset your user")
-                    if st.session_state['count'] == 2:
+                    st.session_state['count_reset'] += 1
+                    print(st.session_state['count_reset'])
+                    st.write(":red[Are you sure? Click again if you want to reset your user]")
+                    if st.session_state['count_reset'] >= 2:
                         h.reset_delete_user(conn,useri, False)
                         useri = st.session_state["user"]
                         st.success(f'User {useri} reset successfully.')
+                        st.session_state['count_reset'] = 0
                         time.sleep(1)
                         st.rerun()
                         
                 delete_clicked = st.button("Delete user")
                 if delete_clicked:
-                    st.session_state['count'] += 1
-                    st.write(":red[Are you sure? Click again if you want to reset your user]")
-                    if st.session_state['count'] == 2:
+                    st.session_state['count_delete'] += 1
+                    print(st.session_state['count_delete'])
+                    st.write(":red[Are you sure? Click again if you want to delete your user]")
+                    if st.session_state['count_delete'] >= 2:
                         h.reset_delete_user(conn,useri, True)
-                        st.session_state['count'] = 0
-                        st.success(f'User {useri} deleted successfully.')
+                        
                         useri = None
                         time.sleep(1)
                         st.rerun()
