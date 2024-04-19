@@ -74,7 +74,6 @@ def reset_delete_user(conn,useri, delete):
         action = ['reset','reseting']
     try:
         query = f"DELETE FROM [esnowflake].[dbo].Dim_Users WHERE name = '{useri}'"
-        print(query)
         conn.cursor().execute(query)
         conn.commit()
         # Tiene que estar aquí porque si no, no sale el texto

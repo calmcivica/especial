@@ -105,7 +105,6 @@ def menu(conn):
                 reset_clicked = st.button("Reset user")
                 if reset_clicked:
                     st.session_state['count_reset'] += 1
-                    print(st.session_state['count_reset'])
                     st.write(":red[Are you sure? Click again if you want to reset your user]")
                     if st.session_state['count_reset'] >= 2:
                         h.reset_delete_user(conn,useri, False)
@@ -118,7 +117,6 @@ def menu(conn):
                 delete_clicked = st.button("Delete user")
                 if delete_clicked:
                     st.session_state['count_delete'] += 1
-                    print(st.session_state['count_delete'])
                     st.write(":red[Are you sure? Click again if you want to delete your user]")
                     if st.session_state['count_delete'] >= 2:
                         h.reset_delete_user(conn,useri, True)
