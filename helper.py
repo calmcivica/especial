@@ -73,15 +73,18 @@ def reset_delete_user(conn,useri, delete):
     else:
         action = ['reset','reseting']
     try:
-        query = f"DELETE FROM [esnowflake].[dbo].Dim_Users WHERE name = '{useri}'"
-        conn.cursor().execute(query)
+        conn.cursor().execute(f"DELETE FROM [esnowflake].[dbo].Dim_Users WHERE name = '{useri}'")
+        conn.cursor().execute(f"DELETE FROM [esnowflake].[dbo].FACT_ANSWERS where user_nickname = '{useri}'") 
+        conn.cursor().execute(f"DELETE FROM [esnowflake].[dbo].FACT_EXAMS where user_nickname = '{useri}'")
         conn.commit()
+        
         # Tiene que estar aquí porque si no, no sale el texto
         st.success("Action completed!")
         if delete == True:
             st.session_state["user"] = None
         else:
             new_user(conn,useri)
+
         st.session_state['count_reset'] = 0
         st.session_state['count_delete'] = 0
         time.sleep(1)
@@ -239,13 +242,13 @@ def sol(jason,n,user_answer,getsol = False):
     if len(correcta) > 1:
         frase_completa = "Las opciones correctas eran "
         for i in range(len(correcta)):
-            frase_completa += f"{correcta[i]}"
+            frase_completa += f":green[{correcta[i]}]"
             if i != len(correcta)-1:
                 frase_completa += ", "
             elif i == len(correcta)-1:
                 frase_completa+="."
     elif len(correcta) == 1:
-        frase_completa = f"La opción correcta era {correcta[0]}"
+        frase_completa = f"La opción correcta era :green[{correcta[0]}]"
 
     st.write(frase_completa)
     st.write(explanation)

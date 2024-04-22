@@ -120,7 +120,6 @@ def menu(conn):
                     st.write(":red[Are you sure? Click again if you want to delete your user]")
                     if st.session_state['count_delete'] >= 2:
                         h.reset_delete_user(conn,useri, True)
-                        
                         useri = None
                         time.sleep(1)
                         st.rerun()
@@ -687,13 +686,13 @@ def progreso(conn, datos):
                 df = pd.DataFrame(exam_info_snow_list, columns=columns)
 
                 # Replace None with 0 in relevant columns
-                df["number_of_questions"] = df["number_of_questions"].fillna(0)
+                df["number_of_questions"] = df["number_of_questions"].infer_objects(copy=False)
                 df["number_of_correct_questions"] = df[
                     "number_of_correct_questions"
-                ].fillna(0)
+                ].infer_objects(copy=False)
                 df["number_of_failed_questions"] = df[
                     "number_of_failed_questions"
-                ].fillna(0)
+                ].infer_objects(copy=False)
 
                 # Colores para las categorías
                 colores = ["green", "red", "blue"]
