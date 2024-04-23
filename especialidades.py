@@ -9,7 +9,7 @@ st.set_page_config(page_title="Especialidades", layout="wide")
 import tools as t
 import helper as h
 
-PAGES = ["Intro 🔰", "Practicar 🥊", "Exámenes 📄", "Progreso 📈", "Parreitor-3000 🤖"]
+PAGES = ["Intro 🔰", "Practicar 🥊", "Exámenes 📄", "Progreso 📈", "Parreitor-3000 🤖", "Chatpgt"]
 
 # Creating perzonalized buttons
 sn_init_button = """
@@ -79,6 +79,7 @@ elif st.session_state.page == 'snowflake':
         go_to_main()
         st.rerun()
     
+    PAGES.remove("Chatpgt")
     # Add a way to navigate within the Snowflake page
     current_page = st.selectbox("Choose section:", PAGES, key='current_snowflake_page')
     
@@ -107,7 +108,7 @@ elif st.session_state.page == 'snowflake':
         except Exception as e:
             st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Parreitor-3000 🤖":
-        t.parreitor(conn)
+        t.parreitor(conn, especialidad)
 
 ## dbt Page
 elif st.session_state.page == 'dbt':
@@ -124,6 +125,7 @@ elif st.session_state.page == 'dbt':
         go_to_main()
         st.rerun()
     
+    PAGES.remove("Parreitor-3000 🤖")
     # Add a way to navigate within the dbt page
     current_page = st.selectbox("Choose section:", PAGES, key='current_dbt_page')
     
@@ -145,5 +147,6 @@ elif st.session_state.page == 'dbt':
             st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
         t.progreso(conn,datos)
-    elif st.session_state['current_page'] == "Parreitor-3000 🤖":
-        t.parreitor(conn)
+    elif st.session_state['current_page'] == "Chatpgt":
+        st.title("No está en funcionamiento este apartado")
+        # t.chatgpt(conn, especialidad)
