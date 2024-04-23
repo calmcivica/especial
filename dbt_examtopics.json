@@ -7132,7 +7132,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/jinja-macros/"
     },
     {
-        "question_number": 478,
+        "question_number": 448,
         "question_area": "Creating and maintaining dbt documentation",
         "question": "Which of the following is NOT a benefit of using a code templating tool like Jinja in dbt? Choose only ONE best answer.",
         "answers": [
@@ -7146,7 +7146,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/jinja-macros/"
     },
     {
-        "question_number": 479,
+        "question_number": 449,
         "question_area": "Creating and maintaining dbt documentation",
         "question": "You are working on a dbt project that involves organizing SQL queries in a directory called \"reports\" without materializing them to your data platform. You want to define the location of the reports directory in the dbt_project.yml file. What configuration option should you use? Choose only ONE best answer.",
         "answers": [
@@ -7160,7 +7160,7 @@
         "reference": "https://docs.getdbt.com/reference/project-configs/analysis-paths/"
     },
     {
-        "question_number": 480,
+        "question_number": 450,
         "question_area": "Developing dbt models",
         "question": "What are the limitations of the dbt.config() method in terms of the types of arguments that can be passed to it? Choose only ONE best answer.",
         "answers": [
@@ -7174,7 +7174,7 @@
         "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/config"
     },
     {
-        "question_number": 481,
+        "question_number": 451,
         "question_area": "Establishing environments in data warehouse for dbt",
         "question": "You are setting up a new dbt project for your organization and need to configure the connection profile. Which of the following steps should you take to ensure the correct setup? Choose only ONE best answer.",
         "answers": [
@@ -7188,7 +7188,7 @@
         "reference": "https://docs.getdbt.com/dbt-cli/configure-your-profile"
     },
     {
-        "question_number": 482,
+        "question_number": 452,
         "question_area": "Promoting code through version control",
         "question": "Your team is developing a new data warehouse and is deciding on which tools to use. You are considering using dbt as your transformation tool. What are the benefits of using dbt as your transformation tool? Choose only ONE best answer.",
         "answers": [
@@ -7202,7 +7202,7 @@
         "reference": "https://docs.getdbt.com/docs/introduction"
     },
     {
-        "question_number": 483,
+        "question_number": 453,
         "question_area": "Developing dbt models",
         "question": "You are working on a dbt project and are considering using seeds to provide reference data for your models. Which of the following is a good use-case for seeds according to the best practices in dbt? Choose only ONE best answer.",
         "answers": [
@@ -7216,7 +7216,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/seeds"
     },
     {
-        "question_number": 484,
+        "question_number": 454,
         "question_area": "Deploying dbt jobs",
         "question": "Minta is working on a dbt project and has defined both pre- and post-hooks for a model in the configuration block of the model file. She later realizes that she needs to add an additional post-hook to the model. Which of the following is true? Choose only ONE best answer.",
         "answers": [
@@ -7230,7 +7230,7 @@
         "reference": "https://docs.getdbt.com/reference/resource-configs/pre-hook-post-hook/"
     },
     {
-        "question_number": 485,
+        "question_number": 455,
         "question_area": "Developing dbt models",
         "question": "What is the purpose of using Jinja statements in dbt projects? Choose only ONE best answer.",
         "answers": [
@@ -7244,7 +7244,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/jinja-macros/"
     },
     {
-        "question_number": 486,
+        "question_number": 456,
         "question_area": "Monitoring data pipelines",
         "question": "A data team is creating a snapshot in dbt to track changes to their customer data over time. They are unsure of whether they should include all columns in the snapshot, even if some columns do not seem useful. Which of the following is a best practice for selecting columns for a snapshot in dbt? Choose only ONE best answer.",
         "answers": [
@@ -7258,7 +7258,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots/"
     },
     {
-        "question_number": 487,
+        "question_number": 457,
         "question_area": "Developing dbt models",
         "question": "Which function do you use to build dependencies between models in dbt? Choose only ONE best answer.",
         "answers": [
@@ -7272,7 +7272,7 @@
         "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/ref/"
     },
     {
-        "question_number": 488,
+        "question_number": 458,
         "question_area": "Creating and maintaining dbt documentation",
         "question": "What is the requirement for a custom calendar table in dbt metrics? Choose only ONE best answer.",
         "answers": [
@@ -7286,7 +7286,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/metrics/"
     },
     {
-        "question_number": 489,
+        "question_number": 459,
         "question_area": "Monitoring data pipelines",
         "question": "A data team wants to implement snapshot tables in their dbt project to track changes to a large dataset. What is the best practice for working with snapshots in dbt? Choose only ONE best answer.",
         "answers": [
@@ -7300,7 +7300,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots/#configuring-snapshots"
     },
     {
-        "question_number": 490,
+        "question_number": 460,
         "question_area": "Debugging data modeling errors",
         "question": "What happens if a syntax error is present in one of the SQL expressions specified in the 'incremental' model? Choose only ONE best answer.",
         "answers": [
@@ -7314,7 +7314,7 @@
         "reference": "https://discourse.getdbt.com/t/speedup-merge-strategy-with-custom-incremental-predicate/7231"
     },
     {
-        "question_number": 491,
+        "question_number": 461,
         "question_area": "Monitoring data pipelines",
         "question": "A healthcare company wants to keep a historical record of changes to their patient data, such as changes to their medical history and medication information. Which feature of dbt is best for this scenario? Choose only ONE best answer.",
         "answers": [
@@ -7328,7 +7328,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots/"
     },
     {
-        "question_number": 492,
+        "question_number": 462,
         "question_area": "Establishing environments in data warehouse for dbt",
         "question": "What is the best practice for managing user credentials in dbt? Choose only ONE best answer.",
         "answers": [
@@ -7342,7 +7342,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/secrets/"
     },
     {
-        "question_number": 493,
+        "question_number": 463,
         "question_area": "Monitoring data pipelines",
         "question": "A data team is implementing dbt snapshots to track changes in their customer and order tables. They want to ensure they have a unique key for each record to match and track changes over time. Which column in a snapshot is used by dbt to match and track records as they change over time? Choose only ONE best answer.",
         "answers": [
@@ -7356,7 +7356,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots/"
     },
     {
-        "question_number": 494,
+        "question_number": 464,
         "question_area": "Monitoring data pipelines",
         "question": "A company is using dbt to track changes in their customer data. They have specified the check_cols configuration in their snapshot block. What happens if the values in the specified columns remain unchanged? Choose only ONE best answer.",
         "answers": [
@@ -7370,7 +7370,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots/"
     },
     {
-        "question_number": 495,
+        "question_number": 465,
         "question_area": "Monitoring data pipelines",
         "question": "A data analytics company wants to keep track of changes in their sales data, specifically in the orders table. Which of the following statements about using snapshots in dbt is correct? Choose only ONE best answer.",
         "answers": [
@@ -7384,7 +7384,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots/"
     },
     {
-        "question_number": 496,
+        "question_number": 466,
         "question_area": "Debugging data modeling errors",
         "question": "As a data analyst working with dbt Cloud, how can you check the SQL that dbt is running for a specific model? Choose only ONE best answer.",
         "answers": [
@@ -7398,7 +7398,7 @@
         "reference": "https://docs.getdbt.com/docs/dbt-cloud/cloud-using-dbt-cloud/viewing-runs"
     },
     {
-        "question_number": 497,
+        "question_number": 467,
         "question_area": "Developing dbt models",
         "question": "What is the recommended approach to break down complex SQL code when using dbt data models? Choose only ONE best answer.",
         "answers": [
@@ -7412,7 +7412,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/"
     },
     {
-        "question_number": 498,
+        "question_number": 468,
         "question_area": "Developing dbt models",
         "question": "You are attempting to define a new metric in your dbt project using an ephemeral model as the source materialized data. When you attempt to run the dbt run command, you receive an error message that says \"Error: Cannot create metric from temporary data model.\" What is the most likely reason for this issue? Choose only ONE best answer.",
         "answers": [
@@ -7426,7 +7426,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/ephemeral"
     },
     {
-        "question_number": 499,
+        "question_number": 469,
         "question_area": "Developing dbt models",
         "question": "What is the main advantage of using common table expressions (CTEs) in SQL? Choose only ONE best answer.",
         "answers": [
@@ -7440,7 +7440,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-ctes-effectively"
     },
     {
-        "question_number": 500,
+        "question_number": 470,
         "question_area": "Deploying dbt jobs",
         "question": "Your dbt Cloud deployment has failed and you need to troubleshoot the issue. Which of the following steps should be part of your troubleshooting process? Choose only ONE best answer.",
         "answers": [
@@ -7454,7 +7454,7 @@
         "reference": "https://docs.getdbt.com/docs/dbt-cloud/cloud-using-dbt-cloud/troubleshooting"
     },
     {
-        "question_number": 501,
+        "question_number": 471,
         "question_area": "Establishing environments in data warehouse for dbt",
         "question": "What is the recommended location for the profiles.yml file that contains the details needed to connect to the data warehouse using dbt? Choose only ONE best answer.",
         "answers": [
@@ -7468,7 +7468,7 @@
         "reference": "https://docs.getdbt.com/dbt-cli/configure-your-profile/"
     },
     {
-        "question_number": 502,
+        "question_number": 472,
         "question_area": "Developing dbt models",
         "question": "In a dbt Python model, what is the concept of 'lazy evaluation'? Choose only ONE best answer.",
         "answers": [
@@ -7482,7 +7482,7 @@
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-python"
     },    
     {
-        "question_number": 503,
+        "question_number": 473,
         "question_area": "Deploying dbt jobs",
         "question": "You are working on a dbt project and want to select models that have a tag of 'marketing' and are part of the 'core'. Which of the following YAML selectors will achieve this?",
         "answers": [
