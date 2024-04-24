@@ -1,5 +1,4 @@
-import random
-import string
+
 import streamlit as st
 
 # Launching this first to avoid the calling error

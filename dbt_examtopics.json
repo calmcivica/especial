@@ -1825,7 +1825,7 @@
     },
     {
         "question_number": 116,
-        "question_area": "Developing dbt models",
+        "question_area": ["Developing dbt models","Estrellita"],
         "question": "What does the `dbt parse` command do?",
         "answers": [
             "Parses a project and writes detailed timing info",

@@ -142,25 +142,34 @@ def increment_counter():
     st.session_state.counter += 1
 
 def pregunta(jason, n, mode, user, conn, especialidad):
-        if 'seen_questions' not in st.session_state:
-            st.session_state['seen_questions'] = []
-
-        # Filter out questions already seen
-        available_questions = [q for q in jason if q["question_number"] not in st.session_state['seen_questions']]
-
-        if not available_questions:
-            st.error("No more questions available.")
-            return
-
-        # Randomly select a new question from those not seen
-        json_question = random.choice(available_questions)
-        st.session_state['seen_questions'].append(json_question["question_number"])
-        st.session_state['seen_questions']
-
+        json_question = jason[n-1]
         numero = json_question["question_number"]
         pregunta = json_question["question"]
         respuestas = json_question["answers"]
         question_area = json_question["question_area"]
+
+        if st.session_state["order"]:
+            json_question = jason[n-1]
+        else:
+            if 'seen_questions' not in st.session_state:
+                st.session_state['seen_questions'] = []
+
+            # Filter out questions already seen
+            available_questions = [q for q in jason if q["question_number"] not in st.session_state['seen_questions']]
+
+            if not available_questions:
+                st.error("No more questions available.")
+                return
+
+            # Randomly select a new question from those not seen
+            json_question = random.choice(available_questions)
+            st.session_state['seen_questions'].append(json_question["question_number"])
+            st.session_state['seen_questions']
+            
+        numero = json_question["question_number"]
+        pregunta = json_question["question"]
+        respuestas = json_question["answers"]
+        question_area = json_question["question_area"]   
 
         # Ensure answers are randomized only once per question
         unique_answer_key = f"randomized_answers_{numero}"
@@ -171,7 +180,15 @@ def pregunta(jason, n, mode, user, conn, especialidad):
             respuestas = st.session_state[unique_answer_key]
 
         st.write(f'Pregunta {numero} de ExamTopics')
-        st.write(":orange[Question area:]", question_area)
+        # Assuming question_area might sometimes come as a string instead of list
+        if isinstance(question_area, str):
+            question_area = [question_area]  # Convert to a list if it's a single string
+
+        if question_area:  # Check if the list is not empty
+            areas = ', '.join(question_area)  # Join all elements of the list into a single string separated by commas
+            st.write(f":orange[Question area:] {areas}")
+        else:
+            st.write(":orange[No question area specified]")
         st.write(pregunta)
         imagen = './static/' + especialidad + '/' + str(numero) + ".png"
         if os.path.exists(imagen):
@@ -454,6 +471,9 @@ def orden_preguntas(question_set):
     order_button = str(order_init_button+button)
     random_button = str(random_init_button+button)
 
+    if "order" not in st.session_state:
+        st.session_state["order"] = True
+
     col2, col3 = st.columns([1,1], gap="small")
     with col2:
         st.markdown(order_button, unsafe_allow_html=True)
@@ -464,10 +484,16 @@ def orden_preguntas(question_set):
     with col3:
         st.markdown(random_button, unsafe_allow_html=True)
         st.markdown('<span id="button-random"></span>', unsafe_allow_html=True)
-        if col3.button("Orden aleatorio", on_click=random.shuffle(question_set), use_container_width=True):
-            st.session_state["question_set"] = question_set
+        if col3.button("Orden aleatorio", use_container_width=True):
+            question_set_random = random.shuffle(question_set)
+            st.session_state["question_set"] = question_set_random
+            st.session_state["order"] = False
             st.rerun()
     st.divider()
+
+def reset_question_set():
+    if "question_set" in st.session_state:
+        del st.session_state["question_set"]
 
 def filtros(especialidad, datos, conn, user, examen=None):
     st.subheader("Filtros")
@@ -540,9 +566,10 @@ def filtros(especialidad, datos, conn, user, examen=None):
         preguntas_filtradas = [
             item
             for item in preguntas_filtradas
-            if item["question_area"] in secciones
+            if any(area in secciones for area in item["question_area"])
         ]
     return preguntas_filtradas
+
 
 def exam_settings(question_set):
     st.subheader("Opciones")

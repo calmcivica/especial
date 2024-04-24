@@ -102,4 +102,5 @@ SECCIONES_DBT = [
     "Creating and maintaining dbt documentation",
     "Promoting code through version control",
     "Establishing environments in data warehouse for dbt",
+    "Estrellita"
 ]

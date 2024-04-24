@@ -207,7 +207,7 @@ def practicar(conn, datos, especialidad):
             preguntas_filtradas = [
                 item
                 for item in preguntas_filtradas
-                if item["question_area"] in secciones
+                if any(area in secciones for area in item["question_area"])
             ]
 
         consulta_preguntas_hechas = f"""SELECT 
