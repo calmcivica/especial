@@ -142,7 +142,21 @@ def increment_counter():
     st.session_state.counter += 1
 
 def pregunta(jason, n, mode, user, conn, especialidad):
-        json_question = jason[n-1]
+        if 'seen_questions' not in st.session_state:
+            st.session_state['seen_questions'] = []
+
+        # Filter out questions already seen
+        available_questions = [q for q in jason if q["question_number"] not in st.session_state['seen_questions']]
+
+        if not available_questions:
+            st.error("No more questions available.")
+            return
+
+        # Randomly select a new question from those not seen
+        json_question = random.choice(available_questions)
+        st.session_state['seen_questions'].append(json_question["question_number"])
+        print(st.session_state['seen_questions'])
+
         numero = json_question["question_number"]
         pregunta = json_question["question"]
         respuestas = json_question["answers"]
