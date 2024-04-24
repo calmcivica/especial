@@ -182,7 +182,9 @@ def pregunta(jason, n, mode, user, conn, especialidad):
         else:
             respuestas = st.session_state[unique_answer_key]
         # Se indica el número de preguntas
-        st.info(f'Pregunta {str(st.session_state['question_number_internal']+1)} de {str(len(st.session_state["question_set"]))}.', icon="ℹ️")
+        numero = st.session_state['question_number_internal']+1
+        num_question_set = len(st.session_state["question_set"])
+        st.info(f'Pregunta {str(numero)} de {str(num_question_set)}.')
         st.write(f'Pregunta {numero} de ExamTopics')
         # Assuming question_area might sometimes come as a string instead of list
         if isinstance(question_area, str):

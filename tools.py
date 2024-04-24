@@ -538,7 +538,7 @@ def progreso(conn, datos):
 
             metrics_final = df_secciones_referencia.merge(
                 metrics_por_seccion, on="question_area", how="left"
-            ).fillna(0)
+            , validate="many_to_many").fillna(0) 
 
             metrics_final["preguntas No Vistas"] = metrics_final["question_area"].map(total_preguntas_por_seccion) - metrics_final["preguntas Correctas"] - metrics_final["preguntas Incorrectas"]
 
