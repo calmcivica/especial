@@ -527,7 +527,6 @@ def progreso(conn, datos):
             #   Convertir la lista de preguntas en un DataFrame
             df_preguntas_totales = pd.DataFrame(datos)
             # Crear DataFrame de referencia para todas las secciones
-            # Crear DataFrame de referencia para todas las secciones
             df_secciones_referencia = pd.DataFrame(
                 df_preguntas_totales["question_area"].unique(),
                 columns=["question_area"],

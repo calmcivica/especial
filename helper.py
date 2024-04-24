@@ -178,7 +178,8 @@ def pregunta(jason, n, mode, user, conn, especialidad):
             st.session_state[unique_answer_key] = respuestas.copy()
         else:
             respuestas = st.session_state[unique_answer_key]
-
+        # Se indica el número de preguntas
+        st.info(f'Pregunta {str(st.session_state['question_number_internal']+1)} de {str(len(st.session_state["question_set"]))}.', icon="ℹ️")
         st.write(f'Pregunta {numero} de ExamTopics')
         # Assuming question_area might sometimes come as a string instead of list
         if isinstance(question_area, str):
@@ -187,6 +188,7 @@ def pregunta(jason, n, mode, user, conn, especialidad):
         if question_area:  # Check if the list is not empty
             areas = ', '.join(question_area)  # Join all elements of the list into a single string separated by commas
             st.write(f":orange[Question area:] {areas}")
+
         else:
             st.write(":orange[No question area specified]")
         st.write(pregunta)
@@ -484,10 +486,8 @@ def orden_preguntas(question_set):
     with col3:
         st.markdown(random_button, unsafe_allow_html=True)
         st.markdown('<span id="button-random"></span>', unsafe_allow_html=True)
-        if col3.button("Orden aleatorio", use_container_width=True):
-            question_set_random = random.shuffle(question_set)
-            st.session_state["question_set"] = question_set_random
-            st.session_state["order"] = False
+        if col3.button("Orden aleatorio", on_click=random.shuffle(question_set), use_container_width=True):
+            st.session_state["question_set"] = question_set
             st.rerun()
     st.divider()
 
