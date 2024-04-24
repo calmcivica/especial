@@ -155,7 +155,7 @@ def pregunta(jason, n, mode, user, conn, especialidad):
         # Randomly select a new question from those not seen
         json_question = random.choice(available_questions)
         st.session_state['seen_questions'].append(json_question["question_number"])
-        print(st.session_state['seen_questions'])
+        st.session_state['seen_questions']
 
         numero = json_question["question_number"]
         pregunta = json_question["question"]
