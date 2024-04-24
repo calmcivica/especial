@@ -4843,7 +4843,6 @@
         "question_number": 297,
         "question_area": [
             "Deploying dbt jobs",
-            "Deploying dbt jobs",
             "Estrellita"
         ],
         "question": "What is the command used to specify a target other than the default when using DBT?",

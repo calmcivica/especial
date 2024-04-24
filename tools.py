@@ -515,49 +515,33 @@ def progreso(conn, datos):
             # Calcular el número de preguntas respondidas por día
             racha_actual = 0
             fecha_anterior = None
+            # Prepare data for merging
             df_preguntas = pd.DataFrame(datos)
+            
+            # Handle multiple question areas by exploding them into separate rows
+            df_preguntas = df_preguntas.explode('question_area')
 
             df_combinado = df.merge(
                 df_preguntas[["question_number", "question_area"]],
                 left_on="question_id",
                 right_on="question_number",
-                how="left",
-                validate="many_to_many",
-            )
-            #   Convertir la lista de preguntas en un DataFrame
-            df_preguntas_totales = pd.DataFrame(datos)
-            # Crear DataFrame de referencia para todas las secciones
+                how="left"
+            , validate="many_to_many")
+
             df_secciones_referencia = pd.DataFrame(
-                df_preguntas_totales["question_area"].unique(),
-                columns=["question_area"],
+                df_preguntas["question_area"].unique(), columns=["question_area"]
             )
-            # Contar el total de preguntas por sección
-            total_preguntas_por_seccion = df_preguntas_totales[
-                "question_area"
-            ].value_counts()
-            # Agrupar por 'question_area' en df_combinado y calcular preguntas correctas e incorrectas
-            metrics_por_seccion = df_combinado.groupby("question_area")[
-                "is_correct"
-            ].agg(["sum", lambda x: len(x) - x.sum()])
-            metrics_por_seccion.columns = [
-                "preguntas Correctas",
-                "preguntas Incorrectas",
-            ]
-            # Realizar un merge con el DataFrame de referencia para incluir todas las secciones
+
+            total_preguntas_por_seccion = df_preguntas["question_area"].value_counts()
+            metrics_por_seccion = df_combinado.groupby("question_area")["is_correct"].agg(['sum', lambda x: len(x) - x.sum()])
+            metrics_por_seccion.columns = ["preguntas Correctas", "preguntas Incorrectas"]
+
             metrics_final = df_secciones_referencia.merge(
-                metrics_por_seccion,
-                on="question_area",
-                how="left",
-                validate="many_to_many",
-            )
-            # Rellenar valores NaN con 0
-            metrics_final.fillna(0, inplace=True)
-            # Calcular preguntas no vistas correctamente
-            metrics_final["preguntas No Vistas"] = (
-                metrics_final["question_area"].map(total_preguntas_por_seccion)
-                - metrics_final["preguntas Correctas"]
-                - metrics_final["preguntas Incorrectas"]
-            )
+                metrics_por_seccion, on="question_area", how="left"
+            ).fillna(0)
+
+            metrics_final["preguntas No Vistas"] = metrics_final["question_area"].map(total_preguntas_por_seccion) - metrics_final["preguntas Correctas"] - metrics_final["preguntas Incorrectas"]
+
             # Mostrar el resultado en Streamlit sin índice
             # st.write(metrics_final.set_index('question_area'))
             # Definir colores personalizados
