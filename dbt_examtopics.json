@@ -8938,22 +8938,22 @@
         "reference": "https://docs.getdbt.com/reference/resource-properties/tests"
     },
     {
-        "question_number": 552,
+        "question_number": 532,
         "question_area": [
             "Debugging data modeling errors",
             "Estrellita"
         ],
-        "question": "A dbt model's test fails during execution, and you suspect a misconfiguration in the 'properties.yml' file. You find that tests are listed using a dash (-) instead of the correct dictionary format. How should the test configuration be corrected to resolve this issue?",
+        "question": "During a run of dbt tests, you encounter a failure related to the 'orders' model's 'properties.yml' file. Upon inspection, you notice an issue with the structure of the test definitions. How should the test configuration be corrected to conform to proper YAML syntax?",
         "answers": [
             "Option A",
             "Option B",
             "Option C"
         ],
         "correct_answer": [
-            "Option B"
+            "Option C"
         ],
-        "explanation": "In YAML, a dash (-) indicates an item in a list. For a dbt model's test configuration, tests should be defined as a dictionary, not as a list. The correct format should use key-value pairs without a leading dash.",
-        "reference": "https://docs.getdbt.com/reference/resource-configs/tests"
+        "explanation": "In YAML, tests for a column are specified as a list under the tests key. Each item in the list represents a test. The correct format must have a dash before each test type to indicate a list item.",
+        "reference": "https://docs.getdbt.com/reference/resource-properties/tests"
     },
     {
         "question_number": 533,
@@ -9299,5 +9299,20 @@
         ],
         "explanation": "The recommended approach to track package versions in a dbt project is to specify them in the dbt_project.yml file under the 'packages' configuration block. This centralizes the package version information and ensures consistency across the dbt project, rather than having separate requirements.txt files or specifying versions in individual model files or SQL scripts.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/package-management"
+    },
+    {
+        "question_number": 552,
+        "question_area": ["Creating and maintaining dbt documentation"],
+        "question": "In the 'dim_purchases_providers' model's 'properties.yml' file, custom tests and documentation are used for the 'EMAIL' column. However, during execution, dbt returns an error related to the 'EMAIL' column's test configuration. What is the correct way to structure the test for 'email_length_within_range' to avoid this error?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option C"
+        ],
+        "explanation": "The custom test 'email_length_within_range' should be specified as a dictionary under the tests key, with 'column_name', 'min_length', and 'max_length' as its parameters. Each test in the list should start with a dash to correctly denote list items.",
+        "reference": "https://docs.getdbt.com/reference/resource-properties/tests"
     }
 ]
