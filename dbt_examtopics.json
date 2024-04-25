@@ -592,7 +592,10 @@
     },
     {
         "question_number": 38,
-        "question_area": "Implementing dbt tests",
+        "question_area": [
+            "Implementing dbt tests",
+            "Estrellita"
+        ],
         "question": "How can you store test failure results in the database for later analysis?",
         "answers": [
             "Using the --store-failures option with dbt test",
@@ -643,7 +646,10 @@
     },
     {
         "question_number": 41,
-        "question_area": "Deploying dbt jobs",
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
         "question": "In dbt Cloud, what additional set-up is needed for a 'slim CI'-style job beyond just appending --select state\\:modified+ to any commands?",
         "answers": [
             "Setting the 'Defer to a previous run state?' option",
@@ -697,16 +703,16 @@
         "question_area": "Implementing dbt tests",
         "question": "How can you run all tests of a particular type (e.g., singular or generic)?",
         "answers": [
-            "`dbt test --select test_type\\:singular`",
-            "`dbt test --select test_type\\:generic`",
-            "`dbt test --select type\\:singular`",
-            "`dbt test --select type\\:generic`"
+            "`dbt test --select test_type:singular`",
+            "`dbt test --select test_type:generic`",
+            "`dbt test --select type:singular`",
+            "`dbt test --select type:generic`"
         ],
         "correct_answer": [
-            "`dbt test --select test_type\\:singular`",
-            "`dbt test --select test_type\\:generic`"
+            "`dbt test --select test_type:singular`",
+            "`dbt test --select test_type:generic`"
         ],
-        "explanation": "To run all tests of a specific type, you use the `--select test_type\\:singular` for singular tests and `--select test_type\\:generic` for generic tests. This allows targeted execution of either all singular or all generic tests defined in the project.",
+        "explanation": "To run all tests of a specific type, you use the `--select test_type:singular` for singular tests and `--select test_type:generic` for generic tests. This allows targeted execution of either all singular or all generic tests defined in the project.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -717,16 +723,16 @@
         ],
         "question": "How can you select models that match a specified node config?",
         "answers": [
-            "`dbt run --select config.materialized\\:incremental`",
-            "`dbt run --select config.materialized\\:view`",
-            "`dbt run --select config.enabled\\:true`",
-            "`dbt run --select config.grants.select\\:reporter`"
+            "`dbt run --select config.materialized:incremental`",
+            "`dbt run --select config.materialized:view`",
+            "`dbt run --select config.enabled:true`",
+            "`dbt run --select config.grants.select:reporter`"
         ],
         "correct_answer": [
-            "`dbt run --select config.materialized\\:incremental`",
-            "`dbt run --select config.materialized\\:view`"
+            "`dbt run --select config.materialized:incremental`",
+            "`dbt run --select config.materialized:view`"
         ],
-        "explanation": "To select models that match a specific configuration, you use the `--select config.<option path>: <value>` syntax. For example, to run all models that are materialized incrementally, you would use `dbt run --select config.materialized\\:incremental`.",
+        "explanation": "To select models that match a specific configuration, you use the `--select config.<option path>: <value>` syntax. For example, to run all models that are materialized incrementally, you would use `dbt run --select config.materialized:incremental`.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -734,13 +740,13 @@
         "question_area": "Developing dbt models",
         "question": "How can you select models within a specific package?",
         "answers": [
-            "`dbt run --select package:  snowplow`",
+            "`dbt run --select package:snowplow`",
             "`dbt run --select snowplow`",
             "`dbt run --select snowplow.*`",
-            "`dbt run --select package:  finance`"
+            "`dbt run --select package:finance`"
         ],
         "correct_answer": [
-            "`dbt run --select package:  snowplow`",
+            "`dbt run --select package:snowplow`",
             "`dbt run --select snowplow`",
             "`dbt run --select snowplow.*`"
         ],
@@ -752,16 +758,16 @@
         "question_area": "Promoting code through version control",
         "question": "How can you select nodes that are new and/or modified compared to a previous version of the same project?",
         "answers": [
-            "`dbt run --select state\\:new`",
-            "`dbt run --select state\\:modified`",
+            "`dbt run --select state:new`",
+            "`dbt run --select state:modified`",
             "`dbt run --select changes: new`",
             "`dbt run --select changes: modified`"
         ],
         "correct_answer": [
-            "`dbt run --select state\\:new`",
-            "`dbt run --select state\\:modified`"
+            "`dbt run --select state:new`",
+            "`dbt run --select state:modified`"
         ],
-        "explanation": "To select nodes that are either completely new or have been modified since the last version of the project, you use the `--select state\\:new` for new nodes and `--select state\\:modified` for both new and modified nodes. This is particularly useful for implementing efficient CI/CD pipelines.",
+        "explanation": "To select nodes that are either completely new or have been modified since the last version of the project, you use the `--select state:new` for new nodes and `--select state:modified` for both new and modified nodes. This is particularly useful for implementing efficient CI/CD pipelines.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -769,15 +775,15 @@
         "question_area": "Developing dbt models",
         "question": "How can you select parent resources of a particular exposure?",
         "answers": [
-            "`dbt run --select +exposure\\:weekly_jaffle_metrics`",
-            "`dbt run --select exposure\\:weekly_jaffle_metrics+`",
-            "`dbt run --select @exposure\\:weekly_jaffle_metrics`",
-            "`dbt run --select exposure\\:weekly_jaffle_metrics`"
+            "`dbt run --select +exposure:weekly_jaffle_metrics`",
+            "`dbt run --select exposure:weekly_jaffle_metrics+`",
+            "`dbt run --select @exposure:weekly_jaffle_metrics`",
+            "`dbt run --select exposure:weekly_jaffle_metrics`"
         ],
         "correct_answer": [
-            "`dbt run --select +exposure\\:weekly_jaffle_metrics`"
+            "`dbt run --select +exposure:weekly_jaffle_metrics`"
         ],
-        "explanation": "To select parent resources of a particular exposure, you use the `+exposure\\:<name>` syntax. This allows for targeted execution of all upstream dependencies of the specified exposure.",
+        "explanation": "To select parent resources of a particular exposure, you use the `+exposure:<name>` syntax. This allows for targeted execution of all upstream dependencies of the specified exposure.",
         "reference": "https://docs.getdbt.com/reference/node-selection"
     },
     {
@@ -785,15 +791,15 @@
         "question_area": "Developing dbt models",
         "question": "How can you select parent resources of a specific metric?",
         "answers": [
-            "`dbt run --select +metric\\:<name>`",
-            "`dbt run --select metric\\:<name>+`",
-            "`dbt run --select @metric\\:<name>`",
-            "`dbt run --select metric\\:<name>`"
+            "`dbt run --select +metric:<name>`",
+            "`dbt run --select metric:<name>+`",
+            "`dbt run --select @metric:<name>`",
+            "`dbt run --select metric:<name>`"
         ],
         "correct_answer": [
-            "`dbt run --select +metric\\:<name>`"
+            "`dbt run --select +metric:<name>`"
         ],
-        "explanation": "To select parent resources of a specific metric, you use the `+metric\\:<name>` syntax, which selects all models contributing to the specified metric.",
+        "explanation": "To select parent resources of a specific metric, you use the `+metric:<name>` syntax, which selects all models contributing to the specified metric.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -801,15 +807,15 @@
         "question_area": "Developing dbt models",
         "question": "How do you select all models that depend on a particular source?",
         "answers": [
-            "`dbt run --select source\\:<source_name>+`",
-            "`dbt run --select +source\\:<source_name>`",
-            "`dbt run --select @source\\:<source_name>`",
-            "`dbt run --select source\\:<source_name>*`"
+            "`dbt run --select source:<source_name>+`",
+            "`dbt run --select +source:<source_name>`",
+            "`dbt run --select @source:<source_name>`",
+            "`dbt run --select source:<source_name>*`"
         ],
         "correct_answer": [
-            "`dbt run --select source\\:<source_name>+`"
+            "`dbt run --select source:<source_name>+`"
         ],
-        "explanation": "To select all models that depend on a particular source, you use the `source\\:<source_name>+` syntax. This selects the source and all downstream models.",
+        "explanation": "To select all models that depend on a particular source, you use the `source:<source_name>+` syntax. This selects the source and all downstream models.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -817,15 +823,15 @@
         "question_area": "Developing dbt models",
         "question": "How do you select models matching a specific tag?",
         "answers": [
-            "`dbt run --select tag\\:<tag_name>`",
-            "`dbt run --select @tag\\:<tag_name>`",
-            "`dbt run --select tag\\:<tag_name>+`",
-            "`dbt run --select *tag\\:<tag_name>`"
+            "`dbt run --select tag:<tag_name>`",
+            "`dbt run --select @tag:<tag_name>`",
+            "`dbt run --select tag:<tag_name>+`",
+            "`dbt run --select *tag:<tag_name>`"
         ],
         "correct_answer": [
-            "`dbt run --select tag\\:<tag_name>`"
+            "`dbt run --select tag:<tag_name>`"
         ],
-        "explanation": "To select models matching a specific tag, you use the `tag\\:<tag_name>` syntax. This selects all nodes tagged with the specified tag name.",
+        "explanation": "To select models matching a specific tag, you use the `tag:<tag_name>` syntax. This selects all nodes tagged with the specified tag name.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -833,15 +839,15 @@
         "question_area": "Developing dbt models",
         "question": "How do you select nodes stored in a particular file/directory?",
         "answers": [
-            "`dbt run --select path\\:models/staging/sales`",
-            "`dbt run --select directory\\:models/staging/sales`",
-            "`dbt run --select file\\:models/staging/sales.sql`",
+            "`dbt run --select path:models/staging/sales`",
+            "`dbt run --select directory:models/staging/sales`",
+            "`dbt run --select file:models/staging/sales.sql`",
             "`dbt run --select models/staging/sales`"
         ],
         "correct_answer": [
-            "`dbt run --select path\\:models/staging/sales`"
+            "`dbt run --select path:models/staging/sales`"
         ],
-        "explanation": "To select nodes stored in a particular file or directory, you use the `path\\:` method followed by the directory or file path. This method selects all models stored within the specified path.",
+        "explanation": "To select nodes stored in a particular file or directory, you use the `path:` method followed by the directory or file path. This method selects all models stored within the specified path.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
     },
     {
@@ -996,7 +1002,10 @@
     },
     {
         "question_number": 62,
-        "question_area": "Creating and maintaining dbt documentation",
+        "question_area": [
+            "Creating and maintaining dbt documentation",
+            "Estrellita"
+        ],
         "question": "dbt source freshness produces which artifact?",
         "answers": [
             "sources.json",
@@ -1111,7 +1120,10 @@
     },
     {
         "question_number": 69,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "Which two features are necessary to enable 'slim CI' in dbt?",
         "answers": [
             "Defer and state",
@@ -1478,7 +1490,7 @@
             "dbt test -s stg_heroku_postgres_events,test_name\\:validate_events"
         ],
         "correct_answer": [
-            "dbt run --select state\\:modified",
+            "dbt test -s stg_heroku_postgres_events,test_type\\:singular",
             "dbt test -s stg_heroku_postgres_events,test_name\\:validate_events"
         ],
         "explanation": "To identify and test only the modified models, a developer should use the dbt command: dbt run --select state\\:modified.",
@@ -1623,7 +1635,10 @@
     },
     {
         "question_number": 100,
-        "question_area": "Deploying dbt jobs",
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
         "question": "Consider a production job with commands enabled for docs generation. What is the correct order of invoked dbt commands in the run history after 'clone git repository' and 'create profile from connection'?",
         "answers": [
             "dbt deps >> dbt run >> dbt test >> dbt docs generate",
@@ -2537,7 +2552,10 @@
     },
     {
         "question_number": 156,
-        "question_area": "Implementing dbt tests",
+        "question_area": [
+            "Implementing dbt tests",
+            "Estrellita"
+        ],
         "question": "What happens when command 'dbt test --store-failures' is invoked?",
         "answers": [
             "This will store failures in a configured location",
@@ -2948,7 +2966,10 @@
     },
     {
         "question_number": 181,
-        "question_area": "Deploying dbt jobs",
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
         "question": "You can use --defer argument in dbt snapshot command?",
         "answers": [
             "True",
@@ -3042,7 +3063,10 @@
     },
     {
         "question_number": 187,
-        "question_area": ["Deploying dbt jobs","Estrellita"],
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
         "question": "Write the command to run models that are in the marts/finance subdirectory and tagged nightly.",
         "answers": [
             "dbt run -s marts.finance tag\\:nightly",
@@ -3136,7 +3160,10 @@
     },
     {
         "question_number": 193,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "Ephemeral models can be deferred.",
         "answers": [
             "True",
@@ -3164,7 +3191,10 @@
     },
     {
         "question_number": 195,
-        "question_area": "Deploying dbt jobs",
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
         "question": "What are the ways to set deferral?",
         "answers": [
             "By passing --defer and --state flags explicitly",
@@ -3292,7 +3322,10 @@
     },
     {
         "question_number": 203,
-        "question_area": "Monitoring data pipelines",
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
         "question": "By default, when dbt source freshness completes, a JSON file containing information about the freshness of your sources will be saved to?",
         "answers": [
             "target/source.json",
@@ -3613,7 +3646,10 @@
     },
     {
         "question_number": 223,
-        "question_area": "Promoting code through version control",
+        "question_area": [
+            "Promoting code through version control",
+            "Estrellita"
+        ],
         "question": "A user is currently working on a branch 'freature_products' and realizes that the word feature is misspelt, How will the user modify the branch name? The user will run the following command:",
         "answers": [
             "git branch -m freature_products feature_products",
@@ -3705,7 +3741,10 @@
     },
     {
         "question_number": 229,
-        "question_area": "Promoting code through version control",
+        "question_area": [
+            "Promoting code through version control",
+            "Estrellita"
+        ],
         "question": "A user has made two commits and hasn't pushed the commits to the remote repository yet. Now, the user wants to un-commit the changes. What is the user supposed to do?",
         "answers": [
             "git reset HEAD~2",
@@ -3753,7 +3792,10 @@
     },
     {
         "question_number": 232,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "freshness is a source configuration.",
         "answers": [
             "True",
@@ -3986,7 +4028,10 @@
     },
     {
         "question_number": 247,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "According to dbt best practices, should staging models typically have a 1-to-1 relationship with source tables?",
         "answers": [
             "True",
@@ -4000,7 +4045,10 @@
     },
     {
         "question_number": 248,
-        "question_area": ["Monitoring data pipelines","Estrellita"],
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
         "question": "When selecting nodes using the --select flag, which operator allows you to select the INTERSECTION of your arguments?",
         "answers": [
             ",",
@@ -4216,7 +4264,10 @@
     },
     {
         "question_number": 260,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "In a dbt project structure, which option is better for creating a dimensional table that joins user information with address data to obtain the address for each user?",
         "answers": [
             "Both lineages are correct.",
@@ -4495,7 +4546,10 @@
     },
     {
         "question_number": 276,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "You are a data scientist working on a data pipeline and you want to write a model in dbt that doesn’t directly build into the database. Which materialization option should you use for this purpose?",
         "answers": [
             "Table.",
@@ -4982,7 +5036,10 @@
     },
     {
         "question_number": 306,
-        "question_area": "Monitoring data pipelines",
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
         "question": "You are working on a dbt project and want to ensure that only the data sources with freshness greater than the previous state are used for the transformation. Which selector should you use in your dbt command?",
         "answers": [
             "source_status\\:fresher",
@@ -4998,7 +5055,10 @@
     },
     {
         "question_number": 307,
-        "question_area": ["Deploying dbt jobs","Estrellita"],
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
         "question": "You want to select models in the 'sales' package that have a materialization setting of 'incremental' but exclude those tagged as 'deprecated'. Which of the following YAML selectors will achieve this?",
         "answers": [
             "Option A",
@@ -5145,7 +5205,10 @@
     },
     {
         "question_number": 316,
-        "question_area": "Monitoring data pipelines",
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
         "question": "In the case of a job, if we run a dbt build command, but we want all possible verifications and resources to be also made, what is the only command that is required to run beforehand to accomplish the demand task?",
         "answers": [
             "dbt seed",
@@ -5408,7 +5471,10 @@
     },
     {
         "question_number": 332,
-        "question_area": ["Promoting code through version control","Estrellita"],
+        "question_area": [
+            "Promoting code through version control",
+            "Estrellita"
+        ],
         "question": "You want to select models in the 'sales' package that are set as 'incremental' but exclude those tagged as 'deprecated'. Which YAML selector will achieve this? Choose only ONE best answer.",
         "answers": [
             "Option A",
@@ -5462,7 +5528,8 @@
             "Python models are slower to run than SQL models and can be more expensive due to requiring more general-purpose compute.",
             "There is a lack of unified lineage, testing, and documentation when deploying Python models via dbt.",
             "Syntax differences in Python are more pronounced than in SQL, leading to a wider range of possible solutions with varying performance and adherence to standards.",
-            "The capabilities of Python models in dbt are very new, and their underlying implementation might change in future releases."
+            "The capabilities of Python models in dbt are very new, and their underlying implementation might change in future releases.",
+            "Python models require an entirely different set of data warehouse features."
         ],
         "correct_answer": [
             "Python models are slower to run than SQL models and can be more expensive due to requiring more general-purpose compute.",
@@ -5486,7 +5553,7 @@
             "Returns null values as 0 for metrics with no observations"
         ],
         "explanation": "The 'treat_null_values_as_zero' configuration in dbt metrics modifies the behavior of metrics calculations such that null values are treated as zero, helping in scenarios where no observations might otherwise skew the metric results.",
-        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/metrics"
+        "reference": "https://github.com/dbt-labs/dbt_metrics"
     },
     {
         "question_number": 337,
@@ -5499,9 +5566,9 @@
             "dbt randomly selects the order in which hooks are executed."
         ],
         "correct_answer": [
-            "dbt executes hooks in the order they are defined, regardless of whether they are in dependent packages or the active package."
+            "dbt executes the hooks defined in dependent packages first, followed by the hooks in the active package."
         ],
-        "explanation": "dbt executes hooks based on the order they are defined within the dbt project's configuration files, providing consistency and predictability in hook execution across packages.",
+        "explanation": "DBT has a specific execution order that ensures that the hooks of the dependent packages are executed before those of the active package to maintain consistency and correct dependency between packages.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/hooks"
     },
     {
@@ -5708,23 +5775,26 @@
     {
         "question_number": 350,
         "question_area": "Creating and maintaining dbt documentation",
-        "question": "A data analyst is building a dbt project and wants to ensure that the data lineage is clear and understandable. Which function should they use in their queries to provide clear data lineage within the project? Choose only ONE best answer.",
+        "question": "A data analyst is building a dbt project and wants to ensure that the data lineage is clear and understandable. Which function should they use in their queries to provide clear data lineage within the project? Choose ALL answers that apply.",
         "answers": [
             "source",
             "select",
             "Ref",
-            "join",
-            "A and C"
+            "join"
         ],
         "correct_answer": [
+            "source",
             "Ref"
         ],
-        "explanation": "The 'Ref' function in dbt is used to create a dependency between models, which enhances the traceability and clarity of data lineage within the project.",
+        "explanation": "'Ref' and 'Source' functions in dbt are used to create a dependency between models, which enhances the traceability and clarity of data lineage within the project.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources"
     },
     {
         "question_number": 351,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "A data team is creating a snapshot in dbt that involves joining two tables. Which of the following is a best practice for joining tables in a dbt snapshot? Choose only ONE best answer.",
         "answers": [
             "Join the tables in the snapshot query",
@@ -5784,9 +5854,9 @@
             "To select from source tables in models."
         ],
         "correct_answer": [
-            "To declare tables as sources in dbt."
+            "To select from source tables in models."
         ],
-        "explanation": "The `{{ source() }}` function in dbt is used to declare tables as sources within dbt models, which standardizes how source data is referenced and ensures consistency across the project.",
+        "explanation": "The `{{ source() }}` function in dbt is used to select from source tables as sources within dbt models, which standardizes how source data is referenced and ensures consistency across the project.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/using-sources"
     },
     {
@@ -5877,7 +5947,10 @@
     },
     {
         "question_number": 359,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "What are best practices for data logic in SQL and dbt to ensure modularity? Choose only ONE best answer.",
         "answers": [
             "Using common table expressions (CTEs) and dbt models",
@@ -6014,20 +6087,23 @@
         "question_area": "Debugging data modeling errors",
         "question": "During dbt development, which configuration should be used to save the results of a test query to a database table?",
         "answers": [
-            "store-successes",
-            "store-failures",
-            "store-all",
-            "store-errors"
+            "--store-successes",
+            "--store-failures",
+            "--store-all",
+            "--store-errors"
         ],
         "correct_answer": [
-            "store-failures"
+            "--store-failures"
         ],
-        "explanation": "Using 'store-failures' configuration will save the results of failing test queries to a database table, facilitating debugging and correction.",
+        "explanation": "Using '--store-failures' flag will save the results of failing test queries to a database table, facilitating debugging and correction.",
         "reference": "https://docs.getdbt.com/reference/dbt-flags"
     },
     {
         "question_number": 368,
-        "question_area": "Debugging data modeling errors",
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
         "question": "During dbt development, which flag or configuration should be used to save the results of a test query to a database table?",
         "answers": [
             "--store-successes",
@@ -6247,7 +6323,10 @@
     },
     {
         "question_number": 381,
-        "question_area": "Monitoring data pipelines",
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
         "question": "What is the primary function of the dbt source freshness command? Choose only ONE best answer",
         "answers": [
             "To generate a list of all available data sources",
@@ -7100,7 +7179,10 @@
     },
     {
         "question_number": 432,
-        "question_area": "Monitoring data pipelines",
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
         "question": "You are setting up a snapshot configuration in dbt and want to ensure that the unique key is reliable. What is a best practice for ensuring the uniqueness of the unique key? Choose only ONE best answer.",
         "answers": [
             "Add a test for uniqueness to the snapshot table.",
@@ -7357,7 +7439,7 @@
         "correct_answer": [
             "It helps to optimize the performance of queries"
         ],
-        "explanation": "While Jinja in dbt offers many benefits, such as enabling control structures and macro usage, it does not inherently optimize the performance of queries.",
+        "explanation": "While Jinja in dbt offers many benefits, it does not allow the creation of new database tables directly, it is done through models.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/jinja-macros/"
     },
     {
@@ -7442,7 +7524,10 @@
     },
     {
         "question_number": 453,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "You are working on a dbt project and are considering using seeds to provide reference data for your models. Which of the following is a good use-case for seeds according to the best practices in dbt? Choose only ONE best answer.",
         "answers": [
             "Loading raw data that has been exported to CSVs",
@@ -7490,7 +7575,10 @@
     },
     {
         "question_number": 456,
-        "question_area": "Monitoring data pipelines",
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
         "question": "A data team is creating a snapshot in dbt to track changes to their customer data over time. They are unsure of whether they should include all columns in the snapshot, even if some columns do not seem useful. Which of the following is a best practice for selecting columns for a snapshot in dbt? Choose only ONE best answer.",
         "answers": [
             "Only include the columns that seem useful at the moment",
@@ -7499,9 +7587,9 @@
             "Include only the columns that are unique to the table being snapped"
         ],
         "correct_answer": [
-            "Include only the columns that are necessary for downstream models"
+            "Include as many columns as possible in the snapshot"
         ],
-        "explanation": "The best practice for creating snapshots in dbt is to include only the columns that are necessary for downstream models. This helps manage space and performance while ensuring that essential data is captured for historical analysis.",
+        "explanation": "Including as many columns as possible allows you to capture a complete record of the data at each point in time. This is useful for historical analysis and understanding the full context of changes in the data. Although some columns may not seem useful at the time, they may be valuable for future analysis or for answering questions that have not yet been asked.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots/"
     },
     {
@@ -8515,7 +8603,10 @@
     },
     {
         "question_number": 514,
-        "question_area": ["Creating and maintaining dbt documentation","Estrellita"],
+        "question_area": [
+            "Creating and maintaining dbt documentation",
+            "Estrellita"
+        ],
         "question": "What is the correct order of keys in a YAML file to properly define a source in a dbt project?",
         "answers": [
             "sources: -> name: -> description: -> database: -> schema: -> tables: -> name: -> description: -> columns:",
@@ -8531,7 +8622,10 @@
     },
     {
         "question_number": 515,
-        "question_area": ["Developing dbt models","Estrellita"],
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "How would you correctly add an aggregate column that uses the 'listagg' window function to concatenate unique 'employee_names' from a 'sales' model, ordered by 'sale_date'?",
         "answers": [
             "{{ dbt.listagg(measure='DISTINCT employee_name_name', delimiter_text=', ', order_by_clause='sale_date') }}",
@@ -8547,7 +8641,10 @@
     },
     {
         "question_number": 516,
-        "question_area": ["Developing dbt models","Estrellita"],
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "How would you correctly implement the 'bool_or' macro to add an aggregate column indicating whether any sale in a group exceeded $10,000 in the 'sales' model?",
         "answers": [
             "{{ dbt.bool_or('sale_amount > 10000') }}",
@@ -8563,7 +8660,10 @@
     },
     {
         "question_number": 517,
-        "question_area": ["Developing dbt models","Estrellita"],
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "How would you use the 'any_value' macro in dbt to select a non-deterministic sample of 'customer_name' from the 'orders' model grouped by 'order_date'?",
         "answers": [
             "{{ dbt.any_value('customer_name') }}",
@@ -8579,7 +8679,10 @@
     },
     {
         "question_number": 518,
-        "question_area": ["Deploying dbt jobs","Estrellita"],
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
         "question": "What are the minimum configuration settings required in the 'profiles.yml' file for dbt to connect to a data warehouse?",
         "answers": [
             "Username, password, and database type",
@@ -8594,8 +8697,11 @@
         "reference": "https://docs.getdbt.com/dbt-cli/configure-your-profile"
     },
     {
-        "question_number": 8,
-        "question_area": ["Monitoring data pipelines","Estrellita"],
+        "question_number": 519,
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
         "question": "In the context of dbt, what is the significance of the 'target' setting in the 'profiles.yml' file when connecting to multiple environments in a data warehouse?",
         "answers": [
             "It specifies the logging level for different environments",
@@ -8608,5 +8714,590 @@
         ],
         "explanation": "The 'target' setting in the 'profiles.yml' file is crucial for dbt when connecting to a data warehouse with multiple environments. It allows users to specify which environment (development, staging, or production) dbt should connect to, thus enabling appropriate access and operations within the specified environment.",
         "reference": "https://docs.getdbt.com/dbt-cli/configure-your-profile"
+    },
+    {
+        "question_number": 520,
+        "question_area": [
+            "Promoting code through version control",
+            "Estrellita"
+        ],
+        "question": "What should a user do if they encounter a merge conflict when trying to merge their feature branch into the master branch, where the conflict arises due to recent changes pushed to master by a colleague?",
+        "answers": [
+            "Immediately force-push the feature branch to master to override the changes",
+            "Pull the latest changes from the master branch, resolve the conflicts locally, then continue with the merge",
+            "Delete the feature branch and start over with a new branch from the latest master",
+            "Ignore the conflicts and push the changes using --force-with-lease"
+        ],
+        "correct_answer": [
+            "Pull the latest changes from the master branch, resolve the conflicts locally, then continue with the merge"
+        ],
+        "explanation": "When encountering a merge conflict, the best practice is to pull the latest changes from the master branch to the feature branch, resolve the conflicts manually by editing the affected files, and then proceed with the merge. This ensures that the feature branch is up-to-date and that all conflicts are resolved before integrating the changes into master.",
+        "reference": "https://git-scm.com/docs/git-merge"
+    },
+    {
+        "question_number": 521,
+        "question_area": [
+            "Promoting code through version control",
+            "Estrellita"
+        ],
+        "question": "What is the recommended approach for merging a feature branch into the master branch to ensure a clean history and minimal integration issues?",
+        "answers": [
+            "Use the 'git merge' command with the '--no-ff' option to create a merge commit even if the merge resolves as a fast-forward",
+            "Always use the 'git rebase' command before merging to make the project history linear",
+            "Merge directly into master without pulling the latest changes from the master branch first",
+            "Use the 'git push' command with '--force' to ensure the feature branch overrides any conflicts with master"
+        ],
+        "correct_answer": [
+            "Always use the 'git rebase' command before merging to make the project history linear"
+        ],
+        "explanation": "Before merging a feature branch into the master branch, it is recommended to use 'git rebase' to reapply commits on the feature branch onto the base tip of the master branch. This practice helps to maintain a linear project history, which simplifies future maintenance and review processes.",
+        "reference": "https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
+    },
+    {
+        "question_number": 522,
+        "question_area": [
+            "Creating and maintaining dbt documentation",
+            "Estrellita"
+        ],
+        "question": "Which artifacts must be present to successfully generate documentation in a dbt project?",
+        "answers": [
+            "Only the dbt_project.yml is necessary",
+            "The manifest.json and catalog.json files",
+            "Only the models and tests within the project",
+            "The data sources and macros alone"
+        ],
+        "correct_answer": [
+            "The manifest.json and catalog.json files"
+        ],
+        "explanation": "To generate documentation in a dbt project, it is essential to have the manifest.json and catalog.json files available. The manifest.json file contains metadata about the project, such as model configurations and dependency graphs, while the catalog.json includes information about the database schema, such as column types and table statistics. These artifacts collectively enable the comprehensive documentation of the dbt project.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/documentation"
+    },
+    {
+        "question_number": 523,
+        "question_area": [
+            "Implementing dbt tests",
+            "Estrellita"
+        ],
+        "question": "What is the main difference between the `dbt run` and `dbt test` commands in a dbt workflow?",
+        "answers": [
+            "`dbt run` compiles and executes the model SQL scripts, while `dbt test` validates the data integrity within the models.",
+            "`dbt run` and `dbt test` both compile and execute model SQL scripts.",
+            "`dbt test` creates new models in the data warehouse, whereas `dbt run` checks for data accuracy.",
+            "`dbt run` is used for debugging models, and `dbt test` is used for deploying them."
+        ],
+        "correct_answer": [
+            "`dbt run` compiles and executes the model SQL scripts, while `dbt test` validates the data integrity within the models."
+        ],
+        "explanation": "The `dbt run` command is used to compile and execute SQL scripts that define models, essentially building or rebuilding models in the data warehouse. On the other hand, `dbt test` is used after models are built to check for data integrity and consistency by running tests that validate assumptions about the data, such as uniqueness, not null conditions, and referential integrity.",
+        "reference": "https://docs.getdbt.com/reference/commands/test"
+    },
+    {
+        "question_number": 524,
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
+        "question": "How does the `dbt build` command differ from the `dbt run` and `dbt test` commands?",
+        "answers": [
+            "`dbt build` sequentially runs `dbt run` and `dbt test` together in a single command, simplifying the workflow.",
+            "`dbt build` is only used for initial setup of dbt projects, unlike the other commands.",
+            "`dbt run` and `dbt test` are subsets of `dbt build`, which is only used in production environments.",
+            "`dbt build` performs data cleaning, whereas `dbt run` and `dbt test` do not."
+        ],
+        "correct_answer": [
+            "`dbt build` sequentially runs `dbt run` and `dbt test` together in a single command, simplifying the workflow."
+        ],
+        "explanation": "The `dbt build` command is a comprehensive command that includes the functionalities of both `dbt run` and `dbt test`. It first runs the `dbt run` command to build or rebuild models, and then immediately runs the `dbt test` command to validate the data integrity of these models. This streamlines the workflow by combining model building and testing into a single, efficient command sequence.",
+        "reference": "https://docs.getdbt.com/reference/commands/build"
+    },
+    {
+        "question_number": 525,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "What is the difference between the SQL code obtained during the compile phase and the SQL code used during the run phase in dbt?",
+        "answers": [
+            "The compile phase SQL is exactly the same as the run phase SQL and there are no differences",
+            "The compile phase SQL includes Jinja templating, while the run phase SQL is pure SQL with all Jinja rendered",
+            "The compile phase SQL is optimized for performance, whereas the run phase SQL prioritizes accuracy",
+            "The compile phase generates pseudo-SQL for syntax checking, while the run phase executes environment-specific SQL"
+        ],
+        "correct_answer": [
+            "The compile phase SQL includes Jinja templating, while the run phase SQL is pure SQL with all Jinja rendered"
+        ],
+        "explanation": "During the compile phase in dbt, SQL code still includes Jinja templating, which allows for dynamic construction of SQL queries based on variables, configurations, and logic defined in the dbt models. In the run phase, all Jinja code is fully rendered into pure SQL, which is then executed against the data warehouse. This difference is crucial for debugging and understanding how dbt processes and transforms data modeling code from development to execution.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models#compile-and-run"
+    },
+    {
+        "question_number": 526,
+        "question_area": [
+            "Creating and maintaining dbt documentation",
+            "Estrellita"
+        ],
+        "question": "In a dbt 'source.yml' file, how would you correctly configure a source table to warn you after 24 hours of staleness, but only for records where the 'status' column is set to 'active'? Choose the correct configuration block.",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option A"
+        ],
+        "explanation": "The correct block to configure warnings for staleness based on specific column conditions is to use the 'freshness' block with a 'filter' that specifies the 'status' column condition.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/using-sources"
+    },
+    {
+        "question_number": 527,
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
+        "question": "You are tasked with documenting a new source in your dbt 'source.yml' file that includes a column-level test for uniqueness on the 'customer_id' column. Which configuration correctly sets up this test?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option C"
+        ],
+        "explanation": "Column-level tests in dbt are defined under the 'columns' key within the table's configuration. The uniqueness test is specified directly alongside the column name it pertains to.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/using-sources#declaring-resource-properties"
+    },
+    {
+        "question_number": 528,
+        "question_area": [
+            "Implementing dbt tests",
+            "Estrellita"
+        ],
+        "question": "In a dbt 'source.yml' file, which configuration would you use to apply a custom schema test to ensure the 'email' column in a 'users' table contains only valid email addresses?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option B"
+        ],
+        "explanation": "To implement a custom schema test in dbt, you would define it under the 'tests' key for the specific column within the 'tables' section of the source configuration.",
+        "reference": "https://docs.getdbt.com/reference/resource-configs/tests"
+    },
+    {
+        "question_number": 529,
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
+        "question": "You are configuring a source in a 'source.yml' file to track the 'order' table's freshness within a 2-hour window and throw an error if the data is more than 3 hours old. How should you set up the 'freshness' block?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option C"
+        ],
+        "explanation": "The 'freshness' configuration should include both 'warn_after' and 'error_after' settings with respective time periods to monitor data freshness correctly.",
+        "reference": "https://docs.getdbt.com/reference/source-configs/freshness"
+    },
+    {
+        "question_number": 530,
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
+        "question": "When setting up a 'source.yml' file, how would you specify an alias for the 'inventory' table so that it's referred to as 'stock' within your dbt project?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option B"
+        ],
+        "explanation": "To set an alias for a table in dbt, you use the 'identifier' key in the table's configuration within the 'source.yml' file. This alias is used as the table name within dbt.",
+        "reference": "https://docs.getdbt.com/reference/source-configs/identifier"
+    },
+    {
+        "question_number": 531,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "If you need to ensure that the 'customer_email' column in a 'customers' source table excludes any null values and duplicate entries, how should you set up the column tests?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option A"
+        ],
+        "explanation": "Column tests in dbt are specified within the 'columns' block of the table configuration. Each test is listed under the 'tests' key for the given column.",
+        "reference": "https://docs.getdbt.com/reference/resource-properties/tests"
+    },
+    {
+        "question_number": 552,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "A dbt model's test fails during execution, and you suspect a misconfiguration in the 'properties.yml' file. You find that tests are listed using a dash (-) instead of the correct dictionary format. How should the test configuration be corrected to resolve this issue?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option B"
+        ],
+        "explanation": "In YAML, a dash (-) indicates an item in a list. For a dbt model's test configuration, tests should be defined as a dictionary, not as a list. The correct format should use key-value pairs without a leading dash.",
+        "reference": "https://docs.getdbt.com/reference/resource-configs/tests"
+    },
+    {
+        "question_number": 533,
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
+        "question": "When a created table already exists and you run your dbt incremental model without any additional flags, will `is_incremental()` return True or False?",
+        "answers": [
+            "True",
+            "False"
+        ],
+        "correct_answer": [
+            "True"
+        ],
+        "explanation": "`is_incremental()` will return True if the table already exists and the model is being run without the full refresh flag. This is because the macro is designed to detect if the model is being built incrementally on top of existing data.",
+        "reference": "https://docs.getdbt.com/docs/build/incremental-models#understanding-the-is_incremental-macro"
+    },
+    {
+        "question_number": 534,
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
+        "question": "Consider you are running an incremental model for the first time, will `is_incremental()` return True or False?",
+        "answers": [
+            "True",
+            "False"
+        ],
+        "correct_answer": [
+            "False"
+        ],
+        "explanation": "When an incremental model is run for the first time, `is_incremental()` will return False because there is no pre-existing table to increment upon. The model will start with a full-refresh run to create the initial table.",
+        "reference": "https://docs.getdbt.com/docs/build/incremental-models#understanding-the-is_incremental-macro"
+    },
+    {
+        "question_number": 535,
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
+        "question": "If you execute an incremental model with the `--full-refresh` flag, what will be the return value of `is_incremental()`?",
+        "answers": [
+            "True",
+            "False"
+        ],
+        "correct_answer": [
+            "False"
+        ],
+        "explanation": "When the `--full-refresh` flag is used with an incremental model, `is_incremental()` returns False. This flag instructs dbt to disregard the incremental nature of the model and rebuild the table from scratch.",
+        "reference": "https://docs.getdbt.com/docs/build/incremental-models#understanding-the-is_incremental-macro"
+    },
+    {
+        "question_number": 536,
+        "question_area": [
+            "Implementing dbt tests",
+            "Estrellita"
+        ],
+        "question": "In a 'properties.yml' file, you need to ensure that the 'status' column in the 'orders' table only contains specific allowed values: 'pending', 'shipped', 'delivered', or 'cancelled'. Which dbt test should you use to validate that the 'status' column conforms to these constraints?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option B"
+        ],
+        "explanation": "To validate that a column only contains specific allowed values, you should use the 'accepted_values' test in dbt, which allows you to define a list of acceptable values for a given column.",
+        "reference": "https://docs.getdbt.com/reference/resource-properties/tests#accepted-values"
+    },
+    {
+        "question_number": 537,
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
+        "question": "When defining tests in a dbt 'properties.yml' file, you come across the need to check for uniqueness in the 'customer_id' column of the 'customers' table. However, you also need to apply a custom test to ensure the 'customer_id' starts with 'CUST-'. What is the difference between using a generic test and a singular test in this context, and how would you implement both?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option C"
+        ],
+        "explanation": "A generic test in dbt, like 'unique', can be applied to any column and does not require custom logic. A singular test, such as ensuring a value starts with a specific prefix, requires custom SQL logic. Implementing both requires defining the 'unique' test and writing a custom SQL test for the prefix condition.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/tests#generic-tests-vs-singular-tests"
+    },
+    {
+        "question_number": 538,
+        "question_area": "Implementing dbt tests",
+        "question": "What is the purpose of the `--store-failures` flag in dbt test commands, and how does it impact the testing process?",
+        "answers": [
+            "It stores the successful test results in a specified schema for audit purposes",
+            "It skips the execution of tests and only validates the SQL logic",
+            "It stores records that fail tests into a separate table for further analysis",
+            "It decreases the runtime of tests by avoiding full data scans"
+        ],
+        "correct_answer": [
+            "It stores records that fail tests into a separate table for further analysis"
+        ],
+        "explanation": "The `--store-failures` flag in dbt is used during the testing process to capture and store records that fail tests into a separate table. This enables data teams to analyze the failures in detail, diagnose issues, and improve data quality by addressing the underlying causes.",
+        "reference": "https://docs.getdbt.com/docs/build/data-tests#storing-test-failures"
+    },
+    {
+        "question_number": 539,
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
+        "question": "How do you configure a source in dbt's 'source.yml' to warn if the 'events' table's data is more than 45 minutes old, considering it's updated on the hour, every hour?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option C"
+        ],
+        "explanation": "To set up a warning for data that is older than 45 minutes, you would use the 'warn_after' property within the freshness block, specifying the count as 45 and the period as 'minute'.",
+        "reference": "https://docs.getdbt.com/reference/source-configs/freshness"
+    },
+    {
+        "question_number": 540,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "In a dbt 'source.yml' file for the 'payments' table, how would you define a freshness check that causes an error if the data is stale for more than 3 days, but only checks records where the 'status' column is 'completed'?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option B"
+        ],
+        "explanation": "To only check the freshness of records with a 'completed' status, you would use the 'filter' property within the freshness block and specify a boolean SQL expression alongside the 'error_after' configuration.",
+        "reference": "https://docs.getdbt.com/reference/source-configs/freshness"
+    },
+    {
+        "question_number": 541,
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
+        "question": "As a dbt developer, you need to create a performance-optimized transformation model that will be heavily queried by several downstream processes. Which materialization is most appropriate to ensure the model's queries are fast and that it is stored persistently? Choose only ONE best answer.",
+        "answers": [
+            "View",
+            "Table",
+            "Incremental",
+            "Ephemeral"
+        ],
+        "correct_answer": [
+            "Table"
+        ],
+        "explanation": "The 'table' materialization is suitable for models that require optimized performance for heavy querying, as it stores the transformation results persistently in the data warehouse, allowing for faster retrieval compared to views.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/materializations/#table"
+    },
+    {
+        "question_number": 542,
+        "question_area": [
+            "Promoting code through version control",
+            "Estrellita"
+        ],
+        "question": "You have completed development on a feature branch in your dbt project. What sequence of steps should you follow to safely integrate your changes into the main branch?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option B"
+        ],
+        "explanation": "The safe integration of changes from a feature branch to the main branch involves: running dbt build to test new changes, committing the code to the repository, creating a pull request for team review, passing the CI/CD pipeline tests, and finally merging the pull request into the main branch.",
+        "reference": "https://docs.getdbt.com/docs/guides/version-control"
+    },
+    {
+        "question_number": 543,
+        "question_area": [
+            "Promoting code through version control",
+            "Estrellita"
+        ],
+        "question": "Why is it beneficial to use Git for version control in software development, particularly for tracking changes and identifying the source of bugs?",
+        "answers": [
+            "Git allows for real-time collaboration and immediate updates to the code base.",
+            "Git commits provide a detailed history of changes, enabling developers to pinpoint when a bug was introduced.",
+            "Using Git can automatically fix bugs without developer intervention.",
+            "Git is beneficial primarily for its user-friendly interface and not for tracking changes."
+        ],
+        "correct_answer": [
+            "Git commits provide a detailed history of changes, enabling developers to pinpoint when a bug was introduced."
+        ],
+        "explanation": "Using Git for version control is particularly beneficial because each commit provides a detailed, immutable snapshot of the code at a specific point in time. This allows developers to track when changes were made and by whom, making it much easier to identify when and potentially where a bug was introduced into the codebase. This is crucial for effective debugging and maintaining software quality over time.",
+        "reference": "https://git-scm.com/book/en/v2"
+    },
+    {
+        "question_number": 544,
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
+        "question": "If you have a large CSV file with a data table stored in Amazon S3 and you want to import this data into dbt, what are the steps involved, and is a temporary table created or could you use seeds to load the data?",
+        "answers": [
+            "Directly upload the CSV as a seed and dbt will handle it as a temporary table during builds",
+            "Load the CSV into a staging table using external tools, then reference it in dbt models",
+            "Create a temporary table in SQL and use dbt to load data from the CSV",
+            "Use seeds to import the CSV, but preprocess it with Python or another scripting language first"
+        ],
+        "correct_answer": [
+            "Load the CSV into a staging table using external tools, then reference it in dbt models"
+        ],
+        "explanation": "While dbt seeds can import smaller CSV files directly into the data warehouse, for a large CSV stored in S3, it's more efficient to use external tools or services to first load the CSV into a staging table in the data warehouse. Afterward, this staging table can be referenced within dbt models. Using seeds directly for very large CSV files is not recommended as seeds are not designed to handle large datasets efficiently.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/seeds"
+    },
+    {
+        "question_number": 545,
+        "question_area": [
+            "Creating and maintaining dbt documentation",
+            "Estrellita"
+        ],
+        "question": "In dbt, which of the following are valid types of exposures? Select two.",
+        "answers": [
+            "Dashboard",
+            "Notebook",
+            "Analysis",
+            "ML",
+            "Application"
+        ],
+        "correct_answer": [
+            "Notebook",
+            "ML"
+        ],
+        "explanation": "In dbt, 'exposures' help document downstream dependencies or consumers of dbt models. The valid types of exposures include 'dashboard', 'notebook', 'analysis', 'ml', and 'application'. Among these, 'notebook' and 'ml' (machine learning) are specific types that can be used to describe certain analytics or data science workflows.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/exposures/"
+    },
+    {
+        "question_number": 546,
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
+        "question": "What is the primary use of the `defer` flag in dbt commands?",
+        "answers": [
+            "To delay the execution of models until all sources are updated",
+            "To use the production schema as a fallback for missing dependencies during a development run",
+            "To postpone the deployment of changes until they are manually approved",
+            "To incrementally process only new data in the models"
+        ],
+        "correct_answer": [
+            "To use the production schema as a fallback for missing dependencies during a development run"
+        ],
+        "explanation": "The `defer` flag in dbt is used primarily when running dbt in development but with dependencies on production data that may not be present in the development environment. This flag allows developers to build and test models using existing production artifacts as a fallback, thereby avoiding failures due to missing dependencies.",
+        "reference": "https://docs.getdbt.com/reference/commands/run/#deferring-to-a-previous-run"
+    },
+    {
+        "question_number": 547,
+        "question_area": [
+            "Promoting code through version control",
+            "Estrellita"
+        ],
+        "question": "You are setting up a dbt project and want to document an exposure that represents a monthly revenue dashboard. This dashboard depends on a 'fct_revenue' model and a 'dim_date' model. It's a well-established dashboard within your organization. What is the correct way to define this exposure, including its maturity level, in a 'models/<filename>.yml' file?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option B"
+        ],
+        "explanation": "Exposures are defined under the 'exposures' key and must include the required properties 'name', 'type', and 'owner'. The 'depends_on' property lists the refable nodes the exposure depends on, and the 'maturity' property indicates the level of confidence in the exposure.",
+        "reference": "https://docs.getdbt.com/reference/resource-properties/exposures"
+    },
+    {
+        "question_number": 548,
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
+        "question": "When updating the dbt version for a project, what key parameter must be updated in the dbt_project.yml file to ensure compatibility?",
+        "answers": [
+            "Update the 'version' parameter to match the new dbt version",
+            "Update the 'dbt_version' parameter to specify the new version range",
+            "Change the 'profile' parameter to reflect the new dbt version",
+            "No changes are needed in the dbt_project.yml for version updates"
+        ],
+        "correct_answer": [
+            "Update the 'dbt_version' parameter to specify the new version range"
+        ],
+        "explanation": "When updating to a new dbt version, it is important to update the 'dbt_version' parameter in the dbt_project.yml file. This parameter specifies the version of dbt that the project is compatible with, helping to avoid issues related to version mismatches and ensuring that the project uses the appropriate features and syntax supported by that version.",
+        "reference": "https://docs.getdbt.com/reference/project-configs/require-dbt-version#require-a-specific-dbt-version"
+    },
+    {
+        "question_number": 549,
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
+        "question": "A dbt macro is created to determine the schema where tables are materialized based on the environment ('prod' or 'dev'). If the current environment is 'prod', tables should be materialized in the 'analytics' schema. In 'dev', they should use the 'dev_analytics' schema. Which macro correctly handles the schema selection based on the environment?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option B"
+        ],
+        "explanation": "The correct macro uses an if-else condition to check the value of the 'target.name' variable, which represents the current environment, and returns the appropriate schema name based on that environment.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/jinja-macros"
+    },
+    {
+        "question_number": 550,
+        "question_area": [
+            "Deploying dbt jobs",
+            "Establishing environments in data warehouse for dbt"
+        ],
+        "question": "A macro within a dbt project dynamically generates the target schema names based on the deployment environment. If the macro includes logic to suffix schema names with '_prod' in the production environment and '_dev' in the development environment, how will this affect the materialization of tables when the 'env' variable is set to 'prod' and 'dev', respectively?",
+        "answers": [
+            "When 'env' is set to 'prod', tables are materialized in a schema with a '_prod' suffix. When 'env' is set to 'dev', tables are materialized in a schema with a '_dev' suffix.",
+            "Regardless of the 'env' variable being 'prod' or 'dev', tables are always materialized in the default schema without any suffix.",
+            "Tables are materialized in a schema with a '_dev' suffix when 'env' is set to 'prod', and without any suffix when 'env' is set to 'dev'."
+        ],
+        "correct_answer": [
+            "When 'env' is set to 'prod', tables are materialized in a schema with a '_prod' suffix. When 'env' is set to 'dev', tables are materialized in a schema with a '_dev' suffix."
+        ],
+        "explanation": "With the described macro logic, when the 'env' variable is set to 'prod', tables will be materialized in schemas with the '_prod' suffix. Conversely, when the 'env' variable is set to 'dev', tables will be materialized in schemas with the '_dev' suffix. This approach is commonly used to separate development and production data within the same data warehouse.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/jinja-macros"
+    },
+    {
+        "question_number": 551,
+        "question_area": [
+            "Data Transformations"
+        ],
+        "question": "In a dbt project, when tracking the specific versions of Python packages used for processing and transforming data, which of the following methods is recommended to specify the package versions in the dbt project metadata?",
+        "answers": [
+            "Include a separate requirements.txt file in the dbt project directory that lists all the necessary packages and their versions.",
+            "Specify the package versions in the dbt_project.yml file under the 'packages' configuration block.",
+            "Specify the package versions in each individual model file that uses the packages.",
+            "Include the package versions in the SQL code used to manipulate and transform the data."
+        ],
+        "correct_answer": [
+            "Specify the package versions in the dbt_project.yml file under the 'packages' configuration block."
+        ],
+        "explanation": "The recommended approach to track package versions in a dbt project is to specify them in the dbt_project.yml file under the 'packages' configuration block. This centralizes the package version information and ensures consistency across the dbt project, rather than having separate requirements.txt files or specifying versions in individual model files or SQL scripts.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/package-management"
     }
 ]
