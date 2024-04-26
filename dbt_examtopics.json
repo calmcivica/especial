@@ -2381,13 +2381,13 @@
         ],
         "question": "In a DBT project, after setting the DBT_STATE environment variable to reference the production branch and creating a 'users_data' branch for new models, which command would you use to test only the new and modified models?",
         "answers": [
-            "dbt build --select 'state:new'",
-            "dbt test --select 'state:modified'",
+            "dbt build --select 'state\\:new'",
+            "dbt test --select 'state\\:modified'",
             "dbt test --state modified",
-            "dbt build -s 'state:modified.relation'"
+            "dbt build -s 'state\\:modified.relation'"
         ],
         "correct_answer": [
-            "dbt test --select 'state:modified'"
+            "dbt test --select 'state\\:modified'"
         ],
         "explanation": "To test only the new and modified models after branching out to 'users_data' and setting up the DBT_STATE, the correct command is: dbt test --select 'state:modified'. This command selects and tests models that have been modified compared to the main branch manifest.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
@@ -3203,7 +3203,8 @@
             "By updating the profiles.yml file"
         ],
         "correct_answer": [
-            "By passing --defer and --state flags explicitly or By setting environment variables (DBT_DEFER_STATE and DBT_STATE)"
+            "By passing --defer and --state flags explicitly",
+            "By setting environment variables (DBT_DEFER_STATE and DBT_STATE)"
         ],
         "explanation": "Deferral in dbt can be set by explicitly passing --defer and --state flags during command execution or by setting the corresponding environment variables for more dynamic or CI/CD-driven workflows.",
         "reference": "https://docs.getdbt.com/reference/node-selection/defer"
@@ -3650,7 +3651,7 @@
             "Promoting code through version control",
             "Estrellita"
         ],
-        "question": "A user is currently working on a branch 'freature_products' and realizes that the word feature is misspelt, How will the user modify the branch name? The user will run the following command:",
+        "question": "A user is currently working on a branch 'freature_products' and realizes that the word feature is misspelt. How will the user modify the branch name? The user will run the following command:",
         "answers": [
             "git branch -m freature_products feature_products",
             "git branch -M freature_products feature_products",
@@ -3658,9 +3659,9 @@
             "git branch -d freature_products feature_products"
         ],
         "correct_answer": [
-            "git branch -m feature_products"
+            "git branch -m freature_products feature_products"
         ],
-        "explanation": "To rename a branch in Git, the user can use the git branch -m command followed by the old branch name and the corrected branch name.",
+        "explanation": "To rename a branch in Git, the user can use the git branch -m command followed by the old branch name and the corrected branch name. --> git branch -m old_name new_name",
         "reference": "https://git-scm.com/docs/git-branch#Documentation/git-branch.txt--m"
     },
     {
@@ -4268,7 +4269,7 @@
             "Developing dbt models",
             "Estrellita"
         ],
-        "question": "In a dbt project structure, which option is better for creating a dimensional table that joins user information with address data to obtain the address for each user?",
+        "question": "In a dbt project structure, which option is better for creating a dimensional table that joins user information with address data to obtain the address for each user? Choose ALL answers that apply.",
         "answers": [
             "Both lineages are correct.",
             "The second lineage is better because we reduce computing and storage.",
@@ -5811,7 +5812,7 @@
     {
         "question_number": 352,
         "question_area": "Monitoring data pipelines",
-        "question": "A company wants to use dbt to track changes in their sales data. Which of the following is necessary to use the check strategy in dbt? Choose only ONE best answer.",
+        "question": "A company wants to use dbt to track changes in their sales data. Which of the following is necessary to use the check strategy in dbt? Choose ALL answers that apply.",
         "answers": [
             "A list of columns that will be checked for changes.",
             "A column that represents the time the source row was last updated.",
@@ -5819,10 +5820,11 @@
             "A snapshot block that retrieves the desired data."
         ],
         "correct_answer": [
-            "A unique key that identifies each row."
+            "A unique key that identifies each row.",
+            "A list of columns that will be checked for changes."
         ],
-        "explanation": "The check strategy in dbt requires a unique key to identify each row. This key is used to compare snapshots and detect changes in the data.",
-        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/snapshots/configuring-snapshots#check"
+        "explanation": "The check strategy in dbt requires a unique key to identify each row and also it requires specifying 'check_cols', a list of columns to monitor for changes. This setup is essential for detecting changes between snapshots.",
+        "reference": "https://docs.getdbt.com/docs/build/snapshots#check-strategy"
     },
     {
         "question_number": 353,
@@ -8432,8 +8434,7 @@
         ],
         "explanation": "The `state:modified` selector is crucial for managing dbt runs by targeting only those models that have experienced changes in their SQL, configurations, or dependencies. This selective execution is key in ensuring that updates are properly tested and integrated into the existing data pipeline without unnecessary reprocessing of unaltered models.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
-    },
-    {
+    },    {
         "question_number": 505,
         "question_area": [
             "Deploying dbt jobs",
@@ -8441,16 +8442,16 @@
         ],
         "question": "In dbt, how should you configure the `dbt_project.yml` file and use order commands to ensure that a job named 'daily_sales_report' executes only after 'load_transactions' and 'update_inventory' jobs have successfully completed?",
         "answers": [
-            "List 'daily_sales_report' after 'load_transactions' and 'update_inventory' in the `dbt_project.yml` under the same job definition",
+            "List 'daily_sales_report' after 'load_transactions' and 'update_inventory' under the same job definition",
             "Use the `depends_on` parameter in the job definitions to specify execution order",
             "Include all jobs under a single tag and specify execution order in a bash script",
             "Configure each job in separate yml files and manually trigger them in sequence"
         ],
         "correct_answer": [
-            "Use the `depends_on` parameter in the job definitions to specify execution order"
+            "List 'daily_sales_report' after 'load_transactions' and 'update_inventory' under the same job definition"
         ],
-        "explanation": "By using the `depends_on` parameter in the job definitions within `dbt_project.yml`, you can explicitly define that the 'daily_sales_report' job should only run after the successful completion of both 'load_transactions' and 'update_inventory'. This ensures the necessary dependencies are met before the job execution, aligning data processing flows accurately.",
-        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/jobs-and-tests#configuring-jobs"
+        "explanation": "During a job run, the commands are 'chained' together and executed as run steps. If one of the run steps in the chain fails, then the subsequent steps aren't executed, and the job will fail.",
+        "reference": "https://docs.getdbt.com/docs/deploy/job-commands"
     },
     {
         "question_number": 506,
@@ -8462,14 +8463,14 @@
         "answers": [
             "List the models in alphabetical order in `dbt_project.yml`",
             "Use pre-hooks and post-hooks in each model to manage execution order",
-            "Define explicit `ref()` dependencies in the model SQL files and reference this order in `dbt_project.yml`",
+            "Define explicit `ref()` dependencies in the model SQL files",
             "Randomly order the models since dbt handles dependency resolution"
         ],
         "correct_answer": [
-            "Define explicit `ref()` dependencies in the model SQL files and reference this order in `dbt_project.yml`"
+            "Define explicit `ref()` dependencies in the model SQL files"
         ],
-        "explanation": "The best practice is to define explicit `ref()` dependencies within each model's SQL code (e.g., `dim_customers` references `stg_customers`, `fact_sales` references `dim_customers`), and ensure this order is reflected in `dbt_project.yml`. This method leverages dbt's dependency resolution to ensure that models are built in the correct sequence, maintaining data integrity throughout the pipeline.",
-        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models#configuring-models"
+        "explanation": "The best practice is to define explicit `ref()` dependencies within each model's SQL code (e.g., `dim_customers` references `stg_customers`, `fact_sales` references `dim_customers`). This method leverages dbt's dependency resolution to ensure that models are built in the correct sequence, maintaining data integrity throughout the pipeline.",
+        "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/ref"
     },
     {
         "question_number": 507,
@@ -9225,7 +9226,7 @@
             "Option B"
         ],
         "explanation": "Exposures are defined under the 'exposures' key and must include the required properties 'name', 'type', and 'owner'. The 'depends_on' property lists the refable nodes the exposure depends on, and the 'maturity' property indicates the level of confidence in the exposure.",
-        "reference": "https://docs.getdbt.com/reference/resource-properties/exposures"
+        "reference": "https://docs.getdbt.com/reference/exposure-properties"
     },
     {
         "question_number": 548,
@@ -9268,7 +9269,7 @@
         "question_number": 550,
         "question_area": [
             "Deploying dbt jobs",
-            "Establishing environments in data warehouse for dbt"
+            "Estrellita"
         ],
         "question": "A macro within a dbt project dynamically generates the target schema names based on the deployment environment. If the macro includes logic to suffix schema names with '_prod' in the production environment and '_dev' in the development environment, how will this affect the materialization of tables when the 'env' variable is set to 'prod' and 'dev', respectively?",
         "answers": [
@@ -9302,8 +9303,64 @@
     },
     {
         "question_number": 552,
-        "question_area": ["Creating and maintaining dbt documentation"],
+        "question_area": [
+            "Creating and maintaining dbt documentation",
+            "Estrellita"
+        ],
         "question": "In the 'dim_purchases_providers' model's 'properties.yml' file, custom tests and documentation are used for the 'EMAIL' column. However, during execution, dbt returns an error related to the 'EMAIL' column's test configuration. What is the correct way to structure the test for 'email_length_within_range' to avoid this error?",
+        "answers": [
+            "Option A",
+            "Option B",
+            "Option C"
+        ],
+        "correct_answer": [
+            "Option A"
+        ],
+        "explanation": "The custom test 'email_length_within_range' should be specified as a dictionary under the tests key, with 'min_length', and 'max_length' as its parameters. Each test in the list should start with a dash to correctly denote list items.",
+        "reference": "https://docs.getdbt.com/reference/resource-properties/tests"
+    },
+    {
+        "question_number": 553,
+        "question_area": [
+            "Creating and maintaining dbt documentation",
+            "Estrellita"
+        ],
+        "question": "You have parts of a source. Order the options and create a logic source.",
+        "answers": [
+            "F >> E >> C >> B >> A >> D >> G",
+            "E >> F >> B >> C >> D >> G >> A",
+            "F >> E >> A >> D >> B >> G >> C"
+        ],
+        "correct_answer": [
+            "F >> E >> C >> B >> A >> D >> G"
+        ],
+        "explanation": "The correct structure is: version, sources, name of the source, database of the source, schema (optional), description of the source, tag (optional). Then tables, table name, its description and freshness of the data in the table. Continue with columns, the name, description and the test of the column (optional).",
+        "reference": "https://docs.getdbt.com/reference/source-properties"
+    },
+    {
+        "question_number": 554,
+        "question_area": [
+            "Creating and maintaining dbt documentation",
+            "Estrellita"
+        ],
+        "question": "It's this source correct?",
+        "answers": [
+            "True",
+            "False"
+        ],
+        "correct_answer": [
+            "True"
+        ],
+        "explanation": "In YAML, the '>' character is used to indicate a folded block scalar. When '>' is used, it means that the scalar value spans multiple lines and any line breaks are folded into spaces, except for those that break indentation. This allows you to write multiline strings more cleanly without having to worry about explicit line breaks.",
+        "reference": "https://docs.getdbt.com/docs/build/sources"
+    }, 
+    {
+        "question_number": 555,
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
+        "question": "In setting up your dbt project, you're optimizing the configuration of the `base_events` model to leverage your warehouse's ability to sort and distribute data efficiently. Which configuration ensures that the `base_events` model is materialized as a table, sorted by `event_time`, and distributed by `event_id`?",
         "answers": [
             "Option A",
             "Option B",
@@ -9312,7 +9369,7 @@
         "correct_answer": [
             "Option C"
         ],
-        "explanation": "The custom test 'email_length_within_range' should be specified as a dictionary under the tests key, with 'column_name', 'min_length', and 'max_length' as its parameters. Each test in the list should start with a dash to correctly denote list items.",
-        "reference": "https://docs.getdbt.com/reference/resource-properties/tests"
+        "explanation": "In dbt, the 'config' block within a model's configuration allows you to specify how the model is materialized and optimized for query performance. Using 'materialized: table' ensures the model is stored as a persistent table. The 'sort' key specifies the column to sort the data on for faster query performance, while 'dist' defines the distribution key to balance the data across nodes for parallel processing. The provided configuration correctly sets the 'base_events' model to be materialized as a table, with 'event_time' as the sort key and 'event_id' as the distribution key. The `sort` configuration in dbt is used to define how the rows in a table should be ordered. `The dist` configuration stands for the distribution key in a table within a distributed data warehouse. This determines how the data is distributed across the different nodes of the data warehouse.",
+        "reference": "https://docs.getdbt.com/reference/resource-configs/materialized"
     }
 ]
