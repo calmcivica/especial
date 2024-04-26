@@ -3877,7 +3877,7 @@
         "correct_answer": [
             "sql_header and materialized"
         ],
-        "explanation": "The 'sql_header' configuration in dbt allows you to specify SQL code that will be injected at the top of the compiled SQL file for the model. This is useful for adding comments or setting session parameters.",
+        "explanation": "The 'sql_header' configuration in dbt allows you to specify SQL code that will be injected at the top of the compiled SQL file for the model. This is useful for adding comments or setting session parameters. Materializations are strategies for persisting dbt models in a warehouse. There are this types of materializations: `ephemeral`, `table`, `view`, `materialized_view`, `incremental`. The following resource-specific configurations are only available to Models: materialized and sql_header",
         "reference": "https://docs.getdbt.com/reference/model-configs"
     },
     {
@@ -8237,7 +8237,7 @@
         ],
         "explanation": "The 'version:' key in YAML files other than dbt_project.yml is used to specify the version of the YAML configuration that dbt accepts, which, as of now, is always set to 2. This ensures that the YAML files adhere to a format that dbt can properly parse and execute.",
         "reference": "https://docs.getdbt.com/docs/guides/migration-guide/upgrading-to-0-17-0"
-    }
+    },
     {
         "question_number": 494,
         "question_area": [
@@ -8250,7 +8250,9 @@
             "dbt will assume the `dbt_project.yml` file uses the version 2 syntax and will proceed without issues.",
             "dbt will default to assuming your `dbt_project.yml` file uses the deprecated version 1 syntax."
         ],
-        "correct_answer": "dbt will default to assuming your `dbt_project.yml` file uses the deprecated version 1 syntax.",
+        "correct_answer": [
+            "dbt will default to assuming your `dbt_project.yml` file uses the deprecated version 1 syntax."
+        ],
         "explanation": "The `config-version` tag is optional. However, if it is not specified, dbt will default to assuming that the `dbt_project.yml` file is using the version 1 syntax, which was deprecated in dbt v0.19.0. While dbt will still run, it will expect the structure of the project configuration to follow the rules and structure of version 1, which may lead to unexpected behavior if your project is actually using the newer syntax introduced in version 2. So, always use `config-version: 2` in your `dbt_project.yml`",
         "reference": "https://docs.getdbt.com/reference/project-configs/config-version"
     },
@@ -8290,7 +8292,7 @@
             "$ dbt run-operation get_version"
         ],
         "explanation": "The command `$ dbt run-operation get_version` specifically invokes a dbt macro that outputs the current version of dbt. This operation is useful for confirming the dbt version in scripting and debugging scenarios, ensuring compatibility and consistency across environments.",
-        "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/version"
+        "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/dbt_version"
     },
     {
         "question_number": 497,
@@ -8335,13 +8337,13 @@
         ],
         "question": "Which dbt selector would you use to run models that have modifications in their SQL body or configuration?",
         "answers": [
-            "state:new",
-            "state:modified",
-            "state:unmodified",
-            "state:old"
+            "`state:new`",
+            "`state:modified`",
+            "`state:unmodified`",
+            "`state:old`"
         ],
         "correct_answer": [
-            "state:modified"
+            "`state:modified`"
         ],
         "explanation": "The `state:modified` selector is used to run models that have been altered in some way, such as changes to the model's SQL body or configurations. This ensures that any adjustments are validated against the current state of the data and schema to prevent disruptions in the production environment.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
@@ -8431,7 +8433,8 @@
         ],
         "explanation": "The `state:modified` selector is crucial for managing dbt runs by targeting only those models that have experienced changes in their SQL, configurations, or dependencies. This selective execution is key in ensuring that updates are properly tested and integrated into the existing data pipeline without unnecessary reprocessing of unaltered models.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
-    },    {
+    },
+    {
         "question_number": 505,
         "question_area": [
             "Deploying dbt jobs",
@@ -8616,7 +8619,7 @@
             "sources: -> name: -> description: -> database: -> schema: -> tables: -> name: -> description: -> columns:"
         ],
         "explanation": "In dbt, the YAML file should start with the 'sources' key, followed by specifying the source name and description. It then needs to define the 'database' and 'schema' where the source tables are located. Under 'tables', each table should have its name, description, and columns detailed. This ordering ensures all elements are correctly recognized and linked within dbt's source definition.",
-        "reference": "https://docs.getdbt.com/reference/source-configs"
+        "reference": "https://docs.getdbt.com/docs/build/sources"
     },
     {
         "question_number": 515,
@@ -8626,10 +8629,9 @@
         ],
         "question": "How would you correctly add an aggregate column that uses the 'listagg' window function to concatenate unique 'employee_names' from a 'sales' model, ordered by 'sale_date'?",
         "answers": [
-            "{{ dbt.listagg(measure='DISTINCT employee_name_name', delimiter_text=', ', order_by_clause='sale_date') }}",
+            "{{ dbt.listagg(measure='DISTINCT employee_name', delimiter_text=', ', order_by_clause='sale_date') }}",
             "{{ dbt.listagg(measure='employee_name', delimiter_text=',', order_by_clause='sale_date') }}",
-            "{{ dbt.listagg(measure='employee_name', delimiter_text=', ') }}",
-            "{{ dbt.listagg(measure='DISTINCT employee_name', delimiter_text=', ', order_by_clause='sale_date DESC') }}"
+            "{{ dbt.listagg(measure='employee_name', delimiter_text=', ') }}"
         ],
         "correct_answer": [
             "{{ dbt.listagg(measure='DISTINCT employee_name', delimiter_text=', ', order_by_clause='sale_date') }}"
@@ -9350,7 +9352,7 @@
         ],
         "explanation": "In YAML, the '>' character is used to indicate a folded block scalar. When '>' is used, it means that the scalar value spans multiple lines and any line breaks are folded into spaces, except for those that break indentation. This allows you to write multiline strings more cleanly without having to worry about explicit line breaks.",
         "reference": "https://docs.getdbt.com/docs/build/sources"
-    }, 
+    },
     {
         "question_number": 555,
         "question_area": [
@@ -9368,5 +9370,23 @@
         ],
         "explanation": "In dbt, the 'config' block within a model's configuration allows you to specify how the model is materialized and optimized for query performance. Using 'materialized: table' ensures the model is stored as a persistent table. The 'sort' key specifies the column to sort the data on for faster query performance, while 'dist' defines the distribution key to balance the data across nodes for parallel processing. The provided configuration correctly sets the 'base_events' model to be materialized as a table, with 'event_time' as the sort key and 'event_id' as the distribution key. The `sort` configuration in dbt is used to define how the rows in a table should be ordered. `The dist` configuration stands for the distribution key in a table within a distributed data warehouse. This determines how the data is distributed across the different nodes of the data warehouse.",
         "reference": "https://docs.getdbt.com/reference/resource-configs/materialized"
+    },
+    {
+        "question_number": 556,
+        "question_area": [
+            "Data Transformations"
+        ],
+        "question": "What are the different types of materializations available in dbt and how do they affect the persistence of models in a data warehouse?",
+        "answers": [
+            "ephemeral — not built into the database, table — rebuilt as a table, view — rebuilt as a view",
+            "incremental — updates or inserts records, materialized_view — maintains materialized views, custom — user-defined strategies",
+            "table — temporary table on each run, view — permanent view, materialized_view — cached view updates on schedule",
+            "All are correct."
+        ],
+        "correct_answer": [
+            "All are correct."
+        ],
+        "explanation": "dbt supports several types of materializations to manage how models are persisted in a data warehouse. 'ephemeral' models do not materialize data in the database but are used in downstream models. 'table' and 'view' materializations rebuild the model as a table or view, respectively, on each run. 'materialized_view' allows the maintenance of materialized views. 'incremental' models are useful for updating or inserting records based on changes since the last run. Additionally, dbt allows the creation of custom materializations to meet specific needs.",
+        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/materializations"
     }
 ]
