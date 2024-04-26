@@ -6168,7 +6168,7 @@
             "{{ env_var('DBT_ENVIRONMENT', 'prod') }}"
         ],
         "explanation": "The jinja function 'env_var' allows for the use of environment variables with a default fallback value, which is ideal for configuration management in dbt projects.",
-        "reference": "https://docs.getdbt.com/docs/jinja-context/env_var"
+        "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/env_var"
     },
     {
         "question_number": 372,
@@ -8237,25 +8237,22 @@
         ],
         "explanation": "The 'version:' key in YAML files other than dbt_project.yml is used to specify the version of the YAML configuration that dbt accepts, which, as of now, is always set to 2. This ensures that the YAML files adhere to a format that dbt can properly parse and execute.",
         "reference": "https://docs.getdbt.com/docs/guides/migration-guide/upgrading-to-0-17-0"
-    },
+    }
     {
         "question_number": 494,
         "question_area": [
-            "Developing dbt models",
+            "Project configuration",
             "Estrellita"
         ],
-        "question": "What does the 'config-version:' key in dbt_project.yml correspond to?",
+        "question": "What would be the impact of omitting the `config-version` tag in your `dbt_project.yml`?",
         "answers": [
-            "The version of the dbt_project.yml file itself",
-            "The YAML configuration version, equivalent to 'version:' in other YAML files, set to 2",
-            "The dbt version required to run the project",
-            "The version of the external packages the project depends on"
+            "dbt will not run because the version tag is mandatory for all versions after v0.19.0.",
+            "dbt will assume the `dbt_project.yml` file uses the version 2 syntax and will proceed without issues.",
+            "dbt will default to assuming your `dbt_project.yml` file uses the deprecated version 1 syntax."
         ],
-        "correct_answer": [
-            "The YAML configuration version, equivalent to 'version:' in other YAML files, set to 2"
-        ],
-        "explanation": "In dbt_project.yml, the 'config-version:' key serves the same purpose as the 'version:' key in other YAML files within a dbt project. It specifies the YAML configuration version, which is also set to 2, ensuring that the project's configuration file meets dbt's expected format.",
-        "reference": "https://docs.getdbt.com/docs/guides/migration-guide/upgrading-to-0-17-0"
+        "correct_answer": "dbt will default to assuming your `dbt_project.yml` file uses the deprecated version 1 syntax.",
+        "explanation": "The `config-version` tag is optional. However, if it is not specified, dbt will default to assuming that the `dbt_project.yml` file is using the version 1 syntax, which was deprecated in dbt v0.19.0. While dbt will still run, it will expect the structure of the project configuration to follow the rules and structure of version 1, which may lead to unexpected behavior if your project is actually using the newer syntax introduced in version 2. So, always use `config-version: 2` in your `dbt_project.yml`",
+        "reference": "https://docs.getdbt.com/reference/project-configs/config-version"
     },
     {
         "question_number": 495,
@@ -8516,7 +8513,7 @@
             "Implementing dbt tests",
             "Estrellita"
         ],
-        "question": "In a dbt project, where should singular (column-specific) tests be defined to ensure they are executed during the build process?",
+        "question": "In a dbt project, where should singular data tests be defined to ensure they are executed during the build process?",
         "answers": [
             "Within the dbt_project.yml file",
             "In the models' SQL files alongside the column definitions",
@@ -8524,9 +8521,9 @@
             "Directly within the schema.yml file alongside the model's column definitions"
         ],
         "correct_answer": [
-            "Directly within the schema.yml file alongside the model's column definitions"
+            "Inside a dedicated tests directory in the dbt project"
         ],
-        "explanation": "Singular tests in dbt, which are designed to validate specific columns, should be defined within the schema.yml file. This file is typically located in the same directory as the models and allows tests to be associated directly with the relevant column definitions, facilitating automatic test execution during model builds.",
+        "explanation": "Singular tests in dbt are defined in SQL files. This should be placed in a dedicated tests directory, as specified by the 'test-paths' configuration in the dbt_project.yml. These tests can utilize Jinja to reference and validate specific data scenarios directly, making them highly flexible for specialized assertions.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/tests"
     },
     {
@@ -9040,7 +9037,7 @@
         "correct_answer": [
             "Option C"
         ],
-        "explanation": "A generic test in dbt, like 'unique', can be applied to any column and does not require custom logic. A singular test, such as ensuring a value starts with a specific prefix, requires custom SQL logic. Implementing both requires defining the 'unique' test and writing a custom SQL test for the prefix condition.",
+        "explanation": "A generic test in dbt, like 'unique', can be applied to any column and does not require custom logic. A singular test, such as ensuring a value starts with a specific prefix, requires custom SQL logic. That logic should be created in a file '.sql' with the information of that test. In this case, the file 'tests/tests_customer_id_prefix.sql' could have this structure: `with source as (select customer_id from {{ ref('stg_production_sch_products') }})  select customer_id from source where customer_id not like 'CUST-%'`",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/tests#generic-tests-vs-singular-tests"
     },
     {
