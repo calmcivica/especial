@@ -458,7 +458,7 @@
         "correct_answer": [
             "test-paths"
         ],
-        "explanation": "The default directory for tests is tests. This configuration allows specifying custom directories for locating data tests, differentiating between singular and generic tests based on file placement.",
+        "explanation": "The default directory for tests is tests and this will be configured in the dbt_project in the 'test-paths' configuration. This configuration allows specifying custom directories for locating data tests, differentiating between singular and generic tests based on file placement.",
         "reference": "https://docs.getdbt.com/reference/project-configs/test-paths"
     },
     {
@@ -737,7 +737,10 @@
     },
     {
         "question_number": 46,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "How can you select models within a specific package?",
         "answers": [
             "`dbt run --select package:snowplow`",
@@ -837,15 +840,16 @@
     {
         "question_number": 52,
         "question_area": "Developing dbt models",
-        "question": "How do you select nodes stored in a particular file/directory?",
+        "question": "How do you select nodes stored in a particular file/directory? You can choose more than one or only one.",
         "answers": [
             "`dbt run --select path:models/staging/sales`",
             "`dbt run --select directory:models/staging/sales`",
-            "`dbt run --select file:models/staging/sales.sql`",
+            "`dbt run --select file:models/staging/sales`",
             "`dbt run --select models/staging/sales`"
         ],
         "correct_answer": [
-            "`dbt run --select path:models/staging/sales`"
+            "`dbt run --select path:models/staging/sales`",
+            "`dbt run --select models/staging/sales`"
         ],
         "explanation": "To select nodes stored in a particular file or directory, you use the `path:` method followed by the directory or file path. This method selects all models stored within the specified path.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods"
@@ -903,13 +907,13 @@
         "question_area": "Implementing dbt tests",
         "question": "How does 'indirect selection' work for the `dbt test` command?",
         "answers": [
-            "Runs tests defined on selected models",
+            "Runs tests that reference the selected node",
             "Only runs tests that match the model's config",
             "Executes all tests in the project, ignoring selection",
             "Selects tests based on the model's name"
         ],
         "correct_answer": [
-            "Runs tests defined on selected models"
+            "Runs tests that reference the selected node"
         ],
         "explanation": "Indirect selection with the `dbt test` command implicitly runs any tests that depend on the selected models. This behavior can be modified with the `--indirect-selection=cautious` option to ensure tests only run if all their model dependencies are selected.",
         "reference": "https://docs.getdbt.com/reference/node-selection/test-selection-examples"
@@ -1404,8 +1408,8 @@
         "question": "What distinguishes generic tests from singular tests in dbt?",
         "answers": [
             "Generic tests are configured in YAML and run on specific columns in a model",
-            "Singular tests are specific queries run against your models",
-            "Generic tests are SQL queries stored in .sql files",
+            "Singular tests are specific queries run against one of the columns in your models",
+            "Generic tests are SQL queries stored in models path files",
             "Singular tests are configured in YAML and do not return specific failing rows"
         ],
         "correct_answer": [
@@ -2397,13 +2401,13 @@
         "question_area": "Monitoring data pipelines",
         "question": "If a developer updates a model in a dbt project, which command ensures that only these updated models are rebuilt to reflect the changes?",
         "answers": [
-            "dbt run --models state:modified",
-            "dbt run --select state:modified",
-            "dbt run -s state:modified",
-            "dbt test --models state:modified"
+            "`dbt run --models state:modified`",
+            "`dbt run --select state:modified`",
+            "`dbt run -s state:modified`",
+            "`dbt test --models state:modified`"
         ],
         "correct_answer": [
-            "dbt run --select state:modified"
+            "`dbt run --select state:modified`"
         ],
         "explanation": "To rebuild only the updated models in a dbt project, use the command: dbt run --select state:modified. This command targets and rebuilds only the models that have been modified, ensuring changes are applied.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
@@ -2490,7 +2494,10 @@
     },
     {
         "question_number": 152,
-        "question_area": "Developing dbt models",
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
         "question": "What happens when the 'invalidate_hard_deletes' config is set to 'true' while defining a snapshot?",
         "answers": [
             "Finds hard deleted records in source, and set dbt_valid_to current time if no longer exists",
@@ -3345,10 +3352,10 @@
         "question_area": "Deploying dbt jobs",
         "question": "To override the destination for this sources.json, what flag is used?",
         "answers": [
-            "use the -o (or --output) flag",
-            "use the -f (or --file) flag",
-            "use the -d (or --destination) flag",
-            "use the -s (or --save-to) flag"
+            "use the -o (or --output) flag --> dbt source freshness --output target/source_freshness.json",
+            "use the -f (or --file) flag --> dbt source freshness --file target/source_freshness.json",
+            "use the -d (or --destination) flag --> dbt source freshness --output target/source_freshness.json",
+            "use the -s (or --save-to) flag --> dbt source freshness --output target/source_freshness.json"
         ],
         "correct_answer": [
             "use the -o (or --output) flag"
@@ -3401,7 +3408,7 @@
         "correct_answer": [
             "dbt --version"
         ],
-        "explanation": "The global flags that support dbt and its sub commands include dbt --version, which displays the dbt version, and dbt -r or --record-timing-info, which records timing information for each node in the dbt run process. These flags can be used across various dbt commands to provide additional functionality and information.",
+        "explanation": "The global flags that support dbt and its sub commands include dbt --version, which displays the dbt version, and dbt -r or --record-timing-info, which records timing information for each node in the dbt run process (https://docs.getdbt.com/reference/global-configs/record-timing-info). These flags can be used across various dbt commands to provide additional functionality and information.",
         "reference": "https://docs.getdbt.com/reference/dbt-commands"
     },
     {
@@ -3457,7 +3464,7 @@
         "question_area": "Deploying dbt jobs",
         "question": "How will you enable --cache-selected-only config using yaml configs?",
         "answers": [
-            "config\\:cache_selected_only: true",
+            "config\\:cache_selected_only\\:true",
             "cache-selected-only\\:true",
             "cache\\:selected_only\\:true",
             "enable_cache_selected_only\\:true"
@@ -3498,20 +3505,20 @@
             "To show only error logs in stdout."
         ],
         "explanation": "The 'quiet' config is used to show only error logs in stdout, suppressing other log messages. This can be helpful when you want to focus only on errors during execution.",
-        "reference": "https://docs.getdbt.com/reference/global-configs/about-global-configs#available-flags"
+        "reference": "https://docs.getdbt.com/reference/global-configs/logs#suppress-non-error-logs-in-output"
     },
     {
         "question_number": 214,
         "question_area": "Deploying dbt jobs",
         "question": "How will you stop dbt from writing json artifacts (eg. manifest.json, run_results.json) to the target/ directory?",
         "answers": [
-            "By disabling write_json config.",
+            "By disabling write_json config using dbt run -no-write-json.",
             "By setting json_output to false.",
             "By specifying a custom output directory.",
             "By using the --disable-json-output flag."
         ],
         "correct_answer": [
-            "By disabling write_json config."
+            "By disabling write_json config using dbt run -no-write-json."
         ],
         "explanation": "To stop dbt from writing JSON artifacts to the target/ directory, you can disable the write_json configuration in your dbt_project.yml file. This will prevent the generation of JSON artifacts such as manifest.json and run_results.json.",
         "reference": "https://docs.getdbt.com/reference/global-configs/json-artifacts"
@@ -3920,13 +3927,13 @@
         "question_area": "Developing dbt models",
         "question": "A test with warn severity will never return an error.",
         "answers": [
-            "True.",
+            "True. Tests with warning severity will not return warnings but only errors.",
             "False. A warning severity test can also result in an error.",
             "True. Tests with warning severity will not return errors but only warnings.",
             "False. Tests with warning severity can sometimes return errors depending on the conditions."
         ],
         "correct_answer": [
-            "True."
+            "True. Tests with warning severity will not return errors but only warnings."
         ],
         "explanation": "A test with a warning severity will not return an error. It will only generate a warning if the conditions specified in the test are met, but it will not cause the overall run to fail.",
         "reference": "https://docs.getdbt.com/reference/resource-configs/severity"
@@ -4216,9 +4223,9 @@
             "dbt will generate the schema name for the staging’s models in the schema pepegonzalez_stage and the marts’s models in the schema pepegonzalez."
         ],
         "correct_answer": [
-            "dbt will generate the schema name for the staging’s models in the schema pepegonzalez_stage and the marts’s models in the schema pepegonzalez_marketing."
+            "dbt will generate the schema name for the staging’s models in the schema pepegonzalez_stage and the marts’s models in the schema pepegonzalez."
         ],
-        "explanation": "According to the 'generate_schema_name' macro and the 'dbt_project.yml' configuration, if the developer's target name is 'dev', the staging models will be built in the 'pepegonzalez_stage' schema, as the custom schema name will be appended with '_stage'. Marts models will be built in the 'pepegonzalez' schema because the target name is in the ['pro', 'dev'] list, so the default schema will be used without appending the custom schema name.",
+        "explanation": "According to the 'generate_schema_name' macro and the 'dbt_project.yml' configuration, if the developer's target name is 'dev', the staging models will be built in the 'pepegonzalez_stage' schema, as the custom schema name will be appended with '_stage'. Marts models will be built in the 'pepegonzalez' schema because the target name is in the ['pro', 'dev'] list, so the default schema will be used without appending a custom schema name.",
         "reference": "https://docs.getdbt.com/docs/build/custom-schemas"
     },
     {
@@ -4362,7 +4369,7 @@
             "Project configuration",
             "Estrellita"
         ],
-        "question": "Given a dbt_project.yml configuration that specifies a database using an environment variable and sets a schema for production_sch models, what database and schema will the staging models use when the 'DBT_ENVIRONMENT' variable is set to 'USER_DEV'?",
+        "question": "Given a dbt_project.yml configuration that specifies a database using an environment variable and sets a schema for production_sch models, what database and schema will the staging models use when the 'DBT_ENVIRONMENT' variable is set to 'USER_DEV' and the default schema if 'public'?",
         "answers": [
             "The staging models will use the USER_DEV_DEMO_SLVR_DB database and the public_production_sch schema.",
             "The staging models will use the DEMO_SLVR_DB database with the USER_DEV schema prefix.",
@@ -4639,7 +4646,8 @@
             "updated_at",
             "check_cols",
             "unique_key",
-            "None of the above"
+            "None of them",
+            "All are correct"
         ],
         "correct_answer": [
             "check_cols"
@@ -4864,7 +4872,10 @@
     },
     {
         "question_number": 295,
-        "question_area": "Implementing dbt tests",
+        "question_area": [
+            "Implementing dbt tests",
+            "Estrellita"
+        ],
         "question": "A data team wants to reduce the number of columns that need to be checked in their database when using the check strategy in dbt. What is the recommended technique they can use to achieve this?",
         "answers": [
             "Include all columns in the check_cols configuration.",
@@ -4971,7 +4982,9 @@
             "Use dbt's source_status command with a specific flag",
             "Run dbt source freshness and manually exclude stale sources in your workflow"
         ],
-        "correct_answer": "Implement freshness tests and exclude stale sources in model logic",
+        "correct_answer": [
+            "Implement freshness tests and exclude stale sources in model logic"
+        ],
         "explanation": "In dbt, you can define freshness tests in your source configurations to assess data staleness. To exclude stale data sources, you would need to implement custom logic in your models or workflows, as dbt does not provide a built-in selector for excluding stale sources based on these tests.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources#source-freshness"
     },
@@ -4999,7 +5012,9 @@
             "dbt run -s stg_covid_cases",
             "dbt run -select stg_covid_cases"
         ],
-        "correct_answer": "dbt run -s stg_covid_cases",
+        "correct_answer": [
+            "dbt run -s stg_covid_cases"
+        ],
         "explanation": "The command 'dbt run -s stg_covid_cases' specifies that dbt should run the 'stg_covid_cases' model only.",
         "reference": "https://docs.getdbt.com/reference/dbt-commands/run#selecting-models-to-run"
     },
@@ -5141,8 +5156,11 @@
     },
     {
         "question_number": 312,
-        "question_area": "Deploying dbt models",
-        "question": "What does the `on_schema_change` configuration do in a dbt model?",
+        "question_area": [
+            "Deploying dbt models",
+            "Estrellita"
+        ],
+        "question": "What does the `on_schema_change` configuration do in a dbt model? Choose ALL answers that apply.",
         "answers": [
             "Triggers a model rebuild when the source data schema changes",
             "Automatically generates schema documentation",
@@ -5175,33 +5193,36 @@
     {
         "question_number": 314,
         "question_area": "Deploying dbt jobs",
-        "question": "Imagine you have a 'usuarios' table with fields: 'id', 'email', 'nombre', 'fecha_ultima_modificacion'. You perform a snapshot using the 'timestamp' strategy. If you update the user's name to 'Juan García' and 'fecha_ultima_modificacion' to '2023-04-11', and then take another snapshot, what would the snapshot table look like after this update?",
+        "question": "Imagine you have a `usuarios` table with fields: `id`, `email`, `nombre`, `fecha_ultima_modificacion`. You perform a snapshot using the `timestamp` strategy. If you update the user's name to `Juan García` and `fecha_ultima_modificacion` to `2023-04-11`, and then take another snapshot, what would the snapshot table look like after this update?",
         "answers": [
-            "Two rows with the same 'id' (1), one with 'Juan Pérez' and the other with 'Juan García', both with a null 'dbt_valid_to'.",
-            "Two rows with 'id' 1, the first with 'dbt_valid_to' not null, the second with 'dbt_valid_to' null and 'nombre' 'Juan García'.",
-            "A single row with 'id' 1 and 'nombre' 'Juan García', with 'dbt_valid_to' not null.",
+            "Two rows with the same `id` (1), one with `Juan Pérez` and the other with `Juan García`, both with a null `dbt_valid_to`.",
+            "Two rows with `id` 1, the first with `nombre` `Juan Pérez` and `dbt_valid_to` not null, the second with `dbt_valid_to` null and `nombre` `Juan García`.",
+            "A single row with `id` 1 and `nombre` `Juan García`, with `dbt_valid_to` not null.",
             "No rows because the snapshot does not include updates, only inserts."
         ],
         "correct_answer": [
-            "Two rows with 'id' 1, the first with 'dbt_valid_to' not null, the second with 'dbt_valid_to' null and 'nombre' 'Juan García'."
+            "Two rows with `id` 1, the first with `dbt_valid_to` not null, the second with `dbt_valid_to` null and `nombre` `Juan García`."
         ],
-        "explanation": "The timestamp strategy tracks changes over time. When 'nombre' is updated, a new snapshot row is created, preserving the historical record with 'dbt_valid_to' set to null for the most recent entry, indicating it is the current version.",
+        "explanation": "The timestamp strategy tracks changes over time. When `nombre` is updated, a new snapshot row is created, preserving the historical record with `dbt_valid_to` set to null for the most recent entry, indicating it is the current version.",
         "reference": "https://docs.getdbt.com/docs/build/snapshots"
     },
     {
         "question_number": 315,
-        "question_area": "Deploying dbt jobs",
-        "question": "If 'invalidate_hard_deletes' is enabled and the user with 'id' 1 is deleted from the source table and a snapshot is taken, what happens to the snapshot table?",
+        "question_area": [
+            "Deploying dbt jobs",
+            "Estrellita"
+        ],
+        "question": "If `invalidate_hard_deletes` is enabled and the user with `id` 1 is deleted from the source table and a snapshot is taken, what happens to the snapshot table?",
         "answers": [
-            "The snapshot table still retains the record with 'id' 1 but ‘dbt_valid_to’ field is null.",
-            "The record with 'id' 1 is deleted from the snapshot table.",
-            "The snapshot table still retains the record with 'id' 1 but ‘dbt_valid_to’ field has the date of the deletion.",
+            "The snapshot table still retains the record with `id` 1 but ‘dbt_valid_to’ field is null.",
+            "The record with `id` 1 is deleted from the snapshot table.",
+            "The snapshot table still retains the record with `id` 1 but ‘dbt_valid_to’ field has the date of the deletion.",
             "The snapshot table becomes empty."
         ],
         "correct_answer": [
-            "The snapshot table still retains the record with 'id' 1 but ‘dbt_valid_to’ field has the date of the deletion."
+            "The snapshot table still retains the record with `id` 1 but ‘dbt_valid_to’ field has the date of the deletion."
         ],
-        "explanation": "When 'invalidate_hard_deletes' is enabled (set to True), any deletions in the source table are mirrored in the snapshot table. Additionally, the 'dbt_valid_to' field is updated to reflect the date when the corresponding row became invalid.",
+        "explanation": "When `invalidate_hard_deletes` is enabled (set to True), any deletions in the source table are mirrored in the snapshot table. Additionally, the `dbt_valid_to` field is updated to reflect the date when the corresponding row became invalid.",
         "reference": "https://docs.getdbt.com/docs/build/snapshots"
     },
     {
@@ -5227,17 +5248,17 @@
     {
         "question_number": 317,
         "question_area": "Implementing dbt tests",
-        "question": "Suppose we have a 'providers' table in our data model with fields such as 'PROVIDER_ID', 'FIRST_NAME', 'LAST_NAME', 'EMAIL', 'PHONE', 'TYPE_OF_VENDOR', 'TIEMPO_ACTUAL', and an existing row that includes a phone number in a specific format. We use a test named 'check_phone_format' to validate the phone number format. What happens if the phone number format is changed from '(704) 1234567' to '6661234567'?",
+        "question": "Suppose we have a `providers` table in our data model with fields such as `PROVIDER_ID`, `FIRST_NAME`, `LAST_NAME`, `EMAIL`, `PHONE`, `TYPE_OF_VENDOR`, `TIEMPO_ACTUAL`, and an existing row that includes a phone number in a specific format. We use a test named `check_phone_format` to validate the phone number format. What happens if the phone number format is changed from `(704) 1234567` to `6661234567`?",
         "answers": [
             "The test passes as the new format meets the expected pattern.",
-            "The test fails because the phone format does not match the expected '(XXX) XXXXXXX'.",
+            "The test fails because the phone format does not match the expected `(XXX) XXXXXXX`.",
             "The test ignores the phone number format entirely.",
             "The test results in an error unrelated to the format."
         ],
         "correct_answer": [
-            "The test fails because the phone format does not match the expected '(XXX) XXXXXXX'."
+            "The test fails because the phone format does not match the expected `(XXX) XXXXXXX`."
         ],
-        "explanation": "The 'check_phone_format' test is designed to ensure that the phone numbers match a specific format. Since the new phone format '6661234567' does not include parentheses and spaces as required, the test will fail, indicating that the phone number format needs correction.",
+        "explanation": "The `check_phone_format` test is designed to ensure that the phone numbers match a specific format. Since the new phone format `6661234567` does not include parentheses and spaces as required, the test will fail, indicating that the phone number format needs correction.",
         "reference": "https://docs.getdbt.com/docs/build/jinja-macros"
     },
     {
@@ -5275,7 +5296,7 @@
     {
         "question_number": 320,
         "question_area": "Implementing dbt tests",
-        "question": "Consider a scenario where you have a 'vendors' table within a retail database and a 'TYPE_OF_VENDOR' field is changed from 'local' to 'international'. If a dynamic SQL query macro is used to select vendors based on their type, what would be the expected result given the update?",
+        "question": "In a retail database, the 'TYPE_OF_VENDOR' field in the 'vendors' table is updated from 'local' to 'international'. If a dynamic SQL query macro is used to filter vendors based on their type, what result would you expect after this update?",
         "answers": [
             "The macro retrieves the updated vendor as 'international', reflecting the change.",
             "The macro does not retrieve the updated vendor since the 'LAST_UPDATE' was not modified.",
@@ -5285,7 +5306,7 @@
         "correct_answer": [
             "The macro retrieves the updated vendor as 'international', reflecting the change."
         ],
-        "explanation": "The 'dynamic_select_query' macro is designed to generate SQL queries dynamically based on the specified parameters. In this scenario, after the 'TYPE_OF_VENDOR' is updated from 'local' to 'international', executing the macro with the condition 'TYPE_OF_VENDOR = \"international\"' should successfully retrieve the updated vendor's ID and new type. This demonstrates how dynamic SQL can adapt to data changes and ensure that query results are consistent with the current state of the database.",
+        "explanation": "The dynamic SQL query macro adapts to data changes in the database. After the 'TYPE_OF_VENDOR' is updated to 'international', the macro will retrieve the updated vendor by filtering with 'TYPE_OF_VENDOR = \"international\"' (`WHERE TYPE_OF_VENDOR = \"international\"`). This showcases the ability of dynamic SQL to reflect real-time changes in the data.",
         "reference": "https://docs.getdbt.com/docs/build/jinja-macros"
     },
     {
@@ -5780,12 +5801,12 @@
         "answers": [
             "source",
             "select",
-            "Ref",
+            "ref",
             "join"
         ],
         "correct_answer": [
             "source",
-            "Ref"
+            "ref"
         ],
         "explanation": "'Ref' and 'Source' functions in dbt are used to create a dependency between models, which enhances the traceability and clarity of data lineage within the project.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-sources"
@@ -6082,7 +6103,7 @@
             "To evaluate the freshness of data sources and apply selectors based on the result"
         ],
         "explanation": "The source_status method is used to assess the freshness of data sources, which is vital for ensuring data integrity and timeliness in reporting.",
-        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/sources"
+        "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-source_status-method"
     },
     {
         "question_number": 367,
@@ -6492,17 +6513,17 @@
     {
         "question_number": 391,
         "question_area": "Creating and maintaining dbt documentation",
-        "question": "You have defined an exposure called 'my_exposure' in your dbt project, but when you try to run the dbt run command with the -s flag and the exposure name, you receive an error message that says 'Could not find exposure 'my_exposure''. What is the most likely reason for this error? Choose only ONE best answer.",
+        "question": "You have defined an exposure called 'my_exposure' in your dbt project to represent a downstream dependency on a dashboard, but it does not appear in the generated documentation. What is the most likely reason for this issue? Choose only ONE best answer.",
         "answers": [
-            "The exposure has not been defined correctly in the dbt schema.yml file.",
+            "The exposure has not been defined correctly in a schema.yml file.",
             "The exposure has not been added to the dbt_project.yml file.",
-            "The exposure has not been added to the auto-generated documentation site.",
+            "The exposure's required attributes are missing or incorrect.",
             "The exposure has not been tested and run in the dbt project."
         ],
         "correct_answer": [
-            "The exposure has not been defined correctly in the dbt schema.yml file."
+            "The exposure's required attributes are missing or incorrect."
         ],
-        "explanation": "Exposures must be correctly defined in the dbt schema.yml file. If dbt cannot find an exposure, it typically means there was a misconfiguration or typo in its definition.",
+        "explanation": "Exposures must be correctly defined in a schema file (e.g., schema.yml) and include all required attributes. If the exposure is not displayed in the documentation, it likely means that some required attributes were missing or incorrectly specified.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/exposures/"
     },
     {
@@ -7000,7 +7021,10 @@
     },
     {
         "question_number": 421,
-        "question_area": "Monitoring data pipelines",
+        "question_area": [
+            "Monitoring data pipelines",
+            "Estrellita"
+        ],
         "question": "A data analytics company wants to track changes in their customer database, including hard deletes, to ensure that their analytics are up-to-date. They want to use dbt snapshots to achieve this. What should they do to enable tracking of hard deletes? Choose only ONE best answer.",
         "answers": [
             "Turn on the 'invalidate_hard_deletes' option in the dbt configuration file.",
@@ -7036,18 +7060,18 @@
             "Developing dbt models",
             "Estrellita"
         ],
-        "question": "You are working on a data warehouse and want to build dependencies between two models that have the same name. In order to achieve this, which of the following options should you use? Choose only ONE best answer.",
+        "question": "You are working on a data warehouse and want to build dependencies between two models that have the same name, but are in different schemas. In order to achieve this, which of the following options should you use? Choose only ONE best answer.",
         "answers": [
             "The ref function with the model name as the argument",
-            "Custom schemas and custom aliases",
+            "The use of custom schemas, custom aliases or custom identifiers",
             "The ref function with the model name and the schema name as arguments",
             "The ref function with the model name and the alias name as arguments"
         ],
         "correct_answer": [
-            "Custom schemas and custom aliases"
+            "The use of custom schemas, custom aliases or custom identifiers"
         ],
-        "explanation": "When multiple models have the same name but are in different schemas or need different handling, using custom schemas and aliases allows for unique identification and dependency management between them.",
-        "reference": "https://docs.getdbt.com/reference/dbt-jinja-functions/ref/"
+        "explanation": "When multiple models have the same name but are in different schemas or need different handling, using custom schemas, aliases or identifiers allows for unique identification and dependency management between them. Info about schema: https://docs.getdbt.com/reference/resource-properties/schema. Info about alias:https://docs.getdbt.com/docs/build/custom-aliases",
+        "reference": "https://docs.getdbt.com/reference/resource-properties/identifier"
     },
     {
         "question_number": 424,
@@ -7441,7 +7465,7 @@
         "correct_answer": [
             "It helps to optimize the performance of queries"
         ],
-        "explanation": "While Jinja in dbt offers many benefits, it does not allow the creation of new database tables directly, it is done through models.",
+        "explanation": "While Jinja in dbt offers many benefits, it does not helps to optimize the performance of queries, you have to create a good code to optimize the query. Jinja help you giving you the tools and you have to do the rest.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/jinja-macros/"
     },
     {
@@ -7828,19 +7852,22 @@
     },
     {
         "question_number": 471,
-        "question_area": "Establishing environments in data warehouse for dbt",
-        "question": "What is the recommended location for the profiles.yml file that contains the details needed to connect to the data warehouse using dbt? Choose only ONE best answer.",
+        "question_area": [
+            "Data Transformations",
+            "Estrellita"
+        ],
+        "question": "How does dbt Cloud utilize concurrent CI jobs when multiple pull requests are triggered in the same dbt repository?",
         "answers": [
-            "inside the dbt project",
-            "In version control",
-            "Outside the dbt project",
-            "In the dbt_project.yml file"
+            "Each pull request triggers a CI job that runs in a sequential schema, causing potential delays",
+            "Concurrent CI jobs run in the same schema to accelerate the CI process",
+            "Each pull request triggers a CI job that builds into a separate, temporary schema allowing for concurrent execution",
+            "CI jobs are queued and run only when the primary branch is updated"
         ],
         "correct_answer": [
-            "Outside the dbt project"
+            "Each pull request triggers a CI job that builds into a separate, temporary schema allowing for concurrent execution"
         ],
-        "explanation": "The profiles.yml file, which contains sensitive connection details to the data warehouse, should be located outside the dbt project directory to separate sensitive configuration from project files.",
-        "reference": "https://docs.getdbt.com/dbt-cli/configure-your-profile/"
+        "explanation": "In dbt Cloud, when multiple teammates create pull requests on the same dbt repository, each pull request triggers a CI job that builds into a dedicated, temporary schema. This setup allows dbt Cloud to execute CI runs concurrently instead of sequentially. Concurrent CI runs enable the team to test and integrate dbt code more efficiently without waiting for other CI runs to complete.",
+        "reference": "https://docs.getdbt.com/docs/deploy/continuous-integration"
     },
     {
         "question_number": 472,
@@ -7911,7 +7938,7 @@
     {
         "question_number": 476,
         "question_area": "Monitoring data pipelines",
-        "question": "If a model failed in the previous run, how can you rebuild only the failed model and its downstream dependencies?",
+        "question": "If model_d failed in the previous run, how can you rebuild only the failed model and its downstream dependencies?",
         "answers": [
             "dbt run",
             "dbt run --select model_d+",
@@ -7996,7 +8023,10 @@
     },
     {
         "question_number": 481,
-        "question_area": "Creating and maintaining dbt documentation",
+        "question_area": [
+            "Creating and maintaining dbt documentation",
+            "Estrellita"
+        ],
         "question": "When converting legacy SQL into dbt models, how should sources and tables be defined in the 'sources.yml' file given a database and schema combination used across all references?",
         "answers": [
             "Define 1 source with 5 tables in the 'sources.yml' file",
@@ -8281,7 +8311,7 @@
             "Deploying dbt jobs",
             "Estrellita"
         ],
-        "question": "What command would you use in a terminal to invoke the dbt macro that returns the current version of dbt you are running?",
+        "question": "What macro command would you use in a terminal to invoke the dbt macro that returns the current version of dbt you are running?",
         "answers": [
             "$ dbt run-operation dbt_version",
             "$ dbt run-operation get_version",
@@ -8372,15 +8402,15 @@
         ],
         "question": "How does the `state:unmodified` selector help in optimizing dbt project runs?",
         "answers": [
-            "It reruns models to verify integrity even without changes.",
+            "All existing nodes with no changes.",
             "It selects nodes that have undergone significant transformations only.",
             "It excludes all nodes that do not have any changes, thus saving time and resources.",
             "It selectively runs only new or significantly altered models."
         ],
         "correct_answer": [
-            "It excludes all nodes that do not have any changes, thus saving time and resources."
+            "All existing nodes with no changes."
         ],
-        "explanation": "The `state:unmodified` selector is critical for optimizing dbt project runs by excluding nodes that have not changed from being rerun. This approach reduces the computational load and improves the efficiency of the development and deployment process by focusing resources only on altered nodes.",
+        "explanation": "The `state:unmodified` selector is critical for optimizing dbt project runs by including nodes that have not changed. This approach reduces the computational load and improves the efficiency of the development and deployment process by focusing resources only on nodes that are not altered.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
     },
     {
@@ -8388,13 +8418,13 @@
         "question_area": "Implementing dbt tests",
         "question": "In dbt, which state selector would you use to execute models that have modified column contracts, such as changes in column names or data types?",
         "answers": [
-            "state:new",
-            "state:modified",
-            "state:modified.contract",
-            "state:old"
+            "`state:new`",
+            "`state:modified`",
+            "`state:modified.contract`",
+            "`state:old`"
         ],
         "correct_answer": [
-            "state:modified.contract"
+            "`state:modified.contract`"
         ],
         "explanation": "The selector `state:modified.contract` is specifically used to target models that have changes in their column contracts, such as a name change or a change in data type of a column. This is crucial for ensuring that models comply with expected structures and for mitigating issues related to data integrity and database schema evolution.",
         "reference": "https://docs.getdbt.com/reference/node-selection/methods#the-state-method"
@@ -9177,18 +9207,17 @@
         ],
         "question": "In dbt, which of the following are valid types of exposures? Select two.",
         "answers": [
-            "Dashboard",
-            "Notebook",
-            "Analysis",
-            "ML",
-            "Application"
+            "Dashboard and Notebook.",
+            "Analysis and ML (Machine Learning).",
+            "Application.",
+            "Dashboard, Notebook and Application.",
+            "All valid types of exposures."
         ],
         "correct_answer": [
-            "Notebook",
-            "ML"
+            "All valid types of exposures."
         ],
-        "explanation": "In dbt, 'exposures' help document downstream dependencies or consumers of dbt models. The valid types of exposures include 'dashboard', 'notebook', 'analysis', 'ml', and 'application'. Among these, 'notebook' and 'ml' (machine learning) are specific types that can be used to describe certain analytics or data science workflows.",
-        "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/exposures/"
+        "explanation": "In dbt, 'exposures' help document downstream dependencies or consumers of dbt models. The valid types of exposures include `dashboard`, `notebook`, `analysis`, `ml` and `application`. Among these, `notebook` and `ml` (machine learning) are specific types that can be used to describe certain analytics or data science workflows.",
+        "reference": "https://docs.getdbt.com/docs/build/exposures#available-properties"
     },
     {
         "question_number": 546,
@@ -9236,14 +9265,14 @@
         "question": "When updating the dbt version for a project, what key parameter must be updated in the dbt_project.yml file to ensure compatibility?",
         "answers": [
             "Update the 'version' parameter to match the new dbt version",
-            "Update the 'dbt_version' parameter to specify the new version range",
+            "Update the 'require-dbt-version' parameter to specify the new version range",
             "Change the 'profile' parameter to reflect the new dbt version",
             "No changes are needed in the dbt_project.yml for version updates"
         ],
         "correct_answer": [
-            "Update the 'dbt_version' parameter to specify the new version range"
+            "Update the 'require-dbt-version' parameter to specify the new version range"
         ],
-        "explanation": "When updating to a new dbt version, it is important to update the 'dbt_version' parameter in the dbt_project.yml file. This parameter specifies the version of dbt that the project is compatible with, helping to avoid issues related to version mismatches and ensuring that the project uses the appropriate features and syntax supported by that version.",
+        "explanation": "When updating to a new dbt version, it is important to update the 'require-dbt-version' parameter in the dbt_project.yml file. This parameter specifies the version of dbt that the project is compatible with, helping to avoid issues related to version mismatches and ensuring that the project uses the appropriate features and syntax supported by that version.",
         "reference": "https://docs.getdbt.com/reference/project-configs/require-dbt-version#require-a-specific-dbt-version"
     },
     {
@@ -9290,12 +9319,12 @@
         "question": "In a dbt project, when tracking the specific versions of Python packages used for processing and transforming data, which of the following methods is recommended to specify the package versions in the dbt project metadata?",
         "answers": [
             "Include a separate requirements.txt file in the dbt project directory that lists all the necessary packages and their versions.",
-            "Specify the package versions in the dbt_project.yml file under the 'packages' configuration block.",
+            "Specify the package versions in the dbt_project.yml file under the 'packages' configuration block or in the packages.yml inside the dbt project.",
             "Specify the package versions in each individual model file that uses the packages.",
             "Include the package versions in the SQL code used to manipulate and transform the data."
         ],
         "correct_answer": [
-            "Specify the package versions in the dbt_project.yml file under the 'packages' configuration block."
+            "Specify the package versions in the dbt_project.yml file under the 'packages' configuration block or in the packages.yml inside the dbt project."
         ],
         "explanation": "The recommended approach to track package versions in a dbt project is to specify them in the dbt_project.yml file under the 'packages' configuration block. This centralizes the package version information and ensures consistency across the dbt project, rather than having separate requirements.txt files or specifying versions in individual model files or SQL scripts.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/package-management"
@@ -9369,7 +9398,7 @@
             "Option C"
         ],
         "explanation": "In dbt, the 'config' block within a model's configuration allows you to specify how the model is materialized and optimized for query performance. Using 'materialized: table' ensures the model is stored as a persistent table. The 'sort' key specifies the column to sort the data on for faster query performance, while 'dist' defines the distribution key to balance the data across nodes for parallel processing. The provided configuration correctly sets the 'base_events' model to be materialized as a table, with 'event_time' as the sort key and 'event_id' as the distribution key. The `sort` configuration in dbt is used to define how the rows in a table should be ordered. `The dist` configuration stands for the distribution key in a table within a distributed data warehouse. This determines how the data is distributed across the different nodes of the data warehouse.",
-        "reference": "https://docs.getdbt.com/reference/resource-configs/materialized"
+        "reference": "https://docs.getdbt.com/reference/model-configs"
     },
     {
         "question_number": 556,
@@ -9378,9 +9407,12 @@
         ],
         "question": "What are the different types of materializations available in dbt and how do they affect the persistence of models in a data warehouse?",
         "answers": [
-            "ephemeral — not built into the database, table — rebuilt as a table, view — rebuilt as a view",
-            "incremental — updates or inserts records, materialized_view — maintains materialized views, custom — user-defined strategies",
-            "table — temporary table on each run, view — permanent view, materialized_view — cached view updates on schedule",
+            "ephemeral",
+            "incremental",
+            "table",
+            "view",
+            "materialized_view",
+            "custom",
             "All are correct."
         ],
         "correct_answer": [
@@ -9388,5 +9420,262 @@
         ],
         "explanation": "dbt supports several types of materializations to manage how models are persisted in a data warehouse. 'ephemeral' models do not materialize data in the database but are used in downstream models. 'table' and 'view' materializations rebuild the model as a table or view, respectively, on each run. 'materialized_view' allows the maintenance of materialized views. 'incremental' models are useful for updating or inserting records based on changes since the last run. Additionally, dbt allows the creation of custom materializations to meet specific needs.",
         "reference": "https://docs.getdbt.com/docs/building-a-dbt-project/building-models/materializations"
+    },
+    {
+        "question_number": 557,
+        "question_area": [
+            "Developing dbt models",
+            "Estrellita"
+        ],
+        "question": "How can you select all models within a specific folder?",
+        "answers": [
+            "`dbt run --select folder_name.*`",
+            "`dbt run --select package:folder_name`",
+            "`dbt run --select folder_name`",
+            "`dbt run --select package:folder_name.*`"
+        ],
+        "correct_answer": [
+            "`dbt run --select folder_name.*`"
+        ],
+        "explanation": "You can select all models within a specific folder using the `folder_name.*` syntax, which allows for targeted execution of all models within that folder.",
+        "reference": "https://docs.getdbt.com/reference/node-selection/methods"
+    },
+    {
+        "question_number": 558,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "You attempt to run a dbt command but encounter the following error. What should you do to resolve this issue?",
+        "answers": [
+            "Use pwd to check that you're in the correct directory. If not, use cd to navigate to the right one.",
+            "Verify that a file named dbt_project.yml exists in the root directory of your project.",
+            "Create a new dbt_project.yml if it's missing.",
+            "Check if the dbt_project.yml file is correctly formatted and includes all required keys."
+        ],
+        "correct_answer": [
+            "Use pwd to check that you're in the correct directory. If not, use cd to navigate to the right one.",
+            "Verify that a file named dbt_project.yml exists in the root directory of your project."
+        ],
+        "explanation": "The error indicates that dbt cannot locate the dbt_project.yml file which is essential for defining the dbt project. Checking your current directory and ensuring the presence and correctness of the dbt_project.yml file are crucial steps.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 559,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "You start a dbt run and encounter the following error. What should you do to resolve this issue?",
+        "answers": [
+            "Check the 'profile' key in your dbt_project.yml to ensure it matches with your profiles.yml.",
+            "Open and review your profiles.yml file for the correct configuration under 'jaffle_shops'.",
+            "Run dbt debug --config-dir to find the location of your profiles.yml file if it's missing.",
+            "Rename your profile in profiles.yml to match the 'profile' key in your dbt_project.yml."
+        ],
+        "correct_answer": [
+            "Check the 'profile' key in your dbt_project.yml to ensure it matches with your profiles.yml.",
+            "Open and review your profiles.yml file for the correct configuration under 'jaffle_shops'."
+        ],
+        "explanation": "This error is caused by a mismatch or absence of the specified profile in the profiles.yml file. Ensuring consistency between dbt_project.yml and profiles.yml is key to resolving this issue.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 560,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "You encounter the following error during a dbt run. What are the steps to fix this error?",
+        "answers": [
+            "Open your profiles.yml file and check the username and password credentials.",
+            "Work with your DBA to confirm the correct database credentials.",
+            "After updating the credentials, run dbt debug to verify the connection.",
+            "Ensure that your database server is accessible from your current network."
+        ],
+        "correct_answer": [
+            "Open your profiles.yml file and check the username and password credentials.",
+            "After updating the credentials, run dbt debug to verify the connection."
+        ],
+        "explanation": "Incorrect database credentials can prevent dbt from connecting to your database. Verifying and correcting these in the profiles.yml file is essential to resolve connectivity issues.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 561,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "Upon attempting to run your dbt project, you receive this error. What steps should you take to correct this error?",
+        "answers": [
+            "Open your dbt_project.yml file and locate the unexpected key, such as 'hello'.",
+            "Remove or correct any keys that are not allowed based on the dbt documentation.",
+            "Ensure that all entries in dbt_project.yml adhere to the schema specified by dbt.",
+            "Use the dbt documentation as a reference to verify the validity of all keys in your dbt_project.yml."
+        ],
+        "correct_answer": [
+            "Open your dbt_project.yml file and locate the unexpected key, such as 'hello'.",
+            "Remove or correct any keys that are not allowed based on the dbt documentation."
+        ],
+        "explanation": "Incorrect database credentials can prevent dbt from connecting to your database. Verifying and correcting these in the profiles.yml file is essential to resolve connectivity issues.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 562,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "You execute a dbt run for the customers model and receive this error. What steps should you follow to resolve this error?",
+        "answers": [
+            "Open models/customers.sql and search for 'stg_customer'. Verify that a corresponding file exists.",
+            "Check for a typo in the ref function or file names; it might be 'stg_customers' instead of 'stg_customer'.",
+            "Ensure that the ref function refers to an existing model and correct any discrepancies.",
+            "If 'stg_customer' does not exist, consider creating it or updating the model dependency to an existing one."
+        ],
+        "correct_answer": [
+            "Open models/customers.sql and search for 'stg_customer'. Verify that a corresponding file exists.",
+            "Check for a typo in the ref function or file names; it might be 'stg_customers' instead of 'stg_customer'."
+        ],
+        "explanation": "The error indicates a reference to a non-existent model 'stg_customer'. Checking the SQL file for typos and verifying the existence of the referenced model file are essential steps.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 563,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "While running dbt, you encounter a Jinja compilation error in a macro. How can you correct this Jinja error?",
+        "answers": [
+            "Open the macro file (macros/cents_to_dollars.sql) and ensure that every {% macro %} has a corresponding {% endmacro %}.",
+            "Check for unclosed blocks within the macro, such as missing {% endif %} or {% endfor %}.",
+            "Review other Jinja syntax requirements to ensure all statements are properly closed.",
+            "Use a linter or syntax checker to identify and fix any syntactical mistakes in the Jinja template."
+        ],
+        "correct_answer": [
+            "Open the macro file (macros/cents_to_dollars.sql) and ensure that every {% macro %} has a corresponding {% endmacro %}.",
+            "Check for unclosed blocks within the macro, such as missing {% endif %} or {% endfor %}."
+        ],
+        "explanation": "The compilation error stems from an unclosed tag in a Jinja macro. Carefully inspecting the macro file for any unclosed Jinja statements and ensuring they are properly terminated will resolve this issue.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 564,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "You attempt to run dbt and encounter a YAML syntax error in your schema file. How should you proceed to fix this error?",
+        "answers": [
+            "Open schema.yml and go to line 5. Check for proper YAML syntax, particularly the indentation levels.",
+            "Ensure that the structure of the YAML file adheres to required specifications, such as proper nesting and alignment of elements.",
+            "Use a YAML validator to identify and correct syntax errors in the file.",
+            "Review YAML syntax rules and adjust your file accordingly, paying close attention to details like spaces and colons."
+        ],
+        "correct_answer": [
+            "Open schema.yml and go to line 5. Check for proper YAML syntax, particularly the indentation levels.",
+            "Use a YAML validator to identify and correct syntax errors in the file."
+        ],
+        "explanation": "The syntax error in the YAML file is typically due to incorrect indentation. Correcting the indentation and validating the file's syntax will resolve this error and ensure the YAML file is properly formatted.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 565,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "Your dbt run fails with an error related to an invalid configuration in your YAML file. What should you do to correct this error?",
+        "answers": [
+            "Open models/schema.yml and remove any keys that are not recognized by dbt, such as 'hello'.",
+            "Refer to the dbt documentation to understand the allowed keys and structures within a model configuration.",
+            "Check that all keys used in your YAML file are supported in the current version of dbt you are using.",
+            "After making changes, validate the YAML file to ensure all configurations are correct."
+        ],
+        "correct_answer": [
+            "Open models/schema.yml and remove any keys that are not recognized by dbt, such as 'hello'.",
+            "Refer to the dbt documentation to understand the allowed keys and structures within a model configuration."
+        ],
+        "explanation": "The error is due to unrecognized keys in the YAML configuration. Removing these keys and referring to official dbt documentation for valid configurations will ensure that the YAML file meets dbt specifications.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 566,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "While executing dbt run, you encounter an error. What should you do to resolve this cycle in your dbt DAG?",
+        "answers": [
+            "Review the ref() functions in the models involved in the cycle to identify incorrect references.",
+            "Replace direct model references with the {{ this }} variable where a model needs to reference itself.",
+            "Reorganize model dependencies to ensure a linear flow without loops.",
+            "Create separate models if necessary to break the cycle and simplify the dependency graph."
+        ],
+        "correct_answer": [
+            "Review the ref() functions in the models involved in the cycle to identify incorrect references.",
+            "Replace direct model references with the {{ this }} variable where a model needs to reference itself."
+        ],
+        "explanation": "Cyclic dependencies occur when models refer back to each other creating loops in the dependency graph. Identifying and correcting ref() functions, and using the {{ this }} variable can help break these cycles.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 567,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "You run your dbt model and face a SQL compilation error. What steps should you follow to debug and fix this SQL error?",
+        "answers": [
+            "Open models/customers.sql and examine the SQL syntax near line 14 for errors.",
+            "Cross-reference the error with the compiled SQL in target/run/jaffle_shop/models/customers.sql to better understand the context.",
+            "Test the problematic SQL snippet in an SQL runner to isolate the error.",
+            "Adjust the SQL code to correct syntax errors, then re-run the dbt model to confirm the fix."
+        ],
+        "correct_answer": [
+            "Open models/customers.sql and examine the SQL syntax near line 14 for errors.",
+            "Test the problematic SQL snippet in an SQL runner to isolate the error."
+        ],
+        "explanation": "SQL compilation errors are typically due to incorrect SQL syntax. Reviewing and testing the SQL code independently helps in isolating and correcting the mistake, ensuring the model compiles successfully on the next run.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 568,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "You are developing a new model in dbt Cloud and use the Preview button to test your SQL statement. It returns the expected results. However, when you execute dbt run, the model fails because it cannot find a dependent table. What is the most likely cause of this issue and how can you fix it?",
+        "answers": [
+            "The dependent table might not exist in the database. Ensure that all upstream models have been run successfully.",
+            "There may be a typo in the SQL query or the table name. Double-check the SQL syntax and table references in your model.",
+            "You might have used the Preview button without running dbt run for upstream models, which are required to build the relations your new model depends on.",
+            "The connection to the database could be misconfigured, preventing dbt from accessing the required tables."
+        ],
+        "correct_answer": [
+            "You might have used the Preview button without running dbt run for upstream models, which are required to build the relations your new model depends on."
+        ],
+        "explanation": "Using the Preview button allows you to see the results of SQL statements executed against already existing tables. To ensure all dependent tables are created and updated, you must run dbt run to build and refresh all upstream models. This ensures that all required data is available and consistent.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
+    },
+    {
+        "question_number": 569,
+        "question_area": [
+            "Debugging data modeling errors",
+            "Estrellita"
+        ],
+        "question": "You've made several changes to your dbt models but when you execute dbt run, none of the updates seem to have taken effect. What could be the problem and what should you do before running the command again?",
+        "answers": [
+            "Ensure all files are saved in your code editor before running dbt. Look for indications such as unsaved changes (e.g., a dot next to the filename).",
+            "Check if there are any errors in your SQL code that might prevent dbt from compiling the models correctly.",
+            "Verify that you are running dbt in the correct directory where your project files are located.",
+            "Restart your code editor or IDE to refresh the environment and then try running dbt run again."
+        ],
+        "correct_answer": [
+            "Ensure all files are saved in your code editor before running dbt. Look for indications such as unsaved changes (e.g., a dot next to the filename)."
+        ],
+        "explanation": "dbt uses the last-saved version of your files when executing commands. If changes are not saved, they won't be reflected when dbt runs. Always save your work before running dbt to ensure all modifications are included.",
+        "reference": "https://docs.getdbt.com/guides/debug-errors"
     }
 ]

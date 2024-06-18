@@ -15,6 +15,8 @@ sn_init_button = """
         <style>.element-container:has(#button-after-sn) + div button {"""
 dbt_init_button = """
         <style>.element-container:has(#button-after-dbt) + div button {"""
+google_init_button = """
+        <style>.element-container:has(#button-after-google) + div button {"""
 button = """
             border: none;
             color: white;
@@ -27,6 +29,8 @@ sn_end_button = """background-color: #1e88e5;
         }</style>"""
 dbt_end_button = """background-color: #f4511e;
         }</style>"""
+google_end_button = """background-color: #ffba03;
+        }</style>"""
 
 ### Session_state to:
 # snowflake
@@ -35,6 +39,10 @@ def go_to_snowflake():
 # dbt
 def go_to_dbt():
     st.session_state.page = 'dbt'
+# google
+def go_to_google():
+    st.session_state.page = 'google'
+
 
 ### Definig Main: ESPECIALIDADES
 def go_to_main():
@@ -43,7 +51,7 @@ def go_to_main():
         # # Set a title and subtitle
         st.markdown("<h1 style='text-align: center; color: white;'>Especialidades</h1>", unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; color: white;'>¿En qué especialidad quieres volverte un máquina?</h3>", unsafe_allow_html=True)
-        col1, col2 = st.columns([1,1], gap="medium")
+        col1, col2, col3 = st.columns([1,1,1], gap="medium")
         with col1:
             sn_button_complete = str(sn_init_button+button+sn_end_button)
             st.markdown(sn_button_complete, unsafe_allow_html=True)
@@ -54,6 +62,11 @@ def go_to_main():
             st.markdown(dbt_button_complete, unsafe_allow_html=True)
             st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
             col2.button('dbt',on_click=go_to_dbt, use_container_width=True)
+        with col3:
+            dbt_button_complete = str(google_init_button+button+google_end_button)
+            st.markdown(dbt_button_complete, unsafe_allow_html=True)
+            st.markdown('<span id="button-after-google"></span>', unsafe_allow_html=True)
+            col3.button('GCP - Google',on_click=go_to_google, use_container_width=True)
     except Exception as e:
         st.warning("Error: " + str(e.args))
 
@@ -127,6 +140,48 @@ elif st.session_state.page == 'dbt':
     PAGES.remove("Parreitor-3000 🤖")
     # Add a way to navigate within the dbt page
     current_page = st.selectbox("Choose section:", PAGES, key='current_dbt_page')
+    
+    # Update the session state for the current page in dbt
+    st.session_state['current_page'] = current_page
+    
+    # Execute the function based on the current_page
+    if st.session_state['current_page'] == "Intro 🔰":
+        t.comienzo(conn, especialidad)
+    elif st.session_state['current_page'] == "Practicar 🥊":
+        try:
+            t.practicar(conn, datos, especialidad)
+        except Exception as e:
+            st.warning("Error: " + str(e.args))
+    elif st.session_state['current_page'] == "Exámenes 📄":
+        try:
+            t.examen(conn, datos, especialidad)
+        except Exception as e:
+            st.warning("Error: " + str(e.args))
+    elif st.session_state['current_page'] == "Progreso 📈":
+        t.progreso(conn,datos)
+    elif st.session_state['current_page'] == "Chatpgt":
+        st.title("No está en funcionamiento este apartado")
+        # t.chatgpt(conn, especialidad)
+
+
+## Google Page
+elif st.session_state.page == 'google':
+    # Init connection
+    conn = h.init_connection()
+    # Init json
+    especialidad = "google"
+    datos = t.get_datos(especialidad)
+    # Init user
+    user = h.get_user_none()
+
+    st.title('GCP - Google')
+    if st.button('Back to Main', key='back-to-main-from-google'):
+        go_to_main()
+        st.rerun()
+    
+    PAGES.remove("Parreitor-3000 🤖")
+    # Add a way to navigate within the dbt page
+    current_page = st.selectbox("Choose section:", PAGES, key='current_google_page')
     
     # Update the session state for the current page in dbt
     st.session_state['current_page'] = current_page

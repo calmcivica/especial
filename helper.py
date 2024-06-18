@@ -519,6 +519,11 @@ def filtros(especialidad, datos, conn, user, examen=None):
             "¿ Qué secciones quieres tocar ?",
             c.SECCIONES_DBT,
         )
+    elif especialidad == "google":
+        secciones = st.multiselect(
+            "¿ Qué secciones quieres tocar ?",
+            c.SECCIONES_GOOGLE,
+    )
     option = st.multiselect(
         "Otros filtros",
         ["Todas", "Sin hacer", "Falladas en exámenes", "Falladas en práctica"],

@@ -32,6 +32,8 @@ def get_datos(especialidad):
             archivo = "sn_examtopics.json"
         elif especialidad == "dbt":
             archivo = "dbt_examtopics.json"
+        elif especialidad == "google":
+            archivo = "google_examtopics.json"        
     except Exception as e:
         st.warning("Ha habido un error, no encuentro los json. " + str(e.args))
     datos = h.open_file(archivo)
@@ -145,6 +147,8 @@ def comienzo(conn, especialidad):
         info = c.COMIENZO_SNOWFLAKE + c.INFO_EXAMEN_SNOWFLAKE
     elif especialidad == "dbt":
         info = c.COMIENZO_DBT + c.INFO_EXAMEN_DBT
+    elif especialidad == "google":
+        info = c.COMIENZO_GOOGLE + c.INFO_EXAMEN_GOOGLE
     menu(conn)
     st.markdown(info)
 
@@ -171,6 +175,8 @@ def practicar(conn, datos, especialidad):
             st.markdown(c.USO_SECCION_SNOWFLAKE)
         elif especialidad == "dbt":
             st.markdown(c.USO_SECCION_DBT)
+        elif especialidad == "google":
+            st.markdown(c.USO_SECCION_GOOGLE)
 
     filtros, preguntas = st.columns([1, 3], gap="large")
     # Filtros
@@ -193,6 +199,11 @@ def practicar(conn, datos, especialidad):
             secciones = st.multiselect(
                 "¿ Qué secciones quieres tocar ?",
                 c.SECCIONES_DBT,
+            )
+        elif especialidad == "google":
+            secciones = st.multiselect(
+                "¿ Qué secciones quieres tocar ?",
+                c.SECCIONES_GOOGLE,
             )
 
         option = st.multiselect(
@@ -309,6 +320,8 @@ def examen(conn, datos, especialidad):
                         info = c.INFO_EXAMEN_SNOWFLAKE
                     elif especialidad == "dbt":
                         info = c.INFO_EXAMEN_DBT
+                    elif especialidad == "google":
+                        info = c.INFO_EXAMEN_GOOGLE
                     st.markdown(info)
             with st.container():
                 _, boton, _ = st.columns(3, gap="large")
