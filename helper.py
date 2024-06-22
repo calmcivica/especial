@@ -14,19 +14,40 @@ import pyodbc
 from pathlib import Path
 import ast
 import constantes as c
+from sqlalchemy import create_engine, text
 
 @st.cache_resource
-def init_connection():
-    return pyodbc.connect(
-        "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
-        + st.secrets["server"]
-        + ";DATABASE="
-        + st.secrets["database"]
-        + ";UID="
-        + st.secrets["username"]
-        + ";PWD="
-        + st.secrets["password"]
-    )
+def init_connection(especialidad):
+    if especialidad in ['snowflake','dbt','google']:
+        tipo = 'especialidades'
+        return pyodbc.connect(
+                "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
+                + st.secrets["server"]
+                + ";DATABASE="
+                + st.secrets[f"database_{tipo}"]
+                + ";UID="
+                + st.secrets[f"username_{tipo}"]
+                + ";PWD="
+                + st.secrets[f"password_{tipo}"]
+            )
+    elif especialidad in ['sql']:
+        tipo = 'sql'
+        connection_str = (
+            "mssql+pyodbc://"
+            + st.secrets[f"username_{tipo}"]
+            + ":"
+            + st.secrets[f"password_{tipo}"]
+            + "@"
+            + st.secrets["server"]
+            + "/"
+            + st.secrets[f"database_{tipo}"]
+            + "?driver=ODBC+Driver+17+for+SQL+Server"
+        )
+        engine = create_engine(connection_str, pool_size=10000, max_overflow=2000000)
+        return engine
+    else:
+        raise Exception("Ha habido un error al iniciar sesión en SQL Server")        
+
 
 def open_file(json_file):
     # Abre el archivo JSON en modo lectura

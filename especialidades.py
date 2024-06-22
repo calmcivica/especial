@@ -6,6 +6,7 @@ import streamlit as st
 st.set_page_config(page_title="Especialidades", layout="wide")
 
 import tools as t
+import sql_especialidad.tools_sql as tsql
 import helper as h
 
 PAGES = ["Intro 🔰", "Practicar 🥊", "Exámenes 📄", "Progreso 📈", "Parreitor-3000 🤖", "Chatpgt"]
@@ -17,6 +18,9 @@ dbt_init_button = """
         <style>.element-container:has(#button-after-dbt) + div button {"""
 google_init_button = """
         <style>.element-container:has(#button-after-google) + div button {"""
+sql_init_button = """
+        <style>.element-container:has(#button-after-sql) + div button {
+"""
 button = """
             border: none;
             color: white;
@@ -31,6 +35,8 @@ dbt_end_button = """background-color: #f4511e;
         }</style>"""
 google_end_button = """background-color: #ffba03;
         }</style>"""
+sql_end_button = """background-color: #12d519;
+        }</style>"""
 
 ### Session_state to:
 # snowflake
@@ -42,6 +48,9 @@ def go_to_dbt():
 # google
 def go_to_google():
     st.session_state.page = 'google'
+# sql
+def go_to_sql():
+    st.session_state.page = 'sql'
 
 
 ### Definig Main: ESPECIALIDADES
@@ -51,22 +60,30 @@ def go_to_main():
         # # Set a title and subtitle
         st.markdown("<h1 style='text-align: center; color: white;'>Especialidades</h1>", unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; color: white;'>¿En qué especialidad quieres volverte un máquina?</h3>", unsafe_allow_html=True)
-        col1, col2, col3 = st.columns([1,1,1], gap="medium")
-        with col1:
+        col1_1, col1_2, col1_3 = st.columns([1,1,1], gap="medium")
+        with col1_1:
             sn_button_complete = str(sn_init_button+button+sn_end_button)
             st.markdown(sn_button_complete, unsafe_allow_html=True)
             st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
-            col1.button('Snowflake',on_click=go_to_snowflake, use_container_width=True)
-        with col2:
+            col1_1.button('Snowflake',on_click=go_to_snowflake, use_container_width=True)
+        with col1_2:
             dbt_button_complete = str(dbt_init_button+button+dbt_end_button)
             st.markdown(dbt_button_complete, unsafe_allow_html=True)
             st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
-            col2.button('dbt',on_click=go_to_dbt, use_container_width=True)
-        with col3:
+            col1_2.button('dbt',on_click=go_to_dbt, use_container_width=True)
+        with col1_3:
             dbt_button_complete = str(google_init_button+button+google_end_button)
             st.markdown(dbt_button_complete, unsafe_allow_html=True)
             st.markdown('<span id="button-after-google"></span>', unsafe_allow_html=True)
-            col3.button('GCP - Google',on_click=go_to_google, use_container_width=True)
+            col1_3.button('GCP - Google',on_click=go_to_google, use_container_width=True)
+        # Siguiente fila
+        col2_1, col2_2, col2_3 = st.columns([1,1,1], gap="medium")
+        with col2_1:
+            sql_button_complete = str(sql_init_button+button+sql_end_button)
+            st.markdown(sql_button_complete, unsafe_allow_html=True)
+            st.markdown('<span id="button-after-sql"></span>', unsafe_allow_html=True)
+            col2_1.button('SQL',on_click=go_to_sql, use_container_width=True)
+
     except Exception as e:
         st.warning("Error: " + str(e.args))
 
@@ -81,8 +98,8 @@ if 'page' not in st.session_state or st.session_state.page == 'main':
 ## Snowflake Page
 elif st.session_state.page == 'snowflake':
     # Initializations
-    conn = h.init_connection()
     especialidad = "snowflake"
+    conn = h.init_connection(especialidad)
     datos = t.get_datos(especialidad)
     user = h.get_user_none()
 
@@ -124,10 +141,10 @@ elif st.session_state.page == 'snowflake':
 
 ## dbt Page
 elif st.session_state.page == 'dbt':
-    # Init connection
-    conn = h.init_connection()
-    # Init json
     especialidad = "dbt"
+    # Init connection
+    conn = h.init_connection(especialidad)
+    # Init json
     datos = t.get_datos(especialidad)
     # Init user
     user = h.get_user_none()
@@ -166,10 +183,10 @@ elif st.session_state.page == 'dbt':
 
 ## Google Page
 elif st.session_state.page == 'google':
-    # Init connection
-    conn = h.init_connection()
-    # Init json
     especialidad = "google"
+    # Init connection
+    conn = h.init_connection(especialidad)
+    # Init json
     datos = t.get_datos(especialidad)
     # Init user
     user = h.get_user_none()
@@ -204,3 +221,54 @@ elif st.session_state.page == 'google':
     elif st.session_state['current_page'] == "Chatpgt":
         st.title("No está en funcionamiento este apartado")
         # t.chatgpt(conn, especialidad)
+
+## SQL Page
+elif st.session_state.page == 'sql':
+    especialidad = "sql"
+    # Init connection
+    engine = h.init_connection(especialidad)
+    ################################################################################
+    # Create the title of the website
+    st.title(":bar_chart: SQL Query Comparison Tool :slot_machine:")
+    #----------------------------------------
+    query_temp = ""
+    if 'input_list' not in st.session_state:
+        st.session_state['input_list'] = []
+    if 'counter' not in st.session_state:
+        st.session_state['counter'] = 0
+    if 'show' not in st.session_state:
+        st.session_state['show'] = 0
+    option_w = "Case_0"
+    option = "Case 0"
+    error = ""
+    # SELECT consult from user 
+    try:
+        option_w, option = tsql.display_cases_exercises(tsql.date_control(engine))
+        if option is not None:
+            st.divider()
+            tsql.enunciado(engine, option)
+        # When exercise is select:
+        if option:
+            tsql.do_you_need("Temporary table", engine)
+            tsql.do_you_need("Function",engine)
+            tsql.do_you_need("Procedure",engine)
+            st.divider()
+            query1 = st.text_area("Enter SQL SELECT Query:", height=300)
+            
+            col1, col2 = st.columns([1,1], gap="medium")
+            with col1:
+                # User result
+                if st.button("Show result"):
+                    tsql.show_result_1()
+            with col2:
+                # Compare queries
+                if st.button("Compare YOUR SOLUTION",  on_click=tsql.counter_add_1):
+                    tsql.show_result_2()
+            # Only user result
+            if  st.session_state["show"] == 1:
+                tsql.show_tables(engine, query1, option, False)
+            # Compare solution with the user
+            if  st.session_state["show"] == 2:
+                tsql.show_tables(engine, query1, option, True)
+    except Exception as e:
+        st.error(str(e.args))
