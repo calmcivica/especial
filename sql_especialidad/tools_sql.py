@@ -6,7 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 import tracemalloc
 import numpy as np
 from pandas import DataFrame
-import sql_especialidad.cases_exercises as ce
+import sql_especialidad.casos_exercises as ce
 tracemalloc.start()
 
 # run_query function adapted for SQLAlchemy engine
@@ -83,10 +83,10 @@ def do_you_need(element, engine):
 
 
 def uncheck_other_weeks(current_week):
-    cases = ["Case 1", "Case 2", "Case 3", "Case 4"]
-    for case in cases:
-        if case != current_week:
-            st.session_state[case] = False
+    casos = ["Caso 1", "Caso 2", "Caso 3", "Caso 4"]
+    for caso in casos:
+        if caso != current_week:
+            st.session_state[caso] = False
     counter_reset()
 
 def date_control(engine):
@@ -96,36 +96,36 @@ def date_control(engine):
     number = int(df_num.iloc[0,0])
     return number
 
-def display_cases_exercises(numero):
+def display_casos_exercises(numero):
     try:
-        st.subheader("Choose case")
+        st.subheader("Choose caso")
         option_w, option = None, None
-        # Define checkboxes for each case
-        cases = ce.classify_number_cases(numero)
+        # Define checkboxes for each caso
+        casos = ce.classify_number_casos(numero)
         listados = ce.classify_number_exercises(numero)
         week_aux = ""
-        if cases != ["None"]:
-            for i, case in enumerate(cases):
-                if case not in st.session_state:
-                    st.session_state[case] = False
+        if casos != ["None"]:
+            for i, caso in enumerate(casos):
+                if caso not in st.session_state:
+                    st.session_state[caso] = False
                 if week_aux not in st.session_state:
                     st.session_state[week_aux] = False
                 agree_sem = st.checkbox(
-                    case,
-                    value=st.session_state[case],
-                    key=case,
+                    caso,
+                    value=st.session_state[caso],
+                    key=caso,
                     on_change=uncheck_other_weeks,
-                    args=(case,),
+                    args=(caso,),
                 )
                 if agree_sem:
-                    option_w = case
+                    option_w = caso
                     option = st.selectbox(
                         "Select your exercise:",
                         listados[i],
-                        key=f"{case}_select",
+                        key=f"{caso}_select",
                         on_change=counter_reset,
                     )
-                    break  # Exit loop once the selected case is processed
+                    break  # Exit loop once the selected caso is processed
             return option_w, option
         else:
             st.write("No hay ejercicios disponibles!")
@@ -393,8 +393,8 @@ def show_tables(engine, query1, option, comparation):
                         else:
                             st.write("The tables have :green[SAME number of columns].")
                             # Clean the data of whitespace
-                            df1_1 = trim_normalize_and_sentence_case_all_columns(df1_1)
-                            df2_1 = trim_normalize_and_sentence_case_all_columns(df2_1)
+                            df1_1 = trim_normalize_and_sentence_caso_all_columns(df1_1)
+                            df2_1 = trim_normalize_and_sentence_caso_all_columns(df2_1)
                             # Compare ignoring column names
                             arr1 = df1_1.to_numpy()
                             arr2 = df2_1.to_numpy()
@@ -423,29 +423,29 @@ def show_tables(engine, query1, option, comparation):
     except Exception:
         pass
 
-def trim_normalize_and_sentence_case_all_columns(df):
+def trim_normalize_and_sentence_caso_all_columns(df):
     """
     Trim whitespace, replace carriage returns with newlines, remove consecutive newlines,
-    and convert to sentence case from each value across all series in dataframe.
+    and convert to sentence caso from each value across all series in dataframe.
     """
 
-    def to_sentence_case(s):
-        # Split into sentences, then strip and lowercase each sentence,
+    def to_sentence_caso(s):
+        # Split into sentences, then strip and lowercaso each sentence,
         # finally capitalize the first letter of each.
         return ". ".join(sentence.strip().capitalize() for sentence in s.split("."))
 
-    def trim_replace_and_sentence_case(x):
+    def trim_replace_and_sentence_caso(x):
         if isinstance(x, str):
             # Trim whitespace at both ends
             x = x.strip()
             # Replace carriage returns (\r) with newlines (\n), then remove consecutive newlines
             x = x.replace("\r", "\n").replace("\n\n", "\n")
-            # Convert to sentence case
-            x = to_sentence_case(x)
+            # Convert to sentence caso
+            x = to_sentence_caso(x)
         return x
 
     # Use applymap to apply the function to each element of the dataframe
-    return df.map(trim_replace_and_sentence_case)
+    return df.map(trim_replace_and_sentence_caso)
 
 
 def rename_duplicate_columns(df):

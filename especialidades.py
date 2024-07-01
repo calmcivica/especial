@@ -231,6 +231,9 @@ elif st.session_state.page == 'sql':
     # Create the title of the website
     st.title(":bar_chart: SQL Query Comparison Tool :slot_machine:")
     #----------------------------------------
+    if st.button('Back to Main', key='back-to-main-from-dbt'):
+        go_to_main()
+        st.rerun()
     query_temp = ""
     if 'input_list' not in st.session_state:
         st.session_state['input_list'] = []
@@ -238,15 +241,19 @@ elif st.session_state.page == 'sql':
         st.session_state['counter'] = 0
     if 'show' not in st.session_state:
         st.session_state['show'] = 0
-    option_w = "Case_0"
-    option = "Case 0"
+    option_w = "Caso_0"
+    option = "Caso 0"
     error = ""
     # SELECT consult from user 
     try:
-        option_w, option = tsql.display_cases_exercises(tsql.date_control(engine))
+        option_w, option = tsql.display_casos_exercises(tsql.date_control(engine))
+        if option_w is not None:
+            with st.expander(f"¿Cómo es el {option_w}? 🤔"):
+                st.image(f"./sql_especialidad/images/{option_w}.png")
         if option is not None:
             st.divider()
             tsql.enunciado(engine, option)
+
         # When exercise is select:
         if option:
             tsql.do_you_need("Temporary table", engine)

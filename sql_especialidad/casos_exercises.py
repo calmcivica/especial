@@ -29,15 +29,15 @@ listado_4 = [
     "Ejercicio4_5",
 ]
 
-def classify_number_cases(numero):
+def classify_number_casos(numero):
     if numero >= 101 and numero <= 107:
-        return ["Case 1"]
+        return ["Caso 1"]
     elif 108 <= numero <= 121:
-        return ["Case 1", "Case 2"]
+        return ["Caso 1", "Caso 2"]
     elif 122 <= numero <= 136:
-        return ["Case 1", "Case 2", "Case 3"]
+        return ["Caso 1", "Caso 2", "Caso 3"]
     elif 137 <= numero <= 161:
-        return ["Case 1", "Case 2", "Case 3", "Case 4"]
+        return ["Caso 1", "Caso 2", "Caso 3", "Caso 4"]
     else:
         return ["None"]
     
