@@ -96,6 +96,7 @@ experiencia de aprendizaje, optimizando así tu estudio para la certificación.
 """
 
 SECCIONES_DBT = [
+    "Todas",
     "Developing dbt models",
     "Debugging data modeling errors",
     "Monitoring data pipelines",
@@ -153,6 +154,7 @@ experiencia de aprendizaje, optimizando así tu estudio para la certificación.
 """
 
 SECCIONES_GOOGLE = [
+    "Todas",
     "Diseño de sistemas de procesamiento de datos",
     "Transferencia y procesamiento de datos",
     "Almacenamiento de los datos",

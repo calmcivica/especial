@@ -9,7 +9,7 @@ import tools as t
 import sql_especialidad.tools_sql as tsql
 import helper as h
 
-PAGES = ["Intro 🔰", "Practicar 🥊", "Exámenes 📄", "Progreso 📈", "Parreitor-3000 🤖", "Chatpgt"]
+PAGES = ["Intro 🔰", "Practicar 🥊", "Exámenes 📄", "Progreso 📈", "Parreitor-3000 🤖", "Chatgpt"]
 
 # Creating perzonalized buttons
 sn_init_button = """
@@ -97,10 +97,12 @@ if 'page' not in st.session_state or st.session_state.page == 'main':
 
 ## Snowflake Page
 elif st.session_state.page == 'snowflake':
-    # Initializations
     especialidad = "snowflake"
+    # Init connection
     conn = h.init_connection(especialidad)
+    # Init json
     datos = t.get_datos(especialidad)
+    # Init user
     user = h.get_user_none()
 
     st.title('Snowflake')
@@ -108,7 +110,7 @@ elif st.session_state.page == 'snowflake':
         go_to_main()
         st.rerun()
     
-    PAGES.remove("Chatpgt")
+    PAGES.remove("Chatgpt")
     # Add a way to navigate within the Snowflake page
     current_page = st.selectbox("Choose section:", PAGES, key='current_snowflake_page')
     
@@ -117,10 +119,7 @@ elif st.session_state.page == 'snowflake':
     
     # Execute the function based on the current_page
     if st.session_state['current_page'] == "Intro 🔰":
-        try:
-            t.comienzo(conn, especialidad)
-        except Exception as e:
-            st.warning("Error: " + str(e.args))
+        t.comienzo(conn, especialidad)
     elif st.session_state['current_page'] == "Practicar 🥊":
         try:
             t.practicar(conn, datos, especialidad)
@@ -132,10 +131,7 @@ elif st.session_state.page == 'snowflake':
         except Exception as e:
             st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
-        try:
-            t.progreso(conn,datos)
-        except Exception as e:
-            st.warning("Error: " + str(e.args))
+        t.progreso(conn,datos)
     elif st.session_state['current_page'] == "Parreitor-3000 🤖":
         t.parreitor(conn, especialidad)
 
@@ -176,7 +172,7 @@ elif st.session_state.page == 'dbt':
             st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
         t.progreso(conn,datos)
-    elif st.session_state['current_page'] == "Chatpgt":
+    elif st.session_state['current_page'] == "Chatgpt":
         st.title("No está en funcionamiento este apartado")
         # t.chatgpt(conn, especialidad)
 
@@ -218,7 +214,7 @@ elif st.session_state.page == 'google':
             st.warning("Error: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
         t.progreso(conn,datos)
-    elif st.session_state['current_page'] == "Chatpgt":
+    elif st.session_state['current_page'] == "Chatgpt":
         st.title("No está en funcionamiento este apartado")
         # t.chatgpt(conn, especialidad)
 

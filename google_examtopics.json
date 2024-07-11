@@ -1,7 +1,7 @@
 [
     {
         "question_number": 1,
-        "question_area": "Transferencia y procesamiento de datos",
+        "question_area": "Preparación y uso de los datos para el análisis",
         "question": "Your company built a TensorFlow neural-network model with a large number of neurons and layers. The model fits well for the training data. However, when tested against new data, it performs poorly. What method can you employ to address this?",
         "answers": [
             "Threading",
@@ -80,7 +80,7 @@
         "reference": "https://cloud.google.com/blog/products/gcp/handling-invalid-inputs-in-dataflow"
     },
     {
-        "question_number": 5,
+        "question_number": 6,
         "question_area": "Mantenimiento y automatización de las cargas de trabajo de datos",
         "question": "An external customer provides you with a daily dump of data from their database into Google Cloud Storage as CSV files. You want to analyze this data in Google BigQuery, but the data could have rows that are formatted incorrectly or corrupted. How should you build this pipeline?",
         "answers": [
@@ -110,6 +110,38 @@
         ],
         "explanation": "Linear regression is computationally efficient and well-suited for predicting continuous numerical outcomes, making it ideal for use on a resource-constrained virtual machine. It requires less computational power compared to more complex models, thus fitting within the budget constraints.",
         "reference": "https://towardsdatascience.com/do-you-know-how-to-choose-the-right-machine-learning-algorithm-among-7-different-types-295d0b0c7f60"
+    },
+    {
+        "question_number": 8,
+        "question_area": "Diseño de sistemas de procesamiento de datos",
+        "question": "You are building a new real-time data warehouse for your company and will use Google BigQuery streaming inserts. There is no guarantee that data will only be sent in once but you do have a unique ID for each row of data and an event timestamp. You want to ensure that duplicates are not included while interactively querying data. Which query type should you use?",
+        "answers": [
+            "Include ORDER BY DESC on timestamp column and LIMIT to 1.",
+            "Use GROUP BY on the unique ID column and timestamp column and SUM on the values.",
+            "Use the LAG window function with PARTITION by unique ID along with WHERE LAG IS NOT NULL.",
+            "Use the ROW_NUMBER window function with PARTITION by unique ID along with WHERE row equals 1."
+        ],
+        "correct_answer": [
+            "Use the ROW_NUMBER window function with PARTITION by unique ID along with WHERE row equals 1."
+        ],
+        "explanation": "Row Number equals 1 with partitioning will ensure only one record is fetched per partition, effectively removing duplicates.",
+        "reference": "https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#window_functions"
+    },
+    {
+        "question_number": 9,
+        "question_area": "Diseño de sistemas de procesamiento de datos",
+        "question": "Your company is using WILDCARD tables to query data across multiple tables with similar names. The SQL statement is currently failing with the following error: \"Syntax error: Expected end of input but got \"*\"\" Which table name will make the SQL statement work correctly?",
+        "answers": [
+            "'bigquery-public-data.noaa_gsod.gsod'",
+            "bigquery-public-data.noaa_gsod.gsod*",
+            "bigquery-public-data.noaa_gsod.gsod'*",
+            "``bigquery-public-data.noaa_gsod.gsod*``"
+        ],
+        "correct_answer": [
+            "``bigquery-public-data.noaa_gsod.gsod*``"
+        ],
+        "explanation": "The wildcard table name contains the special character (*), which means that you must enclose the wildcard table name in backtick (`) characters to correctly format the SQL statement.",
+        "reference": "https://cloud.google.com/bigquery/docs/wildcard-tables"
     },
     {
         "question_number": 10,
@@ -273,60 +305,7 @@
     {
         "question_number": 18,
         "question_area": "Preparación y uso de los datos para el análisis",
-        "question": "You have a database of bank transactions. Which three machine learning applications can you use to analyze the data?",
-        "answers": [
-            "Supervised learning to determine which transactions are most likely to be fraudulent.",
-            "Unsupervised learning to determine which transactions are most likely to be fraudulent.",
-            "Clustering to divide the transactions into N categories based on feature similarity.",
-            "Supervised learning to predict the location of a transaction.",
-            "Reinforcement learning to predict the location of a transaction.",
-            "Unsupervised learning to predict the location of a transaction."
-        ],
-        "correct_answer": [
-            "Unsupervised learning to determine which transactions are most likely to be fraudulent.",
-            "Clustering to divide the transactions into N categories based on feature similarity.",
-            "Reinforcement learning to predict the location of a transaction."
-        ],
-        "explanation": "Unsupervised learning can be used for anomaly detection to identify potentially fraudulent transactions. Clustering can categorize transactions based on similarity of features. Reinforcement learning, though less typical for transaction location prediction, could theoretically adapt to changes in transaction patterns over time.",
-        "reference": "https://cloud.google.com/solutions/machine-learning/clustering-geolocation-data-k-means"
-    },
-    {
-        "question_number": 19,
-        "question_area": "Almacenamiento de los datos",
-        "question": "Your company's on-premises Apache Hadoop servers are approaching end-of-life, and IT has decided to migrate the cluster to Google Cloud Dataproc. You want to minimize the storage cost of the migration. What should you do?",
-        "answers": [
-            "Put the data into Google Cloud Storage.",
-            "Use preemptible virtual machines (VMs) for the Cloud Dataproc cluster.",
-            "Tune the Cloud Dataproc cluster so that there is just enough disk for all data.",
-            "Migrate some of the cold data into Google Cloud Storage, and keep only the hot data in Persistent Disk."
-        ],
-        "correct_answer": [
-            "Put the data into Google Cloud Storage."
-        ],
-        "explanation": "Migrating data to Google Cloud Storage rather than using Google Persistent Disk for storage within Dataproc can significantly reduce costs due to lower storage prices and better scalability options in GCS.",
-        "reference": "https://cloud.google.com/storage/docs/storing-data"
-    },
-    {
-        "question_number": 17,
-        "question_area": "Almacenamiento de los datos",
-        "question": "Your company is migrating their 30-node Apache Hadoop cluster to the cloud and wants to reuse Hadoop jobs while minimizing management. They also want to persist data beyond the life of the cluster. What should you do?",
-        "answers": [
-            "Create a Google Cloud Dataflow job to process the data.",
-            "Create a Google Cloud Dataproc cluster that uses persistent disks for HDFS.",
-            "Create a Hadoop cluster on Google Compute Engine that uses persistent disks.",
-            "Create a Cloud Dataproc cluster that uses the Google Cloud Storage connector.",
-            "Create a Hadoop cluster on Google Compute Engine that uses Local SSD disks."
-        ],
-        "correct_answer": [
-            "Create a Cloud Dataproc cluster that uses the Google Cloud Storage connector."
-        ],
-        "explanation": "Using a Cloud Dataproc cluster with the Google Cloud Storage connector allows for seamless integration with existing Hadoop jobs while ensuring data persistence beyond the life of the cluster, minimizing management overhead and leveraging cloud-native features.",
-        "reference": "https://cloud.google.com/dataproc/docs/concepts/components/connectors/gcs"
-    },
-    {
-        "question_number": 18,
-        "question_area": "Preparación y uso de los datos para el análisis",
-        "question": "You have a database of bank transactions. Which three machine learning applications can you use to analyze the data?",
+        "question": "You have a database of bank transactions. Which three Transferencia y procesamiento de datos applications can you use to analyze the data?",
         "answers": [
             "Supervised learning to determine which transactions are most likely to be fraudulent.",
             "Unsupervised learning to determine which transactions are most likely to be fraudulent.",
@@ -392,22 +371,6 @@
         "reference": "https://cloud.google.com/solutions/data-deduplication"
     },
     {
-        "question_number": 21,
-        "question_area": "Mantenimiento y automatización de las cargas de trabajo de datos",
-        "question": "Your company sends inventory data every 6 hours to a cloud data ingestion service. Data includes several fields and a timestamp. If there are concerns about a transmission, the data is re-transmitted. How should you efficiently deduplicate the data?",
-        "answers": [
-            "Assign global unique identifiers (GUID) to each data entry.",
-            "Compute the hash value of each data entry, and compare it with all historical data.",
-            "Store each data entry as the primary key in a separate database and apply an index.",
-            "Maintain a database table to store the hash value and other metadata for each data entry."
-        ],
-        "correct_answer": [
-            "Maintain a database table to store the hash value and other metadata for each data entry."
-        ],
-        "explanation": "Maintaining a database table with hash values and other metadata allows for quick deduplication checks without the need to compare each incoming data entry against all historical data, thereby enhancing efficiency and reducing computational load.",
-        "reference": "https://cloud.google.com/solutions/data-deduplication"
-    },
-    {
         "question_number": 22,
         "question_area": "Preparación y uso de los datos para el análisis",
         "question": "A new data scientist at your company needs to perform complex analyses across large datasets stored in Google Cloud Storage and a Cassandra cluster on Google Compute Engine. Her laptop's capabilities are insufficient. How can you best support her?",
@@ -420,7 +383,7 @@
         "correct_answer": [
             "Deploy Google Cloud Datalab to a virtual machine on Google Compute Engine."
         ],
-        "explanation": "Deploying Google Cloud Datalab on a VM in Google Compute Engine provides a scalable and powerful environment for complex data analysis and machine learning tasks, leveraging cloud resources instead of the limited capabilities of a local laptop.",
+        "explanation": "Deploying Google Cloud Datalab on a VM in Google Compute Engine provides a scalable and powerful environment for complex data analysis and Transferencia y procesamiento de datos tasks, leveraging cloud resources instead of the limited capabilities of a local laptop.",
         "reference": "https://cloud.google.com/datalab/docs"
     },
     {
@@ -438,23 +401,6 @@
         ],
         "explanation": "This solution leverages Google Cloud Pub/Sub for real-time data ingestion, Google Cloud Dataflow for data processing and transformation, and Google BigQuery for storage and analysis. This end-to-end solution is ideal for handling large-scale, real-time data workflows efficiently.",
         "reference": "https://cloud.google.com/pubsub/docs/overview"
-    },
-    {
-        "question_number": 24,
-        "question_area": "Preparación y uso de los datos para el análisis",
-        "question": "After loading data into Google BigQuery and discovering the need to change a column's data type from STRING to TIMESTAMP for efficiency, what is the most effective migration strategy?",
-        "answers": [
-            "Delete the table CLICK_STREAM and recreate it with the DT column as TIMESTAMP type. Reload the data.",
-            "Add a TS column of the TIMESTAMP type to CLICK_STREAM, populate it from DT, and use TS for future queries.",
-            "Create a view CLICK_STREAM_V where DT strings are cast to TIMESTAMP values and use this view going forward.",
-            "Add TS of the TIMESTAMP type and IS_NEW of the BOOLEAN type to CLICK_STREAM, reload all data with IS_NEW true, and use TS in future queries.",
-            "Construct a query to return every row of CLICK_STREAM, cast DT to TIMESTAMP, and store in a new table NEW_CLICK_STREAM. Use this table going forward."
-        ],
-        "correct_answer": [
-            "Construct a query to return every row of CLICK_STREAM, cast DT to TIMESTAMP, and store in a new table NEW_CLICK_STREAM. Use this table going forward."
-        ],
-        "explanation": "This method minimizes migration effort by creating a new table with the desired TIMESTAMP type for the DT column using a single query, thus avoiding the need to alter the schema of the existing table or reload all data manually.",
-        "reference": "https://cloud.google.com/bigquery/docs/changing-schemas#changing_a_columns_data_type"
     },
     {
         "question_number": 24,
@@ -554,22 +500,6 @@
         "reference": "https://cloud.google.com/bigtable/docs/schema-design"
     },
     {
-        "question_number": 29,
-        "question_area": "Configuración y gestión de la seguridad y acceso a los datos",
-        "question": "Your company is streaming real-time sensor data into Bigtable and has noticed poor performance. How should the row key be redesigned to improve performance?",
-        "answers": [
-            "Use a row key of the form <timestamp>.",
-            "Use a row key of the form <sensorid>.",
-            "Use a row key of the form <timestamp>#<sensorid>.",
-            "Use a row key of the form <sensorid>#<timestamp>."
-        ],
-        "correct_answer": [
-            "Use a row key of the form <sensorid>#<timestamp>."
-        ],
-        "explanation": "Using a row key that starts with <sensorid> followed by <timestamp> optimizes the distribution of writes across the table, reducing hotspots and improving query performance.",
-        "reference": "https://cloud.google.com/bigtable/docs/schema-design"
-    },
-    {
         "question_number": 30,
         "question_area": "Migración a la nube y configuración híbrida",
         "question": "Your company's databases are under heavy load, making analytics difficult without affecting operations. You want to perform analytics with minimal impact. What should you do?",
@@ -587,7 +517,7 @@
     },
     {
         "question_number": 31,
-        "question_area": "Automatización y optimización de infraestructuras",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "You have a Google Cloud Dataflow streaming pipeline with a Pub/Sub source. You need to update the code making the new pipeline incompatible with the current version without data loss. What should you do?",
         "answers": [
             "Update the current pipeline and use the drain flag.",
@@ -603,7 +533,7 @@
     },
     {
         "question_number": 31,
-        "question_area": "Automatización y optimización de infraestructuras",
+        "question_area": "Mantenimiento y automatización de las cargas de trabajo de datos",
         "question": "You have a Google Cloud Dataflow streaming pipeline with a Pub/Sub source. You need to update the code making the new pipeline incompatible with the current version without data loss. What should you do?",
         "answers": [
             "Update the current pipeline and use the drain flag.",
@@ -619,7 +549,7 @@
     },
     {
         "question_number": 32,
-        "question_area": "Optimización del rendimiento",
+        "question_area": "Mantenimiento y automatización de las cargas de trabajo de datos",
         "question": "Flowlogistic is experiencing suboptimal performance with their Bigtable setup for a real-time data analysis campaign. How can they improve this?",
         "answers": [
             "Redesign the schema by evenly distributing reads and writes across the row space of the table.",
@@ -635,7 +565,7 @@
     },
     {
         "question_number": 33,
-        "question_area": "Integración y procesamiento de datos",
+        "question_area": "Preparación y uso de los datos para el análisis",
         "question": "You are developing a real-time dashboard for the CFO using Google Cloud Dataflow, but notice some messages are missing. All messages are published to Cloud Pub/Sub successfully. What should you do next?",
         "answers": [
             "Check the dashboard application to see if it is not displaying correctly.",
@@ -651,7 +581,7 @@
     },
     {
         "question_number": 34,
-        "question_area": "Migración a la nube y configuración híbrida",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "Flowlogistic needs a new system on GCP to feed proprietary tracking software, capable of handling data ingestion, processing, and storage from global sources. Which GCP products should you use?",
         "answers": [
             "Cloud Pub/Sub, Cloud Dataflow, and Cloud Storage",
@@ -667,7 +597,7 @@
     },
     {
         "question_number": 35,
-        "question_area": "Configuración y gestión de la seguridad y acceso a los datos",
+        "question_area": "Almacenamiento de los datos",
         "question": "Flowlogistic wants to use Google BigQuery as their primary analysis system but has existing Apache Hadoop and Spark workloads. How should they store the data common to both workloads?",
         "answers": [
             "Store the common data in BigQuery as partitioned tables.",
@@ -683,7 +613,7 @@
     },
     {
         "question_number": 36,
-        "question_area": "Data Storage Solutions",
+        "question_area": "Almacenamiento de los datos",
         "question": "Flowlogistic wants to use Google Cloud to overcome their technology stack limitations for real-time tracking of shipments. What is the best recommendation for them?",
         "answers": [
             "Migrate their data to Google Cloud Storage and use Dataflow for processing.",
@@ -699,7 +629,7 @@
     },
     {
         "question_number": 37,
-        "question_area": "Data Processing Strategies",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "Flowlogistic needs to optimize its order and shipment data analysis. What cloud solution should they use for the best performance?",
         "answers": [
             "Utilize Google BigQuery for its big data analytics capabilities.",
@@ -715,7 +645,7 @@
     },
     {
         "question_number": 38,
-        "question_area": "Data Analysis Techniques",
+        "question_area": "Preparación y uso de los datos para el análisis",
         "question": "To ensure that Flowlogistic's real-time tracking system is cost-effective and scalable, what should they integrate into their Google Cloud architecture?",
         "answers": [
             "Incorporate Google Cloud Functions to manage real-time data triggers.",
@@ -731,7 +661,7 @@
     },
     {
         "question_number": 39,
-        "question_area": "Cloud Migration Strategies",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "Flowlogistic is considering a full migration to the cloud. What approach should they take to ensure a seamless transition of their data operations?",
         "answers": [
             "Gradually migrate their applications using Google Cloud's VM Migration service.",
@@ -747,7 +677,7 @@
     },
     {
         "question_number": 40,
-        "question_area": "Advanced Data Processing",
+        "question_area": "Preparación y uso de los datos para el análisis",
         "question": "Flowlogistic needs to analyze complex shipment data across multiple sources in real-time. Which Google Cloud product should they use?",
         "answers": [
             "Google Cloud Dataflow for stream and batch data processing.",
@@ -763,7 +693,7 @@
     },
     {
         "question_number": 41,
-        "question_area": "Cloud Infrastructure Optimization",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "How can Flowlogistic best optimize their cloud architecture for performance and cost?",
         "answers": [
             "Implement auto-scaling and managed services to reduce operational overhead.",
@@ -779,12 +709,12 @@
     },
     {
         "question_number": 42,
-        "question_area": "Real-Time Data Integration",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "Flowlogistic wants to integrate real-time tracking data into their cloud platform. What technology should they primarily focus on?",
         "answers": [
             "Google Cloud Pub/Sub for handling real-time message streaming.",
             "Google Cloud Datastore for NoSQL database services.",
-            "Google Cloud SQL for relational database management.",
+            "Google Cloud SQL for relational Almacenamiento de los datos.",
             "Google Cloud Storage for scalable and durable object storage."
         ],
         "correct_answer": [
@@ -795,7 +725,7 @@
     },
     {
         "question_number": 43,
-        "question_area": "Cost-Effective Data Processing",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "What strategy should Flowlogistic adopt to process their data in the most cost-effective way possible on Google Cloud?",
         "answers": [
             "Use preemptible VMs to reduce compute costs.",
@@ -811,7 +741,7 @@
     },
     {
         "question_number": 44,
-        "question_area": "Data Security and Compliance",
+        "question_area": "Configuración y gestión de la seguridad y acceso a los datos",
         "question": "Flowlogistic needs to ensure their data is secure and compliant with industry regulations. What Google Cloud feature should they leverage?",
         "answers": [
             "Google Cloud's Identity and Access Management (IAM) for fine-grained access control.",
@@ -827,12 +757,12 @@
     },
     {
         "question_number": 45,
-        "question_area": "Advanced Analytics and Machine Learning",
-        "question": "Flowlogistic wants to leverage advanced analytics and machine learning to predict shipment delays. What Google Cloud services should they use?",
+        "question_area": "Preparación y uso de los datos para el análisis",
+        "question": "Flowlogistic wants to leverage advanced analytics and Transferencia y procesamiento de datos to predict shipment delays. What Google Cloud services should they use?",
         "answers": [
             "Google Cloud BigQuery for its powerful data analytics capabilities.",
-            "Google Cloud AI Platform to build and deploy machine learning models.",
-            "TensorFlow on Google Compute Engine for custom machine learning algorithms.",
+            "Google Cloud AI Platform to build and deploy Transferencia y procesamiento de datos models.",
+            "TensorFlow on Google Compute Engine for custom Transferencia y procesamiento de datos algorithms.",
             "All of the above."
         ],
         "correct_answer": [
@@ -860,7 +790,7 @@
     {
         "question_number": 47,
         "question_area": "Preparación y uso de los datos para el análisis",
-        "question": "You are designing the database schema for a machine learning-based food ordering service that will predict what users want to eat. Here is some of the information you need to store: The user profile (what the user likes and doesn't like to eat), the user account information (name, address, preferred meal times), and the order information (when orders are made, from where, to whom). The database will be used to store all the transactional data of the product. You want to optimize the data schema. Which Google Cloud Platform product should you use?",
+        "question": "You are designing the database schema for a Transferencia y procesamiento de datos-based food ordering service that will predict what users want to eat. Here is some of the information you need to store: The user profile (what the user likes and doesn't like to eat), the user account information (name, address, preferred meal times), and the order information (when orders are made, from where, to whom). The database will be used to store all the transactional data of the product. You want to optimize the data schema. Which Google Cloud Platform product should you use?",
         "answers": [
             "BigQuery",
             "Cloud SQL",
@@ -870,7 +800,7 @@
         "correct_answer": [
             "BigQuery"
         ],
-        "explanation": "BigQuery is the optimal choice for this scenario as it supports large-scale analytics, which is essential for a machine learning-based service. It can handle the large volumes of data generated by the service and provides capabilities for analyzing user preferences and order trends efficiently. While typically not used for transactional data, its ability to handle large datasets and complex queries makes it suitable for aggregating and analyzing transactional data for machine learning purposes.",
+        "explanation": "BigQuery is the optimal choice for this scenario as it supports large-scale analytics, which is essential for a Transferencia y procesamiento de datos-based service. It can handle the large volumes of data generated by the service and provides capabilities for analyzing user preferences and order trends efficiently. While typically not used for transactional data, its ability to handle large datasets and complex queries makes it suitable for aggregating and analyzing transactional data for Transferencia y procesamiento de datos purposes.",
         "reference": "https://cloud.google.com/bigquery"
     },
     {
@@ -909,7 +839,7 @@
     },
     {
         "question_number": 50,
-        "question_area": "Arquitectura de soluciones y servicios en la nube",
+        "question_area": "Diseño de sistemas de procesamiento de datos",
         "question": "You are choosing a NoSQL database to handle telemetry data submitted from millions of Internet-of-Things (IoT) devices. The volume of data is growing at 100 TB per year, and each data entry has about 100 attributes. The data processing pipeline does not require atomicity, consistency, isolation, and durability (ACID). However, high availability and low latency are required. You need to analyze the data by querying against individual fields. Which three databases meet your requirements? (Choose three.)",
         "answers": [
             "Redis",
@@ -929,7 +859,7 @@
     },
     {
         "question_number": 51,
-        "question_area": "Machine Learning y ciencia de datos",
+        "question_area": "Preparación y uso de los datos para el análisis",
         "question": "You are training a spam classifier. You notice that you are overfitting the training data. Which three actions can you take to resolve this problem? (Choose three.)",
         "answers": [
             "Get more training examples",
@@ -949,7 +879,7 @@
     },
     {
         "question_number": 52,
-        "question_area": "Seguridad y privacidad",
+        "question_area": "Mantenimiento y automatización de las cargas de trabajo de datos",
         "question": "You are implementing security best practices on your data pipeline. Currently, you are manually executing jobs as the Project Owner. You want to automate these jobs by taking nightly batch files containing non-public information from Google Cloud Storage, processing them with a Spark Scala job on a Google Cloud Dataproc cluster, and depositing the results into Google BigQuery. How should you securely run this workload?",
         "answers": [
             "Restrict the Google Cloud Storage bucket so only you can see the files",
@@ -1015,7 +945,7 @@
     },
     {
         "question_number": 56,
-        "question_area": "Analytics and Data Warehousing",
+        "question_area": "Preparación y uso de los datos para el análisis",
         "question": "You have enabled the free integration between Firebase Analytics and Google BigQuery. Firebase now automatically creates a new table daily in BigQuery in the format app_events_YYYYMMDD. You want to query all of the tables for the past 30 days in legacy SQL. What should you do?",
         "answers": [
             "Use the TABLE_DATE_RANGE function",
@@ -1029,7 +959,7 @@
     },
     {
         "question_number": 57,
-        "question_area": "Data Processing",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "Your company is currently setting up data pipelines for their campaign. For all the Google Cloud Pub/Sub streaming data, one of the important business requirements is to be able to periodically identify the inputs and their timings during their campaign. Engineers have decided to use windowing and transformation in Google Cloud Dataflow for this purpose. However, when testing this feature, they find that the Cloud Dataflow job fails for the all streaming insert. What is the most likely cause of this problem?",
         "answers": [
             "They have not assigned the timestamp, which causes the job to fail",
@@ -1043,7 +973,7 @@
     },
     {
         "question_number": 58,
-        "question_area": "Data Engineering",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "You architect a system to analyze seismic data. Your extract, transform, and load (ETL) process runs as a series of MapReduce jobs on an Apache Hadoop cluster. The ETL process takes days to process a data set because some steps are computationally expensive. Then you discover that a sensor calibration step has been omitted. How should you change your ETL process to carry out sensor calibration systematically in the future?",
         "answers": [
             "Modify the transformMapReduce jobs to apply sensor calibration before they do anything else.",
@@ -1057,7 +987,7 @@
     },
     {
         "question_number": 59,
-        "question_area": "Database Management",
+        "question_area": "Almacenamiento de los datos",
         "question": "An online retailer has built their current application on Google App Engine. A new initiative at the company mandates that they extend their application to allow their customers to transact directly via the application. They need to manage their shopping transactions and analyze combined data from multiple datasets using a business intelligence (BI) tool. They want to use only a single database for this purpose. Which Google Cloud database should they choose?",
         "answers": [
             "BigQuery",
@@ -1071,7 +1001,7 @@
     },
     {
         "question_number": 60,
-        "question_area": "Big Data",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "You launched a new gaming app almost three years ago. You have been uploading log files from the previous day to a separate Google BigQuery table with the table name format LOGS_yyyymmdd. You have been using table wildcard functions to generate daily and monthly reports for all time ranges. Recently, you discovered that some queries that cover long date ranges are exceeding the limit of 1,000 tables and failing. How can you resolve this issue?",
         "answers": [
             "Convert all daily log tables into date-partitioned tables",
@@ -1085,21 +1015,7 @@
     },
     {
         "question_number": 61,
-        "question_area": "Machine Learning",
-        "question": "Your analytics team wants to build a simple statistical model to determine which customers are most likely to work with your company again, based on a few different metrics. They want to run the model on Apache Spark, using data housed in Google Cloud Storage, and you have recommended using Google Cloud Dataproc to execute this job. Testing has shown that this workload can run in approximately 30 minutes on a 15-node cluster, outputting the results into Google BigQuery. The plan is to run this workload weekly. How should you optimize the cluster for cost?",
-        "answers": [
-            "Migrate the workload to Google Cloud Dataflow",
-            "Use pre-emptible virtual machines (VMs) for the cluster",
-            "Use a higher-memory node so that the job runs faster",
-            "Use SSDs on the worker nodes so that the job can run faster"
-        ],
-        "correct_answer": "Use pre-emptible virtual machines (VMs) for the cluster",
-        "explanation": "Using pre-emptible VMs offers a cost-effective solution for running non-critical batch jobs like this one. Pre-emptible VMs are less expensive than standard VMs and suitable for jobs that can tolerate interruptions, which is viable given the non-critical nature of the weekly job.",
-        "reference": "https://cloud.google.com/dataproc/docs/concepts/compute/preemptible-vms"
-    },
-    {
-        "question_number": 61,
-        "question_area": "Machine Learning",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "Your analytics team wants to build a simple statistical model to determine which customers are most likely to work with your company again, based on a few different metrics. They want to run the model on Apache Spark, using data housed in Google Cloud Storage, and you have recommended using Google Cloud Dataproc to execute this job. Testing has shown that this workload can run in approximately 30 minutes on a 15-node cluster, outputting the results into Google BigQuery. The plan is to run this workload weekly. How should you optimize the cluster for cost?",
         "answers": [
             "Migrate the workload to Google Cloud Dataflow",
@@ -1113,7 +1029,7 @@
     },
     {
         "question_number": 62,
-        "question_area": "Data Processing",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "Your company receives both batch- and stream-based event data. You want to process the data using Google Cloud Dataflow over a predictable time period. However, you realize that in some instances data can arrive late or out of order. How should you design your Cloud Dataflow pipeline to handle data that is late or out of order?",
         "answers": [
             "Set a single global window to capture all the data",
@@ -1127,7 +1043,7 @@
     },
     {
         "question_number": 63,
-        "question_area": "Machine Learning",
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "You have some data, which is shown in the graphic below. The two dimensions are X and Y, and the shade of each dot represents what class it is. You want to classify this data accurately using a linear algorithm. To do this you need to add a synthetic feature. What should the value of that feature be?",
         "answers": [
             "X^2 + Y^2",
@@ -1185,7 +1101,7 @@
     },
     {
         "question_number": 67,
-        "question_area": "Machine Learning and Data Analysis",
+        "question_area": "Transferencia y procesamiento de datos and Data Analysis",
         "question": "You are developing an application that uses a recommendation engine on Google Cloud. Your solution should display new videos to customers based on past views. Your solution needs to generate labels for the entities in videos that the customer has viewed. Your design must be able to provide very fast filtering suggestions based on data from other customer preferences on several TB of data. What should you do?",
         "answers": [
             "Build and train a complex classification model with Spark MLlib to generate labels and filter the results. Deploy the models using Cloud Dataproc. Call the model from your application.",
@@ -1249,18 +1165,18 @@
     },
     {
         "question_number": 71,
-        "question_area": "AI and Machine Learning",
-        "question": "You are developing an application on Google Cloud that will automatically generate subject labels for users' blog posts. You are under competitive pressure to add this feature quickly, and you have no additional developer resources. No one on your team has experience with machine learning. What should you do?",
+        "question_area": "AI and Transferencia y procesamiento de datos",
+        "question": "You are developing an application on Google Cloud that will automatically generate subject labels for users' blog posts. You are under competitive pressure to add this feature quickly, and you have no additional developer resources. No one on your team has experience with Transferencia y procesamiento de datos. What should you do?",
         "answers": [
             "Call the Cloud Natural Language API from your application. Process the generated Entity Analysis as labels.",
             "Call the Cloud Natural Language API from your application. Process the generated Sentiment Analysis as labels.",
-            "Build and train a text classification model using TensorFlow. Deploy the model using Cloud Machine Learning Engine. Call the model from your application and process the results as labels.",
+            "Build and train a text classification model using TensorFlow. Deploy the model using Cloud Transferencia y procesamiento de datos Engine. Call the model from your application and process the results as labels.",
             "Build and train a text classification model using TensorFlow. Deploy the model using a Kubernetes Engine cluster. Call the model from your application and process the results as labels."
         ],
         "correct_answer": [
             "Call the Cloud Natural Language API from your application. Process the generated Entity Analysis as labels."
         ],
-        "explanation": "Utilizing the Cloud Natural Language API allows for immediate implementation of sophisticated text analysis features without the need for machine learning expertise or development resources. The Entity Analysis tool can effectively identify and label the relevant subjects within blog posts, simplifying the task and speeding up deployment.",
+        "explanation": "Utilizing the Cloud Natural Language API allows for immediate implementation of sophisticated text analysis features without the need for Transferencia y procesamiento de datos expertise or development resources. The Entity Analysis tool can effectively identify and label the relevant subjects within blog posts, simplifying the task and speeding up deployment.",
         "reference": "https://cloud.google.com/natural-language/docs"
     },
     {
@@ -1394,7 +1310,7 @@
     {
         "question_number": 80,
         "question_area": "Data Infrastructure",
-        "question": "MJTelco, a rapidly growing startup, needs to handle large-scale data workflows to optimize network topologies using machine learning. They are considering Google Cloud Platform products to support their operations. Which combination of products should you recommend for their use case?",
+        "question": "MJTelco, a rapidly growing startup, needs to handle large-scale data workflows to optimize network topologies using Transferencia y procesamiento de datos. They are considering Google Cloud Platform products to support their operations. Which combination of products should you recommend for their use case?",
         "answers": [
             "Cloud Datastore and Cloud Bigtable",
             "Cloud Bigtable and Cloud SQL",
@@ -1518,7 +1434,7 @@
         "correct_answer": [
             "Implement read replicas to handle the read-only query spikes."
         ],
-        "explanation": "Read replicas can efficiently handle read-only query spikes by distributing the read load, thereby enhancing the performance without significant cost increases or complex changes to database management or architecture.",
+        "explanation": "Read replicas can efficiently handle read-only query spikes by distributing the read load, thereby enhancing the performance without significant cost increases or complex changes to Almacenamiento de los datos or architecture.",
         "reference": "https://cloud.google.com/sql/docs/postgres/replication"
     },
     {
@@ -1927,7 +1843,7 @@
     },
     {
         "question_number": 113,
-        "question_area": "AI and Machine Learning Integration",
+        "question_area": "AI and Transferencia y procesamiento de datos Integration",
         "question": "You are a retailer integrating online sales with in-home assistants like Google Home. You need to interpret customer voice commands and issue orders. Which solution should you choose?",
         "answers": [
             "Speech-to-Text API",
@@ -2092,7 +2008,7 @@
     {
         "question_number": 123,
         "question_area": "Data Analytics",
-        "question": "You need to create a data pipeline that copies time-series transaction data so that it can be queried from within BigQuery by your data science team for analysis. Every hour, thousands of transactions are updated with a new status. The size of the initial dataset is 1.5 PB, and it will grow by 3 TB per day. The data is heavily structured, and your data science team will build machine learning models based on this data. You want to maximize performance and usability for your data science team. Which two strategies should you adopt?",
+        "question": "You need to create a data pipeline that copies time-series transaction data so that it can be queried from within BigQuery by your data science team for analysis. Every hour, thousands of transactions are updated with a new status. The size of the initial dataset is 1.5 PB, and it will grow by 3 TB per day. The data is heavily structured, and your data science team will build Transferencia y procesamiento de datos models based on this data. You want to maximize performance and usability for your data science team. Which two strategies should you adopt?",
         "answers": [
             "Denormalize the data as much as possible.",
             "Preserve the structure of the data as much as possible.",
@@ -2173,7 +2089,7 @@
     },
     {
         "question_number": 128,
-        "question_area": "Optimización del modelo de Machine Learning",
+        "question_area": "Optimización del modelo de Transferencia y procesamiento de datos",
         "question": "You work on a regression problem in a natural language processing domain, and you have 100M labeled examples in your dataset. You have randomly shuffled your data and split your dataset into train and test samples (in a 90/10 ratio). After you trained the neural network and evaluated your model on a test set, you discover that the root-mean-squared error (RMSE) of your model is twice as high on the train set as on the test set. How should you improve the performance of your model?",
         "answers": [
             "Increase the share of the test sample in the train-test split.",
@@ -2485,10 +2401,10 @@
     },
     {
         "question_number": 148,
-        "question_area": "Soluciones de Machine Learning y AI",
+        "question_area": "Soluciones de Transferencia y procesamiento de datos y AI",
         "question": "You work for a shipping company that has distribution centers where packages move on delivery lines to route them properly. The company wants to add cameras to the delivery lines to detect and track any visual damage to the packages in transit. You need to create a way to automate the detection of damaged packages and flag them for human review in real time while the packages are in transit. Which solution should you choose?",
         "answers": [
-            "Use BigQuery machine learning to be able to train the model at scale, so you can analyze the packages in batches.",
+            "Use BigQuery Transferencia y procesamiento de datos to be able to train the model at scale, so you can analyze the packages in batches.",
             "Train an AutoML model on your corpus of images, and build an API around that model to integrate with the package tracking applications.",
             "Use the Cloud Vision API to detect for damage, and raise an alert through Cloud Functions. Integrate the package tracking applications with this function.",
             "Use TensorFlow to create a model that is trained on your corpus of images. Create a Python notebook in Cloud Datalab that uses this model so you can analyze for damaged packages."
@@ -2533,7 +2449,7 @@
     },
     {
         "question_number": 151,
-        "question_area": "Migración y adaptación de modelos de Machine Learning",
+        "question_area": "Migración y adaptación de modelos de Transferencia y procesamiento de datos",
         "question": "You work for an advertising company, and you've developed a Spark ML model to predict click-through rates at advertisement blocks. You've been developing everything at your on-premises data center, and now your company is migrating to Google Cloud. Your data center will be closing soon, so a rapid lift-and-shift migration is necessary. However, the data you've been using will be migrated to BigQuery. You periodically retrain your Spark ML models, so you need to migrate existing training pipelines to Google Cloud. What should you do?",
         "answers": [
             "Use Vertex AI for training existing Spark ML models",
@@ -2560,7 +2476,7 @@
         "correct_answer": [
             "BigQuery"
         ],
-        "explanation": "BigQuery is an optimal choice for this scenario as it offers extensive support for geospatial data processing and machine learning within the same platform. This integration allows for efficient analysis of large volumes of telemetry data, including GeoJSON, and the ability to easily build and deploy models to predict delivery delays.",
+        "explanation": "BigQuery is an optimal choice for this scenario as it offers extensive support for geospatial data processing and Transferencia y procesamiento de datos within the same platform. This integration allows for efficient analysis of large volumes of telemetry data, including GeoJSON, and the ability to easily build and deploy models to predict delivery delays.",
         "reference": "https://cloud.google.com/bigquery/docs/gis-intro"
     },
     {
@@ -2629,7 +2545,7 @@
     },
     {
         "question_number": 157,
-        "question_area": "Machine Learning y Modelado",
+        "question_area": "Transferencia y procesamiento de datos y Modelado",
         "question": "Your team is working on a binary classification problem. You have trained a support vector machine (SVM) classifier with default parameters, and received an area under the Curve (AUC) of 0.87 on the validation set. You want to increase the AUC of the model. What should you do?",
         "answers": [
             "Perform hyperparameter tuning",
@@ -2672,7 +2588,7 @@
         "correct_answer": [
             "Cloud Spanner"
         ],
-        "explanation": "Cloud Spanner meets all the specified requirements. It is fully managed, can automatically scale both vertically and horizontally, supports SQL queries, and provides strong transactional consistency, making it ideal for projects needing scalability and robust database management.",
+        "explanation": "Cloud Spanner meets all the specified requirements. It is fully managed, can automatically scale both vertically and horizontally, supports SQL queries, and provides strong transactional consistency, making it ideal for projects needing scalability and robust Almacenamiento de los datos.",
         "reference": "https://cloud.google.com/spanner/docs/overview"
     },
     {
@@ -2741,7 +2657,7 @@
     },
     {
         "question_number": 164,
-        "question_area": "Machine Learning y Modelado",
+        "question_area": "Transferencia y procesamiento de datos y Modelado",
         "question": "You are working on a linear regression model on BigQuery ML to predict a customer's likelihood of purchasing your company's products. Your model uses a city name variable as a key predictive component. In order to train and serve the model, your data must be organized in columns. You want to prepare your data using the least amount of coding while maintaining the predictable variables. What should you do?",
         "answers": [
             "Create a new view with BigQuery that does not include a column with city information.",
@@ -2773,7 +2689,7 @@
     },
     {
         "question_number": 166,
-        "question_area": "Big Data and Machine Learning",
+        "question_area": "Big Data and Transferencia y procesamiento de datos",
         "question": "A shipping company has live package-tracking data that is sent to an Apache Kafka stream in real time. This is then loaded into BigQuery. Analysts in your company want to query the tracking data in BigQuery to analyze geospatial trends in the lifecycle of a package. The table was originally created with ingest-date partitioning. Over time, the query processing time has increased. You need to implement a change that would improve query performance in BigQuery. What should you do?",
         "answers": [
             "Implement clustering in BigQuery on the ingest date column.",
@@ -2853,8 +2769,8 @@
     },
     {
         "question_number": 171,
-        "question_area": "Machine Learning Data Preparation",
-        "question": "You work for a large real estate firm and are preparing 6 TB of home sales data to be used for machine learning. You will use SQL to transform the data and use BigQuery ML to create a machine learning model. You plan to use the model for predictions against a raw dataset that has not been transformed. How should you set up your workflow in order to prevent skew at prediction time?",
+        "question_area": "Transferencia y procesamiento de datos Data Preparation",
+        "question": "You work for a large real estate firm and are preparing 6 TB of home sales data to be used for Transferencia y procesamiento de datos. You will use SQL to transform the data and use BigQuery ML to create a Transferencia y procesamiento de datos model. You plan to use the model for predictions against a raw dataset that has not been transformed. How should you set up your workflow in order to prevent skew at prediction time?",
         "answers": [
             "When creating your model, use BigQuery's TRANSFORM clause to define preprocessing steps. At prediction time, use BigQuery's ML.EVALUATE clause without specifying any transformations on the raw input data.",
             "When creating your model, use BigQuery's TRANSFORM clause to define preprocessing steps. Before requesting predictions, use a saved query to transform your raw input data, and then use ML.EVALUATE.",
@@ -2953,7 +2869,7 @@
         "question": "You want to rebuild your batch pipeline for structured data on Google Cloud. You are using PySpark to conduct data transformations at scale, but your pipelines are taking over twelve hours to run. To expedite development and pipeline run time, you want to use a serverless tool and SQL syntax. You have already moved your raw data into Cloud Storage. How should you build the pipeline on Google Cloud while meeting speed and processing requirements?",
         "answers": [
             "Convert your PySpark commands into SparkSQL queries to transform the data, and then run your pipeline on Dataproc to write the data into BigQuery.",
-            "Ingest your data into Cloud SQL, convert your PySpark commands into SparkSQL queries to transform the data, and then use federated queries from BigQuery for machine learning.",
+            "Ingest your data into Cloud SQL, convert your PySpark commands into SparkSQL queries to transform the data, and then use federated queries from BigQuery for Transferencia y procesamiento de datos.",
             "Ingest your data into BigQuery from Cloud Storage, convert your PySpark commands into BigQuery SQL queries to transform the data, and then write the transformations to a new table.",
             "Use Apache Beam Python SDK to build the transformation pipelines, and write the data into BigQuery."
         ],
@@ -3092,7 +3008,8 @@
         "reference": "https://cloud.google.com/dataflow/docs/guides/troubleshooting-your-pipeline#detecting_exceptions_in_worker_code"
     },
     {
-        "id": 186,
+        "question_number": 186,
+        "question_area": "Preparación y uso de los datos para el análisis",
         "question": "Your new customer has requested daily reports that show their net consumption of Google Cloud compute resources and who used the resources. You need to quickly and efficiently generate these daily reports. What should you do?",
         "options": [
             "Do daily exports of Cloud Logging data to BigQuery. Create views filtering by project, log type, resource, and user.",
@@ -3104,7 +3021,8 @@
         "explanation": "Option C is ideal for generating daily reports efficiently. By filtering data directly in Cloud Logging and importing into BigQuery, you leverage BigQuery's capabilities for handling large datasets and complex queries without manual data handling."
     },
     {
-        "id": 187,
+        "question_number": 187,
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "The Development and External teams have the project viewer Identity and Access Management (IAM) role in a folder named Visualization. You want the Development Team to be able to read data from both Cloud Storage and BigQuery, but the External Team should only be able to read data from BigQuery. What should you do?",
         "options": [
             "Remove Cloud Storage IAM permissions to the External Team on the acme-raw-data project.",
@@ -3116,7 +3034,8 @@
         "explanation": "Option D effectively separates the data access between the two teams. By setting up a VPC Service Controls perimeter and restricting Cloud Storage as an API, the Development Team can access both services, while the External Team is limited to BigQuery only."
     },
     {
-        "id": 188,
+        "question_number": 188,
+        "question_area": "Diseño de sistemas de procesamiento de datos",
         "question": "Your startup has a web application that currently serves customers out of a single region in Asia. You are targeting funding that will allow your startup to serve customers globally. Your current goal is to optimize for cost, and your post-funding goal is to optimize for global presence and performance. You must use a native JDBC driver. What should you do?",
         "options": [
             "Use Cloud Spanner to configure a single region instance initially, and then configure multi-region Cloud Spanner instances after securing funding.",
@@ -3128,7 +3047,8 @@
         "explanation": "Option C provides a scalable and cost-effective approach. Starting with a zonal instance for Cloud SQL and later expanding to Bigtable with replication across US, Europe, and Asia supports global scaling and performance optimization post-funding."
     },
     {
-        "id": 189,
+        "question_number": 189,
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "You need to migrate 1 PB of data from an on-premises data center to Google Cloud. Data transfer time during the migration should take only a few hours. You want to follow Google-recommended practices to facilitate the large data transfer over a secure connection. What should you do?",
         "options": [
             "Establish a Cloud Interconnect connection between the on-premises data center and Google Cloud, and then use the Storage Transfer Service.",
@@ -3140,7 +3060,8 @@
         "explanation": "Option A leverages Cloud Interconnect for a high-bandwidth, low-latency connection, combined with Storage Transfer Service for secure and efficient data transfer, suitable for the large volume of data and the need for quick migration."
     },
     {
-        "id": 190,
+        "question_number": 190,
+        "question_area": "Transferencia y procesamiento de datos",
         "question": "You are loading CSV files from Cloud Storage into BigQuery daily. However, the BigQuery dataset is not being updated as expected. You've checked the Cloud Storage and confirmed the CSV files are being updated daily. What should you check to resolve this issue?",
         "options": [
             "Ensure the BigQuery dataset is set to auto-detect the schema and update mode is set to append.",
@@ -3152,7 +3073,8 @@
         "explanation": "Option B is critical as even with correct setup elsewhere, a schema mismatch or incorrect file format would prevent successful data loading. Ensuring file format compatibility and schema alignment is fundamental in troubleshooting data loading issues."
     },
     {
-        "id": 191,
+        "question_number": 191,
+        "question_area": "Diseño de sistemas de procesamiento de datos",
         "question": "You need to deploy an application across multiple cloud providers for increased redundancy and latency improvements. You want to minimize latency by serving requests from the closest geographical server to the user. What should you do?",
         "options": [
             "Use a third-party content delivery network (CDN) to route user requests to the nearest data center based on geographic IP address.",
@@ -3164,7 +3086,8 @@
         "explanation": "Option A is the most effective for minimizing latency by using a CDN, which typically optimizes for delivering content from the nearest geographical server to the user, improving both redundancy and latency."
     },
     {
-        "id": 192,
+        "question_number": 192,
+        "question_area": "Mantenimiento y automatización de las cargas de trabajo de datos",
         "question": "Your organization has a hybrid cloud environment with production data centers on-premises and development environments in Google Cloud. You have been tasked with designing a solution that allows for centralized management of security policies across both environments. What should you do?",
         "options": [
             "Deploy Cloud Armor policies at the edge of the network to protect against external threats.",
@@ -3176,8 +3099,9 @@
         "explanation": "Option C, using Anthos Config Management, enables the application of uniform security policies across both environments, facilitating centralized management and ensuring consistency in security configurations."
     },
     {
-        "id": 193,
-        "question": "The machine learning team in your company has developed a model that predicts stock prices based on real-time market data. The team is currently testing the model with historical data stored in BigQuery. They now need to deploy the model to production and ensure it can process real-time data efficiently. What should you do?",
+        "question_number": 193,
+        "question_area": "Preparación y uso de los datos para el análisis",
+        "question": "The Transferencia y procesamiento de datos team in your company has developed a model that predicts stock prices based on real-time market data. The team is currently testing the model with historical data stored in BigQuery. They now need to deploy the model to production and ensure it can process real-time data efficiently. What should you do?",
         "options": [
             "Deploy the model to AI Platform Predictions and use Dataflow to stream data directly from the stock market into BigQuery.",
             "Export the model to a TensorFlow Lite format and run it on mobile devices for faster processing of real-time data.",
@@ -3188,7 +3112,8 @@
         "explanation": "Option D is most suitable for handling real-time data processing by using a scalable Kubernetes cluster for deploying the model and leveraging Pub/Sub for efficient real-time data ingestion."
     },
     {
-        "id": 194,
+        "question_number": 194,
+        "question_area": "Preparación y uso de los datos para el análisis",
         "question": "You need to analyze a large volume of event data from your mobile application to identify usage patterns and improve user experience. The data is structured and you require real-time analysis. What Google Cloud solution should you use?",
         "options": [
             "Load the data into BigQuery and use SQL queries to analyze user behavior.",
@@ -3200,7 +3125,8 @@
         "explanation": "Option B, using Cloud Dataflow for real-time data processing and BigQuery for analysis, provides a powerful solution for handling structured event data and enabling immediate insights into user behavior."
     },
     {
-        "id": 195,
+        "question_number": 195,
+        "question_area": "Mantenimiento y automatización de las cargas de trabajo de datos",
         "question": "A company is experiencing issues with their Google Cloud SQL instance running MySQL, which is intermittently becoming unresponsive. The CPU and memory metrics do not show any spikes during these times. What is the likely cause and how can it be resolved?",
         "options": [
             "The issue may be due to insufficient disk IOPS. Upgrading to a higher-performance disk or increasing the size to get more IOPS could resolve the problem.",
@@ -3325,8 +3251,8 @@
     },
     {
         "question_number": 203,
-        "question_area": "Machine Learning Optimization",
-        "question": "A TensorFlow machine learning model on Compute Engine virtual machines (n2-standard-32) takes two days to complete training. The model has custom TensorFlow operations that must run partially on a CPU. You want to reduce the training time in a cost-effective manner. What should you do?",
+        "question_area": "Transferencia y procesamiento de datos Optimization",
+        "question": "A TensorFlow Transferencia y procesamiento de datos model on Compute Engine virtual machines (n2-standard-32) takes two days to complete training. The model has custom TensorFlow operations that must run partially on a CPU. You want to reduce the training time in a cost-effective manner. What should you do?",
         "answers": [
             "Change the VM type to n2-highmem-32.",
             "Change the VM type to e2-standard-32.",
@@ -3342,7 +3268,7 @@
     {
         "question_number": 204,
         "question_area": "Real-Time Data Processing",
-        "question": "You want to create a machine learning model using BigQuery ML and create an endpoint for hosting the model using Vertex AI. This will enable the processing of continuous streaming data in near-real time from multiple vendors. The data may contain invalid values. What should you do?",
+        "question": "You want to create a Transferencia y procesamiento de datos model using BigQuery ML and create an endpoint for hosting the model using Vertex AI. This will enable the processing of continuous streaming data in near-real time from multiple vendors. The data may contain invalid values. What should you do?",
         "answers": [
             "Create a new BigQuery dataset and use streaming inserts to land the data from multiple vendors. Configure your BigQuery ML model to use the 'ingestion' dataset as the framing data.",
             "Use BigQuery streaming inserts to land the data from multiple vendors where your BigQuery dataset ML model is deployed.",
@@ -3827,7 +3753,7 @@
     },
     {
         "question_number": 234,
-        "question_area": "Storage and database management",
+        "question_area": "Storage and Almacenamiento de los datos",
         "question": "You migrated a data backend for an application that serves 10 PB of historical product data for analytics. Only the last known state for a product, which is about 10 GB of data, needs to be served through an API to the other applications. You need to choose a cost-effective persistent storage solution that can accommodate the analytics requirements and the API performance of up to 1000 queries per second (QPS) with less than 1 second latency. What should you do?",
         "answers": [
             "Store the historical data in BigQuery for analytics. Use a materialized view to precompute the last state of a product. Serve the last state data directly from BigQuery to the API.",
@@ -3859,7 +3785,7 @@
     },
     {
         "question_number": 236,
-        "question_area": "Database management and scalability",
+        "question_area": "Almacenamiento de los datos and scalability",
         "question": "You are deploying a MySQL database workload onto Cloud SQL. The database must be able to scale up to support several readers from various geographic regions. The database must be highly available and meet low RTO and RPO requirements, even in the event of a regional outage. You need to ensure that interruptions to the readers are minimal during a database failover. What should you do?",
         "answers": [
             "Create a highly available Cloud SQL instance in region A. Create a highly available read replica in region B. Scale up read workloads by creating cascading read replicas in multiple regions. Backup the Cloud SQL instances to a multi-regional Cloud Storage bucket. Restore the Cloud SQL backup to a new instance in another region when Region A is down.",
@@ -3971,8 +3897,8 @@
     },
     {
         "question_number": 243,
-        "question_area": "Data preparation for machine learning",
-        "question": "You are preparing data that your machine learning team will use to train a model using BigQueryML. They want to predict the price per square foot of real estate. The training data has a column for the price and a column for the number of square feet. Another feature column called ‘feature1’ contains null values due to missing data. You want to replace the nulls with zeros to keep more data points. Which query should you use?",
+        "question_area": "Data preparation for Transferencia y procesamiento de datos",
+        "question": "You are preparing data that your Transferencia y procesamiento de datos team will use to train a model using BigQueryML. They want to predict the price per square foot of real estate. The training data has a column for the price and a column for the number of square feet. Another feature column called ‘feature1’ contains null values due to missing data. You want to replace the nulls with zeros to keep more data points. Which query should you use?",
         "answers": [
             "Replace null values in the 'feature1' column with zeros without altering other columns or performing unnecessary calculations.",
             "Remove the 'feature1' column from the dataset due to its missing data.",
@@ -3982,7 +3908,7 @@
         "correct_answer": [
             "Replace null values in the 'feature1' column with zeros without altering other columns or performing unnecessary calculations."
         ],
-        "explanation": "Replacing the null values in 'feature1' with zeros allows the retention of more data points for analysis without impacting the integrity of other important columns required for the machine learning model. This method ensures that the training data is more complete, improving the potential accuracy of the model predictions.",
+        "explanation": "Replacing the null values in 'feature1' with zeros allows the retention of more data points for analysis without impacting the integrity of other important columns required for the Transferencia y procesamiento de datos model. This method ensures that the training data is more complete, improving the potential accuracy of the model predictions.",
         "reference": "https://cloud.google.com/bigquery/docs/bigqueryml"
     },
     {
