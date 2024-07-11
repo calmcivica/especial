@@ -522,6 +522,9 @@ def reset_question_set():
         del st.session_state["question_set"]
 
 def filtros(especialidad, datos, conn, user, examen=None):
+    """
+    Sirve solamente para el filtro de examen, no para el de práctica --> TENER CUIDADO!
+    """
     st.subheader("Filtros")
     values = st.slider(
         "Seleccione rango de preguntas en el que practicar",
