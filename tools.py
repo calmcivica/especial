@@ -221,12 +221,7 @@ def practicar(conn, datos, especialidad):
                 if any(area in secciones for area in item["question_area"])
             ]
 
-        consulta_preguntas_hechas = f"""SELECT 
-                STRING_AGG(CAST(question_id AS NVARCHAR(MAX)), ',') WITHIN GROUP (ORDER BY question_id) AS Hechas, 
-                STRING_AGG(CASE WHEN type = 'Examen' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(MAX)) ELSE NULL END, ',') WITHIN GROUP (ORDER BY question_id) AS Examen_falsas, 
-                STRING_AGG(CASE WHEN type = 'practicar' AND is_correct = 0 THEN CAST(question_id AS NVARCHAR(MAX)) ELSE NULL END, ',') WITHIN GROUP (ORDER BY question_id) AS Practicar_falsas 
-                FROM (SELECT DISTINCT question_id, type, is_correct FROM [esnowflake].[dbo].Fact_Answers WHERE user_nickname = '{user}') AS filtered_answers;"""
-
+        consulta_preguntas_hechas = f"EXEC GetQuestionHistory @user='{user}'"
         aux_opcion = conn.cursor().execute(consulta_preguntas_hechas).fetchall()
 
         no_hechas = []
