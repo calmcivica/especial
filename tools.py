@@ -170,13 +170,8 @@ def practicar(conn, datos, especialidad):
     st.session_state["button_order_aleatorio"] = False
     if "exam_mode" not in st.session_state:
         st.session_state["exam_mode"] = ""
-    with st.expander("¿Como podría usar esta sección? 🤔"):
-        if especialidad == "snowflake":
-            st.markdown(c.USO_SECCION_SNOWFLAKE)
-        elif especialidad == "dbt":
-            st.markdown(c.USO_SECCION_DBT)
-        elif especialidad == "google":
-            st.markdown(c.USO_SECCION_GOOGLE)
+    with st.expander("¿Cómo podría usar esta sección? 🤔"):
+        st.markdown(getattr(c, f'USO_SECCION_{especialidad.upper()}'))
 
     filtros, preguntas = st.columns([1, 3], gap="large")
     # Filtros
@@ -190,21 +185,10 @@ def practicar(conn, datos, especialidad):
             step=1,
         )
 
-        if especialidad == "snowflake":
-            secciones = st.multiselect(
-                "¿ Qué secciones quieres tocar ?",
-                c.SECCIONES_SNOWFLAKE,
-            )
-        elif especialidad == "dbt":
-            secciones = st.multiselect(
-                "¿ Qué secciones quieres tocar ?",
-                c.SECCIONES_DBT,
-            )
-        elif especialidad == "google":
-            secciones = st.multiselect(
-                "¿ Qué secciones quieres tocar ?",
-                c.SECCIONES_GOOGLE,
-            )
+        secciones = st.multiselect(
+            "¿Qué secciones quieres tocar?",
+            getattr(c, f'SECCIONES_{especialidad.upper()}')
+        )
 
         option = st.multiselect(
             "Otros filtros",
