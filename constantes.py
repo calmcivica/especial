@@ -105,7 +105,7 @@ SECCIONES_DBT = [
     "Creating and maintaining dbt documentation",
     "Promoting code through version control",
     "Establishing environments in data warehouse for dbt",
-    "Estrellita"
+    "Estrellita",
 ]
 
 
@@ -145,7 +145,7 @@ Los candidatos deben renovar su certificación para mantener su estado de certif
 """
 
 USO_SECCION_GOOGLE = """
-🤓 **¡Parece mentira, pero sí, esto es para estudiar :yellow[Google], no el teórico de la autoescuela!** 🚗💨
+🤓 **¡Parece mentira, pero sí, esto es para estudiar :orange[Google], no el teórico de la autoescuela!** 🚗💨
 
 A primera vista, podrías pensar que te has equivocado de clase, pero no, estás exactamente donde necesitas estar para dominar Google como un pro.
 
@@ -155,9 +155,13 @@ experiencia de aprendizaje, optimizando así tu estudio para la certificación.
 
 SECCIONES_GOOGLE = [
     "Todas",
-    "Diseño de sistemas de procesamiento de datos",
-    "Transferencia y procesamiento de datos",
-    "Almacenamiento de los datos",
-    "Preparación y uso de los datos para el análisis",
-    "Mantenimiento y automatización de las cargas de trabajo de datos"
+    "IDENTITY AND SECURITY",
+    "AI/ML",
+    "DATA ANALYTICS",
+    "DATABASE",
+    "STORAGE",
+    "COMPUTE",
+    "INTEGRATION SERVICES",
+    "OPERATIONS AND MONITORING",
+    "DEVOPS CI/CD"
 ]

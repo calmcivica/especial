@@ -217,7 +217,7 @@ def pregunta(jason, n, mode, user, conn, especialidad):
 
         else:
             st.write(":orange[No question area specified]")
-        st.write(pregunta)
+        st.markdown(pregunta)
         imagen = './static/' + especialidad + '/' + str(numero) + ".png"
         if os.path.exists(imagen):
             st.image(imagen)
@@ -239,7 +239,7 @@ def pregunta(jason, n, mode, user, conn, especialidad):
         user_answer = [resp for resp, checked in zip(respuestas, user_respuestas) if checked]
         
         # Determina si la respuesta es correcta
-        is_correct = sol(jason, n, user_answer, 1) if user_answer else False
+        is_correct = sol(especialidad, jason, n, user_answer, 1) if user_answer else False
         is_answered = bool(user_answer)
         # Muestra la solución
         with st.container():
@@ -250,7 +250,7 @@ def pregunta(jason, n, mode, user, conn, especialidad):
 
                 with st.container():
                     # Botón para mostrar la solución
-                    is_correct = sol(jason,n,user_answer,1)
+                    is_correct = sol(especialidad,jason,n,user_answer,1)
                     is_answered = 0
                     if user_answer:
                         is_answered = 1
@@ -269,7 +269,7 @@ def pregunta(jason, n, mode, user, conn, especialidad):
 
                     # Muestra la solución si la variable de estado es True
                     if st.session_state['show_solution']:
-                        sol(jason, n, user_answer)  # Llama a la función sol
+                        sol(especialidad,jason, n, user_answer)  # Llama a la función sol
 
             elif mode == 'examen':
                 jsoni = {
@@ -280,13 +280,15 @@ def pregunta(jason, n, mode, user, conn, especialidad):
                 st.session_state['exam_answers'].append(jsoni)
 
 
-def sol(jason,n,user_answer,getsol = False):
+def sol(especialidad, jason,n,user_answer,getsol = False):
 
     json_question = jason[n-1]
     # Extrae los datos necesarios del JSON
     correcta = json_question["correct_answer"]
     explanation = json_question["explanation"]
     referencias = json_question["reference"]
+    numero = json_question["question_number"]
+    
     if type(user_answer) == str:
         user_answer = [user_answer]
     comofue = comparar_respuestas(user_answer,correcta) 
@@ -308,10 +310,29 @@ def sol(jason,n,user_answer,getsol = False):
                 frase_completa+="."
     elif len(correcta) == 1:
         frase_completa = f"La opción correcta era :green[{correcta[0]}]"
-
+    imagen = './static/' + especialidad + '/' + str(numero) + "_sol.png"
+    if os.path.exists(imagen):
+        st.image(imagen)
     st.write(frase_completa)
-    st.write(explanation)
-    st.write("Visita la documentación correspondiente [link](%s)" % referencias)
+    st.markdown(explanation)
+
+    if referencias:
+        # Verificar si es un string o una lista
+        if isinstance(referencias, str):
+            # Si es un string, asegurarse de que no esté vacío
+            if referencias.strip():
+                links = f"[{referencias.strip()}]({referencias.strip()})"
+                st.write(f"Visita la documentación correspondiente {links}")
+            else:
+                st.write("No hemos encontrado una documentación como tal para este caso.")
+        elif isinstance(referencias, list) and len(referencias) > 0 and referencias[0] != "":
+            # Si es una lista, crear los enlaces de forma normal
+            links = ", ".join([f"{ref}" for ref in enumerate(referencias)])
+            st.write(f"Visita la documentación correspondiente {links}")
+        else:
+            st.write("No hemos encontrado una documentación como tal para este caso.")
+    else:
+        st.write("No hemos encontrado una documentación como tal para este caso.")
 
     
 
