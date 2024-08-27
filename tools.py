@@ -282,6 +282,9 @@ def examen(conn, datos, especialidad):
         )
 
     if st.session_state.get("exam_mode", 0) == 0:
+        ##################################
+        ###         AJUSTANDO FILTROS
+        ##################################
         with st.container():
             menu(conn)
             st.title("Examen")
@@ -316,7 +319,9 @@ def examen(conn, datos, especialidad):
                             on_click=h.aux_exam,
                             args=("empezar", exam_duration, None),
                         )
-
+        ##################################
+        ###         PARA PONER EL EXAMEN
+        ##################################
     elif st.session_state.get("exam_mode", 0) == 1:
         with st.container():
             question_set = st.session_state["question_set"]
@@ -330,7 +335,7 @@ def examen(conn, datos, especialidad):
                 especialidad,
                 exam_time=exam_duration,
             )
-
+        ##################################
     elif st.session_state.get("exam_mode", 0) == 2:
         exam_duration = st.session_state["exam_duration"]
         exam_id_v = (
@@ -356,21 +361,34 @@ def examen(conn, datos, especialidad):
                 latest_answers[question_number] = answer
         # Convertir el diccionario de respuestas más recientes en una lista
         filtered_answers = list(latest_answers.values())
-        insert = "INSERT INTO [esnowflake].[dbo].Fact_Answers VALUES "
-        values_list = []
+        insert = "INSERT INTO [esnowflake].[dbo].[Fact_Answers] (question_id, user_nickname, type, exam_id, is_correct, is_answered, ANSWER_TIMESTAMP) VALUES "
+        values_list = set()  # Usamos un conjunto para evitar duplicados
         preguntas_acertadas = 0
         preguntas_falladas = 0
+        
         for i, answer in enumerate(filtered_answers):
             question_number = answer["question_number"]
             user_answer = answer["user_answer"]
+
             if isinstance(user_answer, str):
                 user_answer = [user_answer]
-            correcta = datos[question_number - 1]["correct_answer"]
+
+            # Si question_number es 1
+            if question_number == 1:
+                correcta = datos[0]["correct_answer"]
+            # Si question_number no es 1
+            elif question_number >1:
+                correcta = datos[question_number -1]["correct_answer"] # Si cogemos -1 coge la respuesta correcta de la siguiente pregunta
+            else:
+                st.write("Error con los números de las respuestas correctas")
             question = datos[question_number - 1]["question"]
             comofue = h.comparar_respuestas(user_answer, correcta)
+
             answer["result"] = comofue
             answer["correcta"] = correcta
             answer["question"] = question
+
+            # Asignar valores de is_correct e is_answered
             if answer["result"] == 1:
                 preguntas_acertadas += 1
                 is_correct = 1
@@ -383,19 +401,21 @@ def examen(conn, datos, especialidad):
                 is_correct = 0
                 is_answered = 0
             
-                values_list.append(", ")
-            values_list.append(
+            # Agregar valores a la lista usando un conjunto para evitar duplicados
+            values_list.add(
                 f"({question_number}, '{user}', 'examen', {exam_id}, {int(is_correct)}, {int(is_answered)}, CURRENT_TIMESTAMP)"
             )
-            if values_list[-1] == ', ':
-                values_list.pop()
-            insert += "".join(values_list)
+            # Si hay valores en la lista, construir la consulta SQL
+            if values_list:
+                final_values = ", ".join(values_list)
+                insert += final_values
+                insert = insert.replace(')(','),(')
 
         update = f"""
                 update [esnowflake].[dbo].FACT_EXAMS 
                 set 
                 end_time = current_timestamp,
-                number_of_questions = {len(filtered_answers)},
+                number_of_questions = {len(filtered_answers)-1},
                 number_of_failed_questions = {preguntas_falladas}  ,
                 number_of_correct_questions = {preguntas_acertadas}
 
@@ -404,12 +424,12 @@ def examen(conn, datos, especialidad):
         try:
             aux_exam_insert = st.session_state["aux_exam_insert"]
             if aux_exam_insert:
-                conn.cursor().execute(update)
-                conn.cursor().execute(insert)
+                conn.cursor().execute(update).fetchall()
+                conn.cursor().execute(insert).fetchall()
             if "aux_exam_insert" in st.session_state:
                 st.session_state["aux_exam_insert"] = 0
         except Exception as e:
-            st.write(f"An error occurred: {e} ")
+            st.write(f"An error occurred en la función examen: {e} ")
         failed = [answer for answer in filtered_answers if answer["result"] == 0]
         tiempo_invertido_v = (
             conn.cursor()
@@ -436,7 +456,16 @@ def examen(conn, datos, especialidad):
             st.metric("Porcentaje de Aciertos", f"{100*per_acierto:.2f}%")
             st.metric("Número de preguntas", f"{len(filtered_answers)}")
             st.metric("Tiempo Total", f"{tiempo_formato}")
-            umbral = 0.75
+
+            if especialidad == 'snowflake':
+                umbral = int(c.UMBRAL_APROBADO_SNOWFLAKE)/100
+            elif especialidad == 'dbt':
+                umbral = int(c.UMBRAL_APROBADO_DBT)/100
+            elif especialidad == 'google':
+                umbral = int(c.UMBRAL_APROBADO_GOOGLE)/100
+            else:
+                st.error("Error, no hay umbral de aprobado para especialidad")
+
             if per_acierto >= umbral:
                 st.success("¡Grande! Has superado el examen.")
             else:

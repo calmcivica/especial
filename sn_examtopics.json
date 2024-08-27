@@ -122,7 +122,7 @@
             "The Snowflake Web Interface (UI) in the Account -> Billing & Usage section"
         ],
         "explanation": "Account-level storage usage in Snowflake can be monitored via the Snowflake Web Interface (UI) in the 'Account -> Billing & Usage' section. This feature provides insights into storage consumption and associated costs.",
-        "reference": "https://docs.snowflake.com/en/user-guide/admin-account-usage.html"
+        "reference": ["https://docs.snowflake.com/en/user-guide/admin-account-usage.html"]
     },
     {
         "question_number": 9,

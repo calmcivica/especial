@@ -76,7 +76,7 @@ def recharge_user_list(conn):
 def new_user(conn, new_user, message=None):
     try:
         query = f"INSERT INTO [esnowflake].[dbo].Dim_Users (name, rango) VALUES ('{new_user}', 'Iniciado')"
-        conn.cursor().execute(query)
+        conn.cursor().execute(query).fetchall()
         conn.commit()
         if message:
             st.success('New user added successfully!')
@@ -217,6 +217,13 @@ def pregunta(jason, n, mode, user, conn, especialidad):
 
         else:
             st.write(":orange[No question area specified]")
+
+        # EXTRA INFORMATION
+        # Verificar y mostrar información extra si está disponible
+        if "question_extra_info" in json_question and json_question["question_extra_info"]:
+            with st.expander(" 🔽 Información extra del caso:"):
+                st.markdown(json_question["question_extra_info"])
+        
         st.markdown(pregunta)
         imagen = './static/' + especialidad + '/' + str(numero) + ".png"
         if os.path.exists(imagen):
@@ -265,7 +272,7 @@ def pregunta(jason, n, mode, user, conn, especialidad):
                             conn.cursor().execute(query)
                             conn.cursor().commit()
                         except Exception as e:
-                            st.write(f"An error occurred: {e} ") 
+                            st.write(f"An error occurred in function pregunta: {e} ") 
 
                     # Muestra la solución si la variable de estado es True
                     if st.session_state['show_solution']:
@@ -405,6 +412,9 @@ def review():
 
 def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
     if mode == "examen":
+        ##################################
+        ###    INICIALIZANDO VARIABLES SESIÓN
+        ##################################
         if 'exam_answers' not in st.session_state:
                 st.session_state['exam_answers'] = []
         if 'aux_exam_insert' not in st.session_state:
@@ -412,12 +422,13 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
         aux_exam_insert = st.session_state['aux_exam_insert']
         
         if aux_exam_insert == 0:
-            conn.cursor().execute(f"insert into [esnowflake].[dbo].FACT_EXAMS select NEXT VALUE FOR dbo.SEQ_EXAMS,null,'{user}',{exam_time},null,current_timestamp,null,null,null")
+            conn.cursor().execute(f"insert into [esnowflake].[dbo].FACT_EXAMS select (NEXT VALUE FOR dbo.SEQ_EXAMS - 2),null,'{user}',{exam_time},null,current_timestamp,null,null,null")
             st.session_state['aux_exam_insert'] = 1
         
-        exam_mode = 1
+        exam_mode = 1 # Para no volver al estado 0 que era el de filtros de examen
         st.session_state['exam_mode'] = exam_mode
         
+        ## Configuramos el tiempo del examen
         if 'start_time' not in st.session_state:
             st.session_state['start_time'] = datetime.datetime.now()
         current_time = datetime.datetime.now()
@@ -430,7 +441,7 @@ def setexam(set,jason,mode,conn,user,especialidad,exam_time = None):
                 st.metric("Tiempo restante", f"{int(mm):02d}:{int(ss):02d}",help = "Este tiempo restante es a título informativo, no finalizará el examen si se te acaba, luego podrás ver cuanto has tardado en hacerlo. El contador se irá actualizando cuando avances o retrocedas una pregunta, también si haces un RERUN de la app")
             with marca:
                 st.button('Salir sin guardar',use_container_width=True,on_click = aux_exam , args = ('Inicio',None,None,))
-
+        ##########################################
     if 'review_mode' not in st.session_state:
             st.session_state['review_mode'] = 0
     review_mode = st.session_state['review_mode']

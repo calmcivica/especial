@@ -49,6 +49,8 @@ SECCIONES_SNOWFLAKE = [
     "Data Protection and Data Sharing",
 ]
 
+UMBRAL_APROBADO_SNOWFLAKE = '75'
+
 # DBT
 COMIENZO_DBT = """
 # dbt Analytics Engineering Certification Exam
@@ -108,6 +110,7 @@ SECCIONES_DBT = [
     "Estrellita",
 ]
 
+UMBRAL_APROBADO_DBT = '65'
 
 # GOOGLE
 COMIENZO_GOOGLE = """
@@ -165,3 +168,5 @@ SECCIONES_GOOGLE = [
     "OPERATIONS AND MONITORING",
     "DEVOPS CI/CD"
 ]
+
+UMBRAL_APROBADO_GOOGLE = '70'

@@ -97,7 +97,7 @@ class SnowflakeLoader(BaseLoader):
             )
             
         try:
-            cur = conn.cursor()
+            cur = conn.cursor().fetchall()
             cur.execute("USE DATABASE " + self.database)
             cur.execute("USE SCHEMA " + self.schema)
             cur.execute(self.query, self.parameters)
