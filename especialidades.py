@@ -85,7 +85,7 @@ def go_to_main():
             col2_1.button('SQL',on_click=go_to_sql, use_container_width=True)
 
     except Exception as e:
-        st.warning("Error: " + str(e.args))
+        st.warning("Error 1: " + str(e.args))
 
 ######################################################################       
 ######### PAGES
@@ -124,12 +124,12 @@ elif st.session_state.page == 'snowflake':
         try:
             t.practicar(conn, datos, especialidad)
         except Exception as e:
-            st.warning("Error: " + str(e.args))
+            st.warning("Error 2: " + str(e.args))
     elif st.session_state['current_page'] == "Exámenes 📄":
         try:
             t.examen(conn, datos, especialidad)
         except Exception as e:
-            st.warning("Error: " + str(e.args))
+            st.warning("Error 3: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
         t.progreso(conn,datos)
     elif st.session_state['current_page'] == "Parreitor-3000 🤖":
@@ -164,12 +164,12 @@ elif st.session_state.page == 'dbt':
         try:
             t.practicar(conn, datos, especialidad)
         except Exception as e:
-            st.warning("Error: " + str(e.args))
+            st.warning("Error 4: " + str(e.args))
     elif st.session_state['current_page'] == "Exámenes 📄":
         try:
             t.examen(conn, datos, especialidad)
         except Exception as e:
-            st.warning("Error: " + str(e.args))
+            st.warning("Error 5: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
         t.progreso(conn,datos)
     elif st.session_state['current_page'] == "Chatgpt":
@@ -206,12 +206,12 @@ elif st.session_state.page == 'google':
         try:
             t.practicar(conn, datos, especialidad)
         except Exception as e:
-            st.warning("Error: " + str(e.args))
+            st.warning("Error 6: " + str(e.args))
     elif st.session_state['current_page'] == "Exámenes 📄":
         try:
             t.examen(conn, datos, especialidad)
         except Exception as e:
-            st.warning("Error: " + str(e.args))
+            st.warning("Error 7: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
         t.progreso(conn,datos)
     elif st.session_state['current_page'] == "Chatgpt":

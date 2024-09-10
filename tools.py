@@ -12,7 +12,6 @@ import pandas as pd
 from openai import OpenAI
 
 
-
 def get_datos(especialidad):
     """
     Retorna los datos desde un archivo JSON basado en la especialidad especificada.
@@ -33,7 +32,7 @@ def get_datos(especialidad):
         elif especialidad == "dbt":
             archivo = "dbt_examtopics.json"
         elif especialidad == "google":
-            archivo = "google_examtopics.json"        
+            archivo = "google_examtopics.json"
     except Exception as e:
         st.warning("Ha habido un error, no encuentro los json. " + str(e.args))
     datos = h.open_file(archivo)
@@ -57,9 +56,9 @@ def menu(conn):
     with st.container():
         h.get_user_none()
         space, login, actions = st.columns([3, 1, 1], gap="large")
-        space, login, actions = st.columns([2,2,0.5], gap="medium")
-        if 'lista_plana' not in st.session_state:
-            st.session_state['lista_plana'] = h.recharge_user_list(conn)
+        space, login, actions = st.columns([2, 2, 0.5], gap="medium")
+        if "lista_plana" not in st.session_state:
+            st.session_state["lista_plana"] = h.recharge_user_list(conn)
         with space:
             try:
                 if st.session_state.get("user") is None:
@@ -68,62 +67,79 @@ def menu(conn):
                     )
                 else:
                     query = f"SELECT rango FROM [esnowflake].[dbo].Dim_Users WHERE name = '{st.session_state['user']}'"
-                    rango_v = (
-                        conn.cursor()
-                        .execute(query)
-                        .fetchall()
-                    )
+                    rango_v = conn.cursor().execute(query).fetchall()
                     if rango_v:
                         rango = rango_v[0][0]
-                        emoji_map = {"Iniciado": "🤓", "Padawan": "🤠", "Maestro": "🗡️", "Parra": "🤖"}
+                        emoji_map = {
+                            "Iniciado": "🤓",
+                            "Padawan": "🤠",
+                            "Maestro": "🗡️",
+                            "Parra": "🤖",
+                        }
                         emoji = emoji_map.get(rango, "")
                         st.write(f"Rango: {rango} {emoji}")
                     else:
                         st.error("User rank not found.")
             except Exception as e:
-                st.error(f'Error create user: {e}')
+                st.error(f"Error create user: {e}")
 
         with login:
-            if st.session_state["user"] not in st.session_state['lista_plana']:
-                st.session_state['lista_plana'] = h.recharge_user_list(conn)
-            indice = st.session_state['lista_plana'].index(st.session_state["user"]) if st.session_state.get("user") else None
-            useri = st.selectbox("User name:", st.session_state['lista_plana'], index=indice)
+            if st.session_state["user"] not in st.session_state["lista_plana"]:
+                st.session_state["lista_plana"] = h.recharge_user_list(conn)
+            indice = (
+                st.session_state["lista_plana"].index(st.session_state["user"])
+                if st.session_state.get("user")
+                else None
+            )
+            useri = st.selectbox(
+                "User name:", st.session_state["lista_plana"], index=indice
+            )
             st.session_state["user"] = useri
             if st.session_state.get("user") is None:
                 new_user = st.text_input("Or enter a new username:")
                 if new_user:
-                    if new_user not in st.session_state['lista_plana']:
-                        if st.button('Add new user'):
-                            h.new_user(conn, new_user, 'message')
+                    if new_user not in st.session_state["lista_plana"]:
+                        if st.button("Add new user"):
+                            h.new_user(conn, new_user, "message")
                             useri = st.session_state["user"]
                     else:
-                        st.error('Username already exists.')
+                        st.error("Username already exists.")
 
         with actions:
-            if 'count_reset' not in st.session_state or st.session_state['count_reset']>=2:
-                st.session_state['count_reset'] = 0
-            if 'count_delete' not in st.session_state or st.session_state['count_delete']>=2:
-                st.session_state['count_delete'] = 0    
+            if (
+                "count_reset" not in st.session_state
+                or st.session_state["count_reset"] >= 2
+            ):
+                st.session_state["count_reset"] = 0
+            if (
+                "count_delete" not in st.session_state
+                or st.session_state["count_delete"] >= 2
+            ):
+                st.session_state["count_delete"] = 0
 
             if st.session_state.get("user"):
                 reset_clicked = st.button("Reset user")
                 if reset_clicked:
-                    st.session_state['count_reset'] += 1
-                    st.write(":red[Are you sure? Click again if you want to reset your user]")
-                    if st.session_state['count_reset'] >= 2:
-                        h.reset_delete_user(conn,useri, False)
+                    st.session_state["count_reset"] += 1
+                    st.write(
+                        ":red[Are you sure? Click again if you want to reset your user]"
+                    )
+                    if st.session_state["count_reset"] >= 2:
+                        h.reset_delete_user(conn, useri, False)
                         useri = st.session_state["user"]
-                        st.success(f'User {useri} reset successfully.')
-                        st.session_state['count_reset'] = 0
+                        st.success(f"User {useri} reset successfully.")
+                        st.session_state["count_reset"] = 0
                         time.sleep(1)
                         st.rerun()
-                        
+
                 delete_clicked = st.button("Delete user")
                 if delete_clicked:
-                    st.session_state['count_delete'] += 1
-                    st.write(":red[Are you sure? Click again if you want to delete your user]")
-                    if st.session_state['count_delete'] >= 2:
-                        h.reset_delete_user(conn,useri, True)
+                    st.session_state["count_delete"] += 1
+                    st.write(
+                        ":red[Are you sure? Click again if you want to delete your user]"
+                    )
+                    if st.session_state["count_delete"] >= 2:
+                        h.reset_delete_user(conn, useri, True)
                         useri = None
                         time.sleep(1)
                         st.rerun()
@@ -171,7 +187,7 @@ def practicar(conn, datos, especialidad):
     if "exam_mode" not in st.session_state:
         st.session_state["exam_mode"] = ""
     with st.expander("¿Cómo podría usar esta sección? 🤔"):
-        st.markdown(getattr(c, f'USO_SECCION_{especialidad.upper()}'))
+        st.markdown(getattr(c, f"USO_SECCION_{especialidad.upper()}"))
 
     filtros, preguntas = st.columns([1, 3], gap="large")
     # Filtros
@@ -187,7 +203,7 @@ def practicar(conn, datos, especialidad):
 
         secciones = st.multiselect(
             "¿Qué secciones quieres tocar?",
-            getattr(c, f'SECCIONES_{especialidad.upper()}')
+            getattr(c, f"SECCIONES_{especialidad.upper()}"),
         )
 
         option = st.multiselect(
@@ -213,25 +229,30 @@ def practicar(conn, datos, especialidad):
         opcion_practicas_falsas = []
 
         if "Falladas en exámenes" in option:
-            opcion_examen_falsas = ast.literal_eval(aux_opcion[0][1])
+            opcion_examen_falsas = (
+                list(ast.literal_eval(aux_opcion[0][1])) if aux_opcion[0][1] else []
+            )
 
         if "Falladas en práctica" in option:
-            opcion_practicas_falsas = ast.literal_eval(aux_opcion[0][2])
+            opcion_practicas_falsas = (
+                list(ast.literal_eval(aux_opcion[0][2])) if aux_opcion[0][2] else []
+            )
 
         if "Sin hacer" in option:
             hechas = aux_opcion[0][0]
-            hechas_lista = ast.literal_eval(hechas)
-            hechas_int = [int(num) for num in list(hechas_lista)]
-
-            no_hechas = [
-                item["question_number"]
-                for item in preguntas_filtradas
-                if item["question_number"] not in hechas_int
-            ]
+            if hechas:  # Verificar si 'hechas' no es None o vacío
+                hechas_lista = ast.literal_eval(hechas)
+                hechas_int = [int(num) for num in list(hechas_lista)]
+                no_hechas = [
+                    item["question_number"]
+                    for item in preguntas_filtradas
+                    if item["question_number"] not in hechas_int
+                ]
 
         opcion_final = list(
             set(no_hechas + opcion_examen_falsas + opcion_practicas_falsas)
         )
+
         # AÑADIR FILTRO OTROS
         if "Todas" not in option and option != []:
 
@@ -292,7 +313,9 @@ def examen(conn, datos, especialidad):
             with st.container():
                 filtros, settings = st.columns(2, gap="large")
                 with filtros:
-                    preguntas_filtradas = h.filtros(especialidad, datos, conn, user, True)
+                    preguntas_filtradas = h.filtros(
+                        especialidad, datos, conn, user, True
+                    )
                 with settings:
                     # en exam_settings actualizamos st.session_state["question_set"]
                     # y st.session_state["exam_duration"]
@@ -365,7 +388,7 @@ def examen(conn, datos, especialidad):
         values_list = set()  # Usamos un conjunto para evitar duplicados
         preguntas_acertadas = 0
         preguntas_falladas = 0
-        
+
         for i, answer in enumerate(filtered_answers):
             question_number = answer["question_number"]
             user_answer = answer["user_answer"]
@@ -377,8 +400,10 @@ def examen(conn, datos, especialidad):
             if question_number == 1:
                 correcta = datos[0]["correct_answer"]
             # Si question_number no es 1
-            elif question_number >1:
-                correcta = datos[question_number -1]["correct_answer"] # Si cogemos -1 coge la respuesta correcta de la siguiente pregunta
+            elif question_number > 1:
+                correcta = datos[question_number - 1][
+                    "correct_answer"
+                ]  # Si cogemos -1 coge la respuesta correcta de la siguiente pregunta
             else:
                 st.write("Error con los números de las respuestas correctas")
             question = datos[question_number - 1]["question"]
@@ -400,7 +425,7 @@ def examen(conn, datos, especialidad):
             else:
                 is_correct = 0
                 is_answered = 0
-            
+
             # Agregar valores a la lista usando un conjunto para evitar duplicados
             values_list.add(
                 f"({question_number}, '{user}', 'examen', {exam_id}, {int(is_correct)}, {int(is_answered)}, CURRENT_TIMESTAMP)"
@@ -409,7 +434,7 @@ def examen(conn, datos, especialidad):
             if values_list:
                 final_values = ", ".join(values_list)
                 insert += final_values
-                insert = insert.replace(')(','),(')
+                insert = insert.replace(")(", "),(")
 
         update = f"""
                 update [esnowflake].[dbo].FACT_EXAMS 
@@ -457,12 +482,12 @@ def examen(conn, datos, especialidad):
             st.metric("Número de preguntas", f"{len(filtered_answers)}")
             st.metric("Tiempo Total", f"{tiempo_formato}")
 
-            if especialidad == 'snowflake':
-                umbral = int(c.UMBRAL_APROBADO_SNOWFLAKE)/100
-            elif especialidad == 'dbt':
-                umbral = int(c.UMBRAL_APROBADO_DBT)/100
-            elif especialidad == 'google':
-                umbral = int(c.UMBRAL_APROBADO_GOOGLE)/100
+            if especialidad == "snowflake":
+                umbral = int(c.UMBRAL_APROBADO_SNOWFLAKE) / 100
+            elif especialidad == "dbt":
+                umbral = int(c.UMBRAL_APROBADO_DBT) / 100
+            elif especialidad == "google":
+                umbral = int(c.UMBRAL_APROBADO_GOOGLE) / 100
             else:
                 st.error("Error, no hay umbral de aprobado para especialidad")
 
@@ -538,30 +563,43 @@ def progreso(conn, datos):
             fecha_anterior = None
             # Prepare data for merging
             df_preguntas = pd.DataFrame(datos)
-            
+
             # Handle multiple question areas by exploding them into separate rows
-            df_preguntas = df_preguntas.explode('question_area')
+            df_preguntas = df_preguntas.explode("question_area")
 
             df_combinado = df.merge(
                 df_preguntas[["question_number", "question_area"]],
                 left_on="question_id",
                 right_on="question_number",
-                how="left"
-            , validate="many_to_many")
+                how="left",
+                validate="many_to_many",
+            )
 
             df_secciones_referencia = pd.DataFrame(
                 df_preguntas["question_area"].unique(), columns=["question_area"]
             )
 
             total_preguntas_por_seccion = df_preguntas["question_area"].value_counts()
-            metrics_por_seccion = df_combinado.groupby("question_area")["is_correct"].agg(['sum', lambda x: len(x) - x.sum()])
-            metrics_por_seccion.columns = ["preguntas Correctas", "preguntas Incorrectas"]
+            metrics_por_seccion = df_combinado.groupby("question_area")[
+                "is_correct"
+            ].agg(["sum", lambda x: len(x) - x.sum()])
+            metrics_por_seccion.columns = [
+                "preguntas Correctas",
+                "preguntas Incorrectas",
+            ]
 
             metrics_final = df_secciones_referencia.merge(
-                metrics_por_seccion, on="question_area", how="left"
-            , validate="many_to_many").fillna(0) 
+                metrics_por_seccion,
+                on="question_area",
+                how="left",
+                validate="many_to_many",
+            ).fillna(0)
 
-            metrics_final["preguntas No Vistas"] = metrics_final["question_area"].map(total_preguntas_por_seccion) - metrics_final["preguntas Correctas"] - metrics_final["preguntas Incorrectas"]
+            metrics_final["preguntas No Vistas"] = (
+                metrics_final["question_area"].map(total_preguntas_por_seccion)
+                - metrics_final["preguntas Correctas"]
+                - metrics_final["preguntas Incorrectas"]
+            )
 
             # Mostrar el resultado en Streamlit sin índice
             # st.write(metrics_final.set_index('question_area'))
@@ -692,7 +730,9 @@ def progreso(conn, datos):
                 df = pd.DataFrame(exam_info_snow_list, columns=columns)
 
                 # Replace None with 0 in relevant columns
-                df["number_of_questions"] = df["number_of_questions"].infer_objects(copy=False)
+                df["number_of_questions"] = df["number_of_questions"].infer_objects(
+                    copy=False
+                )
                 df["number_of_correct_questions"] = df[
                     "number_of_correct_questions"
                 ].infer_objects(copy=False)
