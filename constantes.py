@@ -153,7 +153,7 @@ USO_SECCION_GOOGLE = """
 A primera vista, podrías pensar que te has equivocado de clase, pero no, estás exactamente donde necesitas estar para dominar Google como un pro.
 
 En esta sección, no solo podrás responder preguntas y ver las respuestas correctas, también encontrarás explicaciones enriquecedoras para que entiendas no solo el 'qué', sino el 'por qué'. A medida que explores las distintas preguntas, podrás filtrar y personalizar tu 
-experiencia de aprendizaje, optimizando así tu estudio para la certificación.   
+experiencia de aprendizaje, optimizando así tu estudio para la certificación.    
 """
 
 SECCIONES_GOOGLE = [

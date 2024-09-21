@@ -591,7 +591,7 @@
         "correct_answer": [
             "Redefine the schema by evenly distributing reads and writes across the row space of the table"
         ],
-        "explanation": "\n- **:green[✅Redefine the schema by evenly distributing reads and writes across the row space of the table.]**: Esta es la mejor opción para mejorar el rendimiento de Google Cloud Bigtable, ya que previene la formación de puntos calientes y asegura que la carga de trabajo se distribuya uniformemente a lo largo de la tabla. **La clave para obtener un rendimiento óptimo en Bigtable es diseñar un esquema que permita distribuir uniformemente las operaciones de lectura y escritura a lo largo del espacio de filas**. Esto no solo evita cuellos de botella, sino que también maximiza la eficiencia del uso de los recursos del clúster, mejorando significativamente el rendimiento general.\n\n  Bigtable funciona mejor cuando las lecturas y escrituras están bien distribuidas a lo largo de todas las filas de la tabla, lo que permite distribuir la carga de trabajo en todos los nodos del clúster. Si no se logra distribuir adecuadamente, el rendimiento se verá afectado negativamente. Redefinir el esquema para lograr una distribución uniforme es una práctica recomendada que se alinea con las mejores prácticas para diseñar esquemas escalables y eficientes en Bigtable.\n\n- **:red[The performance issue should be resolved over time as the size of the Bigtable cluster is increased.]**: Aunque aumentar el tamaño del clúster podría mejorar el rendimiento, esto también incrementa los costos y no aborda los problemas subyacentes del diseño del esquema. Simplemente aumentar los recursos no resolverá un problema de diseño ineficiente.\n\n- **:red[Redesign the schema to use a single row key to identify values that need to be updated frequently in the cluster.]**: Usar una clave de fila única para valores que se actualizan con frecuencia puede causar puntos calientes en la tabla, lo que resulta en un rendimiento reducido y cargas de trabajo desiguales en el clúster.\n\n- **:red[Redesign the schema to use row keys based on numeric IDs that increase sequentially per user viewing the offers.]**: Las claves de fila que aumentan secuencialmente pueden causar que las operaciones de lectura y escritura se concentren en una parte específica de la tabla, lo que provoca puntos calientes y empeora el rendimiento. Un enfoque más seguro sería utilizar versiones invertidas de los IDs numéricos para distribuir el tráfico de manera más uniforme.",
+        "explanation": "\n- **:green[✅Redefine the schema by evenly distributing reads and writes across the row space of the table.]**: Esta es la mejor opción para mejorar el rendimiento de Google Cloud Bigtable, ya que previene la formación de puntos calientes y asegura que la carga de trabajo se distribuya uniformemente a lo largo de la tabla. **La clave para obtener un rendimiento óptimo en Bigtable es diseñar un esquema que permita distribuir uniformemente las operaciones de lectura y escritura a lo largo del espacio de filas**. Esto no solo evita cuellos de botella, sino que también maximiza la eficiencia del uso de los recursos del clúster, mejorando significativamente el rendimiento general.\n\n  Bigtable funciona mejor cuando las lecturas y escrituras están bien distribuidas a lo largo de todas las filas de la tabla, lo que permite distribuir la carga de trabajo en todos los nodos del clúster. Si no se logra distribuir adecuadamente, el rendimiento se verá afectado negativamente. Redefinir el esquema para lograr una distribución uniforme es una práctica recomendada que se alinea con las mejores prácticas para diseñar esquemas escalables y eficientes en Bigtable. \n\n*NOTA: Espacio de filas se refiere a todas las filas de una tabla de Bigtable y cómo están organizadas y distribuidas.*\n\n- **:red[The performance issue should be resolved over time as the size of the Bigtable cluster is increased.]**: Aunque aumentar el tamaño del clúster podría mejorar el rendimiento, esto también incrementa los costos y no aborda los problemas subyacentes del diseño del esquema. Simplemente aumentar los recursos no resolverá un problema de diseño ineficiente.\n\n- **:red[Redesign the schema to use a single row key to identify values that need to be updated frequently in the cluster.]**: Usar una clave de fila única para valores que se actualizan con frecuencia puede causar puntos calientes en la tabla, lo que resulta en un rendimiento reducido y cargas de trabajo desiguales en el clúster.\n\n- **:red[Redesign the schema to use row keys based on numeric IDs that increase sequentially per user viewing the offers.]**: Las claves de fila que aumentan secuencialmente pueden causar que las operaciones de lectura y escritura se concentren en una parte específica de la tabla, lo que provoca puntos calientes y empeora el rendimiento. Un enfoque más seguro sería utilizar versiones invertidas de los IDs numéricos para distribuir el tráfico de manera más uniforme.",
         "reference": [
             "https://cloud.google.com/bigtable/docs/schema-design",
             "https://cloud.google.com/bigtable/docs/performance?hl=es-419#troubleshooting"
@@ -1273,7 +1273,7 @@
         "correct_answer": [
             "Use Cloud Dataprep to find null values in sample source data. Convert all nulls to 0 using a Cloud Dataprep job"
         ],
-        "explanation": "\n- **:green[✅Use Cloud Dataprep to find null values in sample source data. Convert all nulls to 0 using a Cloud Dataprep job.]**: Este método aborda eficazmente la necesidad de mantener la integridad numérica para el modelo de regresión logística al sustituir los valores nulos por cero, permitiendo que el modelo procese estas entradas sin errores. **Cloud Dataprep** es una herramienta visual que facilita el manejo de datos de manera eficiente, y su uso para la imputación de valores nulos asegura un flujo de trabajo optimizado sin necesidad de escribir código personalizado.\n\n- **:red[Use Cloud Dataprep to find null values in sample source data. Convert all nulls to 'none' using a Cloud Dataproc job.]**: Convertir valores nulos a 'none' no es adecuado, ya que **'none'** no es un valor numérico, lo que podría generar errores en un modelo de regresión logística, que requiere que los datos estén en formato numérico.\n\n- **:red[Use Cloud Dataflow to find null values in sample source data. Convert all nulls to 'none' using a Cloud Dataprep job.]**: Similar a la primera opción, esta no es adecuada porque convertir valores nulos a 'none' es incorrecto para un análisis numérico y no compatible con los requisitos de un modelo de regresión logística.\n\n- **:red[Use Cloud Dataflow to find null values in sample source data. Convert all nulls to 0 using a custom script.]**: Aunque el resultado es el mismo que el de la respuesta correcta (convertir nulos a 0), **Cloud Dataprep** ofrece una solución más eficiente y sin necesidad de scripts personalizados, lo que reduce el riesgo de errores y mejora el tiempo de implementación.",
+        "explanation": "\n- **:green[✅Use Cloud Dataprep to find null values in sample source data. Convert all nulls to 0 using a Cloud Dataprep job.]**: Este método aborda eficazmente la necesidad de mantener la integridad numérica para el modelo de regresión logística al sustituir los valores nulos por cero, permitiendo que el modelo procese estas entradas sin errores. **Cloud Dataprep** es una herramienta visual diseñada específicamente para tareas de preparación de datos, y es ideal cuando se requiere **preprocesar datos** de forma interactiva y rápida sin necesidad de escribir código. Dataprep permite gestionar valores nulos de manera eficiente y realizar transformaciones sencillas como la imputación de valores nulos a 0, lo cual es crucial para **regresión logística**, que requiere entradas numéricas. Además, Dataprep es más adecuado que Dataproc en este caso, ya que ofrece una interfaz más accesible y enfocada en la limpieza y preparación de datos, sin la sobrecarga de gestionar clusters de procesamiento y sin necesidad de escribir scripts personalizados.\n\n- **:red[Use Cloud Dataprep to find null values in sample source data. Convert all nulls to 'none' using a Cloud Dataproc job.]**: Convertir valores nulos a 'none' no es adecuado, ya que **'none'** no es un valor numérico, lo que generaría errores en un modelo de regresión logística. Además, usar **Cloud Dataproc** para esta tarea es innecesario, ya que implica gestionar clusters y escribir scripts, cuando **Cloud Dataprep** puede hacerlo de forma más eficiente y sin la sobrecarga de infraestructura.\n\n- **:red[Use Cloud Dataflow to find null values in sample source data. Convert all nulls to 'none' using a Cloud Dataprep job.]**: Similar a la opción anterior, esta tampoco es adecuada. Convertir nulos a 'none' es incorrecto para regresiones logísticas, y **Cloud Dataflow** no es necesario para una tarea de preprocesamiento tan sencilla cuando **Cloud Dataprep** puede hacer el trabajo sin complicaciones.\n\n- **:red[Use Cloud Dataflow to find null values in sample source data. Convert all nulls to 0 using a custom script.]**: Aunque el resultado de convertir nulos a 0 es correcto, **Cloud Dataprep** es una solución mucho más rápida y sencilla para preprocesar datos sin necesidad de escribir scripts personalizados. **Dataprep** está optimizado para limpiar y transformar datos visualmente, lo que reduce el tiempo de implementación y el riesgo de errores.",
         "reference": "https://cloud.google.com/dataprep/docs"
     },
     {
@@ -1607,8 +1607,8 @@
         "question_extra_info": "# MJTelco Case Study\n\n## Company Overview\nMJTelco is a startup that plans to build networks in rapidly growing, underserved markets around the world. The company has patents for innovative optical communications hardware. Based on these patents, they can create many reliable, high-speed backbone links with inexpensive hardware.\n\n## Company Background\nFounded by experienced telecom executives, MJTelco uses technologies originally developed to overcome communications challenges in space. Fundamental to their operation, they need to create a distributed data infrastructure that drives real-time analysis and incorporates machine learning to continuously optimize their topologies. Because their hardware is inexpensive, they plan to overdeploy the network allowing them to account for the impact of dynamic regional politics on location availability and cost.\nTheir management and operations teams are situated all around the globe creating many-to-many relationships between data consumers and providers in their system. After careful consideration, they decided public cloud is the perfect environment to support their needs.\n\n## Solution Concept\nMJTelco is running a successful proof-of-concept (PoC) project in its labs. They have two primary needs:\n- Scale and harden their PoC to support significantly more data flows generated when they ramp to more than 50,000 installations.\n- Refine their machine-learning cycles to verify and improve the dynamic models they use to control topology definition.\nMJTelco will also use three separate operating environments - development/test, staging, and production - to meet the needs of running experiments, deploying new features, and serving production customers.\n\n## Business Requirements\n- Scale up their production environment with minimal cost, instantiating resources when and where needed in an unpredictable, distributed telecom user community.\n- Ensure security of their proprietary data to protect their leading-edge machine learning and analysis.\n- Provide reliable and timely access to data for analysis from distributed research workers.\n- Maintain isolated environments that support rapid iteration of their machine-learning models without affecting their customers.\n\n## Technical Requirements\n- Ensure secure and efficient transport and storage of telemetry data.\n- Rapidly scale instances to support between 10,000 and 100,000 data providers with multiple flows each.\n- Allow analysis and presentation against data tables tracking up to 2 years of data storing approximately 100m records/day.\n- Support rapid iteration of monitoring infrastructure focused on awareness of data pipeline problems both in telemetry flows and in production learning cycles.\n\n## CEO Statement\nOur business model relies on our patents, analytics and dynamic machine learning. Our inexpensive hardware is organized to be highly reliable, which gives us cost advantages. We need to quickly stabilize our large distributed data pipelines to meet our reliability and capacity commitments.\n\n## CTO Statement\nOur public cloud services must operate as advertised. We need resources that scale and keep our data secure. We also need environments in which our data scientists can carefully study and quickly adapt our models. Because we rely on automation to process our data, we also need our development and test environments to work as we iterate.\n\n## CFO Statement\nThe project is too large for us to maintain the hardware and software required for the data and analysis. Also, we cannot afford to staff an operations team to monitor so many data feeds, so we will rely on automation and infrastructure. Google Cloud's machine learning will allow our quantitative researchers to work on our high-value problems instead of problems with our data pipelines.",
         "question": "MJTelco's Google Cloud Dataflow pipeline is now ready to start receiving data from the 50,000 installations. You want to allow Cloud Dataflow to scale its compute power up as required. Which Cloud Dataflow pipeline configuration setting should you update?",
         "answers": [
-            "Create a table called tracking_table and include a DATE column.",
-            "Create a partitioned table called tracking_table and include a TIMESTAMP column.",
+            "Create a table called tracking_table and include a DATE column",
+            "Create a partitioned table called tracking_table and include a TIMESTAMP column",
             "Create sharded tables for each day following the pattern tracking_table_YYYYMMDD",
             "Create a table called tracking_table with a TIMESTAMP column to represent the day"
         ],
@@ -4418,9 +4418,9 @@
             "Update SQL pipelines and ad-hoc queries to run as interactive query Jobs"
         ],
         "correct_answer": [
-            "Increase the slot capacity of the project with baseline as 0 and maximum reservation size as 3000"
+            "Update SQL pipelines to run as a batch query, and run ad-hoc queries as interactive query Jobs"
         ],
-        "explanation": "\n- **✅:green[Increase the slot capacity of the project with baseline as 0 and maximum reservation size as 3000]**: Aumentar la capacidad de los slots a 3000 permite manejar la concurrencia durante los picos de demanda y evitar errores de cuota. Mantener un baseline de 0 asegura que solo se pague por los slots utilizados.\n- **:red[Rest of the options]**: No abordan adecuadamente los problemas de capacidad o resultan en mayores costos o ineficiencias.",
+        "explanation": "\n- **✅:green[Update SQL pipelines to run as a batch query, and run ad-hoc queries as interactive query Jobs]**: Las consultas en modo batch no compiten inmediatamente por los slots disponibles, lo que reduce la presión sobre los recursos durante los picos de concurrencia. Esto es ideal para las pipelines SQL que no son sensibles al tiempo, mientras que las consultas ad-hoc seguirían obteniendo acceso rápido a los slots.\n- **❌:red[Increase the slot capacity of the project with baseline as 0 and maximum reservation size as 3000]**: Aunque aumentar la capacidad a 3000 podría ayudar, es una solución costosa que no garantiza la prevención de futuros errores de cuota. Además, si ya tenemos errores de cuota con 2000 slots, reducir el baseline a 0 slots sería contraproducente. Reducir el baseline a 0 slots implicaría depender de la disponibilidad compartida, lo que podría agravar los errores de cuota durante los picos de demanda.",
         "reference": "https://cloud.google.com/bigquery/docs/slot-reservations"
     },
     {
@@ -7186,5 +7186,351 @@
         ],
         "explanation": "\n- **✅:green[Google's models and your data]**: **AutoML** utiliza modelos desarrollados por Google y los aplica a tus propios datos para crear modelos personalizados que se ajustan específicamente a tus necesidades y casos de uso. Este es el enfoque de **AutoML**, donde Google proporciona los algoritmos y las herramientas de aprendizaje automático, mientras que tú proporcionas los datos para entrenar estos modelos según los requisitos específicos de tu proyecto.\n\n- **:red[Your models and your data]**: Esto se aplica a la **AI Platform** personalizada, donde puedes usar tus propios modelos y datos, pero no es el caso de **AutoML**.\n\n- **:red[Google's models and Google's data]**: Google no utiliza sus propios datos en **AutoML**; aunque usa modelos preentrenados por Google, se requiere que los usuarios aporten sus propios datos para un entrenamiento personalizado.\n\n- **:red[Your models and Google's data]**: No es típico que Google ofrezca sus datos para ser usados con los modelos personalizados del usuario en **AutoML**. Los usuarios aportan los datos para entrenar los modelos desarrollados por Google.",
         "reference": "https://cloud.google.com/automl"
+    },
+    {
+        "question_number": 400,
+        "question_area": "DATA ANALYTICS",
+        "question": "You are working on optimizing BigQuery for a query that is run repeatedly on a single table. The data queried is about 1 GB, and some rows are expected to change about 10 times every hour. You have optimized the SQL statements as much as possible. You want to further optimize the query's performance. What should you do?",
+        "answers": [
+            "Create a materialized view based on the table, and query that view.",
+            "Enable caching of the queried data so that subsequent queries are faster.",
+            "Create a scheduled query, and run it a few minutes before the report has to be created.",
+            "Reserve a larger number of slots in advance so that you have maximum compute power to execute the query."
+        ],
+        "correct_answer": [
+            "Create a materialized view based on the table, and query that view."
+        ],
+        "explanation": "\n- **✅:green[Create a materialized view based on the table]**: Las vistas materializadas cachean los resultados de una consulta de manera periódica, lo que aumenta el rendimiento de las consultas repetidas. Además, están optimizadas para conjuntos de datos pequeños que cambian con frecuencia.\n- **:red[Rest of the options]**: Las demás opciones no proporcionan mejoras de rendimiento significativas, ya que la caché se invalida cuando los datos subyacentes cambian, las consultas programadas no mejoran el rendimiento, y reservar más slots no optimiza la ejecución en términos de velocidad.",
+        "reference": [
+            "https://cloud.google.com/bigquery/docs/materialized-views-intro",
+            "https://cloud.google.com/bigquery/docs/query-cache"
+        ]
+    },
+    {
+        "question_number": 401,
+        "question_area": "AI/ML",
+        "question": "Several years ago, you built a machine learning model for an ecommerce company. Your model made good predictions. Then a global pandemic occurred, lockdowns were imposed, and many people started working from home. Now the quality of your model has degraded. You want to improve the quality of your model and prevent future performance degradation. What should you do?",
+        "answers": [
+            "Retrain the model with data from the first 30 days of the lockdown.",
+            "Monitor data until usage patterns normalize, and then retrain the model.",
+            "Retrain the model with data from the last 30 days. After one year, return to the older model.",
+            "Retrain the model with data from the last 30 days. Add a step to continuously monitor model input data for changes, and retrain the model."
+        ],
+        "correct_answer": [
+            "Retrain the model with data from the last 30 days. Add a step to continuously monitor model input data for changes, and retrain the model."
+        ],
+        "explanation": "\n- **✅:green[Retrain the model with data from the last 30 days. Add a step to continuously monitor model input data for changes]**: Esta opción es correcta porque la situación actual ha cambiado y los patrones de uso previos ya no son relevantes. Al entrenar con datos recientes y monitorear continuamente el flujo de datos para futuros cambios, se asegura la relevancia continua del modelo.\n- **:red[Rest of the options]**: Las otras opciones no abordan el problema a largo plazo. Entrenar con datos antiguos o simplemente monitorear sin ajustar el modelo no solucionará el problema de degradación del rendimiento.",
+        "reference": [
+            "https://cloud.google.com/vertex-ai/docs/training/retraining-models",
+            "https://cloud.google.com/ml-engine/docs/monitoring"
+        ]
+    },
+    {
+        "question_number": 402,
+        "question_area": "IDENTITY AND SECURITY",
+        "question": "A new member of your development team works remotely. The developer will write code locally on their laptop, which will connect to a MySQL instance on Cloud SQL. The instance has an external (public) IP address. You want to follow Google-recommended practices when you give access to Cloud SQL to the new team member. What should you do?",
+        "answers": [
+            "Ask the developer for their laptop's IP address, and add it to the authorized networks list.",
+            "Remove the external IP address, and replace it with an internal IP address. Add only the IP address for the remote developer's laptop to the authorized list.",
+            "Give instance access permissions in Identity and Access Management (IAM), and have the developer run Cloud SQL Auth proxy to connect to a MySQL instance.",
+            "Give instance access permissions in Identity and Access Management (IAM), change the access to 'private service access' for security, and allow the developer to access Cloud SQL from their laptop."
+        ],
+        "correct_answer": [
+            "Give instance access permissions in Identity and Access Management (IAM), and have the developer run Cloud SQL Auth proxy to connect to a MySQL instance."
+        ],
+        "explanation": "\n- **✅:green[Give instance access permissions in Identity and Access Management (IAM), and have the developer run Cloud SQL Auth proxy]**: Usar el proxy de autenticación de Cloud SQL es la forma recomendada por Google para manejar el acceso remoto a instancias de bases de datos en la nube, porque asegura una conexión segura y evita la necesidad de gestionar direcciones IP de redes autorizadas manualmente.\n- **:red[Rest of the options]**: Las otras opciones no siguen las mejores prácticas, como usar listas de redes autorizadas, que es menos seguro y más difícil de gestionar, o cambiar a acceso privado, que complicaría la conectividad para desarrolladores remotos.",
+        "reference": [
+            "https://cloud.google.com/sql/docs/mysql/sql-proxy",
+            "https://cloud.google.com/sql/docs/mysql/iam-roles"
+        ]
+    },
+    {
+        "question_number": 403,
+        "question_area": "DATABASE",
+        "question": "Your Cloud Spanner database stores customer address information that is frequently accessed by the marketing team. When a customer enters the country and the state where they live, this information is stored in different tables connected by a foreign key. The current architecture has performance issues. You want to follow Google-recommended practices to improve performance. What should you do?",
+        "answers": [
+            "Create interleaved tables, and store states under the countries.",
+            "Denormalize the data, and have a row for each state with its corresponding country.",
+            "Retain the existing architecture, but use short, two-letter codes for the countries and states.",
+            "Combine the countries in a single cell's text, for example 'country:state1,state2,…' and when required, split the data."
+        ],
+        "correct_answer": [
+            "Create interleaved tables, and store states under the countries."
+        ],
+        "explanation": "\n- **✅:green[Create interleaved tables, and store states under the countries]**: Cloud Spanner soporta tablas entrelazadas, lo que garantiza que los datos relacionados se almacenen juntos, optimizando el rendimiento cuando se necesita un fuerte enfoque en la relación de localización de los datos.\n- **:red[Rest of the options]**: Las demás opciones no abordan los problemas de rendimiento tan eficientemente. La desnormalización aumenta la duplicación de datos, y usar códigos más cortos o combinar datos en una única celda no optimiza el acceso ni las consultas.",
+        "reference": [
+            "https://cloud.google.com/spanner/docs/schema-and-data-model#interleaved_tables"
+        ]
+    },
+    {
+        "question_number": 404,
+        "question_area": "DATABASE",
+        "question": "Your company runs its business-critical system on PostgreSQL. The system is accessed simultaneously from many locations around the world and supports millions of customers. Your database administration team manages the redundancy and scaling manually. You want to migrate the database to Google Cloud. You need a solution that will provide global scale and availability and require minimal maintenance. What should you do?",
+        "answers": [
+            "Migrate to BigQuery.",
+            "Migrate to Cloud Spanner.",
+            "Migrate to a Cloud SQL for PostgreSQL instance.",
+            "Migrate to bare metal machines with PostgreSQL installed."
+        ],
+        "correct_answer": [
+            "Migrate to Cloud Spanner."
+        ],
+        "explanation": "\n- **✅:green[Migrate to Cloud Spanner]**: Cloud Spanner es la mejor opción para bases de datos relacionales con escala global y alta disponibilidad, con mínima administración. Ofrece consistencia fuerte y escalabilidad horizontal automática.\n- **:red[Rest of the options]**: BigQuery no es adecuado para bases de datos transaccionales, Cloud SQL es regional y no soporta la escala global, y los servidores bare metal requieren mucho mantenimiento manual.",
+        "reference": [
+            "https://cloud.google.com/spanner/docs"
+        ]
+    },
+    {
+        "question_number": 405,
+        "question_area": "DATABASE",
+        "question": "Your company collects data about customers to regularly check their health vitals. You have millions of customers around the world. Data is ingested at an average rate of two events per 10 seconds per user. You need to be able to visualize data in Bigtable on a per user basis. You need to construct the Bigtable key so that the operations are performant. What should you do?",
+        "answers": [
+            "Construct the key as user-id#device-id#activity-id#timestamp.",
+            "Construct the key as timestamp#user-id#device-id#activity-id.",
+            "Construct the key as timestamp#device-id#activity-id#user-id.",
+            "Construct the key as user-id#timestamp#device-id#activity-id."
+        ],
+        "correct_answer": [
+            "Construct the key as user-id#device-id#activity-id#timestamp."
+        ],
+        "explanation": "\n- **✅:green[Construct the key as user-id#device-id#activity-id#timestamp]**: Este diseño evita el aumento monotónico en los identificadores, que puede generar hotspots en Bigtable. El orden de la clave permite un acceso eficiente por usuario.\n- **:red[Rest of the options]**: Las demás opciones tienen claves que aumentan monotonamente (comenzando con timestamp), lo que genera hotspots y disminuye el rendimiento en bases de datos distribuidas como Bigtable.",
+        "reference": [
+            "https://cloud.google.com/bigtable/docs/schema-design"
+        ]
+    },
+    {
+        "question_number": 406,
+        "question_area": "DATA ANALYTICS",
+        "question": "Your company is hiring several business analysts who are new to BigQuery. The analysts will use BigQuery to analyze large quantities of data. You need to control costs in BigQuery and ensure that there is no budget overrun while you maintain the quality of query results. What should you do?",
+        "answers": [
+            "Set a customized project-level or user-level daily quota to acceptable values.",
+            "Reduce the data in the BigQuery table so that the analysts query less data, and then archive the remaining data.",
+            "Train the analysts to use the query validator or --dry_run to estimate costs so that the analysts can self-regulate usage.",
+            "Export the BigQuery daily costs, and visualize the data on Looker on a per-analyst basis so that the analysts can self-regulate usage."
+        ],
+        "correct_answer": [
+            "Set a customized project-level or user-level daily quota to acceptable values."
+        ],
+        "explanation": "\n- **✅:green[Set a customized project-level or user-level daily quota]**: Establecer cuotas diarias permite controlar los costos al limitar la cantidad de datos procesados por día en BigQuery, garantizando así que no se exceda el presupuesto.\n- **:red[Rest of the options]**: Las otras opciones suponen que los analistas pueden regular su propio uso o disminuyen la calidad de los resultados al reducir los datos disponibles.",
+        "reference": [
+            "https://cloud.google.com/bigquery/docs/quotas"
+        ]
+    },
+    {
+        "question_number": 407,
+        "question_area": "DATABASE",
+        "question": "Your Bigtable database was recently deployed into production. The scale of data ingested and analyzed has increased significantly, but the performance has degraded. You want to identify the performance issue. What should you do?",
+        "answers": [
+            "Use Key Visualizer to analyze performance.",
+            "Use Cloud Trace to identify the performance issue.",
+            "Add logging statements into the code to see which inserts cause the delay.",
+            "Add more nodes to the cluster to see if that resolves the performance issue."
+        ],
+        "correct_answer": [
+            "Use Key Visualizer to analyze performance."
+        ],
+        "explanation": "\n- **✅:green[Use Key Visualizer to analyze performance]**: Key Visualizer es una herramienta diseñada específicamente para Bigtable que proporciona informes visuales detallados sobre el uso y los patrones de acceso a las claves, lo que facilita la identificación de problemas de rendimiento.\n- **:red[Rest of the options]**: Las demás opciones no son adecuadas para identificar problemas específicos de rendimiento en Bigtable, como la sobrecarga de nodos o el diseño ineficiente de claves.",
+        "reference": [
+            "https://cloud.google.com/bigtable/docs/key-visualizer"
+        ]
+    },
+    {
+        "question_number": 408,
+        "question_area": "INTEGRATION SERVICES",
+        "question": "Your company is moving your data analytics to BigQuery. Your other operations will remain on-premises. You need to transfer 800 TB of historic data. You also need to plan for 30 Gbps of daily data transfers that must be appended for analysis the next day. You want to follow Google-recommended practices to transfer your data. What should you do?",
+        "answers": [
+            "As early as possible every day, use Cloud VPN to transfer the existing data over the internet.",
+            "Use a Transfer Appliance to move the existing data to Google Cloud. Use Cloud VPN to transfer data daily.",
+            "Use a Transfer Appliance to move the existing data to Google Cloud. Use VPC Network Peering to transfer data daily.",
+            "Use a Transfer Appliance to move the existing data to Google Cloud. Set up a Dedicated or Partner Interconnect for daily transfers."
+        ],
+        "correct_answer": [
+            "Use a Transfer Appliance to move the existing data to Google Cloud. Set up a Dedicated or Partner Interconnect for daily transfers."
+        ],
+        "explanation": "\n- **✅:green[Use a Transfer Appliance and set up a Dedicated or Partner Interconnect]**: Transfer Appliance es la solución recomendada para mover grandes cantidades de datos históricos, y para transferencias diarias de gran volumen, se recomienda una conexión dedicada o híbrida para garantizar alta velocidad y estabilidad.\n- **:red[Rest of the options]**: Las demás opciones, como Cloud VPN, no son adecuadas para manejar transferencias de datos a gran escala o requieren soluciones que no son recomendadas para transferencias constantes de gran volumen.",
+        "reference": [
+            "https://cloud.google.com/interconnect/docs/concepts/dedicated-overview",
+            "https://cloud.google.com/transfer-appliance"
+        ]
+    },
+    {
+        "question_number": 409,
+        "question_area": "COMPUTE",
+        "question": "Your team runs Dataproc workloads where the worker node takes about 45 minutes to process. You have been exploring various options to optimize the system for cost, including shutting down worker nodes aggressively. However, in your metrics you see that the entire job takes even longer. You want to optimize the system for cost without increasing job completion time. What should you do?",
+        "answers": [
+            "Set a graceful decommissioning timeout greater than 45 minutes.",
+            "Rewrite the processing in Cloud Data Fusion, and run the job automatically.",
+            "Rewrite the processing in Dataflow, and use stream processing of the same data.",
+            "Increase the number of vCPUs on each worker node so that the processing finishes sooner."
+        ],
+        "correct_answer": [
+            "Set a graceful decommissioning timeout greater than 45 minutes."
+        ],
+        "explanation": "\n- **✅:green[Set a graceful decommissioning timeout greater than 45 minutes]**: Al establecer un tiempo de espera para el apagado gradual mayor a 45 minutos, se permite que los nodos completen el trabajo en curso antes de ser desactivados, lo que optimiza los costos sin aumentar el tiempo total de ejecución.\n- **:red[Rest of the options]**: Reescribir en Data Fusion o Dataflow implica costos adicionales y mayor esfuerzo, mientras que aumentar el número de vCPUs aumentaría significativamente los costos sin necesariamente mejorar la eficiencia general.",
+        "reference": [
+            "https://cloud.google.com/dataproc/docs/concepts/configuring-clusters/graceful-decommissioning"
+        ]
+    },
+    {
+        "question_number": 410,
+        "question_area": "DATABASE",
+        "question": "Your customer has a SQL Server database that contains about 5 TB of data in another public cloud. You expect the data to grow to a maximum of 25 TB. The database is the backend of an internal reporting application that is used once a week. You want to migrate the application to Google Cloud to reduce administrative effort while keeping costs the same or reducing them. What should you do?",
+        "answers": [
+            "Migrate the database to Bigtable.",
+            "Migrate the database to Cloud Spanner.",
+            "Install SQL Server on a Compute Engine VM.",
+            "Migrate the database to SQL Server in Cloud SQL."
+        ],
+        "correct_answer": [
+            "Migrate the database to SQL Server in Cloud SQL."
+        ],
+        "explanation": "\n- **✅:green[Migrate the database to SQL Server in Cloud SQL]**: Cloud SQL ofrece una solución gestionada para bases de datos SQL Server, lo que reduce el esfuerzo administrativo y permite escalar hasta 25 TB sin complicaciones adicionales.\n- **:red[Rest of the options]**: Bigtable no es adecuado para bases de datos SQL, Cloud Spanner es más costoso y no necesario para esta aplicación, y ejecutar SQL Server en Compute Engine requiere más esfuerzo administrativo.",
+        "reference": [
+            "https://cloud.google.com/sql/docs/sql-server"
+        ]
+    },
+    {
+        "question_number": 411,
+        "question_area": "DATA ANALYTICS",
+        "question": "Your IT team uses BigQuery for storing structured data. Your finance team recently moved to Google Workspace Enterprise edition from a standalone, desktop-based spreadsheet processor. When the finance team needs data insights, the IT team runs a query on BigQuery, exports the data to a CSV file, and sends the file as an email attachment to the finance team members. You want to improve the process while you retain familiar methods of data analysis for the finance team. What should you do?",
+        "answers": [
+            "Run the query in BigQuery, and give the finance team access to the results view, which can be analyzed.",
+            "Run the query in BigQuery, and give the finance team access to the data visualizations in Google Data Studio.",
+            "Run the query in BigQuery, export the data to CSV, upload the file to a Cloud Storage bucket, and share the file with the finance team.",
+            "Run the query in BigQuery, and save the results to a Google Sheets shared spreadsheet that can be accessed and analyzed by the finance team."
+        ],
+        "correct_answer": [
+            "Run the query in BigQuery, and save the results to a Google Sheets shared spreadsheet that can be accessed and analyzed by the finance team."
+        ],
+        "explanation": "\n- **✅:green[Run the query in BigQuery, and save the results to a Google Sheets shared spreadsheet]**: Connected Sheets permite compartir datos directamente desde BigQuery a Google Sheets, lo que permite que el equipo de finanzas continúe usando una herramienta familiar para el análisis de datos.\n- **:red[Rest of the options]**: Las demás opciones no aprovechan al máximo el ecosistema de Google Workspace o requerirían capacitación adicional y acceso a herramientas más complejas como BigQuery o Cloud Storage.",
+        "reference": [
+            "https://cloud.google.com/connected-sheets"
+        ]
+    },
+    {
+        "question_number": 412,
+        "question_area": "DATA ANALYTICS",
+        "question": "Your scooter-sharing company collects information about their scooters, such as location, battery level, and speed. The company visualizes this data in real time. To guard against intermittent connectivity, each scooter sends repeats of certain messages within a short interval. Occasional data errors have been noticed. The messages are received in Pub/Sub and stored in BigQuery. You need to ensure that the data does not contain duplicates and that erroneous data with empty fields is rejected. What should you do?",
+        "answers": [
+            "Store the data in BigQuery, and run delete queries on erroneous and duplicate data.",
+            "Use Dataflow to subscribe to Pub/Sub, process the data, and store the data in BigQuery.",
+            "Use Kubernetes to create a microservices application that can remove duplicates and erroneous data. Then insert the data into BigQuery.",
+            "Create an application on Compute Engine with Managed Instance Groups that can remove duplicates and erroneous data. Then insert the data into BigQuery."
+        ],
+        "correct_answer": [
+            "Use Dataflow to subscribe to Pub/Sub, process the data, and store the data in BigQuery."
+        ],
+        "explanation": "\n- **✅:green[Use Dataflow to subscribe to Pub/Sub, process the data, and store the data in BigQuery]**: Dataflow es la opción recomendada para procesar datos en streaming, ya que puede eliminar duplicados, manejar campos vacíos y procesar datos de manera eficiente antes de almacenarlos en BigQuery.\n- **:red[Rest of the options]**: Las otras opciones implican más esfuerzo de desarrollo o no garantizan la limpieza de los datos antes de almacenarlos en BigQuery.",
+        "reference": [
+            "https://cloud.google.com/dataflow/docs"
+        ]
+    },
+    {
+        "question_number": 413,
+        "question_area": "DATA ANALYTICS",
+        "question": "Your cryptocurrency trading company visualizes prices to help your customers make trading decisions. Because different trades happen in real time, the price data is fed to a data pipeline that uses Dataflow for processing. You want to compute moving averages. What should you do?",
+        "answers": [
+            "Use hopping windows in Dataflow.",
+            "Use session windows in Dataflow.",
+            "Use tumbling windows in Dataflow.",
+            "Use Dataflow SQL, and compute averages grouped by time."
+        ],
+        "correct_answer": [
+            "Use hopping windows in Dataflow."
+        ],
+        "explanation": "\n- **✅:green[Use hopping windows in Dataflow]**: Las ventanas deslizantes (hopping windows) son ideales para calcular promedios móviles, ya que pueden superponerse y representar intervalos de tiempo consistentes en un flujo de datos.\n- **:red[Rest of the options]**: Las demás opciones, como las ventanas de sesión o ventanas disjuntas (tumbling), no son apropiadas para promedios móviles.",
+        "reference": [
+            "https://cloud.google.com/dataflow/docs"
+        ]
+    },
+    {
+        "question_number": 414,
+        "question_area": "DATABASE",
+        "question": "You are building the trading platform for a stock exchange with millions of traders. Trading data is written rapidly. You need to retrieve data quickly to show visualizations to the traders, such as the changing price of a particular stock over time. You need to choose a storage solution in Google Cloud. What should you do?",
+        "answers": [
+            "Use Bigtable.",
+            "Use Firestore.",
+            "Use Cloud SQL.",
+            "Use Memorystore."
+        ],
+        "correct_answer": [
+            "Use Bigtable."
+        ],
+        "explanation": "\n- **✅:green[Use Bigtable]**: Bigtable es la solución recomendada para almacenar y recuperar datos de series temporales con un alto rendimiento de lectura y escritura. Es ideal para almacenar grandes volúmenes de datos rápidamente cambiantes.\n- **:red[Rest of the options]**: Firestore, Cloud SQL y Memorystore no tienen las capacidades de alto rendimiento necesarias para manejar este tipo de datos de series temporales.",
+        "reference": [
+            "https://cloud.google.com/bigtable/docs"
+        ]
+    },
+    {
+        "question_number": 415,
+        "question_area": "DATA ANALYTICS",
+        "question": "Your customer uses Hadoop and Spark to run data analytics on-premises. The main data is stored in hard disks that are centrally accessed. Your customer needs to migrate their workloads to Google Cloud efficiently while considering scalability. You want to select an architecture that requires minimal effort. What should you do?",
+        "answers": [
+            "Use Dataproc to run Hadoop and Spark jobs. Move the data to Cloud Storage.",
+            "Use Dataflow to recreate the jobs in a serverless approach. Move the data to Cloud Storage.",
+            "Use Dataproc to run Hadoop and Spark jobs. Retain the data on a Compute Engine VM with an attached persistent disk.",
+            "Use Dataflow to recreate the jobs in a serverless approach. Retain the data on a Compute Engine VM with an attached persistent disk."
+        ],
+        "correct_answer": [
+            "Use Dataproc to run Hadoop and Spark jobs. Move the data to Cloud Storage."
+        ],
+        "explanation": "\n- **✅:green[Use Dataproc to run Hadoop and Spark jobs. Move the data to Cloud Storage]**: Dataproc es un servicio gestionado que permite ejecutar trabajos de Hadoop y Spark de manera eficiente en Google Cloud. Almacenar los datos en Cloud Storage es la mejor práctica recomendada para el almacenamiento persistente.\n- **:red[Rest of the options]**: Reescribir los trabajos en Dataflow requiere mucho esfuerzo, y mantener los datos en discos persistentes no es la mejor práctica para escalabilidad.",
+        "reference": [
+            "https://cloud.google.com/dataproc/docs"
+        ]
+    },
+    {
+        "question_number": 416,
+        "question_area": "AI/ML",
+        "question": "You used a small amount of data to build a machine learning model that gives you good inferences during testing. However, the results show more errors when real-world data is used to run the model. No additional data can be collected for testing. You want to get a more accurate view of the model's capability. What should you do?",
+        "answers": [
+            "Reduce the amount of data to improve the model.",
+            "Cross-validate the data, and re-run the model building process.",
+            "Create feature crosses that will add new columns to increase the data.",
+            "Duplicate the data twice to increase the data, and re-run the model building process."
+        ],
+        "correct_answer": [
+            "Cross-validate the data, and re-run the model building process."
+        ],
+        "explanation": "\n- **✅:green[Cross-validate the data, and re-run the model building process]**: La validación cruzada es una técnica recomendada cuando un modelo parece estar sobreajustado. Al hacer validación cruzada, se reduce el sobreajuste del modelo al dividir el conjunto de datos en múltiples particiones o 'folds'.\n- **:red[Rest of the options]**: Reducir o duplicar los datos no abordará el problema del sobreajuste, y agregar columnas no mejorará la validación del modelo con los datos existentes.",
+        "reference": [
+            "https://cloud.google.com/ai-platform/docs"
+        ]
+    },
+    {
+        "question_number": 417,
+        "question_area": "IDENTITY AND SECURITY",
+        "question": "Your organization has been collecting information for many years about your customers, including their address and credit card details. You plan to use this customer data to build machine learning models on Google Cloud. You are concerned about private data leaking into the machine learning model. Your management is also concerned that direct leaks of personal data could damage the company's reputation. You need to address these concerns about data security. What should you do?",
+        "answers": [
+            "Remove all the tables that contain sensitive data.",
+            "Use libraries like SciPy to build the ML models on your local computer.",
+            "Remove the sensitive data by using the Cloud Data Loss Prevention (DLP) API.",
+            "Identify the rows that contain sensitive data, and apply SQL queries to remove only those rows."
+        ],
+        "correct_answer": [
+            "Remove the sensitive data by using the Cloud Data Loss Prevention (DLP) API."
+        ],
+        "explanation": "\n- **✅:green[Remove the sensitive data by using the Cloud Data Loss Prevention (DLP) API]**: Cloud DLP es la herramienta recomendada para redacción, enmascaramiento y tokenización de datos sensibles. Esto asegura que el modelo no tenga acceso a información personal identificable o confidencial.\n- **:red[Rest of the options]**: Eliminar datos completos o realizar operaciones localmente no es eficiente ni garantiza la seguridad de los datos a escala, mientras que eliminar filas completas afectaría la precisión del modelo.",
+        "reference": [
+            "https://cloud.google.com/dlp/docs"
+        ]
+    },
+    {
+        "question_number": 418,
+        "question_area": "DATA ANALYTICS",
+        "question": "Your healthcare application has a backend system that accepts event data directly from IoT devices. Recent increases of the application's users and devices are causing a sudden influx of data that overwhelms the system. You need to redesign the data pipeline to ensure that all data is processed and that no events are lost. You want to follow Google-recommended practices. What should you do?",
+        "answers": [
+            "Use Kafka with pull mode.",
+            "Use Pub/Sub with pull mode.",
+            "Use Pub/Sub with push mode.",
+            "Run Cloud Scheduler at fixed intervals."
+        ],
+        "correct_answer": [
+            "Use Pub/Sub with pull mode."
+        ],
+        "explanation": "\n- **✅:green[Use Pub/Sub with pull mode]**: Pub/Sub es la solución gestionada recomendada por Google para procesar grandes volúmenes de eventos de manera eficiente. Usar el modo pull permite que el sistema controle cuándo procesar nuevos eventos según la capacidad disponible, evitando sobrecargas.\n- **:red[Rest of the options]**: Usar Kafka o el modo push puede no ser adecuado para este escenario gestionado, y ejecutar Cloud Scheduler a intervalos fijos no garantiza que todos los eventos se procesen a tiempo.",
+        "reference": [
+            "https://cloud.google.com/pubsub/docs/pull"
+        ]
     }
 ]
