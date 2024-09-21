@@ -223,6 +223,7 @@ elif st.session_state.page == 'sql':
     especialidad = "sql"
     # Init connection
     engine = h.init_connection(especialidad)
+    
     ################################################################################
     # Create the title of the website
     st.title(":bar_chart: SQL Query Comparison Tool :slot_machine:")
@@ -230,6 +231,9 @@ elif st.session_state.page == 'sql':
     if st.button('Back to Main', key='back-to-main-from-dbt'):
         go_to_main()
         st.rerun()
+
+    username = t.menu(engine, especialidad)
+
     query_temp = ""
     if 'input_list' not in st.session_state:
         st.session_state['input_list'] = []
@@ -245,6 +249,8 @@ elif st.session_state.page == 'sql':
         option_w, option = tsql.display_casos_exercises(tsql.date_control(engine))
         if option_w is not None:
             with st.expander(f"¿Cómo es el {option_w}? 🤔"):
+                st.info("Recuerda que para hacer los ejercicios tienes que terminar todas las consultas en ';' sin dejar ningún espacio detrás de ese punto y coma.")
+                st.info("Ejemplo de consulta: SELECT * FROM CASE01.MENU;  -> Como puedes ver todos los casos se nombran como 'CASE0' y el número que sea del caso.")
                 st.image(f"./sql_especialidad/images/{option_w}.png")
         if option is not None:
             st.divider()
@@ -269,9 +275,9 @@ elif st.session_state.page == 'sql':
                     tsql.show_result_2()
             # Only user result
             if  st.session_state["show"] == 1:
-                tsql.show_tables(engine, query1, option, False)
+                tsql.show_tables(engine, query1, option, False, username)
             # Compare solution with the user
             if  st.session_state["show"] == 2:
-                tsql.show_tables(engine, query1, option, True)
+                tsql.show_tables(engine, query1, option, True, username)
     except Exception as e:
         st.error(str(e.args))

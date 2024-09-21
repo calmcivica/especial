@@ -61,58 +61,85 @@ def get_user_none():
     user = st.session_state['user']
     return user
 
-def recharge_user_list(conn):
-    query = "select name from [esnowflake].[dbo].Dim_Users ORDER BY name"
-    user_list_v = (
-    conn.cursor()
-            .execute(
-                query
-            )
-            .fetchall()
-    )
-    lista_plana = [item[0] for item in user_list_v]
-    return lista_plana
+def recharge_user_list(conn,es_sql=False):
+    if es_sql:
+        with conn.begin() as connection:
+            query = "select username from [dbo].Dim_Users ORDER BY username"
+            result = connection.execute(text(query))
+            lista_plana = [row[0] for row in result.fetchall()]
+        return lista_plana
+    else:
+        query = "select name from [esnowflake].[dbo].Dim_Users ORDER BY name"
+        user_list_v = (
+        conn.cursor()
+                .execute(
+                    query
+                )
+                .fetchall()
+        )
+        lista_plana = [item[0] for item in user_list_v]
+        return lista_plana
 
-def new_user(conn, new_user, message=None):
+def new_user(conn, new_user, message=None, es_sql=False):
     try:
-        query = f"INSERT INTO [esnowflake].[dbo].Dim_Users (name, rango) VALUES ('{new_user}', 'Iniciado')"
-        conn.cursor().execute(query).fetchall()
-        conn.commit()
+        if es_sql:
+            # For SQLAlchemy connection
+            query = text("INSERT INTO [dbo].Dim_Users (username) VALUES (:username)")
+            with conn.begin() as connection:
+                connection.execute(query, {'username': new_user})
+                connection.commit()
+        else:
+            # For pyodbc connection
+            query = f"INSERT INTO [esnowflake].[dbo].Dim_Users (name, rango) VALUES ('{new_user}', 'Iniciado')"
+            conn.cursor().execute(query).fetchall()
+            conn.commit()
+
         if message:
             st.success('New user added successfully!')
         st.session_state["user"] = new_user
-        st.session_state['lista_plana'] = recharge_user_list(conn)
+        st.session_state['lista_plana'] = recharge_user_list(conn, es_sql)
+        
         time.sleep(1)
         st.rerun()
     except Exception as e:
         st.error(f'Error adding new user: {e}')
 
-def reset_delete_user(conn,useri, delete):
+def reset_delete_user(conn, useri, delete, es_sql=False):
     action = ''
     if delete:
-        action = ['delete','deleting']
+        action = ['delete', 'deleting']
     else:
-        action = ['reset','reseting']
+        action = ['reset', 'resetting']
+    
     try:
-        conn.cursor().execute(f"DELETE FROM [esnowflake].[dbo].Dim_Users WHERE name = '{useri}'")
-        conn.cursor().execute(f"DELETE FROM [esnowflake].[dbo].FACT_ANSWERS where user_nickname = '{useri}'") 
-        conn.cursor().execute(f"DELETE FROM [esnowflake].[dbo].FACT_EXAMS where user_nickname = '{useri}'")
-        conn.commit()
+        if es_sql == True:
+            # Para SQLAlchemy connection
+            with conn.begin() as connection:
+                connection.execute(text("DELETE FROM [dbo].Dim_Users WHERE username = :username"), {'username': useri})
+                connection.execute(text("DELETE FROM [dbo].Fact_Answers WHERE username = :username"), {'username': useri})
+                connection.commit()
+        else:
+            # Para pyodbc connection
+            conn.cursor().execute(f"DELETE FROM [esnowflake].[dbo].Dim_Users WHERE name = '{useri}'")
+            conn.cursor().execute(f"DELETE FROM [esnowflake].[dbo].FACT_ANSWERS WHERE user_nickname = '{useri}'")
+            conn.cursor().execute(f"DELETE FROM [esnowflake].[dbo].FACT_EXAMS WHERE user_nickname = '{useri}'")
+            conn.commit()
         
-        # Tiene que estar aquí porque si no, no sale el texto
         st.success("Action completed!")
-        if delete == True:
+
+        st.session_state['lista_plana'] = recharge_user_list(conn, es_sql)
+        if delete:
             st.session_state["user"] = None
         else:
-            new_user(conn,useri)
+            new_user(conn, useri, es_sql=es_sql)
 
+        
         st.session_state['count_reset'] = 0
         st.session_state['count_delete'] = 0
         time.sleep(1)
         st.rerun()
     except Exception as e:
         st.error(f'Error {action[1]} user: {e}')
-
 
 def process_qa_block(qa_block):
     # Eliminar líneas vacías

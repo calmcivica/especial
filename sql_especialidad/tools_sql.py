@@ -288,8 +288,16 @@ def show_result_1():
 def show_result_2():
     st.session_state["show"] = 2
 
+def insert_result(conn, username, ejercicio, resultado):
+    try:
+        query = text(f"INSERT INTO [dbo].Fact_Answers (username, ejercicio, correcto) VALUES ('{username}', '{ejercicio}', '{resultado}')")
+        with conn.begin() as connection:
+            connection.execute(query)
+            connection.commit()
+    except Exception as e:
+        st.error(f"Error inserting result: {e}")
 
-def show_tables(engine, query1, option, comparation):
+def show_tables(engine, query1, option, comparation, username):
     try:
         if query1.endswith(";"):
             query1 = query1[:-1].upper()
@@ -325,6 +333,8 @@ def show_tables(engine, query1, option, comparation):
                                 if error == ("list index out of range"):
                                     error = "Check your result, because it seems that [SQL SERVER] doesn`t like your query :tired_face:"
                                 st.error(clean_error_message("Error user: " + error))
+                                if st.session_state["show"] == 2:
+                                    insert_result(engine, username, option, False)
                             transaction.commit()
                             connection.close()
                 ########################################################################
@@ -337,6 +347,8 @@ def show_tables(engine, query1, option, comparation):
                 if error == ("list index out of range"):
                     error = "Check your result, because it seems that [SQL SERVER] doesn`t like your query :tired_face:"
                 st.error(clean_error_message("Error user: " + error))
+                if st.session_state["show"] == 2:
+                    insert_result(engine, username, option, False)
             try:
                 # Show the DataFrames
                 if df1_1 is not None:
@@ -356,6 +368,8 @@ def show_tables(engine, query1, option, comparation):
             except Exception as e:
                 if df1_1 is None and query2 is None:
                     st.error("There is an error in the SOLUTION table: " + str(e))
+                if st.session_state["show"] == 2:
+                    insert_result(engine, username, option, False)
                 # else:
                 # st.error(clean_error_message("Error user: " + error))
             finally:
@@ -376,6 +390,8 @@ def show_tables(engine, query1, option, comparation):
                         if error == ("list index out of range"):
                             error = "Check your result, because it seems that [SQL SERVER] doesn`t like your query :tired_face:"
                         st.error(clean_error_message("Error user: " + error))
+                        if st.session_state["show"] == 2:
+                            insert_result(engine, username, option, False)
                 if df2_1 is not None and df1_1 is not None:
                     if st.session_state["counter"] > 3:
                         st.write("Do you need some help? :angel:")
@@ -385,11 +401,15 @@ def show_tables(engine, query1, option, comparation):
                     if len(df1_1) != len(df2_1):
                         st.warning(" --- COMMENTS --- ")
                         st.write("The tables have a :red[DIFFERENT number of rows].")
+                        if st.session_state["show"] == 2:
+                            insert_result(engine, username, option, False)
                     else:
                         st.write("The tables have the :green[SAME number of rows].")
                         # Check if the DataFrames have the same number of columns
                         if len(df1_1.columns) != len(df2_1.columns):
                             st.write("The tables have :red[DIFFERENT number of columns].")
+                            if st.session_state["show"] == 2:
+                                insert_result(engine, username, option, False)
                         else:
                             st.write("The tables have :green[SAME number of columns].")
                             # Clean the data of whitespace
@@ -412,9 +432,13 @@ def show_tables(engine, query1, option, comparation):
                                     st.write("  -> This is the row that differs:")
                                 # You can now work with `diff_values` DataFrame to highlight or process differences
                                 st.write(diff_values)
+                                if st.session_state["show"] == 2:
+                                    insert_result(engine, username, option, False)
                             else:
                                 st.write(":green[The tables are identical.]")
                                 st.success("EXERCISE CORRECT!")
+                                if st.session_state["show"] == 2:
+                                    insert_result(engine, username, option, True)
                 st.session_state["input_list"] = []
                 show_result()
         else:

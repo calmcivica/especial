@@ -38,8 +38,12 @@ def get_datos(especialidad):
     datos = h.open_file(archivo)
     return datos
 
+def init_users(conn, es_sql=False):
+    h.get_user_none()
+    if "lista_plana" not in st.session_state:
+        st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)    
 
-def menu(conn):
+def menu(conn, especialidad):
     """
     Muestra la interfaz de usuario para la selección y visualización de información de usuario.
     Crea un menú con información del usuario actual y permite la selección de un nuevo usuario desde una lista filtrada.
@@ -52,13 +56,15 @@ def menu(conn):
     Retorna:
     - str: El nombre del usuario seleccionado.
     """
+    es_sql = False
+    if especialidad == 'sql':
+        es_sql = True
     # User information
     with st.container():
-        h.get_user_none()
+        init_users(conn, es_sql)
         space, login, actions = st.columns([3, 1, 1], gap="large")
         space, login, actions = st.columns([2, 2, 0.5], gap="medium")
-        if "lista_plana" not in st.session_state:
-            st.session_state["lista_plana"] = h.recharge_user_list(conn)
+
         with space:
             try:
                 if st.session_state.get("user") is None:
@@ -66,26 +72,27 @@ def menu(conn):
                         "Recuerda elegir tu usuario si quieres que se registren tus avances y poder ver tus progresos."
                     )
                 else:
-                    query = f"SELECT rango FROM [esnowflake].[dbo].Dim_Users WHERE name = '{st.session_state['user']}'"
-                    rango_v = conn.cursor().execute(query).fetchall()
-                    if rango_v:
-                        rango = rango_v[0][0]
-                        emoji_map = {
-                            "Iniciado": "🤓",
-                            "Padawan": "🤠",
-                            "Maestro": "🗡️",
-                            "Parra": "🤖",
-                        }
-                        emoji = emoji_map.get(rango, "")
-                        st.write(f"Rango: {rango} {emoji}")
-                    else:
-                        st.error("User rank not found.")
+                    if es_sql == False:
+                        query = f"SELECT rango FROM [esnowflake].[dbo].Dim_Users WHERE name = '{st.session_state['user']}'"
+                        rango_v = conn.cursor().execute(query).fetchall()
+                        if rango_v:
+                            rango = rango_v[0][0]
+                            emoji_map = {
+                                "Iniciado": "🤓",
+                                "Padawan": "🤠",
+                                "Maestro": "🗡️",
+                                "Parra": "🤖",
+                            }
+                            emoji = emoji_map.get(rango, "")
+                            st.write(f"Rango: {rango} {emoji}")
+                        else:
+                            st.error("User rank not found.")
             except Exception as e:
                 st.error(f"Error create user: {e}")
 
         with login:
             if st.session_state["user"] not in st.session_state["lista_plana"]:
-                st.session_state["lista_plana"] = h.recharge_user_list(conn)
+                st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)
             indice = (
                 st.session_state["lista_plana"].index(st.session_state["user"])
                 if st.session_state.get("user")
@@ -100,7 +107,7 @@ def menu(conn):
                 if new_user:
                     if new_user not in st.session_state["lista_plana"]:
                         if st.button("Add new user"):
-                            h.new_user(conn, new_user, "message")
+                            h.new_user(conn, new_user, "message", es_sql)
                             useri = st.session_state["user"]
                     else:
                         st.error("Username already exists.")
@@ -125,7 +132,7 @@ def menu(conn):
                         ":red[Are you sure? Click again if you want to reset your user]"
                     )
                     if st.session_state["count_reset"] >= 2:
-                        h.reset_delete_user(conn, useri, False)
+                        h.reset_delete_user(conn, useri, False, es_sql)
                         useri = st.session_state["user"]
                         st.success(f"User {useri} reset successfully.")
                         st.session_state["count_reset"] = 0
@@ -139,7 +146,7 @@ def menu(conn):
                         ":red[Are you sure? Click again if you want to delete your user]"
                     )
                     if st.session_state["count_delete"] >= 2:
-                        h.reset_delete_user(conn, useri, True)
+                        h.reset_delete_user(conn, useri, True, es_sql)
                         useri = None
                         time.sleep(1)
                         st.rerun()
@@ -165,7 +172,7 @@ def comienzo(conn, especialidad):
         info = c.COMIENZO_DBT + c.INFO_EXAMEN_DBT
     elif especialidad == "google":
         info = c.COMIENZO_GOOGLE + c.INFO_EXAMEN_GOOGLE
-    menu(conn)
+    menu(conn, especialidad)
     st.markdown(info)
 
 
@@ -181,7 +188,7 @@ def practicar(conn, datos, especialidad):
     - especialidad: Especialidad seleccionada ('snowflake' o 'dbt') para personalizar la sección de práctica.
     """
     user = h.get_user_none()
-    menu(conn)
+    menu(conn, especialidad)
     # Init
     st.session_state["button_order_aleatorio"] = False
     if "exam_mode" not in st.session_state:
@@ -307,7 +314,7 @@ def examen(conn, datos, especialidad):
         ###         AJUSTANDO FILTROS
         ##################################
         with st.container():
-            menu(conn)
+            menu(conn, especialidad)
             st.title("Examen")
             st.write("Empieza ajustando los filtros y luego las opciones")
             with st.container():
@@ -536,7 +543,7 @@ def examen(conn, datos, especialidad):
 
 
 def progreso(conn, datos):
-    menu(conn)
+    menu(conn, especialidad)
     user = st.session_state["user"]
     if user == None:
         st.write("Elige tu usuario para ver tu progreso")
@@ -813,7 +820,7 @@ def progreso(conn, datos):
 
 
 def parreitor(conn, especialidad):
-    menu(conn)
+    menu(conn, especialidad)
     st.title("Parreitor-3000")
     if "messages" not in st.session_state:
         st.session_state.messages = []
