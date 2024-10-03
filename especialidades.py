@@ -124,14 +124,14 @@ elif st.session_state.page == 'snowflake':
         try:
             t.practicar(conn, datos, especialidad)
         except Exception as e:
-            st.warning("Error 2: " + str(e.args))
+            st.warning("Error 2:  " + str(e.args))
     elif st.session_state['current_page'] == "Exámenes 📄":
         try:
             t.examen(conn, datos, especialidad)
         except Exception as e:
             st.warning("Error 3: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
-        t.progreso(conn,datos)
+        t.progreso(conn,datos,especialidad)
     elif st.session_state['current_page'] == "Parreitor-3000 🤖":
         t.parreitor(conn, especialidad)
 
@@ -171,7 +171,7 @@ elif st.session_state.page == 'dbt':
         except Exception as e:
             st.warning("Error 5: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
-        t.progreso(conn,datos)
+        t.progreso(conn,datos,especialidad)
     elif st.session_state['current_page'] == "Chatgpt":
         st.title("No está en funcionamiento este apartado")
         # t.chatgpt(conn, especialidad)
@@ -213,7 +213,7 @@ elif st.session_state.page == 'google':
         except Exception as e:
             st.warning("Error 7: " + str(e.args))
     elif st.session_state['current_page'] == "Progreso 📈":
-        t.progreso(conn,datos)
+        t.progreso(conn,datos,especialidad)
     elif st.session_state['current_page'] == "Chatgpt":
         st.title("No está en funcionamiento este apartado")
         # t.chatgpt(conn, especialidad)
@@ -250,7 +250,7 @@ elif st.session_state.page == 'sql':
         if option_w is not None:
             with st.expander(f"¿Cómo es el {option_w}? 🤔"):
                 st.info("Recuerda que para hacer los ejercicios tienes que terminar todas las consultas en ';' sin dejar ningún espacio detrás de ese punto y coma.")
-                st.info("Ejemplo de consulta: SELECT * FROM CASE01.MENU;  -> Como puedes ver todos los casos se nombran como 'CASE0' y el número que sea del caso.")
+                st.info("Ejemplo de consulta: SELECT * FROM CASE01.MENU;  ->  Como puedes ver todos los casos se nombran como 'CASE0' y el número que sea del caso.")
                 st.image(f"./sql_especialidad/images/{option_w}.png")
         if option is not None:
             st.divider()

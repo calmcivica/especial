@@ -542,7 +542,7 @@ def examen(conn, datos, especialidad):
             "nada"
 
 
-def progreso(conn, datos):
+def progreso(conn, datos, especialidad):
     menu(conn, especialidad)
     user = st.session_state["user"]
     if user == None:

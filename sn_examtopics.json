@@ -14699,17 +14699,17 @@
         "question_area": "Data Loading and Unloading",
         "question": "When unloading data from Snowflake to AWS, what permissions are required? (Choose two.)",
         "answers": [
-            "s3:DeleteObject",
-            "s3:CopyObject",
-            "s3:GetBucketAcl",
-            "s3:PutObject",
-            "s3:GetBucketLocation"
+            "s3\\:DeleteObject",
+            "s3\\:CopyObject",
+            "s3\\:GetBucketAcl",
+            "s3\\:PutObject",
+            "s3\\:GetBucketLocation"
         ],
         "correct_answer": [
-            "s3:DeleteObject",
-            "s3:PutObject"
+            "s3\\:DeleteObject",
+            "s3\\:PutObject"
         ],
-        "explanation": "When unloading data from Snowflake to AWS, the permissions required include 's3:DeleteObject' and 's3:PutObject'. These permissions ensure that Snowflake can correctly store and access data in the specified AWS S3 bucket.",
+        "explanation": "When unloading data from Snowflake to AWS, the permissions required include 's3\\:DeleteObject' and 's3\\:PutObject'. These permissions ensure that Snowflake can correctly store and access data in the specified AWS S3 bucket.",
         "reference": "https://docs.snowflake.com/en/user-guide/data-unload-s3#configuring-an-s3-bucket-for-unloading-data"
     },
     {
