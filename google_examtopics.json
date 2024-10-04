@@ -3081,7 +3081,7 @@
         ]
     },
     {
-        "question_number": 164,
+        "question_number": 165,
         "question_area": "DATA ANALYTICS",
         "question": "You are working on a linear regression model on BigQuery ML to predict a customer's likelihood of purchasing your company's products. Your model uses a city name variable as a key predictive component. In order to train and serve the model, your data must be organized in columns. You want to prepare your data using the least amount of coding while maintaining the predictive variables. What should you do?",
         "answers": [
