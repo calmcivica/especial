@@ -2465,7 +2465,7 @@
         "correct_answer": [
             "Import the new records from the CSV file into a new BigQuery table. Create a BigQuery job that merges the new records with the existing records and writes the results to a new BigQuery table"
         ],
-        "explanation": "\n- **✅:green[Import the new records from the CSV file into a new BigQuery table. Create a BigQuery job that merges the new records with the existing records and writes the results to a new BigQuery table]**: This approach avoids quota limits by using BigQuery's high-efficiency bulk data handling capabilities, and ensures all data is updated accurately and efficiently.\n- **:red[Reduce the number of records updated each day to stay within the BigQuery UPDATE DML statement limit]**: This would only serve as a temporary fix and does not scale well with the volume of data needing updates.\n- **:red[Increase the BigQuery UPDATE DML statement limit in the Quota management section of the Google Cloud Platform Console]**: While this might provide a temporary solution, it's often not possible to sufficiently increase limits to handle such large updates, and could also incur higher costs.\n- **:red[Split the source CSV file into smaller CSV files in Cloud Storage to reduce the number of BigQuery UPDATE DML statements per BigQuery job]**: This could also be an inefficient process, especially if the data needs to be updated frequently or in real-time.",
+        "explanation": "\n- **✅:green[Import the new records from the CSV file into a new BigQuery table. Create a BigQuery job that merges the new records with the existing records and writes the results to a new BigQuery table]**: Esta estrategia permite evitar los límites de cuota utilizando las capacidades de BigQuery para manejar grandes volúmenes de datos de forma eficiente. Asegura que todos los datos se actualicen de manera precisa y eficiente, sin exceder las cuotas de DML.\n\n- **:red[Reduce the number of records updated each day to stay within the BigQuery UPDATE DML statement limit]**: Reducir el número de registros actualizados cada día solo sería una solución temporal y no escalaría bien con grandes volúmenes de datos que necesitan ser actualizados.\n\n- **:red[Increase the BigQuery UPDATE DML statement limit in the Quota management section of the Google Cloud Platform Console]**: Aunque aumentar los límites puede proporcionar una solución temporal, generalmente no es posible aumentar suficientemente los límites para manejar grandes actualizaciones, y además podría generar costos más altos.\n\n- **:red[Split the source CSV file into smaller CSV files in Cloud Storage to reduce the number of BigQuery UPDATE DML statements per BigQuery job]**: Dividir el archivo CSV en varios archivos más pequeños también podría ser un proceso ineficiente, especialmente si los datos necesitan ser actualizados con frecuencia o en tiempo real.",
         "reference": [
             "https://cloud.google.com/bigquery/docs/managing-table-data",
             "https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax#merge_statement"
@@ -2492,7 +2492,7 @@
     {
         "question_number": 132,
         "question_area": "DATABASE",
-        "question": "Your United States-based company has created an application for assessing and responding to user actions. The primary table's data volume grows by 250,000 records per second. Many third parties use your application's APIs to build the functionality into their own frontend applications. Your application's APIs should comply with the following requirements: ✑ Single global endpoint ✑ ANSI SQL support ✑ Consistent access to the most up-to-date data What should you do?",
+        "question": "Your United States-based company has created an application for assessing and responding to user actions. The primary table's data volume grows by 250,000 records per second. Many third parties use your application's APIs to build the functionality into their own frontend applications. Your application's APIs should comply with the following requirements: \n\n✑ Single global endpoint \n\n✑ ANSI SQL support \n\n✑ Consistent access to the most up-to-date data. \n\nWhat should you do?",
         "answers": [
             "Implement BigQuery with no region selected for storage or processing",
             "Implement Cloud Spanner with the leader in North America and read-only replicas in Asia and Europe",
@@ -2502,7 +2502,7 @@
         "correct_answer": [
             "Implement Cloud Spanner with the leader in North America and read-only replicas in Asia and Europe"
         ],
-        "explanation": "\n- **✅:green[Implement Cloud Spanner with the leader in North America and read-only replicas in Asia and Europe]**: This approach meets all specified requirements, providing a single global endpoint with strong consistency and ANSI SQL support, ideal for handling high data growth rates and global accessibility.\n- **:red[Implement BigQuery with no region selected for storage or processing]**: BigQuery does not offer real-time transaction support or a global endpoint necessary for operational database requirements.\n- **:red[Implement Cloud SQL for PostgreSQL with the master in North America and read replicas in Asia and Europe]**: While Cloud SQL supports SQL, it cannot provide the real-time, consistent access to data across global regions as effectively as Cloud Spanner.\n- **:red[Implement Bigtable with the primary cluster in North America and secondary clusters in Asia and Europe]**: Bigtable does not support ANSI SQL, which is a requirement for the application's APIs.",
+        "explanation": "\n- **✅:green[Implement Cloud Spanner with the leader in North America and read-only replicas in Asia and Europe]**: Esta opción cumple con todos los requisitos especificados, proporcionando un único punto de acceso global con consistencia fuerte y soporte para ANSI SQL. Es ideal para manejar altas tasas de crecimiento de datos y accesibilidad global. **Cloud Spanner** es una base de datos distribuida diseñada para ofrecer consistencia global y escalabilidad horizontal, lo que la hace perfecta para esta situación.\n\n- **:red[Implement BigQuery with no region selected for storage or processing]**: **BigQuery** no ofrece soporte para transacciones en tiempo real ni un punto de acceso global, lo que es necesario para los requisitos de bases de datos operacionales.\n\n- **:red[Implement Cloud SQL for PostgreSQL with the master in North America and read replicas in Asia and Europe]**: Aunque **Cloud SQL** soporta ANSI SQL, no puede proporcionar acceso en tiempo real y consistente a los datos en varias regiones globales tan eficientemente como **Cloud Spanner**.\n\n- **:red[Implement Bigtable with the primary cluster in North America and secondary clusters in Asia and Europe]**: **Bigtable** no soporta ANSI SQL, que es un requisito esencial para las APIs de la aplicación.",
         "reference": "https://cloud.google.com/spanner/docs"
     },
     {
@@ -2527,7 +2527,7 @@
     {
         "question_number": 134,
         "question_area": "COMPUTE, DATABASE, STORAGE",
-        "question": "You are building an application to share financial market data with consumers, who will receive data feeds. Data is collected from the markets in real time. Consumers will receive the data in the following ways:\n \n✑ Real-time event stream\n \n✑ ANSI SQL access to real-time stream and historical data\n \n✑ Batch historical exports\nWhich solution should you use?",
+        "question": "You are building an application to share financial market data with consumers, who will receive data feeds. Data is collected from the markets in real time. Consumers will receive the data in the following ways:\n \n✑ Real-time event stream\n \n✑ ANSI SQL access to real-time stream and historical data\n \n✑ Batch historical exports \n\nWhich solution should you use?",
         "answers": [
             "Cloud Dataflow, Cloud SQL, Cloud Spanner",
             "Cloud Pub/Sub, Cloud Storage, BigQuery",
@@ -2546,7 +2546,7 @@
     {
         "question_number": 135,
         "question_area": "COMPUTE, DATABASE, STORAGE",
-        "question": "You are building a new application that you need to collect data from in a scalable way. Data arrives continuously from the application throughout the day, and you expect to generate approximately 150 GB of JSON data per day by the end of the year. Your requirements are:\n \n✑ Decoupling producer from consumer\n \n✑ Space and cost-efficient storage of the raw ingested data, which is to be stored indefinitely\n \n✑ Near real-time SQL query\n \n✑ Maintain at least 2 years of historical data, which will be queried with SQL\nWhich pipeline should you use to meet these requirements?",
+        "question": "You are building a new application that you need to collect data from in a scalable way. Data arrives continuously from the application throughout the day, and you expect to generate approximately 150 GB of JSON data per day by the end of the year. Your requirements are:\n \n✑ Decoupling producer from consumer\n \n✑ Space and cost-efficient storage of the raw ingested data, which is to be stored indefinitely\n \n✑ Near real-time SQL query\n \n✑ Maintain at least 2 years of historical data, which will be queried with SQL\n\nWhich pipeline should you use to meet these requirements?",
         "answers": [
             "Create an application that provides an API. Write a tool to poll the API and write data to Cloud Storage as gzipped JSON files",
             "Create an application that writes to a Cloud SQL database to store the data. Set up periodic exports of the database to write to Cloud Storage and load into BigQuery",
@@ -2564,7 +2564,7 @@
     },
     {
         "question_number": 136,
-        "question_area": "COMPUTE",
+        "question_area": "DATA ANALYTICS",
         "question": "You are running a pipeline in Dataflow that receives messages from a Pub/Sub topic and writes the results to a BigQuery dataset in the EU. Currently, your pipeline is located in europe-west4 and has a maximum of 3 workers, instance type n1-standard-1. You notice that during peak periods, your pipeline is struggling to process records in a timely fashion, when all 3 workers are at maximum CPU utilization. Which two actions can you take to increase performance of your pipeline? (Choose two.)",
         "answers": [
             "Increase the number of max workers",
@@ -2585,7 +2585,7 @@
     },
     {
         "question_number": 137,
-        "question_area": "COMPUTE",
+        "question_area": "DATA ANALYTICS",
         "question": "You have a data pipeline with a Dataflow job that aggregates and writes time series metrics to Bigtable. You notice that data is slow to update in Bigtable. This data feeds a dashboard used by thousands of users across the organization. You need to support additional concurrent users and reduce the amount of time required to write the data. Which two actions should you take? (Choose two.)",
         "answers": [
             "Configure your Dataflow pipeline to use local execution",
@@ -2606,7 +2606,7 @@
     },
     {
         "question_number": 138,
-        "question_area": "COMPUTE",
+        "question_area": "DATA ANALYTICS",
         "question": "You have several Spark jobs that run on a Cloud Dataproc cluster on a schedule. Some of the jobs run in sequence, and some of the jobs run concurrently. You need to automate this process. What should you do?",
         "answers": [
             "Create a Cloud Dataproc Workflow Template",
@@ -2625,7 +2625,7 @@
     },
     {
         "question_number": 139,
-        "question_area": "COMPUTE",
+        "question_area": "DATA ANALYTICS",
         "question": "You are building a new data pipeline to share data between two different types of applications: jobs generators and job runners. Your solution must scale to accommodate increases in usage and must accommodate the addition of new applications without negatively affecting the performance of existing ones. What should you do?",
         "answers": [
             "Create an API using App Engine to receive and send messages to the applications",
@@ -2731,7 +2731,7 @@
     {
         "question_number": 145,
         "question_area": "COMPUTE",
-        "question": "You receive data files in CSV format monthly from a third party. You need to cleanse this data, but every third month the schema of the files changes. Your requirements for implementing these transformations include: ✑ Executing the transformations on a schedule ✑ Enabling non-developer analysts to modify transformations ✑ Providing a graphical tool for designing transformations. What should you do?",
+        "question": "You receive data files in CSV format monthly from a third party. You need to cleanse this data, but every third month the schema of the files changes. Your requirements for implementing these transformations include: \n\n✑ Executing the transformations on a schedule \n\n✑ Enabling non-developer analysts to modify transformations \n\n✑ Providing a graphical tool for designing transformations. \n\nWhat should you do?",
         "answers": [
             "Use Dataprep by Trifacta to build and maintain the transformation recipes, and execute them on a scheduled basis",
             "Load each month's CSV data into BigQuery, and write a SQL query to transform the data to a standard schema. Merge the transformed tables together with a SQL query",
@@ -2759,7 +2759,7 @@
             "Run the gsutil utility to transfer all ORC files from the Cloud Storage bucket to the master node of the Dataproc cluster. Then run the Hadoop utility to copy them do HDFS. Mount the Hive tables from HDFS",
             "Leverage Cloud Storage connector for Hadoop to mount the ORC files as external Hive tables. Replicate external Hive tables to the native ones"
         ],
-        "explanation": "\n- **✅:green[Run the gsutil utility to transfer to the master node and copy to HDFS]**: Esta opción maximiza el rendimiento en HDFS al mover los archivos ORC al sistema de archivos distribuido.\n- **✅:green[Leverage Cloud Storage connector for Hadoop]**: Permite usar los datos en Cloud Storage como tablas externas de Hive sin mover los datos a HDFS, replicando si es necesario.\n- **:red[A y B]**: No garantizan disponibilidad de los datos en todos los nodos del clúster.\n- **:red[BigQuery connector]**: Añade complejidad innecesaria.",
+        "explanation": "\n- **✅:green[Run the gsutil utility to transfer to the master node and copy to HDFS]**: Esta opción maximiza el rendimiento en HDFS al mover los archivos ORC al sistema de archivos distribuido.\n- **✅:green[Leverage Cloud Storage connector for Hadoop]**: Permite usar los datos en Cloud Storage como tablas externas de Hive sin mover los datos a HDFS, replicando si es necesario.\n- **:red['Run the gsutil utility to transfer all ORC files from the Cloud Storage bucket to HDFS. Mount the Hive tables locally' y 'Run the gsutil utility to transfer all ORC files from the Cloud Storage bucket to any node of the Dataproc cluster. Mount the Hive tables locally']**: No garantizan disponibilidad de los datos en todos los nodos del clúster.\n- **:red[BigQuery connector]**: Añade complejidad innecesaria.",
         "reference": [
             "https://cloud.google.com/dataproc/docs/concepts/connectors/cloud-storage",
             "https://cloud.google.com/dataproc/docs/concepts/components/hive"
@@ -2902,7 +2902,7 @@
     {
         "question_number": 155,
         "question_area": "COMPUTE",
-        "question": "Your company is selecting a system to centralize data ingestion and delivery. You are considering messaging and data integration systems to address the requirements. The key requirements are:\n \n✑ The ability to seek to a particular offset in a topic, possibly back to the start of all data ever captured\n \n✑ Support for publish/subscribe semantics on hundreds of topics\n \n✑ Retain per-key ordering\nWhich system should you choose?",
+        "question": "Your company is selecting a system to centralize data ingestion and delivery. You are considering messaging and data integration systems to address the requirements. The key requirements are:\n \n✑ The ability to seek to a particular offset in a topic, possibly back to the start of all data ever captured\n \n✑ Support for publish/subscribe semantics on hundreds of topics\n \n✑ Retain per-key ordering \n\nWhich system should you choose?",
         "answers": [
             "Apache Kafka",
             "Cloud Storage",
@@ -3082,21 +3082,20 @@
     },
     {
         "question_number": 165,
-        "question_area": "DATA ANALYTICS",
-        "question": "You are working on a linear regression model on BigQuery ML to predict a customer's likelihood of purchasing your company's products. Your model uses a city name variable as a key predictive component. In order to train and serve the model, your data must be organized in columns. You want to prepare your data using the least amount of coding while maintaining the predictive variables. What should you do?",
+        "question_area": "DATABASE",
+        "question": "You work for a large bank that operates in locations throughout North America. You are setting up a data storage system that will handle bank account transactions. You require ACID compliance and the ability to access data with SQL. Which solution is appropriate?",
         "answers": [
-            "Create a new view with BigQuery that does not include a column with city information",
-            "Use SQL in BigQuery to transform the state column using a one-hot encoding method, and make each city a column with binary values",
-            "Use TensorFlow to create a categorical variable with a vocabulary list. Create the vocabulary file and upload that as part of your model to BigQuery ML",
-            "Use Cloud Data Fusion to assign each city to a region that is labeled as 1, 2, 3, 4, or 5, and then use that number to represent the city in the model"
+            "Store transaction data in Cloud Spanner. Enable stale reads to reduce latency.",
+            "Store transaction in Cloud Spanner. Use locking read-write transactions.",
+            "Store transaction data in BigQuery. Disable the query cache to ensure consistency.",
+            "Store transaction data in Cloud SQL. Use a federated query BigQuery for analysis."
         ],
         "correct_answer": [
-            "Use SQL in BigQuery to transform the state column using a one-hot encoding method, and make each city a column with binary values"
+            "Store transaction in Cloud Spanner. Use locking read-write transactions."
         ],
-        "explanation": "\n- **✅:green[ Use SQL in BigQuery for one-hot encoding]**: Es el método estándar para convertir variables categóricas a numéricas y BigQuery permite realizar esta transformación eficientemente con SQL.\n- **:red[Create a new view without city information]**: Eliminar la información afectaría la capacidad predictiva del modelo.\n- **:red[Use TensorFlow for a vocabulary list]**: TensorFlow es innecesario ya que BigQuery ML ofrece la funcionalidad requerida.\n- **:red[Use Cloud Data Fusion to assign regions]**: Es innecesariamente complejo y menos eficiente que usar SQL directamente en BigQuery.",
+        "explanation": "\n- **✅:green[Store transaction in Cloud Spanner. Use locking read-write transactions]**: Cloud Spanner es una base de datos relacional totalmente gestionada que ofrece fuertes garantías de consistencia ACID, lo que es fundamental para las transacciones bancarias. Las transacciones de lectura-escritura con bloqueo garantizan la integridad de los datos y evitan problemas de concurrencia, como lecturas sucias o fantasmas, que son críticos en aplicaciones bancarias.\n- **:red[Rest of the options]**: Las lecturas obsoletas no garantizan consistencia ACID, desactivar la caché de consultas no asegura la integridad de las transacciones, y usar consultas federadas entre Cloud SQL y BigQuery no garantiza la integridad de las transacciones como lo hace Spanner.",
         "reference": [
-            "https://cloud.google.com/bigquery-ml/docs",
-            "https://cloud.google.com/spanner/docs/transactions"
+            "https://cloud.google.com/spanner/docs"
         ]
     },
     {

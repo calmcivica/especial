@@ -10427,7 +10427,7 @@
     {
         "question_number": 635,
         "question_area": "Account Access and Security",
-        "question": "Which command can be used to view the allowed and blocked IP list of a network policy?",
+        "question": "Which command allows you to view the allowed and blocked IP list of a network policy?",
         "answers": [
             "ALTER NETWORK POLICY",
             "CREATE NETWORK POLICY",
@@ -10435,10 +10435,12 @@
             "SHOW NETWORK POLICIES"
         ],
         "correct_answer": [
-            "SHOW NETWORK POLICIES"
+            "DESCRIBE NETWORK POLICY"
         ],
-        "explanation": "The 'SHOW NETWORK POLICIES' command is used in Snowflake to view the allowed and blocked IP list of a network policy. This command provides information about the network policies that have been created and their configurations.",
-        "reference": "https://docs.snowflake.com/en/sql-reference/sql/show-network-policies.html"
+        "explanation": "\n- **✅:green[DESCRIBE NETWORK POLICY]**: Este comando en Snowflake permite ver la lista de IPs permitidas y bloqueadas de una política de red, proporcionando información detallada sobre la política.\n- ❌ALTER NETWORK POLICY: Este comando solo permite modificar una política de red existente, pero no ofrece detalles sobre las IPs.\n- ❌CREATE NETWORK POLICY: Utilizado para crear una nueva política de red, no para ver las IPs asociadas a una ya existente.\n- ❌SHOW NETWORK POLICIES: Este comando muestra un listado de todas las políticas de red, pero no proporciona detalles específicos sobre las IPs permitidas o bloqueadas.",
+        "reference": [
+            "https://docs.snowflake.com/en/sql-reference/sql/describe-network-policy.html"
+        ]
     },
     {
         "question_number": 636,
@@ -10535,10 +10537,12 @@
             "Information_schema.warehouse_metering_history"
         ],
         "correct_answer": [
-            "Account_usage.query_history"
+            "Information_schema.warehouse_load_history"
         ],
-        "explanation": "The 'Account_usage.query_history' view in Snowflake provides insights into the performance of virtual warehouses, including aspects such as query queuing, which can affect performance.",
-        "reference": "https://docs.snowflake.com/en/sql-reference/account-usage/query_history"
+        "explanation": "\n- **✅:green[Information_schema.warehouse_load_history]**: Esta vista del sistema proporciona información específica sobre el uso del warehouse virtual, incluyendo los tiempos de espera de las consultas en la cola. Esto permite evaluar el impacto de la cola de consultas en el rendimiento del warehouse.\n- ❌Account_usage.query_history: Aunque mantiene un registro de todas las consultas ejecutadas en Snowflake y permite analizar su rendimiento, no proporciona información específica sobre el impacto de la cola de consultas en el warehouse.\n- ❌Resource monitor: Es una herramienta que rastrea el uso de recursos, pero no está enfocada en el rendimiento del warehouse o las colas de consultas.\n- ❌Information_schema.warehouse_metering_history: Proporciona datos de uso de warehouse, pero no está enfocada en las colas de consultas.",
+        "reference": [
+            "https://docs.snowflake.com/en/sql-reference/info-schema/warehouse_load_history.html"
+        ]
     },
     {
         "question_number": 642,
@@ -10623,18 +10627,20 @@
     {
         "question_number": 647,
         "question_area": "Performance Concepts",
-        "question": "Which SQL statement will require a virtual warehouse to run? EMP_ID NUMBER, EMP_NAME VARCHAR(30), EMP_SALARY NUMBER, DEPT VARCHAR(20) );",
+        "question": "Which SQL statement will require a virtual warehouse to run?",
         "answers": [
             "SELECT COUNT(*) FROM TBL_EMPLOYEE;",
             "ALTER TABLE TBL_EMPLOYEE ADD COLUMN EMP_REGION VARCHAR(20);",
             "INSERT INTO TBL_EMPLOYEE(EMP_ID, EMP_NAME, EMP_SALARY, DEPT) VALUES(1, 'Adam', 20000, 'Finance');",
-            "CREATE OR REPLACE TABLE TBL_EMPLOYEE ("
+            "CREATE OR REPLACE TABLE TBL_EMPLOYEE (EMP_ID NUMBER, EMP_NAME VARCHAR(30), EMP_SALARY NUMBER, DEPT VARCHAR(20));"
         ],
         "correct_answer": [
-            "SELECT COUNT(*) FROM TBL_EMPLOYEE;"
+            "INSERT INTO TBL_EMPLOYEE(EMP_ID, EMP_NAME, EMP_SALARY, DEPT) VALUES(1, 'Adam', 20000, 'Finance');"
         ],
-        "explanation": "The SQL statement 'SELECT COUNT(*) FROM TBL_EMPLOYEE;' will require a virtual warehouse to run in Snowflake. This is because it involves querying data, which requires computational resources provided by a virtual warehouse.",
-        "reference": "https://docs.snowflake.com/en/user-guide/warehouses.html"
+        "explanation": "\n- **✅:green[INSERT INTO TBL_EMPLOYEE...]**: Cualquier operación DML (como un INSERT) requiere que un virtual warehouse esté activo para mover los datos desde la capa de cloud hacia la capa de almacenamiento en Snowflake.\n- ❌SELECT COUNT(*): Esta consulta simplemente extrae metadatos, que pueden ser recuperados sin usar un warehouse activo.\n- ❌ALTER TABLE: Esta operación cambia la estructura de la tabla, pero no requiere el uso de un warehouse para ejecutarse.\n- ❌CREATE OR REPLACE TABLE: La creación de tablas no necesita computación por parte de un warehouse.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/warehouses.html"
+        ]
     },
     {
         "question_number": 648,
@@ -11477,10 +11483,12 @@
             "Connect to Snowflake partners to explore extended functionality."
         ],
         "correct_answer": [
-            "Connect to Snowflake partners to explore extended functionality."
+            "Analyze query performance."
         ],
-        "explanation": "In the Admin area of Snowsight, a Snowflake user can connect to Snowflake partners to explore extended functionality. This area is designed to offer insights and administrative controls for various aspects of Snowflake.",
-        "reference": "https://docs.snowflake.com/en/user-guide/ui-snowsight-admin"
+        "explanation": "\n- **✅:green[Analyze query performance]**: En el área de administración de Snowsight, los usuarios pueden analizar el rendimiento de las consultas, utilizando herramientas específicas para monitorear y optimizar el rendimiento.\n- ❌Write queries and execute them: Esta funcionalidad está disponible en otras áreas de Snowflake, no en la zona administrativa de Snowsight.\n- ❌Provide an overview of the listings in the Snowflake Marketplace: El acceso y manejo de Snowflake Marketplace se realiza fuera de Snowsight, no en la zona administrativa.\n- ❌Connect to Snowflake partners to explore extended functionality: Aunque Snowflake ofrece integración con socios, esta opción no se realiza específicamente desde el área de administración de Snowsight.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/ui-snowsight-admin"
+        ]
     },
     {
         "question_number": 699,
@@ -12530,11 +12538,13 @@
             "STATEMENT_QUEUED_TIMEOUT_IN_SECONDS"
         ],
         "correct_answer": [
-            "STATEMENT_QUEUED_TIMEOUT_IN_SECONDS",
-            "STATEMENT_TIMEOUT_IN_SECONDS"
+            "STATEMENT_TIMEOUT_IN_SECONDS",
+            "STATEMENT_QUEUED_TIMEOUT_IN_SECONDS"
         ],
-        "explanation": "Está en la sección de Query Processing and Concurrency del link",
-        "reference": "https://docs.snowflake.com/en/user-guide/warehouses-overview"
+        "explanation": "\n- **✅:green[STATEMENT_TIMEOUT_IN_SECONDS]**: Este parámetro permite controlar el tiempo máximo que una consulta puede ejecutarse antes de ser terminada, ayudando a gestionar la concurrencia y procesamiento de consultas.\n- **✅:green[STATEMENT_QUEUED_TIMEOUT_IN_SECONDS]**: Este parámetro controla el tiempo máximo que una consulta puede estar en cola antes de ser descartada, gestionando la concurrencia a nivel de objeto.\n- ❌MAX_CONCURRENCY_LEVEL: Este parámetro controla el nivel máximo de concurrencia a nivel de warehouse, no a nivel de objeto.\n- ❌DATA_RETENTION_TIME_IN_DAYS y MIN_DATA_RETENTION_TIME_IN_DAYS: Estos parámetros se relacionan con la retención de datos, no con el procesamiento o concurrencia de consultas.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/warehouses-overview"
+        ]
     },
     {
         "question_number": 763,
@@ -15697,9 +15707,9 @@
             "USAGE"
         ],
         "correct_answer": [
-            "READ"
+            "USAGE"
         ],
-        "explanation": "\n- **✅:green[READ]**: Para acceder a una URL de archivo desde un escenario externo en Snowflake, el permiso mínimo requerido es 'READ'. Este permiso permite leer los archivos almacenados en el escenario.\n- **❌:red[MODIFY]**: El permiso 'MODIFY' no es necesario para acceder a una URL de archivo; se utiliza para modificar los archivos en el escenario.\n- **❌:red[SELECT]**: El permiso 'SELECT' se usa para consultar datos en una tabla, no para acceder a archivos en un escenario.\n- **❌:red[USAGE]**: El permiso 'USAGE' es necesario para utilizar el escenario en sí, pero para acceder a un archivo específico se requiere 'READ'.",
+        "explanation": "\n- **✅:green[USAGE]**: El permiso mínimo requerido para acceder a una URL de archivo desde un escenario externo en Snowflake es 'USAGE'. Este permiso permite utilizar el escenario para acceder a los archivos almacenados en él.\n- ❌READ: El permiso 'READ' se utiliza principalmente en escenarios internos, pero no es necesario para acceder a una URL en un escenario externo.\n- ❌MODIFY: Este permiso se usa para modificar archivos, pero no es necesario para simplemente acceder a ellos.\n- ❌SELECT: Se usa para consultar datos en tablas, no para acceder a archivos en escenarios.",
         "reference": [
             "https://docs.snowflake.com/en/sql-reference/functions/build_stage_file_url"
         ]
@@ -15735,9 +15745,9 @@
             "Provision the failed resources."
         ],
         "correct_answer": [
-            "Provision the failed resources."
+            "Repair the failed resources."
         ],
-        "explanation": "\n- **✅:green[Provision the failed resources.]**: Si algún recurso de cómputo para un almacén virtual no logra provisionarse durante el inicio, Snowflake intenta volver a provisionar esos recursos. Este proceso asegura que todos los recursos necesarios estén disponibles para el funcionamiento del almacén.\n- **❌:red[Repair the failed resources.]**: Snowflake no intenta reparar los recursos fallidos durante el proceso de inicio; en cambio, intenta provisionar los recursos nuevamente.\n- **❌:red[Restart the failed resources.]**: El reinicio de los recursos no es el enfoque para resolver los problemas de provisionamiento; Snowflake se centra en la re-provisión.\n- **❌:red[Queue the failed resources.]**: Los recursos fallidos no se colocan en cola; el proceso se centra en la provisión para garantizar que todos los recursos necesarios estén operativos.",
+        "explanation": "\n- **✅:green[Repair the failed resources]**: Si alguno de los recursos de cómputo para un warehouse virtual falla al provisionarse durante el inicio, Snowflake intenta reparar esos recursos fallidos para asegurar el funcionamiento del warehouse.\n- ❌Provision the failed resources: Snowflake no intenta reprovisionar los recursos fallidos directamente, sino que primero trata de repararlos.\n- ❌Restart the failed resources: Reiniciar los recursos fallidos no es el enfoque que Snowflake sigue en estos casos.\n- ❌Queue the failed resources: Los recursos fallidos no se colocan en una cola; se intenta repararlos para que el warehouse pueda operar correctamente.",
         "reference": [
             "https://docs.snowflake.com/en/user-guide/warehouses-tasks"
         ]
@@ -15790,9 +15800,9 @@
             "A file in a stage"
         ],
         "correct_answer": [
-            "An individual column"
+            "An individual row"
         ],
-        "explanation": "\n- **✅:green[An individual column]**: El tipo de dato VARIANT en Snowflake impone un límite de tamaño de 16 MB por columna individual. Esto significa que cada columna de tipo VARIANT puede almacenar hasta 16 MB de datos.\n- **❌:red[An individual row]**: El límite de 16 MB se aplica a columnas, no a filas completas. Cada fila puede tener múltiples columnas, cada una con su propio límite.\n- **❌:red[A view]**: Las vistas no tienen un límite de tamaño específico impuesto por el tipo de dato VARIANT; este límite se aplica a las columnas.\n- **❌:red[A file in a stage]**: El límite de 16 MB no se aplica a archivos en un stage; se aplica a datos dentro de una columna VARIANT.",
+        "explanation": "\n- **✅:green[An individual row]**: El tipo de dato VARIANT en Snowflake impone un límite de 16 MB por fila individual. Esto significa que cada fila que contiene una columna de tipo VARIANT puede almacenar hasta 16 MB de datos en total.\n- ❌An individual column: Aunque las columnas VARIANT contienen datos semiestructurados, el límite de 16 MB se aplica a la fila que contiene estas columnas, no a la columna en sí.\n- ❌A view: Las vistas no tienen un límite de tamaño específico impuesto por el tipo de dato VARIANT.\n- ❌A file in a stage: El límite de 16 MB no se aplica a archivos en un stage; se aplica a datos dentro de una fila que usa columnas de tipo VARIANT.",
         "reference": [
             "https://docs.snowflake.com/en/user-guide/semistructured-considerations"
         ]
@@ -16080,11 +16090,11 @@
             "RETURN_ALL_ERRORS"
         ],
         "correct_answer": [
-            "RETURN_ERRORS"
+            "RETURN_ROWS"
         ],
-        "explanation": "\n- **✅:green[RETURN_ERRORS]**: Esta opción permite que el comando 'COPY INTO' valide y devuelva solo los errores encontrados durante el proceso de carga de datos.",
+        "explanation": "\n- **✅:green[RETURN_ROWS]**: Esta opción permite que el comando 'COPY INTO' devuelva las filas cargadas durante el proceso, lo que facilita la validación de la carga exitosa.\n- ❌RETURN__ROWS: No es una opción válida en Snowflake.\n- ❌RETURN_ERRORS y RETURN_ALL_ERRORS: Estas opciones permiten devolver errores, pero no están diseñadas para validar las filas cargadas como lo hace 'RETURN_ROWS'.",
         "reference": [
-            "https://docs.snowflake.com/en/sql-reference/sql/copy-into-location.html"
+            "https://docs.snowflake.com/en/sql-reference/sql/copy-into-location"
         ]
     },
     {
@@ -16246,11 +16256,11 @@
             "CHECK_XML"
         ],
         "correct_answer": [
-            "PARSE_XML"
+            "CHECK_XML"
         ],
-        "explanation": "\n- **✅:green[PARSE_XML]**: Este comando se utiliza para validar la sintaxis y estructura de los objetos XML en Snowflake. Otros comandos, como 'TO_XML' o 'CHECK_XML', no están diseñados para validar XML.",
+        "explanation": "\n- **✅:green[CHECK_XML]**: Este comando se utiliza específicamente para verificar la validez de un objeto XML en Snowflake, asegurándose de que cumple con la estructura XML correcta.\n- ❌PARSE_XML: Aunque PARSE_XML convierte datos en formato XML, no verifica directamente su validez.\n- ❌XMLGET: Extrae valores de un objeto XML, pero no valida el XML completo.\n- ❌TO_XML: Convierte datos en formato XML, pero no valida la estructura XML.",
         "reference": [
-            "https://docs.snowflake.com/en/sql-reference/functions/parse_xml.html"
+            "https://docs.snowflake.com/en/sql-reference/functions/check_xml"
         ]
     },
     {
@@ -17056,12 +17066,12 @@
             "Virtual warehouse credit consumption"
         ],
         "correct_answer": [
-            "Full index scans",
-            "Cartesian products"
+            "Cartesian products",
+            "Queries too large to fit in memory"
         ],
-        "explanation": "\n- **✅:green[Full index scans]**: Este problema se puede identificar mediante el análisis del perfil de consulta, ya que un escaneo completo de índices puede afectar el rendimiento de las consultas.\n- **✅:green[Cartesian products]**: Los productos cartesianos son un signo de problemas en las uniones de consultas y se pueden detectar en el perfil de consulta.\n- **❌:red[Insufficient privileges]**: Este problema no se puede identificar a través del perfil de consulta, ya que está relacionado con la seguridad.\n- **❌:red[Queries too large to fit in memory]**: Aunque este problema afecta el rendimiento, no se puede diagnosticar directamente con el perfil de consulta.\n- **❌:red[Virtual warehouse credit consumption]**: Este aspecto se relaciona más con la gestión de costos que con la ejecución de consultas.",
+        "explanation": "\n- **✅:green[Cartesian products]**: Los productos cartesianos son un signo de problemas en las uniones de consultas y se pueden detectar en el perfil de consulta.\n- **✅:green[Queries too large to fit in memory]**: Consultas que son demasiado grandes para caber en la memoria pueden ser identificadas a través del perfil de consulta, ya que este muestra problemas de rendimiento relacionados con el uso de memoria.\n- ❌Full index scans: Snowflake no utiliza índices tradicionales, por lo tanto, no es aplicable.\n- ❌Insufficient privileges: Este problema está relacionado con la seguridad y permisos, no con el rendimiento de consultas, por lo que no es identificado por el perfil de consulta.\n- ❌Virtual warehouse credit consumption: Este problema está más relacionado con la gestión de costos que con el rendimiento de consultas y no se identifica directamente en el perfil de consulta.",
         "reference": [
-            "https://docs.snowflake.com/en/user-guide/querying-query-profiles.html"
+            "https://docs.snowflake.com/user-guide/ui-snowsight-activity#common-query-problems-identified-by-query-profile"
         ]
     },
     {
@@ -17149,11 +17159,11 @@
         ],
         "correct_answer": [
             "A user with a SECURITYADMIN or higher role",
-            "A user with a USERADMIN or higher role"
+            "A role that has been granted the ATTACH POLICY privilege"
         ],
-        "explanation": "\n- **✅:green[A user with a SECURITYADMIN or higher role]**: Los usuarios con el rol SECURITYADMIN pueden activar y hacer cumplir políticas de red.\n- **✅:green[A user with a USERADMIN or higher role]**: Los usuarios con el rol USERADMIN también pueden activar políticas de red en la cuenta.\n- **❌:red[A role that has been granted the ATTACH POLICY privilege]**: Tener este privilegio no implica la capacidad de activar políticas de red para todos los usuarios.\n- **❌:red[A role that has the NETWORK_POLICY account parameter set]**: Este parámetro no garantiza la activación de la política.\n- **❌:red[A role that has the OWNERSHIP of the network policy]**: La propiedad de la política no significa que se pueda activar para todos los usuarios.",
+        "explanation": "\n- **✅:green[A user with a SECURITYADMIN or higher role]**: Solo los usuarios con el rol SECURITYADMIN o superior pueden activar y hacer cumplir políticas de red en la cuenta de Snowflake.\n- **✅:green[A role that has been granted the ATTACH POLICY privilege]**: Un rol al que se le ha concedido el privilegio ATTACH POLICY también puede activar una política de red.\n- ❌A user with a USERADMIN or higher role: Los usuarios con este rol no tienen permiso para activar políticas de red a menos que también tengan el privilegio adecuado.\n- ❌A role that has the NETWORK_POLICY account parameter set: Este parámetro por sí solo no permite activar políticas de red.\n- ❌A role that has the OWNERSHIP of the network policy: La propiedad de la política no otorga automáticamente la capacidad de activarla para todos los usuarios.",
         "reference": [
-            "https://docs.snowflake.com/en/user-guide/network-policies.html"
+            "https://docs.snowflake.com/en/user-guide/network-policies"
         ]
     },
     {
@@ -17777,11 +17787,11 @@
             "User-Defined Function (UDF)"
         ],
         "correct_answer": [
-            "View"
+            "External table"
         ],
-        "explanation": "\n- **✅:green[View]**: Los 'Views' o 'Vistas' seguras se pueden compartir entre cuentas de Snowflake utilizando la función Secure Data Sharing.\n- **❌:red[Materialized view]**: Solo las vistas seguras, no las vistas materializadas, son compatibles con Secure Data Sharing.\n- **❌:red[External table]**: Las tablas externas no son compatibles con el uso compartido seguro de datos.\n- **❌:red[User-Defined Function (UDF)]**: Solo los UDF seguros son compatibles con Secure Data Sharing, no todos los UDF.",
+        "explanation": "\n- **✅:green[External table]**: Las tablas externas son compatibles con la función Secure Data Sharing en Snowflake, lo que permite compartir datos externos entre cuentas de Snowflake.\n- ❌View: Aunque las vistas se pueden compartir, las tablas externas son la respuesta correcta en este contexto.\n- ❌Materialized view: Las vistas materializadas no se pueden compartir utilizando Secure Data Sharing.\n- ❌User-Defined Function (UDF): No todos los UDF son compatibles con Secure Data Sharing, solo los UDF seguros.",
         "reference": [
-            "https://docs.snowflake.com/en/user-guide/data-sharing-intro"
+            "https://docs.snowflake.com/en/user-guide/data-sharing-intro#granting-privileges-on-objects-in-a-share"
         ]
     },
     {
@@ -18518,10 +18528,10 @@
             "MUST_CHANGE_PASSWORD"
         ],
         "correct_answer": [
-            "MINS_TO_BYPASS_MFA",
-            "MINS_TO_UNLOCK"
+            "DISABLE_MFA",
+            "MINS_TO_BYPASS_MFA"
         ],
-        "explanation": "\n- **✅:green[MINS_TO_BYPASS_MFA]**: Este ajuste permite especificar el tiempo en minutos después del cual MFA será deshabilitado para los usuarios. Esto efectivamente permite evitar la autenticación de múltiples factores durante ese período.\n- **✅:green[MINS_TO_UNLOCK]**: Este ajuste determina el tiempo en minutos después del cual la cuenta se desbloqueará automáticamente, y puede permitir que MFA no se requiera durante el tiempo especificado.\n- **❌:red[DISABLE_MFA]**: No existe una configuración con este nombre en Snowflake para deshabilitar MFA. La gestión de MFA se realiza mediante otros ajustes.\n- **❌:red[PASSWORD]**: El ajuste `PASSWORD` no está relacionado con la desactivación de MFA, sino con la gestión de contraseñas.\n- **❌:red[MUST_CHANGE_PASSWORD]**: Este ajuste obliga a los usuarios a cambiar su contraseña, pero no tiene impacto directo en la configuración de MFA.",
+        "explanation": "\n- **✅:green[DISABLE_MFA]**: Este ajuste permite deshabilitar completamente MFA para un usuario en Snowflake.\n- **✅:green[MINS_TO_BYPASS_MFA]**: Este ajuste permite especificar un tiempo en minutos durante el cual se puede omitir la autenticación multifactor (MFA).\n- ❌MINS_TO_UNLOCK: Este ajuste desbloquea la cuenta de un usuario después de un tiempo determinado, pero no está relacionado con la desactivación de MFA.\n- ❌PASSWORD: Este ajuste gestiona las contraseñas de los usuarios, pero no afecta la configuración de MFA.\n- ❌MUST_CHANGE_PASSWORD: Este ajuste obliga al usuario a cambiar su contraseña, pero no desactiva MFA.",
         "reference": [
             "https://docs.snowflake.com/en/user-guide/security-mfa#managing-mfa-for-an-account-and-users"
         ]
@@ -18921,11 +18931,11 @@
             "A directory table"
         ],
         "correct_answer": [
-            "A pre-signed URL"
+            "A file URL"
         ],
-        "explanation": "\n- **✅:green[A pre-signed URL]**: Un **pre-signed URL** permite que los archivos ubicados en un stage sean accesibles por roles con los privilegios necesarios. Esto incluye la identificación del esquema, base de datos, y la ruta del archivo en Snowflake, proporcionando un acceso seguro y temporal a los archivos almacenados en el stage.\n- **❌:red[A scoped URL]**: Un **scoped URL** no es un término usado en Snowflake para este propósito, lo que lo convierte en una opción incorrecta.\n- **❌:red[A file URL]**: Un **file URL** no proporciona el nivel de seguridad ni la estructura que un pre-signed URL proporciona en Snowflake para el acceso controlado a los archivos.\n- **❌:red[A directory table]**: Un **directory table** no está relacionado con la identificación o acceso a archivos en un stage. Snowflake no usa este concepto para acceder a los archivos dentro de un stage.",
+        "explanation": "\n- **✅:green[A file URL]**: Un **file URL** permite identificar la base de datos, esquema, stage, y la ruta de los archivos. Proporciona un enlace directo a los archivos dentro del stage, que puede ser accedido por un rol con privilegios suficientes.\n- ❌A scoped URL: No es un término utilizado en Snowflake para este propósito, por lo que no es la opción correcta.\n- ❌A pre-signed URL: Aunque permite acceso temporal y seguro a archivos en stages, la opción correcta para identificar ubicación y acceso es **file URL**.\n- ❌A directory table: Snowflake no usa este concepto para acceder a archivos dentro de un stage.",
         "reference": [
-            "https://docs.snowflake.com/en/user-guide/data-load-s3-config.html#using-pre-signed-urls-to-access-files-in-stages"
+            "https://docs.snowflake.com/en/user-guide/unstructured-intro"
         ]
     },
     {
@@ -19648,7 +19658,7 @@
         "correct_answer": [
             "COPY INTO"
         ],
-        "explanation": "\n- **✅:green[COPY INTO]**: Los usuarios de cuentas lectoras pueden ejecutar 'COPY INTO' para descargar datos. \n- ❌:red[INSERT]**: Los usuarios de cuentas lectoras no tienen permisos de escritura, por lo tanto, no pueden insertar datos. \n- ❌:red[CREATE SHARE]**: La creación de 'shares' está limitada a cuentas no lectoras. \n- ❌:red[SHOW PROCEDURES]**: No es posible visualizar procedimientos desde una cuenta lectora.",
+        "explanation": "\n- **✅:green[COPY INTO]**: Los usuarios de cuentas lectoras pueden ejecutar 'COPY INTO <location>' para exportar datos desde Snowflake a un archivo. Este comando está permitido en las reader accounts.\n- ❌INSERT: Los usuarios de cuentas lectoras no tienen permisos de escritura, por lo que no pueden insertar datos.\n- ❌CREATE SHARE: La creación de 'shares' está limitada a cuentas no lectoras.\n- ❌SHOW PROCEDURES: No es posible visualizar procedimientos desde una cuenta lectora.",
         "reference": [
             "https://docs.snowflake.com/en/user-guide/data-sharing-intro.html"
         ]

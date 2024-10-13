@@ -11,7 +11,6 @@ import plotly.express as px
 import pandas as pd
 from openai import OpenAI
 
-
 def get_datos(especialidad):
     """
     Retorna los datos desde un archivo JSON basado en la especialidad especificada.
@@ -38,10 +37,12 @@ def get_datos(especialidad):
     datos = h.open_file(archivo)
     return datos
 
+
 def init_users(conn, es_sql=False):
     h.get_user_none()
     if "lista_plana" not in st.session_state:
-        st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)    
+        st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)
+
 
 def menu(conn, especialidad):
     """
@@ -57,7 +58,7 @@ def menu(conn, especialidad):
     - str: El nombre del usuario seleccionado.
     """
     es_sql = False
-    if especialidad == 'sql':
+    if especialidad == "sql":
         es_sql = True
     # User information
     with st.container():
@@ -68,7 +69,7 @@ def menu(conn, especialidad):
         with space:
             try:
                 if st.session_state.get("user") is None:
-                    st.warning(
+                    st.info(
                         "Recuerda elegir tu usuario si quieres que se registren tus avances y poder ver tus progresos."
                     )
                 else:
