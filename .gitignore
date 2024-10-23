@@ -4,3 +4,6 @@ env/*
 .streamlit/secrets.toml
 launch_docker.txt
 static/dbt/*
+csv/google_examptopics.xlsx
+json_to_csv.py
+.gitignore

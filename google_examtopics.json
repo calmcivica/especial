@@ -3934,20 +3934,21 @@
         "question_area": "STORAGE",
         "question": "You have a Standard Tier Memorystore for Redis instance deployed in a production environment. You need to simulate a Redis instance failover in the most accurate disaster recovery situation, and ensure that the failover has no impact on production data. What should you do?",
         "answers": [
-            "Create a Standard Tier Memorystore for Redis instance in the development environment. Initiate a manual failover by using the limited-dataloss data protection mode",
-            "Create a Standard Tier Memorystore for Redis instance in a development environment. Initiate a manual failover by using the force-dataloss data protection mode",
+            "Create a Standard Tier Memorystore for Redis instance in the development environment. Initiate a manual failover by using the limited-data-loss data protection mode",
+            "Create a Standard Tier Memorystore for Redis instance in a development environment. Initiate a manual failover by using the force-data-loss data protection mode",
             "Increase one replica to Redis instance in production environment. Initiate a manual failover by using the force-data-loss data protection mode",
             "Initiate a manual failover by using the limited-data-loss data protection mode to the Memorystore for Redis instance in the production environment"
         ],
         "correct_answer": [
-            "Increase one replica to Redis instance in production environment. Initiate a manual failover by using the force-data-loss data protection mode"
+            "Create a Standard Tier Memorystore for Redis instance in a development environment. Initiate a manual failover by using the force-data-loss data protection mode"
         ],
-        "explanation": "\n- **✅:green[ Increase one replica to Redis instance in production environment. Initiate a manual failover by using the force-data-loss data protection mode]**: Crear una réplica adicional y realizar el failover asegura que la operación sea lo más precisa posible, sin impactar la producción.\n- **:red[Create a Standard Tier Memorystore for Redis instance in development]**: No refleja la realidad del entorno de producción.\n- **:red[Initiate a manual failover by using the limited-data-loss mode]**: Sin una réplica adicional, esto podría afectar la disponibilidad del servicio en producción.",
+        "explanation": "\n- **✅:green[Create a Standard Tier Memorystore for Redis instance in a development environment. Initiate a manual failover by using the force-data-loss data protection mode]**: Es la mejor opción porque asegura que la prueba se realice en un entorno controlado sin impacto en los datos reales de producción, y el modo force-data-loss simula un failover completo para pruebas de recuperación ante desastres.\n- **:red[Increase one replica to Redis instance in production]**: Realizar pruebas de failover en producción puede arriesgar los datos reales, lo que no es recomendable.\n- **:red[Initiate a manual failover by using the limited-data-loss mode]**: Este modo no prueba completamente las capacidades de recuperación ante fallos, ya que solo afecta las lecturas y no simula un failover completo.",
         "reference": [
-            "https://cloud.google.com/memorystore/docs/redis/high-availability",
-            "https://cloud.google.com/memorystore/docs/redis/about-manual-failover"
+            "https://cloud.google.com/memorystore/docs/redis/about-manual-failover",
+            "https://cloud.google.com/memorystore/docs/redis/high-availability"
         ]
-    },
+    }
+    ,
     {
         "question_number": 215,
         "question_area": "DATA SECURITY",
@@ -3980,7 +3981,7 @@
         "correct_answer": [
             "Set up VPC Network Peering between Project A and Project B. Create a Compute Engine instance without external IP address in Project B on the peered subnet to serve as a proxy server to the Cloud SQL database"
         ],
-        "explanation": "\n- **✅:green[ VPC Network Peering with Compute Engine proxy]**: Esto permite una conexión segura entre los proyectos sin pasar por la Internet pública.\n- **:red[Set up VPC Network Peering only]**: No resuelve el problema de acceso a una instancia sin IP pública.\n- **:red[Turn off external IPs and enable Cloud NAT]**: Exponer las IPs públicas sigue representando un riesgo de seguridad.\n- **:red[Add a firewall rule]**: No es suficiente para solucionar el problema.",
+        "explanation": "\n- **✅:green[ VPC Network Peering with Compute Engine proxy]**: Esto permite una conexión segura entre los proyectos sin pasar por la Internet pública. Crear una instancia de Compute Engine en el Proyecto B que actúe como un proxy garantiza que la instancia de Cloud SQL (que no tiene una IP pública) pueda ser accedida de forma segura desde el Proyecto A. El proxy se comunica con Cloud SQL internamente dentro de la red peered, sin exponer ninguna IP pública.\n- **:red[Set up VPC Network Peering only]**: Aunque conecta las redes, no resolvería el problema de acceso a una instancia sin IP pública, ya que necesitas un mecanismo (proxy) para que Dataflow pueda acceder a la base de datos en la red interna.\n- **:red[Turn off external IPs and enable Cloud NAT]**: Exponer direcciones IP públicas no cumple con el requisito de evitar el tráfico por Internet pública, lo que podría representar un riesgo de seguridad.\n- **:red[Add a firewall rule]**: Permitir acceso a la red no es suficiente, ya que la instancia de Cloud SQL sigue sin ser accesible directamente debido a la falta de IP pública.",
         "reference": [
             "https://cloud.google.com/sql/docs/postgres/private-ip",
             "https://cloud.google.com/vpc/docs/vpc-peering#spec-general"
@@ -4058,7 +4059,7 @@
         "correct_answer": [
             "Use Datastream to replicate data from your on-premises MySQL database to BigQuery. Set up Cloud Interconnect between your on-premises data center and Google Cloud. Use Private connectivity as the connectivity method and allocate an IP address range within your VPC network to the Datastream connectivity configuration. Use Server-only as the encryption type when setting up the connection profile in Datastream"
         ],
-        "explanation": "\n- **✅:green[ Datastream with Cloud Interconnect and private connectivity]**: Este enfoque asegura que los datos se transfieren de forma privada y segura sin pasar por la Internet pública.\n- **:red[Update your existing ETL tool]**: Esto puede ser menos eficiente y seguro que usar Datastream.\n- **:red[Use Forward-SSH tunnel]**: Aunque seguro, puede ser más complejo de configurar que Cloud Interconnect.\n- **:red[Use IP Allowlisting]**: Permitir IPs públicas puede representar un riesgo de seguridad.",
+        "explanation": "\n- **✅:green[ Datastream with Cloud Interconnect and private connectivity]**: Este enfoque asegura que los datos se transfieren de forma privada y segura sin pasar por la Internet pública. \n\n-Datastream es una herramienta de Google Cloud para la replicación continua de datos desde bases de datos como MySQL hacia Google Cloud (en este caso, BigQuery). Es adecuada para migraciones y sincronizaciones de datos. \n\n-Configurar Cloud Interconnect entre tu centro de datos y Google Cloud asegura que el tráfico entre los dos entornos sea privado y no pase por la Internet pública. Esto crea un túnel privado y dedicado para transferir datos. \n\n-El uso de private connectivity es la opción de conectividad más segura, ya que utiliza una conexión privada a través de Cloud Interconnect, garantizando que los datos no salgan a la Internet pública. \n\n-Al configurar un rango de IPs privadas en la VPC asegura que Datastream use un rango de IPs privadas dentro de la red de Google Cloud, manteniendo todo el tráfico dentro de una red privada. \n\n-Al utilizar server-only encryption asegura que solo el servidor (es decir, tu MySQL) se encargue de la encriptación, lo que es adecuado para este escenario, ya que la conexión ya está protegida a nivel de red (con Cloud Interconnect).\n- **:red[Update your existing ETL tool]**: Esta opción es menos segura y eficiente que usar Datastream con Cloud Interconnect, ya que involucra potencialmente pasar por Internet y no aprovecha la replicación continua de Datastream..\n- **:red[Use Forward-SSH tunnel]**: Aunque seguro, es más complejo de configurar y mantener comparado con Cloud Interconnect, y no es necesario si puedes usar conectividad privada directa.\n- **:red[Use IP Allowlisting]**: Permitir IPs públicas en tu firewall es menos seguro, ya que aún implicaría el uso de la Internet pública, lo que va en contra del requisito de la pregunta de evitar la Internet pública.",
         "reference": [
             "https://cloud.google.com/datastream/docs/concepts",
             "https://cloud.google.com/datastream-for-bigquery#benefits"
@@ -4773,8 +4774,8 @@
     },
     {
         "question_number": 260,
-        "question_area": "BIGQUERY",
-        "question": "You have two projects where you run BigQuery jobs: • One project runs production jobs that have strict completion time SLAs. These are high priority jobs that must have the required compute resources available when needed. These jobs generally never go below a 300 slot utilization, but occasionally spike up an additional 500 slots. • The other project is for users to run ad-hoc analytical queries. This project generally never uses more than 200 slots at a time. You want these ad-hoc queries to be billed based on how much data users scan rather than by slot capacity. You need to ensure that both projects have the appropriate compute resources available. What should you do?",
+        "question_area": "DATA ANALYTICS",
+        "question": "You have two projects where you run BigQuery jobs:\n\n • One project runs production jobs that have strict completion time SLAs. These are high priority jobs that must have the required compute resources available when needed. These jobs generally never go below a 300 slot utilization, but occasionally spike up an additional 500 slots.\n\n• The other project is for users to run ad-hoc analytical queries. This project generally never uses more than 200 slots at a time. You want these ad-hoc queries to be billed based on how much data users scan rather than by slot capacity. \n\n You need to ensure that both projects have the appropriate compute resources available. What should you do?",
         "answers": [
             "Create a single Enterprise Edition reservation for both projects. Set a baseline of 300 slots. Enable autoscaling up to 700 slots",
             "Create two reservations, one for each of the projects. For the SLA project, use an Enterprise Edition with a baseline of 300 slots and enable autoscaling up to 500 slots. For the ad-hoc project, configure on-demand billing",
@@ -4792,7 +4793,7 @@
     },
     {
         "question_number": 261,
-        "question_area": "BIGQUERY",
+        "question_area": "DATA ANALYTICS",
         "question": "You want to migrate your existing Teradata data warehouse to BigQuery. You want to move the historical data to BigQuery by using the most efficient method that requires the least amount of programming, but local storage space on your existing data warehouse is limited. What should you do?",
         "answers": [
             "Use BigQuery Data Transfer Service by using the Java Database Connectivity (JDBC) driver with FastExport connection",
@@ -4849,7 +4850,7 @@
     },
     {
         "question_number": 264,
-        "question_area": "BIGQUERY",
+        "question_area": "DATA ANALYTICS",
         "question": "You are running your BigQuery project in the on-demand billing model and are executing a change data capture (CDC) process that ingests data. The CDC process loads 1 GB of data every 10 minutes into a temporary table, and then performs a merge into a 10 TB target table. This process is very scan intensive and you want to explore options to enable a predictable cost model. You need to create a BigQuery reservation based on utilization information gathered from BigQuery Monitoring and apply the reservation to the CDC process. What should you do?",
         "answers": [
             "Create a BigQuery reservation for the dataset",
@@ -4868,7 +4869,7 @@
     },
     {
         "question_number": 265,
-        "question_area": "BIGQUERY",
+        "question_area": "DATA ANALYTICS",
         "question": "You are designing a fault-tolerant architecture to store data in a regional BigQuery dataset. You need to ensure that your application is able to recover from a corruption event in your tables that occurred within the past seven days. You want to adopt managed services with the lowest RPO and most cost-effective solution. What should you do?",
         "answers": [
             "Access historical data by using time travel in BigQuery",
@@ -5136,12 +5137,13 @@
         "correct_answer": [
             "Give analysts the BigQuery Data Viewer role on the shared dataset. Create a dataset for each analyst, and give each analyst the BigQuery Data Editor role at the dataset level for their assigned dataset"
         ],
-        "explanation": "\n- **✅:green[Give analysts the BigQuery Data Viewer role on the shared dataset. Create a dataset for each analyst, and give each analyst the BigQuery Data Editor role at the dataset level for their assigned dataset]**: Los analistas pueden ver los datos compartidos, pero no pueden modificarlos, y tienen espacios de trabajo privados para sus propios datos sin acceso de otros.\n- **:red[Opción A]**: No proporciona espacios de trabajo privados.\n- **:red[Opción B]**: Permitiría a los analistas modificar cualquier conjunto de datos a nivel de proyecto.\n- **:red[Opción D]**: Similar a A, no crea espacios de trabajo privados.",
+        "explanation": "\n- **✅:green[Give analysts the BigQuery Data Viewer role on the shared dataset. Create a dataset for each analyst, and give each analyst the BigQuery Data Editor role at the dataset level for their assigned dataset]**: Los analistas pueden ver los datos compartidos, pero no pueden modificarlos, y tienen espacios de trabajo privados para sus propios datos sin acceso de otros analistas, cumpliendo con todos los requisitos.\n- **:red[Give analysts the BigQuery Data Viewer role at the project level. Create one other dataset, and give the analysts the BigQuery Data Editor role on that dataset]**: No proporciona espacios de trabajo privados para los analistas, lo que limita la flexibilidad de uso individual.\n- **:red[Give analysts the BigQuery Data Viewer role at the project level. Create a dataset for each analyst, and give each analyst the BigQuery Data Editor role at the project level]**: Esta opción permitiría a los analistas modificar cualquier conjunto de datos a nivel de proyecto, lo que no es adecuado si quieres restringir modificaciones en los datos compartidos.\n- **:red[Give analysts the BigQuery Data Viewer role on the shared dataset. Create one other dataset and give the analysts the BigQuery Data Editor role on that dataset]**: Similar a la opción A, tampoco crea espacios de trabajo individuales para cada analista, lo que no cumple con los requisitos de privacidad.",
         "reference": [
             "https://cloud.google.com/bigquery/docs/access-control",
             "https://cloud.google.com/bigquery/docs/datasets-intro"
         ]
-    },
+    }
+    ,
     {
         "question_number": 280,
         "question_area": "DATA ANALYTICS",
@@ -5155,12 +5157,13 @@
         "correct_answer": [
             "Use watermarks to define the expected data arrival window. Allow late data as it arrives"
         ],
-        "explanation": "\n- **✅:green[Use watermarks to define the expected data arrival window. Allow late data as it arrives]**: Las marcas de agua permiten capturar datos tardíos y procesarlos en la ventana adecuada.\n- **:red[Opción B]**: Las ventanas de tumbling no permiten la llegada de datos tardíos.\n- **:red[Opción C]**: Las session windows no son adecuadas para datos con ventanas específicas.\n- **:red[Opción D]**: Expandir la ventana puede generar imprecisiones y aumentar la latencia.",
+        "explanation": "\n- **✅:green[Use watermarks to define the expected data arrival window. Allow late data as it arrives]**: Las marcas de agua permiten capturar datos tardíos y procesarlos en la ventana adecuada, garantizando que los datos lleguen y se agrupen correctamente en su ventana temporal correspondiente.\n- **:red[Change your windowing function to tumbling windows to avoid overlapping window periods]**: Las ventanas de tumbling no permiten la llegada de datos tardíos, por lo que no solucionan el problema de datos retrasados.\n- **:red[Change your windowing function to session windows to define your windows based on certain activity]**: Las session windows se basan en la actividad del usuario, lo que no es adecuado para este caso de datos con ventanas específicas.\n- **:red[Expand your hopping window so that the late data has more time to arrive within the grouping]**: Expandir la ventana puede causar imprecisiones y aumentar la latencia del procesamiento de los datos.",
         "reference": [
             "https://cloud.google.com/dataflow/docs/concepts/streaming-pipelines#watermarks",
             "https://cloud.google.com/dataflow/docs/concepts/streaming-pipelines#watermarks"
         ]
-    },
+    }
+    ,
     {
         "question_number": 281,
         "question_area": "DATABASE",
@@ -5174,9 +5177,10 @@
         "correct_answer": [
             "Use a timestamp range filter in the query to fetch the customer's data for a specific range"
         ],
-        "explanation": "\n- **✅:green[Use a timestamp range filter in the query to fetch the customer's data for a specific range]**: Los filtros de rango de timestamp permiten excluir datos antiguos que aún no han sido eliminados por la garbage collection.\n- **:red[Opción A]**: No garantiza que los datos se eliminen a tiempo.\n- **:red[Opción C]**: Introduce complejidad adicional sin resolver completamente el problema.\n- **:red[Opción D]**: Aumenta la complejidad y costos de almacenamiento sin resolver el problema de datos antiguos visibles.",
+        "explanation": "\n- **✅:green[Use a timestamp range filter in the query to fetch the customer's data for a specific range]**: Los filtros de rango de timestamp permiten excluir datos antiguos que aún no han sido eliminados por la garbage collection, garantizando que los analistas no vean datos que exceden los 30 días.\n- **:red[Set the expiring values of the column families to 29 days and keep the number of versions to 1]**: No garantiza que los datos se eliminen a tiempo, lo que puede resultar en datos antiguos visibles.\n- **:red[Schedule a job daily to scan the data in the table and delete data older than 30 days]**: Introduce complejidad adicional y no garantiza que los datos antiguos sean invisibles durante el proceso de eliminación.\n- **:red[Set the expiring values of the column families to 30 days and set the number of versions to 2]**: Aumentar las versiones aumenta los costos de almacenamiento y no resuelve el problema de datos antiguos visibles.",
         "reference": "https://cloud.google.com/bigtable/docs/garbage-collection"
-    },
+    }
+    ,
     {
         "question_number": 282,
         "question_area": "DATA ANALYTICS",
@@ -5190,9 +5194,10 @@
         "correct_answer": [
             "Use the BigQuery Storage Write API and ensure that your target BigQuery table is regional"
         ],
-        "explanation": "\n- **✅:green[Use the BigQuery Storage Write API and ensure that your target BigQuery table is regional]**: Esta API está optimizada para la alta velocidad de ingestión y garantiza la entrega exactly-once. Una tabla regional también reduce la latencia.\n- **:red[Opción B]**: Las tablas multiregionales no mejoran las garantías de entrega exactamente una vez.\n- **:red[Opción C y D]**: La API de Streaming no ofrece garantías de exactly-once delivery.",
+        "explanation": "\n- **✅:green[Use the BigQuery Storage Write API and ensure that your target BigQuery table is regional]**: Esta API está optimizada para la alta velocidad de ingestión, proporcionando garantías de exactly-once delivery. Usar una tabla regional minimiza la latencia en las operaciones de escritura.\n- **:red[Use the BigQuery Storage Write API and ensure that your target BigQuery table is multiregional]**: Las tablas multiregionales no optimizan las garantías de entrega exactamente una vez y pueden incrementar la latencia.\n- **:red[Use the BigQuery Streaming API and ensure that your target BigQuery table is regional]**: La API de Streaming no proporciona garantías de exactly-once delivery, lo que puede resultar en duplicados de datos.\n- **:red[Use the BigQuery Streaming API and ensure that your target BigQuery table is multiregional]**: Similar a la opción anterior, la API de Streaming no asegura la entrega exactamente una vez, lo que puede afectar la integridad de los datos.",
         "reference": "https://cloud.google.com/bigquery/docs/write-api#advantages"
-    },
+    }
+    ,
     {
         "question_number": 283,
         "question_area": "STORAGE",
@@ -5206,7 +5211,7 @@
         "correct_answer": [
             "Upgrade the external table to a BigLake table. Enable metadata caching for the table"
         ],
-        "explanation": "\n- **✅:green[Upgrade the external table to a BigLake table. Enable metadata caching for the table]**: BigLake optimiza el rendimiento en grandes volúmenes de datos, y el almacenamiento en caché de metadatos mejora el tiempo de respuesta de las consultas.\n- **:red[Opción A]**: Cambiar la clase de almacenamiento no mejorará el rendimiento de las consultas.\n- **:red[Opción B]**: Aumenta la complejidad sin optimizar los metadatos.\n- **:red[Opción D]**: Un bucket multiregional no mejora el rendimiento de consulta.",
+        "explanation": "\n- **✅:green[Upgrade the external table to a BigLake table. Enable metadata caching for the table]**: BigLake optimiza el rendimiento en grandes volúmenes de datos, y el almacenamiento en caché de metadatos mejora el tiempo de respuesta de las consultas.\n- **:red[Change the storage class of the Hive partitioned data objects from Coldline to Standard]**: Cambiar la clase de almacenamiento no mejorará el rendimiento de las consultas.\n- **:red[Create an individual external table for each Hive partition by using a common table name prefix]**: Aumenta la complejidad sin optimizar los metadatos.\n- **:red[Migrate the Hive partitioned data objects to a multi-region Cloud Storage bucket]**: Un bucket multiregional no mejora el rendimiento de consulta.",
         "reference": [
             "https://cloud.google.com/bigquery/docs/biglake-intro#metadata_caching_for_performance",
             "https://cloud.google.com/bigquery/docs/biglake-intro#metadata_caching_for_performance"
@@ -5225,31 +5230,33 @@
         "correct_answer": [
             "Store your data in Bigtable. Concatenate the sensor ID and timestamp and use it as the row key. Perform an export to BigQuery every day"
         ],
-        "explanation": "\n- **✅:green[Store your data in Bigtable. Concatenate the sensor ID and timestamp and use it as the row key. Perform an export to BigQuery every day]**: Bigtable maneja bien grandes volúmenes de datos de series temporales con baja latencia. La exportación diaria a BigQuery permite análisis complejos.\n- **:red[Opción A y D]**: BigQuery no ofrece latencia en milisegundos.\n- **:red[Opción C]**: No es óptima la clave de fila basada en la métrica para consultas con un timestamp específico.",
+        "explanation": "\n- **✅:green[Store your data in Bigtable. Concatenate the sensor ID and timestamp and use it as the row key. Perform an export to BigQuery every day]**: Bigtable maneja bien grandes volúmenes de datos de series temporales con baja latencia. La exportación diaria a BigQuery permite análisis complejos.\n- **:red[Store your data in BigQuery. Concatenate the sensor ID and timestamp, and use it as the primary key]**: BigQuery no ofrece latencia en milisegundos.\n- **:red[Store your data in Bigtable. Concatenate the sensor ID and metric, and use it as the row key]**: No es óptima la clave de fila basada en la métrica para consultas con un timestamp específico.\n- **:red[Store your data in BigQuery. Use the metric as a primary key]**: Similar a la 'Store your data in BigQuery. Concatenate the sensor ID and timestamp, and use it as the primary key', BigQuery no puede ofrecer baja latencia para las consultas en tiempo real.",
         "reference": [
             "https://cloud.google.com/bigtable/docs/schema-design",
             "https://cloud.google.com/bigtable/docs/schema-design-time-series"
         ]
-    },
+    }
+    ,
     {
         "question_number": 285,
         "question_area": "STORAGE",
         "question": "You have 100 GB of data stored in a BigQuery table. This data is outdated and will only be accessed one or two times a year for analytics with SQL. For backup purposes, you want to store this data to be immutable for 3 years. You want to minimize storage costs. What should you do?",
         "answers": [
-            "1. Create a BigQuery table clone.\n2. Query the clone when you need to perform analytics",
-            "1. Create a BigQuery table snapshot.\n2. Restore the snapshot when you need to perform analytics",
-            "1. Perform a BigQuery export to a Cloud Storage bucket with archive storage class.\n2. Enable versioning on the bucket.\n3. Create a BigQuery external table on the exported files",
-            "1. Perform a BigQuery export to a Cloud Storage bucket with archive storage class.\n2. Set a locked retention policy on the bucket.\n3. Create a BigQuery external table on the exported files"
+            "1. Create a BigQuery table clone.2. Query the clone when you need to perform analytics",
+            "1. Create a BigQuery table snapshot.2. Restore the snapshot when you need to perform analytics",
+            "1. Perform a BigQuery export to a Cloud Storage bucket with archive storage class.2. Enable versioning on the bucket.3. Create a BigQuery external table on the exported files",
+            "1. Perform a BigQuery export to a Cloud Storage bucket with archive storage class.2. Set a locked retention policy on the bucket.3. Create a BigQuery external table on the exported files"
         ],
         "correct_answer": [
-            "1. Perform a BigQuery export to a Cloud Storage bucket with archive storage class.\n2. Set a locked retention policy on the bucket.\n3. Create a BigQuery external table on the exported files"
+            "1. Perform a BigQuery export to a Cloud Storage bucket with archive storage class.2. Set a locked retention policy on the bucket.3. Create a BigQuery external table on the exported files"
         ],
-        "explanation": "\n- **✅:green[1. Perform a BigQuery export to a Cloud Storage bucket with archive storage class. 2. Set a locked retention policy on the bucket. 3. Create a BigQuery external table on the exported files]**: Archive storage es la opción más económica y la política de retención asegura la inmutabilidad.\n- **:red[Opción A]**: Los clones no reducen costos de almacenamiento.\n- **:red[Opción B]**: Las snapshots siguen siendo más costosas que Cloud Storage.\n- **:red[Opción C]**: Archive storage es económico, pero la versioning no garantiza la inmutabilidad de 3 años.",
+        "explanation": "\n- **✅:green[1. Perform a BigQuery export to a Cloud Storage bucket with archive storage class. 2. Set a locked retention policy on the bucket. 3. Create a BigQuery external table on the exported files]**: Archive storage es la opción más económica y la política de retención asegura la inmutabilidad de los datos durante 3 años.\n- **:red[Create a BigQuery table clone]**: Los clones no reducen los costos de almacenamiento, ya que siguen siendo almacenados en BigQuery.\n- **:red[Create a BigQuery table snapshot]**: Las snapshots siguen siendo más costosas que almacenar los datos en Cloud Storage en la clase Archive.\n- **:red[Enable versioning on the bucket]**: La versión de datos no garantiza la inmutabilidad por 3 años, mientras que una política de retención bloqueada lo asegura.",
         "reference": [
             "https://cloud.google.com/storage/docs/storage-classes#archive",
             "https://cloud.google.com/bigquery/docs/exporting-data"
         ]
-    },
+    }
+    ,
     {
         "question_number": 286,
         "question_area": "COMPUTE",
@@ -5288,7 +5295,7 @@
     {
         "question_number": 288,
         "question_area": "DATA ANALYTICS",
-        "question": "You are part of a healthcare organization where data is organized and managed by respective data owners in various storage services. As a result of this decentralized ecosystem, discovering and managing data has become difficult. You need to quickly identify and implement a cost-optimized solution to assist your organization with the following:\n- Data management and discovery\n- Data lineage tracking\n- Data quality validation\nHow should you build the solution?",
+        "question": "You are part of a healthcare organization where data is organized and managed by respective data owners in various storage services. As a result of this decentralized ecosystem, discovering and managing data has become difficult. You need to quickly identify and implement a cost-optimized solution to assist your organization with the following:\n- Data management and discovery\n- Data lineage tracking\n- Data quality validation\n\n How should you build the solution?",
         "answers": [
             "Use BigLake to convert the current solution into a data lake architecture",
             "Build a new data discovery tool on Google Kubernetes Engine that helps with new source onboarding and data lineage tracking",
@@ -5575,7 +5582,7 @@
         "correct_answer": [
             "Create a materialized view to aggregate the base table data. Include a filter clause to specify the last one year of partitions"
         ],
-        "explanation": "\n- **✅:green[Create a materialized view]**: Las vistas materializadas permiten almacenar resultados precomputados y automáticamente reflejan los cambios en las tablas base, lo que reduce los costos de computo y mejora el rendimiento de las consultas.\n- **:red[Partition expiration]**: Elimina los datos antiguos pero no mejora el rendimiento de las consultas actuales.\n- **:red[Regular view]**: Las vistas regulares no almacenan resultados precomputados, lo que resulta en tiempos de consulta más largos.\n- **:red[New table with scheduled query]**: Implica mayores costos y más mantenimiento.",
+        "explanation": "\n- **✅:green[Create a materialized view]**: Las vistas materializadas permiten almacenar resultados precomputados y automáticamente reflejan los cambios en las tablas base, lo que reduce los costos de computo y mejora el rendimiento de las consultas.\n- **:red[Partition expiration]**: La opción de configurar una partition expiration en la tabla base para mantener solo el último año borraría los datos históricos, lo que va en contra del requisito de la pregunta, que menciona que debes conservar todo el historial de datos.\n- **:red[Regular view]**: Las vistas regulares no almacenan resultados precomputados, lo que resulta en tiempos de consulta más largos.\n- **:red[New table with scheduled query]**: Implica mayores costos y más mantenimiento.",
         "reference": "https://cloud.google.com/bigquery/docs/materialized-views"
     },
     {
