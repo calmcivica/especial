@@ -14,7 +14,7 @@ from openai import OpenAI
 def get_datos(especialidad):
     """
     Retorna los datos desde un archivo JSON basado en la especialidad especificada.
-    Soporta 'snowflake' y 'dbt', devolviendo los datos de 'sn_examtopics.json' o 'dbt_examtopics.json', respectivamente.
+    Soporta 'snowflake_pro' y 'dbt', devolviendo los datos de 'sn_pro_examtopics.json' o 'dbt_examtopics.json', respectivamente.
     En caso de error al localizar los archivos, muestra una advertencia.
 
     Parámetros:
@@ -26,8 +26,10 @@ def get_datos(especialidad):
     # Get json data
     archivo = ""
     try:
-        if especialidad == "snowflake":
-            archivo = "sn_examtopics.json"
+        if especialidad == "snowflake_pro":
+            archivo = "sn_pro_examtopics.json"
+        elif especialidad == "snowflake_arch":
+            archivo = "sn_arch_examtopics.json"
         elif especialidad == "dbt":
             archivo = "dbt_examtopics.json"
         elif especialidad == "google":
@@ -158,7 +160,7 @@ def comienzo(conn, especialidad):
     """
     Presenta información inicial y específica de la especialidad seleccionada en Streamlit, luego muestra el menú de usuario.
 
-    La función recupera y concatena mensajes de bienvenida e información sobre el examen para la especialidad específica ('snowflake' o 'dbt').
+    La función recupera y concatena mensajes de bienvenida e información sobre el examen para la especialidad específica ('snowflake_pro' o 'dbt').
     Luego, invoca la función 'menu' para gestionar la interacción del usuario, finalizando con la visualización de la información concatenada usando markdown.
 
     Parámetros:
@@ -167,8 +169,10 @@ def comienzo(conn, especialidad):
     """
     h.get_user_none()
     info = ""
-    if especialidad == "snowflake":
-        info = c.COMIENZO_SNOWFLAKE + c.INFO_EXAMEN_SNOWFLAKE
+    if especialidad == "snowflake_pro":
+        info = c.COMIENZO_SNOWFLAKE_PRO + c.INFO_EXAMEN_SNOWFLAKE_PRO
+    elif especialidad == "snowflake_arch":
+        info = c.COMIENZO_SNOWFLAKE_ARCH + c.INFO_EXAMEN_SNOWFLAKE_ARCH
     elif especialidad == "dbt":
         info = c.COMIENZO_DBT + c.INFO_EXAMEN_DBT
     elif especialidad == "google":
@@ -329,8 +333,10 @@ def examen(conn, datos, especialidad):
                     # y st.session_state["exam_duration"]
                     num_questions, exam_duration = h.exam_settings(preguntas_filtradas)
                 with st.expander("¿Como es el examen real?"):
-                    if especialidad == "snowflake":
-                        info = c.INFO_EXAMEN_SNOWFLAKE
+                    if especialidad == "snowflake_pro":
+                        info = c.INFO_EXAMEN_SNOWFLAKE_PRO
+                    elif especialidad == "snowflake_arch":
+                        info = c.INFO_EXAMEN_SNOWFLAKE_ARCH
                     elif especialidad == "dbt":
                         info = c.INFO_EXAMEN_DBT
                     elif especialidad == "google":
@@ -490,8 +496,10 @@ def examen(conn, datos, especialidad):
             st.metric("Número de preguntas", f"{len(filtered_answers)}")
             st.metric("Tiempo Total", f"{tiempo_formato}")
 
-            if especialidad == "snowflake":
-                umbral = int(c.UMBRAL_APROBADO_SNOWFLAKE) / 100
+            if especialidad == "snowflake_pro":
+                umbral = int(c.UMBRAL_APROBADO_SNOWFLAKE_PRO) / 100
+            elif especialidad == "snowflake_arch":
+                umbral = int(c.UMBRAL_APROBADO_SNOWFLAKE_ARCH) / 100
             elif especialidad == "dbt":
                 umbral = int(c.UMBRAL_APROBADO_DBT) / 100
             elif especialidad == "google":

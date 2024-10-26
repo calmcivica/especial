@@ -1,0 +1,20 @@
+[
+    {
+        "question_number": 1,
+        "question_area": "Snowflake Cloud Data Platform Features and Architecture",
+        "question": "Snowflake provides a mechanism for its customers to override its natural clustering algorithms. This method is:",
+        "answers": [
+            "Micro-partitions",
+            "Clustering keys",
+            "Key partitions",
+            "Clustered partitions"
+        ],
+        "correct_answer": [
+            "Clustering keys"
+        ],
+        "explanation": "\n- **✅:green[Clustering keys]**: Snowflake permite a los usuarios definir 'Clustering keys' para anular manualmente su proceso natural de clustering. Esto ayuda a optimizar el rendimiento de las consultas al agrupar los datos de manera más eficiente en función de las columnas clave especificadas.\n- **:red[Micro-partitions]**: Micro-partitions son unidades de almacenamiento automáticas en Snowflake, pero no son un mecanismo para controlar el clustering.\n- **:red[Key partitions]**: Esta no es una característica de Snowflake; no utiliza key partitions para el clustering.\n- **:red[Clustered partitions]**: Aunque suena similar a clustering keys, no es una funcionalidad reconocida de Snowflake y no permite el control manual del clustering.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/tables-clustering-keys.html"
+        ]
+    }
+]

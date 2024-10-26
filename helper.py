@@ -18,7 +18,7 @@ from sqlalchemy import create_engine, text
 
 @st.cache_resource
 def init_connection(especialidad):
-    if especialidad in ['snowflake','dbt','google']:
+    if especialidad in ['snowflake_pro','snowflake_arch','dbt','google']:
         tipo = 'especialidades'
         return pyodbc.connect(
                 "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
@@ -592,10 +592,15 @@ def filtros(especialidad, datos, conn, user, examen=None):
         (0, len(datos)),
         step=1,
     )
-    if especialidad == "snowflake":
+    if especialidad == "snowflake_pro":
         secciones = st.multiselect(
             "¿ Qué secciones quieres tocar ?",
-            c.SECCIONES_SNOWFLAKE,
+            c.SECCIONES_SNOWFLAKE_PRO,
+        )
+    elif especialidad == "snowflake_arch":
+        secciones = st.multiselect(
+            "¿ Qué secciones quieres tocar ?",
+            c.SECCIONES_SNOWFLAKE_ARCH,
         )
     elif especialidad == "dbt":
         secciones = st.multiselect(

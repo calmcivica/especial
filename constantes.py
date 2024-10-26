@@ -1,6 +1,5 @@
-# SNOWFLAKE
-COMIENZO_SNOWFLAKE = """
-# SnowPro® Core Certification 
+# SNOWFLAKE_PRO
+COMIENZO_SNOWFLAKE_PRO = """
 
 ## Descripción General
 La certificación te hará aprender cosas que no sabías de Snowflake y te ayuda en tu carrera profesional. Además cada certificación que obtenemos mejora la relación de partners con Snowflake mejorando el posicionamiento de la compañia.
@@ -19,7 +18,7 @@ La certificación te hará aprender cosas que no sabías de Snowflake y te ayuda
 
 """
 
-INFO_EXAMEN_SNOWFLAKE = """
+INFO_EXAMEN_SNOWFLAKE_PRO = """
 ## Formato del Examen
 
 - **Cantidad de Preguntas:** 100
@@ -31,7 +30,7 @@ INFO_EXAMEN_SNOWFLAKE = """
 
 """
 
-USO_SECCION_SNOWFLAKE = """
+USO_SECCION_SNOWFLAKE_PRO = """
 🤓 **¡Parece mentira, pero sí, esto es para estudiar :blue[Snowflake], no el teórico de la autoescuela!** 🚗💨
 
 A primera vista, podrías pensar que te has equivocado de clase, pero no, estás exactamente donde necesitas estar para dominar Snowflake como un pro.
@@ -39,7 +38,7 @@ A primera vista, podrías pensar que te has equivocado de clase, pero no, estás
 En esta sección, no solo podrás responder preguntas y ver las respuestas correctas, también encontrarás explicaciones enriquecedoras para que entiendas no solo el 'qué', sino el 'por qué'. A medida que explores las distintas preguntas, podrás filtrar y personalizar tu 
 experiencia de aprendizaje, optimizando así tu estudio para la certificación.   
 """
-SECCIONES_SNOWFLAKE = [
+SECCIONES_SNOWFLAKE_PRO = [
     "Todas",
     "Snowflake Cloud Data Platform Features and Architecture",
     "Account Access and Security",
@@ -49,7 +48,59 @@ SECCIONES_SNOWFLAKE = [
     "Data Protection and Data Sharing",
 ]
 
-UMBRAL_APROBADO_SNOWFLAKE = '75'
+UMBRAL_APROBADO_SNOWFLAKE_PRO = '75'
+
+# SNOWFLAKE_ARCH
+COMIENZO_SNOWFLAKE_ARCH = """
+
+## Descripción General
+La certificación te hará aprender cosas que no sabías de Snowflake y te ayuda en tu carrera profesional. Además cada certificación que obtenemos mejora la relación de partners con Snowflake mejorando el posicionamiento de la compañia.
+
+
+## Temario
+| Dominio                                          | Ponderación en el Examen |
+| ------------------------------------------------ | -----------------------: |
+| **1.0 Snowflake Data Cloud Features & Architecture** |                   **25%** |
+| **2.0 Account Access and Security**                  |                   **20%** |
+| **3.0 Performance Concepts**                         |                   **15%** |
+| **4.0 Data Loading and Unloading**                   |                   **10%** |
+| **5.0 Data Transformations**                         |                   **20%** |
+| **6.0 Data Protection and Data Sharing**             |                   **10%** |
+
+
+"""
+
+INFO_EXAMEN_SNOWFLAKE_ARCH = """
+## Formato del Examen
+
+- **Cantidad de Preguntas:** 100
+- **Tipo de Preguntas:** Selección múltiple, Opción múltiple o Verdadero/Falso
+- **Duración:** 120 minutos
+- **Puntuación para Aprobar:** 75% o más
+- **Idiomas Disponibles:** Inglés y Japonés
+- **Precio:** $175 USD por intento, pero tranquilo, paga cívica
+
+"""
+
+USO_SECCION_SNOWFLAKE_ARCH = """
+🤓 **¡Parece mentira, pero sí, esto es para estudiar :blue[Snowflake], no el teórico de la autoescuela!** 🚗💨
+
+A primera vista, podrías pensar que te has equivocado de clase, pero no, estás exactamente donde necesitas estar para dominar Snowflake como un pro.
+
+En esta sección, no solo podrás responder preguntas y ver las respuestas correctas, también encontrarás explicaciones enriquecedoras para que entiendas no solo el 'qué', sino el 'por qué'. A medida que explores las distintas preguntas, podrás filtrar y personalizar tu 
+experiencia de aprendizaje, optimizando así tu estudio para la certificación.   
+"""
+SECCIONES_SNOWFLAKE_ARCH = [
+    "Todas",
+    "Snowflake Cloud Data Platform Features and Architecture",
+    "Account Access and Security",
+    "Performance Concepts",
+    "Data Loading and Unloading",
+    "Data Transformations",
+    "Data Protection and Data Sharing",
+]
+
+UMBRAL_APROBADO_SNOWFLAKE_ARCH = '75'
 
 # DBT
 COMIENZO_DBT = """

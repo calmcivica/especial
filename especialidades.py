@@ -17,58 +17,11 @@ PAGES = [
     "Chatgpt",
 ]
 
-#############################
-##  BOTONES CLARO - OSCURO
-## No se puede poner en tools porque si no peta y está recargando continuamente ms
-## generándose un loop continuo que peta el pc
-#############################
-# ms = st.session_state
-# if "themes" not in ms:
-#     ms.themes = {
-#         "current_theme": "light",
-#         "refreshed": True,
-#         "dark": {
-#             "theme.base": "dark",
-#             "theme.backgroundColor": "#0e1117",
-#             "theme.primaryColor": "#ff5a31",
-#             "theme.secondaryBackgroundColor": "#f18c124f",
-#             "theme.textColor": "white",
-#             "button_face": "🌜- DARK",
-#         },
-#         "light": {
-#             "theme.base": "light",
-#             "theme.backgroundColor": "white",
-#             "theme.primaryColor": "#ff5a31",
-#             "theme.secondaryBackgroundColor": "#f18c124f",
-#             "theme.textColor": "#0a1464",
-#             "button_face": "🌞 - LIGHT",
-#         }
-#     }
-
-
-# def change_theme():
-#     previous_theme = ms.themes["current_theme"]
-#     tdict = (
-#         ms.themes["light"]
-#         if ms.themes["current_theme"] == "light"
-#         else ms.themes["dark"]
-#     )
-#     for vkey, vval in tdict.items():
-#         if vkey.startswith("theme"):
-#             st._config.set_option(vkey, vval)
-
-#     ms.themes["refreshed"] = False
-#     if previous_theme == "dark":
-#         ms.themes["current_theme"] = "light"
-#     elif previous_theme == "light":
-#         ms.themes["current_theme"] = "dark"
-
-
-######################################################
-
 # Creating perzonalized buttons
 sn_init_button = """
         <style>.element-container:has(#button-after-sn) + div button {"""
+sn_init_button_2 = """
+        <style>.element-container:has(#button-after-sn_2) + div button {"""
 dbt_init_button = """
         <style>.element-container:has(#button-after-dbt) + div button {"""
 google_init_button = """
@@ -86,6 +39,8 @@ button = """
             """
 sn_end_button = """background-color: #1e88e5;
         }</style>"""
+sn_end_button_2 = """background-color: #1e88e5;
+        }</style>"""
 dbt_end_button = """background-color: #f4511e;
         }</style>"""
 google_end_button = """background-color: #ffba03;
@@ -95,20 +50,24 @@ sql_end_button = """background-color: #12d519;
 
 
 ### Session_state to:
+
 # snowflake
 def go_to_snowflake():
     st.session_state.page = "snowflake"
+# snowflake_pro
+def go_to_snowflake_pro():
+    st.session_state.page = "snowflake_pro"
 
+def go_to_snowflake_arch():
+    st.session_state.page = "snowflake_arch"
 
 # dbt
 def go_to_dbt():
     st.session_state.page = "dbt"
 
-
 # google
 def go_to_google():
     st.session_state.page = "google"
-
 
 # sql
 def go_to_sql():
@@ -167,22 +126,45 @@ def go_to_main():
 ######################################################################
 ## Main Page
 # Initialize MAIN if session_state is not present or to return to main
-if "page" not in st.session_state or st.session_state.page == "main":
-    # btn_face = (
-    #     ms.themes["light"]["button_face"]
-    #     if ms.themes["current_theme"] == "light"
-    #     else ms.themes["dark"]["button_face"]
-    # )
-    # st.button(btn_face, on_click=change_theme)
-    # if ms.themes["refreshed"] == False:
-    #     ms.themes["refreshed"] = True
-    #     st.rerun()
-    
+if "page" not in st.session_state or st.session_state.page == "main":   
     go_to_main()
 
 ## Snowflake Page
 elif st.session_state.page == "snowflake":
-    especialidad = "snowflake"
+    if st.button("Back to Main", key="back-to-main-from-snowflake"):
+        go_to_main()
+        st.rerun()
+    try:
+        # # Set a title and subtitle
+        st.markdown(
+            "<h1 style='text-align: center;'>❄️Snowflake❄️</h1>",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            "<h3 style='text-align: center;'>¿Qué certificación de Snowflake quieres?</h3>",
+            unsafe_allow_html=True,
+        )
+        col1_1, col1_2, col1_3 = st.columns([1, 1, 1], gap="medium")
+        with col1_1:
+            sn_button_complete = str(sn_init_button + button + sn_end_button)
+            st.markdown(sn_button_complete, unsafe_allow_html=True)
+            st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
+            col1_1.button(
+                "Snowflake Pro", on_click=go_to_snowflake_pro, use_container_width=True
+            )
+        with col1_2:
+            sn_button_complete = str(sn_init_button_2 + button + sn_end_button_2)
+            st.markdown(sn_button_complete, unsafe_allow_html=True)
+            st.markdown('<span id="button-after-sn_2"></span>', unsafe_allow_html=True)
+            col1_2.button(
+                "Snowflake Arch", on_click=go_to_snowflake_arch, use_container_width=True
+            )
+
+    except Exception as e:
+        st.warning("Error 1: " + str(e.args))
+
+elif st.session_state.page == "snowflake_pro":
+    especialidad = "snowflake_pro"
     # Init connection
     conn = h.init_connection(especialidad)
     # Init json
@@ -190,7 +172,46 @@ elif st.session_state.page == "snowflake":
     # Init user
     user = h.get_user_none()
 
-    st.title("Snowflake")
+    st.title("SnowPro® Core Certification")
+    if st.button("Back to Main", key="back-to-main-from-snowflake"):
+        go_to_main()
+        st.rerun()
+
+    PAGES.remove("Chatgpt")
+    # Add a way to navigate within the Snowflake page
+    current_page = st.selectbox("Choose section:", PAGES, key="current_snowflake_page")
+
+    # Update the session state for the current page in Snowflake
+    st.session_state["current_page"] = current_page
+
+    # Execute the function based on the current_page
+    if st.session_state["current_page"] == "Intro 🔰":
+        t.comienzo(conn, especialidad)
+    elif st.session_state["current_page"] == "Practicar 🥊":
+        try:
+            t.practicar(conn, datos, especialidad)
+        except Exception as e:
+            st.warning("Error 2:  " + str(e.args))
+    elif st.session_state["current_page"] == "Exámenes 📄":
+        try:
+            t.examen(conn, datos, especialidad)
+        except Exception as e:
+            st.warning("Error 3: " + str(e.args))
+    elif st.session_state["current_page"] == "Progreso 📈":
+        t.progreso(conn, datos, especialidad)
+    elif st.session_state["current_page"] == "Parreitor-3000 🤖":
+        t.parreitor(conn, especialidad)
+
+elif st.session_state.page == "snowflake_arch":
+    especialidad = "snowflake_arch"
+    # Init connection
+    conn = h.init_connection(especialidad)
+    # Init json
+    datos = t.get_datos(especialidad)
+    # Init user
+    user = h.get_user_none()
+
+    st.title("SnowPro® Advanced: Architect")
     if st.button("Back to Main", key="back-to-main-from-snowflake"):
         go_to_main()
         st.rerun()
@@ -313,7 +334,7 @@ elif st.session_state.page == "sql":
     # Create the title of the website
     st.title(":bar_chart: SQL Query Comparison Tool :slot_machine:")
     # ----------------------------------------
-    if st.button("Back to Main", key="back-to-main-from-dbt"):
+    if st.button("Back to Main", key="back-to-main-from-sql"):
         go_to_main()
         st.rerun()
 
