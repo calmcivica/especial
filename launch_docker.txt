@@ -1,0 +1,10 @@
+# Iniciar sesión en Civica
+docker login -u irene.lopez registry.civica-soft.com:443/
+# Construir la imagen
+docker build -t registry.civica-soft.com:443/especialidad_snowflake_app:latest -f Dockerfile .
+# Subir la imagen al servidor
+docker push registry.civica-soft.com:443/especialidad_snowflake_app:latest
+
+# Para comprobar que se han cargado los cambios en el contenedor:
+# docker run -it --entrypoint /bin/bash registry.civica-soft.com:443/especialidad_snowflake_app:latest
+# ls

@@ -7,6 +7,7 @@ st.set_page_config(page_title="Especialidades", layout="wide")
 import tools as t
 import sql_especialidad.tools_sql as tsql
 import helper as h
+import json_to_csv as jtc
 
 PAGES = [
     "Intro 🔰",
@@ -133,7 +134,6 @@ if "page" not in st.session_state or st.session_state.page == "main":
 elif st.session_state.page == "snowflake":
     if st.button("Back to Main", key="back-to-main-from-snowflake"):
         go_to_main()
-        st.rerun()
     try:
         # # Set a title and subtitle
         st.markdown(
@@ -165,6 +165,16 @@ elif st.session_state.page == "snowflake":
 
 elif st.session_state.page == "snowflake_pro":
     especialidad = "snowflake_pro"
+    #Botón para descargar las preguntas
+    csv_buffer, nombre_fichero = jtc.download_excel(especialidad)
+
+    st.download_button(
+        label="Download excel",
+        data=csv_buffer,
+        file_name=nombre_fichero,
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    ####################################
     # Init connection
     conn = h.init_connection(especialidad)
     # Init json
@@ -204,6 +214,16 @@ elif st.session_state.page == "snowflake_pro":
 
 elif st.session_state.page == "snowflake_arch":
     especialidad = "snowflake_arch"
+    #Botón para descargar las preguntas
+    csv_buffer, nombre_fichero = jtc.download_excel(especialidad)
+
+    st.download_button(
+        label="Download excel",
+        data=csv_buffer,
+        file_name=nombre_fichero,
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    ####################################
     # Init connection
     conn = h.init_connection(especialidad)
     # Init json
@@ -244,6 +264,16 @@ elif st.session_state.page == "snowflake_arch":
 ## dbt Page
 elif st.session_state.page == "dbt":
     especialidad = "dbt"
+    #Botón para descargar las preguntas
+    csv_buffer, nombre_fichero = jtc.download_excel(especialidad)
+
+    st.download_button(
+        label="Download excel",
+        data=csv_buffer,
+        file_name=nombre_fichero,
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    ####################################
     # Init connection
     conn = h.init_connection(especialidad)
     # Init json
@@ -286,6 +316,16 @@ elif st.session_state.page == "dbt":
 ## Google Page
 elif st.session_state.page == "google":
     especialidad = "google"
+    #Botón para descargar las preguntas
+    csv_buffer, nombre_fichero = jtc.download_excel(especialidad)
+
+    st.download_button(
+        label="Download excel",
+        data=csv_buffer,
+        file_name=nombre_fichero,
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    ####################################
     # Init connection
     conn = h.init_connection(especialidad)
     # Init json
