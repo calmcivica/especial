@@ -348,122 +348,6 @@
         ]
     },
     {
-        "question_number": 13,
-        "question_area": "Accounts and Security",
-        "question": "An Architect has a VPN_ACCESS_LOGS table in the SECURITY_LOGS schema containing timestamps of the connection and disconnection, username of the user, and summary statistics. What should the Architect do to enable the Snowflake search optimization service on this table?",
-        "answers": [
-            "Assume role with OWNERSHIP on future tables and ADD SEARCH OPTIMIZATION on the SECURITY_LOGS schema.",
-            "Assume role with ALL PRIVILEGES including ADD SEARCH OPTIMIZATION in the SECURITY LOGS schema.",
-            "Assume role with OWNERSHIP on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema.",
-            "Assume role with ALL PRIVILEGES on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema."
-        ],
-        "correct_answer": [
-            "Assume role with OWNERSHIP on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema."
-        ],
-        "explanation": "\n- **✅:green[Assume role with OWNERSHIP on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema]**: Para habilitar el servicio de optimización de búsqueda en una tabla en Snowflake, el rol debe tener propiedad en la tabla específica en cuestión.",
-        "reference": [
-            "https://docs.snowflake.com/en/user-guide/search-optimization-service.html"
-        ]
-    },
-    {
-        "question_number": 14,
-        "question_area": "Performance Optimization",
-        "question": "The table contains five columns and it has millions of records. The cardinality distribution of the columns is shown below: Column C4 and C5 are mostly used by SELECT queries in the GROUP BY and ORDER BY clauses. Whereas columns C1, C2 and C3 are heavily used in filter and join conditions of SELECT queries. The Architect must design a clustering key for this table to improve the query performance. Based on Snowflake recommendations, how should the clustering key columns be ordered while defining the multi-column clustering key?",
-        "answers": [
-            "C5, C4, C2",
-            "C3, C4, C5",
-            "C1, C3, C2",
-            "C2, C1, C3"
-        ],
-        "correct_answer": [
-            "C2, C1, C3"
-        ],
-        "explanation": "\n- **✅:green[C2, C1, C3]**: Para optimizar el rendimiento en consultas, las columnas más frecuentemente utilizadas en condiciones de filtro y unión deben priorizarse en las claves de clustering en Snowflake.",
-        "reference": [
-            "https://docs.snowflake.com/en/user-guide/tables-clustering-keys.html"
-        ]
-    },
-    {
-        "question_number": 15,
-        "question_area": "Accounts and Security",
-        "question": "Which security, governance, and data protection features require, at a MINIMUM, the Business Critical edition of Snowflake? (Choose two.)",
-        "answers": [
-            "Extended Time Travel (up to 90 days)",
-            "Customer-managed encryption keys through Tri-Secret Secure",
-            "Periodic rekeying of encrypted data",
-            "AWS, Azure, or Google Cloud private connectivity to Snowflake",
-            "Federated authentication and SSO"
-        ],
-        "correct_answer": [
-            "Customer-managed encryption keys through Tri-Secret Secure",
-            "AWS, Azure, or Google Cloud private connectivity to Snowflake"
-        ],
-        "explanation": "\n- **✅:green[Customer-managed encryption keys through Tri-Secret Secure]** y **✅:green[AWS, Azure, or Google Cloud private connectivity to Snowflake]**: Ambos requieren al menos la edición Business Critical de Snowflake para habilitar funciones avanzadas de seguridad y gobernanza.",
-        "reference": [
-            "https://docs.snowflake.com/en/user-guide/security-editions.html"
-        ]
-    },
-    {
-        "question_number": 16,
-        "question_area": "Accounts and Security",
-        "question": "A company wants to deploy its Snowflake accounts inside its corporate network with no visibility on the internet. The company is using a VPN infrastructure and Virtual Desktop Infrastructure (VDI) for its Snowflake users. The company also wants to re-use the login credentials set up for the VDI to eliminate redundancy when managing logins. What Snowflake functionality should be used to meet these requirements? (Choose two.)",
-        "answers": [
-            "Set up replication to allow users to connect from outside the company VPN.",
-            "Provision a unique company Tri-Secret Secure key.",
-            "Use private connectivity from a cloud provider.",
-            "Set up SSO for federated authentication.",
-            "Use a proxy Snowflake account outside the VPN, enabling client redirect for user logins."
-        ],
-        "correct_answer": [
-            "Use private connectivity from a cloud provider.",
-            "Set up SSO for federated authentication."
-        ],
-        "explanation": "\n- **✅:green[Use private connectivity from a cloud provider]** y **✅:green[Set up SSO for federated authentication]**: Ambas opciones cumplen los requisitos de seguridad y conectividad privada, permitiendo a la compañía utilizar credenciales del VDI y mantener sus cuentas de Snowflake dentro de su red corporativa.",
-        "reference": [
-            "https://docs.snowflake.com/en/user-guide/security-private-snowflake.html"
-        ]
-    },
-    {
-        "question_number": 17,
-        "question_area": "Snowflake Architecture",
-        "question": "How do Snowflake databases that are created from shares differ from standard databases that are not created from shares? (Choose three.)",
-        "answers": [
-            "Shared databases are read-only.",
-            "Shared databases must be refreshed in order for new data to be visible.",
-            "Shared databases cannot be cloned.",
-            "Shared databases are not supported by Time Travel.",
-            "Shared databases will have the PUBLIC or INFORMATION_SCHEMA schemas without explicitly granting these schemas to the share.",
-            "Shared databases can also be created as transient databases."
-        ],
-        "correct_answer": [
-            "Shared databases are read-only.",
-            "Shared databases cannot be cloned.",
-            "Shared databases are not supported by Time Travel."
-        ],
-        "explanation": "\n- **✅:green[Shared databases are read-only]** y **✅:green[Shared databases cannot be cloned]** y **✅:green[Shared databases are not supported by Time Travel]**: Las bases de datos compartidas tienen restricciones específicas en cuanto a acceso y operaciones.",
-        "reference": [
-            "https://docs.snowflake.com/en/user-guide/data-sharing-intro.html"
-        ]
-    },
-    {
-        "question_number": 18,
-        "question_area": "Data Engineering",
-        "question": "What integration object should be used to place restrictions on where data may be exported?",
-        "answers": [
-            "Stage integration",
-            "Security integration",
-            "Storage integration",
-            "API integration"
-        ],
-        "correct_answer": [
-            "Storage integration"
-        ],
-        "explanation": "\n- **✅:green[Storage integration]**: Esta opción permite a Snowflake controlar el acceso y la exportación de datos a ubicaciones específicas, restringiendo así donde los datos pueden ser exportados.",
-        "reference": [
-            "https://docs.snowflake.com/en/user-guide/data-policies.html"
-        ]
-    },
-    {
         "question_number": 19,
         "question_area": "Snowflake Tasks and Streams",
         "question": "The following DDL command was used to create a task based on a stream:\n\nCREATE TASK ts_insert_new_customers\n    WAREHOUSE = MY_WH\n    Schedule = '5 minute'\nWHEN\n    System$STREAM_HAS_DATA('MYSTREAM')\nAS\n    INSERT INTO new_customers(id, name)\n    SELECT id, name\n    FROM mystream WHERE METADATA$ACTION = 'INSERT';\n\nAssuming MY_WH is set to auto_suspend – 60 and used exclusively for this task, which statement is true?",
@@ -1187,7 +1071,7 @@
         ]
     },
     {
-        "question_number": 56,
+        "question_number": 57,
         "question_area": "Snowpipe",
         "question": "A company is using Snowpipe to ingest data into a Snowflake table in near real-time. The Cloud Storage bucket configured for the Snowpipe has numerous files with a varying naming convention.\nWhat must be configured to ensure that only specific files are ingested?",
         "answers": [
@@ -1205,7 +1089,7 @@
         ]
     },
     {
-        "question_number": 57,
+        "question_number": 58,
         "question_area": "Zero-Copy Cloning",
         "question": "A Snowflake Architect needs to deploy a Zero-Copy Clone of a production database for testing purposes. The production database has daily Time Travel retention configured for 90 days, and the clone is only needed for a one-day test.\nWhat will happen to the clone after one day if the Architect does not drop it?",
         "answers": [
@@ -1223,7 +1107,7 @@
         ]
     },
     {
-        "question_number": 58,
+        "question_number": 59,
         "question_area": "Secure Data Sharing",
         "question": "An organization is using Snowflake's Secure Data Sharing to share data with external partners. However, the data contains sensitive information, and the organization wants to restrict the visibility of some columns.\nWhat should the organization implement?",
         "answers": [

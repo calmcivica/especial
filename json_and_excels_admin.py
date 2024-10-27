@@ -8,6 +8,7 @@ import random
 from io import BytesIO
 import ast
 from datetime import datetime
+import helper as h
 
 # Credenciales de acceso
 USERNAME = st.secrets["admin_user"]
@@ -17,8 +18,11 @@ RUTA = 'jsons/'
 from datetime import datetime
 import pytz
 
+############################################################
+##  LOGS
+############################################################
 # Función para registrar acciones
-def log_action(action, especialidad=None, user=None):
+def log_action(action, especialidad=None, user=None, numero_aleatorio=None):
     # Zona horaria de Madrid
     madrid_timezone = pytz.timezone("Europe/Madrid")
     timestamp = datetime.now(madrid_timezone).strftime("%Y-%m-%d %H:%M:%S")
@@ -29,6 +33,8 @@ def log_action(action, especialidad=None, user=None):
         log_message += f" | Especialidad: {especialidad}"
     if user:
         log_message += f" | Usuario: {user}"
+    if numero_aleatorio:
+        log_message += f" | Número: {numero_aleatorio}"
 
     # Guardar en archivo de log
     with open("action_log.txt", "a") as log_file:
@@ -37,10 +43,39 @@ def log_action(action, especialidad=None, user=None):
     # Imprimir en la consola para depuración
     print(log_message)
 
+# Función para leer el archivo de log y mostrarlo
+def read_action_log():
+    try:
+        with open("action_log.txt", "r", encoding="utf-8") as log_file:
+            logs = log_file.readlines()
+    except UnicodeDecodeError:
+        # Fallback to latin-1 encoding if UTF-8 fails
+        with open("action_log.txt", "r", encoding="latin-1") as log_file:
+            logs = log_file.readlines()
+    
+    return logs if logs else ["No se ha encontrado el archivo de log o está vacío."]
+    
+# Función para realizar un SELECT en la tabla de SQL Server
+def fetch_download_records(conn):
+    query = "SELECT * FROM [esnowflake].[dbo].excel"
+    cursor = conn.cursor()
+    cursor.execute(query)
+    records = cursor.fetchall()
+    columns = ["name", "id_excel", "fecha_descarga"]
+    formatted_records = [
+        (name, id_excel, fecha_descarga.strftime("%Y-%m-%d %H:%M:%S.%f") if isinstance(fecha_descarga, datetime) else fecha_descarga)
+        for name, id_excel, fecha_descarga in records
+    ]
+    
+    # Create DataFrame with the formatted records
+    df = pd.DataFrame(formatted_records, columns=columns)
 
+    return df
+
+############################################################
 
 # Función para crear el CSV
-def create_excel(especialidad, user=None):
+def create_excel(especialidad):
     if especialidad == 'snowflake_pro':
         nombre_fichero = os.path.join(RUTA,'snowflake_pro_examtopics')
     elif especialidad == 'snowflake_arch':
@@ -77,7 +112,6 @@ def create_excel(especialidad, user=None):
 
     # Convertir la lista de filas en un DataFrame de pandas
     df = pd.DataFrame(rows)
-    log_action("Creación de Excel para descarga", especialidad, user)
     return df
 
 def generar_numero_aleatorio():
@@ -85,8 +119,8 @@ def generar_numero_aleatorio():
     return ''.join([str(random.randint(0, 9)) for _ in range(10)])
 
 @st.cache_data
-def download_excel(especialidad, user):
-    df = create_excel(especialidad, user)
+def download_excel(especialidad):
+    df = create_excel(especialidad)
     numero_aleatorio = generar_numero_aleatorio()
 
     # Crear un archivo Excel con el nombre de la hoja como el número aleatorio
@@ -98,12 +132,14 @@ def download_excel(especialidad, user):
     nombre_fichero = especialidad + '.xlsx'
     return excel_buffer, nombre_fichero, numero_aleatorio
 
-def insert_download_db(conn, username, numero_aleatorio):
+def insert_download_db(username, numero_aleatorio, especialidad):
     # Guardar en la base de datos con la query
+    conn = h.init_connection(especialidad)
     query = f"INSERT INTO [esnowflake].[dbo].excel (name, id_excel, fecha_descarga) VALUES ('{username}', '{numero_aleatorio}', GETDATE())"
     conn.cursor().execute(query)
     conn.commit()
     print(f"Ejecutada query: {query}")
+    log_action("Creación de Excel para descarga", especialidad, username, numero_aleatorio)
 
 # Función para guardar datos en JSON en modo append, asegurando formato JSON correcto
 def save_to_json_append(new_data, especialidad, user=None):
@@ -257,31 +293,6 @@ def save_json(data, especialidad):
     st.success(f"Pregunta modificada guardada exitosamente en {filename}")
     print(data)
 
-def edit_question_form(question):
-    question_area = st.text_input("Área de la pregunta", value=question.get("question_area", ""))
-    question_text = st.text_area("Texto de la pregunta", value=question.get("question", ""))
-    answers = st.text_area("Respuestas (separadas por comas)", value=", ".join(question.get("answers", [])))
-    correct_answer = st.text_area("Respuesta correcta (separadas por comas)", value=", ".join(question.get("correct_answer", [])))
-    explanation = st.text_area("Explicación", value=question.get("explanation", ""))
-    reference = st.text_area("Referencias (separadas por comas)", value=", ".join(question.get("reference", [])))
-
-    # Construir el diccionario de datos
-    updated_data = {
-        "question_area": question_area,
-        "question_text": question_text,
-        "answers": answers,
-        "correct_answer": correct_answer,
-        "explanation": explanation,
-        "reference": reference
-    }
-
-    # Agregar 'question_extra_info' solo si existe en los datos originales
-    if "question_extra_info" in question:
-        question_extra_info = st.text_area("Información extra de la pregunta", value=question.get("question_extra_info", ""))
-        updated_data["question_extra_info"] = question_extra_info
-
-    return updated_data
-
 def delete_all_questions(especialidad, user=None):
     """Elimina todas las preguntas del archivo JSON de la especialidad seleccionada."""
     filename = os.path.join(RUTA, f"{especialidad}_examtopics.json")
@@ -382,7 +393,24 @@ def show_admin_panel():
             if uploaded_image is not None:
                 if st.button("Guardar imagen"):
                     save_image(uploaded_image, especialidad_imagen)
-        
+
+        # Expander para ver el archivo de log de acciones
+        with st.expander("📜 Ver log de acciones"):
+            st.subheader("Registro de acciones")
+            logs = read_action_log()
+            for log in logs:
+                st.write(log.strip())
+
+        # Expander para ver los registros en la tabla de SQL Server
+        with st.expander("📊 Ver registros de descargas en la base de datos"):
+            st.subheader("Registros de descargas")
+            conn = h.init_connection(especialidad)
+            if conn:  # Verifica si la conexión es válida
+                download_records_df = fetch_download_records(conn)
+                st.dataframe(download_records_df)
+            else:
+                st.warning("Conexión a la base de datos no disponible.")
+                
         # Desplegable para borrar preguntas
         with st.expander("⛔Borrar preguntas"):
             st.subheader("Eliminar pregunta por número")

@@ -206,7 +206,7 @@ def practicar(conn, datos, especialidad):
     if user is not None:
         with st.expander("¿Quieres descargar un excel de las preguntas?"):
             # Generar el archivo de Excel y registrar la descarga
-            csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad, user)
+            csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad)
             
             # Mensaje de advertencia
             st.warning("Se quedará registrado cuándo se generó este excel. Recuerda que no se puede compartir la información, puesto que es propiedad de Cívica.")
@@ -216,7 +216,7 @@ def practicar(conn, datos, especialidad):
             label="Download excel",
             data=csv_buffer,
             file_name=nombre_fichero,
-            on_click=lambda: jtc.insert_download_db(conn, user, numero_aleatorio),  # Usamos lambda para pasar parámetros
+            on_click=lambda: jtc.insert_download_db(user, numero_aleatorio, especialidad),  # Usamos lambda para pasar parámetros
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 

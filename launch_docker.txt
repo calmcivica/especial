@@ -8,3 +8,10 @@ docker push registry.civica-soft.com:443/especialidad_snowflake_app:latest
 # Para comprobar que se han cargado los cambios en el contenedor:
 # docker run -it --entrypoint /bin/bash registry.civica-soft.com:443/especialidad_snowflake_app:latest
 # ls
+
+# Para coger los datos que han subido desde la app
+docker start df361c8b7306091f7a53e033e9b5bedc173a3b5fdb147a3695117bb297637558
+# Para las nuevas imágenes subidas
+docker cp df361c8b7306091f7a53e033e9b5bedc173a3b5fdb147a3695117bb297637558:/especialidades-app/static ./ 
+# Para las nuevas preguntas
+docker cp df361c8b7306091f7a53e033e9b5bedc173a3b5fdb147a3695117bb297637558:/especialidades-app/jsons ./

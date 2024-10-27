@@ -1,0 +1,3 @@
+[2024-10-27 20:32:42] Acción: Creación de Excel para descarga | Especialidad: google | Usuario: MANUEL.REINA@CIVICA-SOFT.COM
+[2024-10-27 20:33:52] Acción: Creación de Excel para descarga | Especialidad: google | Usuario: BEATRIZ.EXPOSITO@CIVICA-SOFT.COM
+[2024-10-27 21:45:42] Acción: Creación de Excel para descarga | Especialidad: google | Usuario: IRENE.LOPEZ | Número: 5432993465
