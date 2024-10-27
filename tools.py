@@ -14,7 +14,7 @@ from openai import OpenAI
 def get_datos(especialidad):
     """
     Retorna los datos desde un archivo JSON basado en la especialidad especificada.
-    Soporta 'snowflake_pro' y 'dbt', devolviendo los datos de 'sn_pro_examtopics.json' o 'dbt_examtopics.json', respectivamente.
+    Soporta 'snowflake_pro' y 'dbt', devolviendo los datos de 'snowflake_pro_examtopics.json' o 'dbt_examtopics.json', respectivamente.
     En caso de error al localizar los archivos, muestra una advertencia.
 
     Parámetros:
@@ -27,9 +27,9 @@ def get_datos(especialidad):
     archivo = ""
     try:
         if especialidad == "snowflake_pro":
-            archivo = "sn_pro_examtopics.json"
+            archivo = "snowflake_pro_examtopics.json"
         elif especialidad == "snowflake_arch":
-            archivo = "sn_arch_examtopics.json"
+            archivo = "snowflake_arch_examtopics.json"
         elif especialidad == "dbt":
             archivo = "dbt_examtopics.json"
         elif especialidad == "google":

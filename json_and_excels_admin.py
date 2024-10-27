@@ -1,0 +1,381 @@
+import streamlit as st
+import pandas as pd
+import json
+import os
+import numpy as np
+import subprocess
+import random
+from io import BytesIO
+import ast
+
+# Credenciales de acceso
+USERNAME = st.secrets["admin_user"]
+PASSWORD = st.secrets["admin_password"]
+
+# Función para crear el CSV
+def create_excel(especialidad):
+    if especialidad == 'snowflake_pro':
+        nombre_fichero = 'snowflake_pro_examtopics'
+    elif especialidad == 'snowflake_arch':
+        nombre_fichero = 'snowflake_arch_examtopics'
+    elif especialidad == 'dbt':
+        nombre_fichero = 'dbt_examtopics'
+    elif especialidad == 'google':
+        nombre_fichero = 'google_examtopics'
+    
+    nombre_completo = nombre_fichero + '.json'
+
+    # Leer el archivo JSON
+    with open(nombre_completo, 'r', encoding='utf-8') as file:
+        data = json.load(file)
+
+    # Crear una lista para almacenar los datos transformados
+    rows = []
+
+    # Procesar cada pregunta en el archivo JSON
+    for question in data:
+        # Crear un diccionario para almacenar los datos de cada fila
+        row = {
+            "question_number": question.get("question_number"),
+            "question_area": (question.get("question_area", [])),  # Usamos "; " para separar valores en vez de coma
+            "question": question.get("question"),
+            "question_extra_info": question.get("question_extra_info", ""),  # Campo opcional
+            "answers": (question.get("answers", [])),  # Unimos las respuestas con saltos de línea
+            "correct_answer": (question.get("correct_answer", [])),  # Unimos las respuestas correctas con saltos de línea
+            "explanation": question.get("explanation").replace("\n", " ").replace("\r", ""),  # Limpiar saltos de línea innecesarios
+            "reference": (question.get("reference", []))  # Usamos "; " para unir las referencias con comas
+        }
+        # Añadir la fila a la lista de filas
+        rows.append(row)
+
+    # Convertir la lista de filas en un DataFrame de pandas
+    df = pd.DataFrame(rows)
+    return df
+
+def generar_numero_aleatorio():
+    '''Función para generar un número aleatorio de 10 dígitos'''
+    return ''.join([str(random.randint(0, 9)) for _ in range(10)])
+
+@st.cache_data
+def download_excel(especialidad):
+    df = create_excel(especialidad)
+    numero_aleatorio = generar_numero_aleatorio()
+
+    # Crear un archivo Excel con el nombre de la hoja como el número aleatorio
+    excel_buffer = BytesIO()
+    with pd.ExcelWriter(excel_buffer, engine='openpyxl') as writer:
+        df.to_excel(writer, sheet_name=numero_aleatorio, index=False)
+    excel_buffer.seek(0)
+    
+    nombre_fichero = especialidad + '.xlsx'
+    return excel_buffer, nombre_fichero, numero_aleatorio
+
+def insert_download_db(conn, username, numero_aleatorio):
+    # Guardar en la base de datos con la query
+    query = f"INSERT INTO [esnowflake].[dbo].excel (name, id_excel, fecha_descarga) VALUES ('{username}', '{numero_aleatorio}', GETDATE())"
+    conn.cursor().execute(query)
+    conn.commit()
+    print(f"Ejecutada query: {query}")
+
+# Función para guardar datos en JSON en modo append, asegurando formato JSON correcto
+def save_to_json_append(new_data, especialidad):
+    # filename = os.path.join(DATA_DIR, f"{especialidad}_examtopics.json")
+    filename = f"{especialidad}_examtopics.json"
+
+    # Verificar si el archivo ya existe
+    if os.path.exists(filename):
+        # Leer el archivo JSON existente
+        with open(filename, "r+", encoding="utf-8") as json_file:
+            try:
+                # Cargar el JSON existente como una lista
+                existing_data = json.load(json_file)
+                if isinstance(existing_data, dict):  # Si es un dict, conviértelo a una lista
+                    existing_data = [existing_data]
+            except json.JSONDecodeError:
+                existing_data = []
+
+            # Añadir la nueva data al final de la lista
+            existing_data.extend(new_data)
+
+            # Volver al inicio del archivo y sobrescribirlo con el contenido actualizado
+            json_file.seek(0)
+            json.dump(existing_data, json_file, indent=4, ensure_ascii=False)
+            json_file.truncate()  # Truncar el archivo si el nuevo contenido es más corto
+    else:
+        # Crear un nuevo archivo JSON con los datos nuevos
+        with open(filename, "w", encoding="utf-8") as json_file:
+            json.dump(new_data, json_file, indent=4, ensure_ascii=False)
+    
+    st.success(f"Datos añadidos exitosamente al archivo {filename}")
+
+# Función para borrar una pregunta en el archivo JSON por question_number
+def delete_question_by_number(especialidad, question_number):
+    filename = f"{especialidad}_examtopics.json"
+    
+    # Verificar si el archivo existe
+    if not os.path.exists(filename):
+        st.error("El archivo JSON no existe.")
+        return
+
+    # Leer el contenido actual del archivo JSON
+    with open(filename, "r", encoding="utf-8") as json_file:
+        data = json.load(json_file)
+
+    # Filtrar las preguntas para excluir la que tiene el question_number especificado
+    updated_data = [question for question in data if question.get("question_number") != question_number]
+
+    # Verificar si alguna pregunta fue eliminada
+    if len(data) == len(updated_data):
+        st.warning(f"No se encontró ninguna pregunta con question_number {question_number}.")
+        return
+
+    # Guardar el archivo JSON actualizado
+    with open(filename, "w", encoding="utf-8") as json_file:
+        json.dump(updated_data, json_file, indent=4, ensure_ascii=False)
+
+    st.success(f"La pregunta con question_number {question_number} ha sido eliminada.")
+
+# Interfaz en Streamlit para borrar una pregunta
+def admin_delete_question():
+    st.subheader("Eliminar pregunta por número")
+    
+    # Seleccionar especialidad
+    especialidad = st.selectbox("Selecciona la especialidad:", ["snowflake_pro", "snowflake_arch", "dbt", "google"])
+
+    # Input para el número de la pregunta
+    question_number = st.number_input("Ingrese el question_number de la pregunta a eliminar:", min_value=1, step=1)
+
+    # Botón para ejecutar la eliminación
+    if st.button("Eliminar pregunta"):
+        delete_question_by_number(especialidad, question_number)
+
+def restart_docker_container():
+    st.warning("Reiniciando el proyecto en Docker...")
+    # Comando para reiniciar el contenedor Docker actual
+    # Usamos 'sh -c "sleep 1; kill 1"' para reiniciar el contenedor Docker actual
+    command = 'sh -c "sleep 1; kill 1"'
+    try:
+        subprocess.run(command, shell=True, check=True)
+        st.success("El proyecto se ha reiniciado exitosamente.")
+    except subprocess.CalledProcessError:
+        st.error("Error al intentar reiniciar el proyecto.")
+
+
+def process_excel_file(uploaded_file):
+    df = pd.read_excel(uploaded_file)
+    df = df.replace({np.nan: None})
+    
+    # Convertir el DataFrame en una lista de diccionarios
+    new_data = []
+    for _, row in df.iterrows():
+        # Construir el diccionario fila por fila
+        row_data = {
+            "question_number": row["question_number"],
+            "question_area": row["question_area"],
+            "question": row["question"],
+            "answers": ast.literal_eval(row["answers"]) if row["answers"] else [],
+            "correct_answer": ast.literal_eval(row["correct_answer"]) if row["correct_answer"] else [],
+            "explanation": row["explanation"].replace("\r", "").replace("\n", "\n"),
+            "reference": ast.literal_eval(row["reference"]) if row["reference"] else []
+        }
+
+        # Agregar 'question_extra_info' solo si existe en el DataFrame y tiene valor
+        if "question_extra_info" in df.columns and row["question_extra_info"] is not None:
+            row_data["question_extra_info"] = row["question_extra_info"]
+        
+        new_data.append(row_data)
+
+    return new_data
+
+# Función para procesar archivo JSON y convertirlo en lista de diccionarios
+def process_json_file(uploaded_file):
+    new_data = json.load(uploaded_file)
+    if isinstance(new_data, dict):
+        new_data = [new_data]
+    return new_data
+
+# Función para descargar el JSON de la especialidad
+def download_specialty_json(especialidad):
+    filename = f"{especialidad}_examtopics.json"
+    if os.path.exists(filename):
+        with open(filename, "r", encoding="utf-8") as file:
+            json_data = file.read()
+        return BytesIO(json_data.encode()), f"{especialidad}_examtopics.json", "application/json"
+    else:
+        st.warning(f"No existe un archivo JSON para la especialidad {especialidad}.")
+        return None, None, None
+
+
+# Función para cargar el archivo JSON de una especialidad
+def load_json(especialidad):
+    # filename = os.path.join(DATA_DIR, f"{especialidad}_examtopics.json")
+    filename = f"{especialidad}_examtopics.json"
+    if os.path.exists(filename):
+        with open(filename, "r", encoding="utf-8") as file:
+            data = json.load(file)
+        return data
+    else:
+        st.warning(f"No existe un archivo JSON para la especialidad {especialidad}.")
+        return None
+
+# Función para guardar el archivo JSON de una especialidad
+def save_json(data, especialidad):
+    # filename = os.path.join(DATA_DIR, f"{especialidad}_examtopics.json")
+    filename = f"{especialidad}_examtopics.json"
+    with open(filename, "w", encoding="utf-8") as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
+    st.success(f"Pregunta modificada guardada exitosamente en {filename}")
+    print(data)
+
+def edit_question_form(question):
+    question_area = st.text_input("Área de la pregunta", value=question.get("question_area", ""))
+    question_text = st.text_area("Texto de la pregunta", value=question.get("question", ""))
+    answers = st.text_area("Respuestas (separadas por comas)", value=", ".join(question.get("answers", [])))
+    correct_answer = st.text_area("Respuesta correcta (separadas por comas)", value=", ".join(question.get("correct_answer", [])))
+    explanation = st.text_area("Explicación", value=question.get("explanation", ""))
+    reference = st.text_area("Referencias (separadas por comas)", value=", ".join(question.get("reference", [])))
+
+    # Construir el diccionario de datos
+    updated_data = {
+        "question_area": question_area,
+        "question_text": question_text,
+        "answers": answers,
+        "correct_answer": correct_answer,
+        "explanation": explanation,
+        "reference": reference
+    }
+
+    # Agregar 'question_extra_info' solo si existe en los datos originales
+    if "question_extra_info" in question:
+        question_extra_info = st.text_area("Información extra de la pregunta", value=question.get("question_extra_info", ""))
+        updated_data["question_extra_info"] = question_extra_info
+
+    return updated_data
+
+def delete_all_questions(especialidad):
+    """Elimina todas las preguntas del archivo JSON de la especialidad seleccionada."""
+    filename = f"{especialidad}_examtopics.json"
+    
+    # Verificar si el archivo existe
+    if os.path.exists(filename):
+        # Vaciar el archivo JSON
+        with open(filename, "w", encoding="utf-8") as json_file:
+            json.dump([], json_file, indent=4, ensure_ascii=False)
+        st.success(f"Todas las preguntas de la especialidad '{especialidad}' han sido eliminadas.")
+    else:
+        st.warning(f"No se encontró un archivo JSON para la especialidad '{especialidad}'.")
+
+def save_image(uploaded_file, especialidad):
+    # Crear la ruta de la carpeta de la especialidad en la carpeta 'static'
+    folder_path = os.path.join("static", especialidad)
+    
+    # Verificar si la carpeta existe; si no, crearla
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    
+    # Guardar la imagen en la carpeta correspondiente
+    image_path = os.path.join(folder_path, uploaded_file.name)
+    with open(image_path, "wb") as f:
+        f.write(uploaded_file.getbuffer())
+    
+    st.success(f"La imagen '{uploaded_file.name}' ha sido guardada en la carpeta '{especialidad}'.")
+
+
+def show_admin_panel():
+    st.header("Panel de Administración")
+
+    # Verificar si el usuario ya está autenticado
+    if not st.session_state.get("authenticated", False):
+        with st.form("login_form"):
+            st.write("Ingrese sus credenciales para acceder al panel de administración.")
+            username = st.text_input("Usuario")
+            password = st.text_input("Contraseña", type="password")
+            login_button = st.form_submit_button("Iniciar Sesión")
+
+            if login_button:
+                if username == USERNAME and password == PASSWORD:
+                    st.session_state["authenticated"] = True
+                    st.success("Autenticación exitosa. Ahora puede cargar el archivo.")
+                else:
+                    st.error("Usuario o contraseña incorrectos.")
+
+    if st.session_state.get("authenticated", False):
+        # Desplegable para añadir preguntas
+        with st.expander("❇️ Añadir preguntas"):
+            st.subheader("Subir archivo de preguntas para especialidades")
+
+            especialidad = st.selectbox("Selecciona la especialidad:", ["snowflake_pro", "snowflake_arch", "dbt", "google"], key='modificar')
+            
+            uploaded_file = st.file_uploader("Sube un archivo Excel/JSON con el formato requerido", type=["xlsx", "json"])
+
+            if uploaded_file is not None:
+                if uploaded_file.name.endswith(".xlsx"):
+                    # Procesar archivo Excel
+                    new_data = process_excel_file(uploaded_file)
+                elif uploaded_file.name.endswith(".json"):
+                    # Procesar archivo JSON
+                    new_data = process_json_file(uploaded_file)
+
+                st.write("Contenido del archivo subido:")
+                st.write(new_data)
+                
+                if st.button("Guardar en JSON (modo append)"):
+                    save_to_json_append(new_data, especialidad)
+
+        # Desplegable para descargar archivos JSON de cada especialidad
+        with st.expander("❇️ Descargar archivos JSON de especialidades"):
+            st.subheader("Descargar JSON por especialidad")
+            for esp in ["snowflake_pro", "snowflake_arch", "dbt", "google"]:
+                download_buffer, file_name, mime_type = download_specialty_json(esp)
+                if download_buffer:
+                    st.download_button(
+                        label=f"Descargar {esp}",
+                        data=download_buffer,
+                        file_name=file_name,
+                        mime=mime_type
+                    )
+
+        # Desplegable para subir imágenes a la carpeta 'static'
+        with st.expander("❇️ Añadir imágenes a la especialidad"):
+            st.subheader("Subir imágenes para la especialidad seleccionada")
+
+            # Seleccionar la especialidad
+            especialidad_imagen = st.selectbox("Selecciona la especialidad para añadir imágenes:", ["snowflake_pro", "snowflake_arch", "dbt", "google"], key="add_image")
+
+            # Cargar la imagen
+            uploaded_image = st.file_uploader("Sube una imagen", type=["jpg", "jpeg", "png", "gif"])
+
+            # Guardar la imagen al hacer clic en el botón
+            if uploaded_image is not None:
+                if st.button("Guardar imagen"):
+                    save_image(uploaded_image, especialidad_imagen)
+        
+        # Desplegable para borrar preguntas
+        with st.expander("⛔Borrar preguntas"):
+            st.subheader("Eliminar pregunta por número")
+
+            # Selección de especialidad
+            especialidad_borrar = st.selectbox("Selecciona la especialidad para borrar preguntas:", ["snowflake_pro", "snowflake_arch", "dbt", "google"])
+
+            # Input para el número de la pregunta
+            question_number = st.number_input("Ingrese el question_number de la pregunta a eliminar:", min_value=1, step=1)
+
+            # Botón para ejecutar la eliminación
+            if st.button("Eliminar pregunta"):
+                delete_question_by_number(especialidad_borrar, question_number)
+
+        # Desplegable para borrar todas las preguntas de una especialidad
+        with st.expander("⛔Borrar todas las preguntas de una especialidad"):
+            st.subheader("Eliminar todas las preguntas")
+
+            # Selección de la especialidad a borrar
+            especialidad_borrar_todas = st.selectbox("Selecciona la especialidad para borrar todas las preguntas:", ["snowflake_pro", "snowflake_arch", "dbt", "google"], key="delete_all")
+
+            # Botón para ejecutar la eliminación de todas las preguntas
+            if st.button("Borrar todas las preguntas"):
+                delete_all_questions(especialidad_borrar_todas)
+
+        # Botón para reiniciar el contenedor Docker
+        with st.expander("🔄 - Reiniciar el proyecto en Docker"):
+            if st.button("Reiniciar Docker"):
+                restart_docker_container()

@@ -7,7 +7,8 @@ st.set_page_config(page_title="Especialidades", layout="wide")
 import tools as t
 import sql_especialidad.tools_sql as tsql
 import helper as h
-import json_to_csv as jtc
+import json_and_excels_admin as jtc
+import pandas as pd
 
 PAGES = [
     "Intro 🔰",
@@ -15,7 +16,7 @@ PAGES = [
     "Exámenes 📄",
     "Progreso 📈",
     "Parreitor-3000 🤖",
-    "Chatgpt",
+    "Chatgpt"
 ]
 
 # Creating perzonalized buttons
@@ -74,10 +75,22 @@ def go_to_google():
 def go_to_sql():
     st.session_state.page = "sql"
 
+# sql
+def go_to_admin():
+    st.session_state.page = "ADMIN"
+
+# Inicializar el estado de sesión
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
+if "page" not in st.session_state:
+    st.session_state["page"] = "main"
 
 ### Definig Main: ESPECIALIDADES
 def go_to_main():
     try:
+        # Botón de administración en la parte superior izquierda
+        st.button("ADMIN",on_click=go_to_admin)
+
         st.session_state.page = "main"
         # # Set a title and subtitle
         st.markdown(
@@ -165,22 +178,28 @@ elif st.session_state.page == "snowflake":
 
 elif st.session_state.page == "snowflake_pro":
     especialidad = "snowflake_pro"
-    #Botón para descargar las preguntas
-    csv_buffer, nombre_fichero = jtc.download_excel(especialidad)
-
-    st.download_button(
-        label="Download excel",
-        data=csv_buffer,
-        file_name=nombre_fichero,
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
-    ####################################
     # Init connection
     conn = h.init_connection(especialidad)
-    # Init json
+    # Init JSON
     datos = t.get_datos(especialidad)
     # Init user
     user = h.get_user_none()
+    
+    if user is not None and "Practicar" in st.session_state.get("current_page", ""):
+        # Generar el archivo de Excel y registrar la descarga
+        csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad)
+        
+        # Mensaje de advertencia
+        st.warning("Se quedará registrado cuándo se generó este excel. Recuerda que no se puede compartir la información, puesto que es propiedad de Cívica.")
+        
+        # Botón para descargar las preguntas y ejecutar la inserción en la base de datos solo al hacer clic
+        st.download_button(
+        label="Download excel",
+        data=csv_buffer,
+        file_name=nombre_fichero,
+        on_click=lambda: jtc.insert_download_db(conn, user, numero_aleatorio),  # Usamos lambda para pasar parámetros
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
 
     st.title("SnowPro® Core Certification")
     if st.button("Back to Main", key="back-to-main-from-snowflake"):
@@ -214,16 +233,6 @@ elif st.session_state.page == "snowflake_pro":
 
 elif st.session_state.page == "snowflake_arch":
     especialidad = "snowflake_arch"
-    #Botón para descargar las preguntas
-    csv_buffer, nombre_fichero = jtc.download_excel(especialidad)
-
-    st.download_button(
-        label="Download excel",
-        data=csv_buffer,
-        file_name=nombre_fichero,
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
-    ####################################
     # Init connection
     conn = h.init_connection(especialidad)
     # Init json
@@ -231,6 +240,21 @@ elif st.session_state.page == "snowflake_arch":
     # Init user
     user = h.get_user_none()
 
+    if user is not None and "Practicar" in st.session_state.get("current_page", ""):
+        # Generar el archivo de Excel y registrar la descarga
+        csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad)
+        
+        # Mensaje de advertencia
+        st.warning("Se quedará registrado cuándo se generó este excel. Recuerda que no se puede compartir la información, puesto que es propiedad de Cívica.")
+        
+        # Botón para descargar las preguntas y ejecutar la inserción en la base de datos solo al hacer clic
+        st.download_button(
+        label="Download excel",
+        data=csv_buffer,
+        file_name=nombre_fichero,
+        on_click=lambda: jtc.insert_download_db(conn, user, numero_aleatorio),  # Usamos lambda para pasar parámetros
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
     st.title("SnowPro® Advanced: Architect")
     if st.button("Back to Main", key="back-to-main-from-snowflake"):
         go_to_main()
@@ -264,23 +288,27 @@ elif st.session_state.page == "snowflake_arch":
 ## dbt Page
 elif st.session_state.page == "dbt":
     especialidad = "dbt"
-    #Botón para descargar las preguntas
-    csv_buffer, nombre_fichero = jtc.download_excel(especialidad)
-
-    st.download_button(
-        label="Download excel",
-        data=csv_buffer,
-        file_name=nombre_fichero,
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
-    ####################################
     # Init connection
     conn = h.init_connection(especialidad)
     # Init json
     datos = t.get_datos(especialidad)
     # Init user
     user = h.get_user_none()
-
+    if user is not None and "Practicar" in st.session_state.get("current_page", ""):
+        # Generar el archivo de Excel y registrar la descarga
+        csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad)
+        
+        # Mensaje de advertencia
+        st.warning("Se quedará registrado cuándo se generó este excel. Recuerda que no se puede compartir la información, puesto que es propiedad de Cívica.")
+        
+        # Botón para descargar las preguntas y ejecutar la inserción en la base de datos solo al hacer clic
+        st.download_button(
+        label="Download excel",
+        data=csv_buffer,
+        file_name=nombre_fichero,
+        on_click=lambda: jtc.insert_download_db(conn, user, numero_aleatorio),  # Usamos lambda para pasar parámetros
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
     st.title("dbt")
     if st.button("Back to Main", key="back-to-main-from-dbt"):
         go_to_main()
@@ -316,23 +344,27 @@ elif st.session_state.page == "dbt":
 ## Google Page
 elif st.session_state.page == "google":
     especialidad = "google"
-    #Botón para descargar las preguntas
-    csv_buffer, nombre_fichero = jtc.download_excel(especialidad)
-
-    st.download_button(
-        label="Download excel",
-        data=csv_buffer,
-        file_name=nombre_fichero,
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
-    ####################################
     # Init connection
     conn = h.init_connection(especialidad)
     # Init json
     datos = t.get_datos(especialidad)
     # Init user
     user = h.get_user_none()
-
+    if user is not None and "Practicar" in st.session_state.get("current_page", ""):
+        # Generar el archivo de Excel y registrar la descarga
+        csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad)
+        
+        # Mensaje de advertencia
+        st.warning("Se quedará registrado cuándo se generó este excel. Recuerda que no se puede compartir la información, puesto que es propiedad de Cívica.")
+        
+        # Botón para descargar las preguntas y ejecutar la inserción en la base de datos solo al hacer clic
+        st.download_button(
+        label="Download excel",
+        data=csv_buffer,
+        file_name=nombre_fichero,
+        on_click=lambda: jtc.insert_download_db(conn, user, numero_aleatorio),  # Usamos lambda para pasar parámetros
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
     st.title("GCP - Google")
     if st.button("Back to Main", key="back-to-main-from-google"):
         go_to_main()
@@ -431,3 +463,13 @@ elif st.session_state.page == "sql":
                 tsql.show_tables(engine, query1, option, True, username)
     except Exception as e:
         st.error(str(e.args))
+
+#####################################
+# Página de administración
+elif st.session_state.page == "ADMIN":
+    jtc.show_admin_panel()
+
+    # Botón para regresar a la página principal
+    if st.button("Volver a la página principal"):
+        go_to_main()
+        st.rerun()
