@@ -10,7 +10,10 @@ from agent import chat
 import plotly.express as px
 import pandas as pd
 from openai import OpenAI
+import os
+import json_and_excels_admin as jtc
 
+RUTA = os.path.join(os.path.dirname(__file__), "jsons")
 def get_datos(especialidad):
     """
     Retorna los datos desde un archivo JSON basado en la especialidad especificada.
@@ -27,13 +30,13 @@ def get_datos(especialidad):
     archivo = ""
     try:
         if especialidad == "snowflake_pro":
-            archivo = "snowflake_pro_examtopics.json"
+            archivo = os.path.join(RUTA, "snowflake_pro_examtopics.json")
         elif especialidad == "snowflake_arch":
-            archivo = "snowflake_arch_examtopics.json"
+            archivo = os.path.join(RUTA,"snowflake_arch_examtopics.json")
         elif especialidad == "dbt":
-            archivo = "dbt_examtopics.json"
+            archivo = os.path.join(RUTA,"dbt_examtopics.json")
         elif especialidad == "google":
-            archivo = "google_examtopics.json"
+            archivo = os.path.join(RUTA,"google_examtopics.json")
     except Exception as e:
         st.warning("Ha habido un error, no encuentro los json. " + str(e.args))
     datos = h.open_file(archivo)
@@ -200,6 +203,22 @@ def practicar(conn, datos, especialidad):
         st.session_state["exam_mode"] = ""
     with st.expander("¿Cómo podría usar esta sección? 🤔"):
         st.markdown(getattr(c, f"USO_SECCION_{especialidad.upper()}"))
+    if user is not None:
+        with st.expander("¿Quieres descargar un excel de las preguntas?"):
+            # Generar el archivo de Excel y registrar la descarga
+            csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad, user)
+            
+            # Mensaje de advertencia
+            st.warning("Se quedará registrado cuándo se generó este excel. Recuerda que no se puede compartir la información, puesto que es propiedad de Cívica.")
+            
+            # Botón para descargar las preguntas y ejecutar la inserción en la base de datos solo al hacer clic
+            st.download_button(
+            label="Download excel",
+            data=csv_buffer,
+            file_name=nombre_fichero,
+            on_click=lambda: jtc.insert_download_db(conn, user, numero_aleatorio),  # Usamos lambda para pasar parámetros
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
 
     filtros, preguntas = st.columns([1, 3], gap="large")
     # Filtros

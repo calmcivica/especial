@@ -7,21 +7,48 @@ import subprocess
 import random
 from io import BytesIO
 import ast
+from datetime import datetime
 
 # Credenciales de acceso
 USERNAME = st.secrets["admin_user"]
 PASSWORD = st.secrets["admin_password"]
+RUTA = 'jsons/'
+
+from datetime import datetime
+import pytz
+
+# Función para registrar acciones
+def log_action(action, especialidad=None, user=None):
+    # Zona horaria de Madrid
+    madrid_timezone = pytz.timezone("Europe/Madrid")
+    timestamp = datetime.now(madrid_timezone).strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Mensaje de log
+    log_message = f"[{timestamp}] Acción: {action}"
+    if especialidad:
+        log_message += f" | Especialidad: {especialidad}"
+    if user:
+        log_message += f" | Usuario: {user}"
+
+    # Guardar en archivo de log
+    with open("action_log.txt", "a") as log_file:
+        log_file.write(log_message + "\n")
+    
+    # Imprimir en la consola para depuración
+    print(log_message)
+
+
 
 # Función para crear el CSV
-def create_excel(especialidad):
+def create_excel(especialidad, user=None):
     if especialidad == 'snowflake_pro':
-        nombre_fichero = 'snowflake_pro_examtopics'
+        nombre_fichero = os.path.join(RUTA,'snowflake_pro_examtopics')
     elif especialidad == 'snowflake_arch':
-        nombre_fichero = 'snowflake_arch_examtopics'
+        nombre_fichero = os.path.join(RUTA,'snowflake_arch_examtopics')
     elif especialidad == 'dbt':
-        nombre_fichero = 'dbt_examtopics'
+        nombre_fichero = os.path.join(RUTA,'dbt_examtopics')
     elif especialidad == 'google':
-        nombre_fichero = 'google_examtopics'
+        nombre_fichero = os.path.join(RUTA,'google_examtopics')
     
     nombre_completo = nombre_fichero + '.json'
 
@@ -50,6 +77,7 @@ def create_excel(especialidad):
 
     # Convertir la lista de filas en un DataFrame de pandas
     df = pd.DataFrame(rows)
+    log_action("Creación de Excel para descarga", especialidad, user)
     return df
 
 def generar_numero_aleatorio():
@@ -57,8 +85,8 @@ def generar_numero_aleatorio():
     return ''.join([str(random.randint(0, 9)) for _ in range(10)])
 
 @st.cache_data
-def download_excel(especialidad):
-    df = create_excel(especialidad)
+def download_excel(especialidad, user):
+    df = create_excel(especialidad, user)
     numero_aleatorio = generar_numero_aleatorio()
 
     # Crear un archivo Excel con el nombre de la hoja como el número aleatorio
@@ -78,9 +106,8 @@ def insert_download_db(conn, username, numero_aleatorio):
     print(f"Ejecutada query: {query}")
 
 # Función para guardar datos en JSON en modo append, asegurando formato JSON correcto
-def save_to_json_append(new_data, especialidad):
-    # filename = os.path.join(DATA_DIR, f"{especialidad}_examtopics.json")
-    filename = f"{especialidad}_examtopics.json"
+def save_to_json_append(new_data, especialidad, user=None):
+    filename = os.path.join(RUTA, f"{especialidad}_examtopics.json")
 
     # Verificar si el archivo ya existe
     if os.path.exists(filename):
@@ -107,10 +134,11 @@ def save_to_json_append(new_data, especialidad):
             json.dump(new_data, json_file, indent=4, ensure_ascii=False)
     
     st.success(f"Datos añadidos exitosamente al archivo {filename}")
+    log_action("Datos añadidos a JSON (modo append)", especialidad, user)
 
 # Función para borrar una pregunta en el archivo JSON por question_number
-def delete_question_by_number(especialidad, question_number):
-    filename = f"{especialidad}_examtopics.json"
+def delete_question_by_number(especialidad, question_number, user=None):
+    filename = os.path.join(RUTA, f"{especialidad}_examtopics.json")
     
     # Verificar si el archivo existe
     if not os.path.exists(filename):
@@ -134,6 +162,8 @@ def delete_question_by_number(especialidad, question_number):
         json.dump(updated_data, json_file, indent=4, ensure_ascii=False)
 
     st.success(f"La pregunta con question_number {question_number} ha sido eliminada.")
+    log_action(f"Pregunta eliminada (question_number {question_number})", especialidad, user)
+
 
 # Interfaz en Streamlit para borrar una pregunta
 def admin_delete_question():
@@ -149,7 +179,7 @@ def admin_delete_question():
     if st.button("Eliminar pregunta"):
         delete_question_by_number(especialidad, question_number)
 
-def restart_docker_container():
+def restart_docker_container(user=None):
     st.warning("Reiniciando el proyecto en Docker...")
     # Comando para reiniciar el contenedor Docker actual
     # Usamos 'sh -c "sleep 1; kill 1"' para reiniciar el contenedor Docker actual
@@ -157,9 +187,9 @@ def restart_docker_container():
     try:
         subprocess.run(command, shell=True, check=True)
         st.success("El proyecto se ha reiniciado exitosamente.")
+        log_action("Reinicio del contenedor Docker", user)
     except subprocess.CalledProcessError:
         st.error("Error al intentar reiniciar el proyecto.")
-
 
 def process_excel_file(uploaded_file):
     df = pd.read_excel(uploaded_file)
@@ -196,7 +226,7 @@ def process_json_file(uploaded_file):
 
 # Función para descargar el JSON de la especialidad
 def download_specialty_json(especialidad):
-    filename = f"{especialidad}_examtopics.json"
+    filename = os.path.join(RUTA, f"{especialidad}_examtopics.json")
     if os.path.exists(filename):
         with open(filename, "r", encoding="utf-8") as file:
             json_data = file.read()
@@ -208,8 +238,8 @@ def download_specialty_json(especialidad):
 
 # Función para cargar el archivo JSON de una especialidad
 def load_json(especialidad):
-    # filename = os.path.join(DATA_DIR, f"{especialidad}_examtopics.json")
-    filename = f"{especialidad}_examtopics.json"
+    filename = os.path.join(RUTA, f"{especialidad}_examtopics.json")
+
     if os.path.exists(filename):
         with open(filename, "r", encoding="utf-8") as file:
             data = json.load(file)
@@ -220,8 +250,8 @@ def load_json(especialidad):
 
 # Función para guardar el archivo JSON de una especialidad
 def save_json(data, especialidad):
-    # filename = os.path.join(DATA_DIR, f"{especialidad}_examtopics.json")
-    filename = f"{especialidad}_examtopics.json"
+    filename = os.path.join(RUTA, f"{especialidad}_examtopics.json")
+
     with open(filename, "w", encoding="utf-8") as file:
         json.dump(data, file, indent=4, ensure_ascii=False)
     st.success(f"Pregunta modificada guardada exitosamente en {filename}")
@@ -252,9 +282,9 @@ def edit_question_form(question):
 
     return updated_data
 
-def delete_all_questions(especialidad):
+def delete_all_questions(especialidad, user=None):
     """Elimina todas las preguntas del archivo JSON de la especialidad seleccionada."""
-    filename = f"{especialidad}_examtopics.json"
+    filename = os.path.join(RUTA, f"{especialidad}_examtopics.json")
     
     # Verificar si el archivo existe
     if os.path.exists(filename):
@@ -262,10 +292,12 @@ def delete_all_questions(especialidad):
         with open(filename, "w", encoding="utf-8") as json_file:
             json.dump([], json_file, indent=4, ensure_ascii=False)
         st.success(f"Todas las preguntas de la especialidad '{especialidad}' han sido eliminadas.")
+        log_action("Todas las preguntas eliminadas", especialidad, user)
+
     else:
         st.warning(f"No se encontró un archivo JSON para la especialidad '{especialidad}'.")
 
-def save_image(uploaded_file, especialidad):
+def save_image(uploaded_file, especialidad, user=None):
     # Crear la ruta de la carpeta de la especialidad en la carpeta 'static'
     folder_path = os.path.join("static", especialidad)
     
@@ -279,7 +311,7 @@ def save_image(uploaded_file, especialidad):
         f.write(uploaded_file.getbuffer())
     
     st.success(f"La imagen '{uploaded_file.name}' ha sido guardada en la carpeta '{especialidad}'.")
-
+    log_action(f"Imagen '{uploaded_file.name}' guardada", especialidad, user)
 
 def show_admin_panel():
     st.header("Panel de Administración")
@@ -295,7 +327,8 @@ def show_admin_panel():
             if login_button:
                 if username == USERNAME and password == PASSWORD:
                     st.session_state["authenticated"] = True
-                    st.success("Autenticación exitosa. Ahora puede cargar el archivo.")
+                    st.success("Autenticación exitosa.")
+                    st.rerun()
                 else:
                     st.error("Usuario o contraseña incorrectos.")
 

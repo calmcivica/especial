@@ -1,0 +1,1280 @@
+[
+    {
+        "question_number": 1,
+        "question_area": "Snowflake Architecture",
+        "question": "What built-in Snowflake features make use of the change tracking metadata for a table? (Choose two.)",
+        "answers": [
+            "The MERGE command",
+            "The UPSERT command",
+            "The CHANGES clause",
+            "A STREAM object",
+            "The CHANGE_DATA_CAPTURE command"
+        ],
+        "correct_answer": [
+            "The CHANGES clause",
+            "A STREAM object"
+        ],
+        "explanation": "\n- **✅:green[The CHANGES clause]**: La cláusula 'CHANGES' utiliza metadatos de cambio en Snowflake para rastrear actualizaciones en datos de una tabla.\n- **✅:green[A STREAM object]**: Un 'STREAM object' permite rastrear cambios en las tablas mediante metadatos de cambio, lo que facilita la implementación de CDC (Change Data Capture).\n- **❌:red[MERGE, UPSERT, y CHANGE_DATA_CAPTURE command]**: Aunque MERGE y UPSERT operan sobre datos, no utilizan metadatos de seguimiento de cambios, y 'CHANGE_DATA_CAPTURE' no es un comando en Snowflake.",
+        "reference": [
+            "https://docs.snowflake.com/en/sql-reference/constructs/changes.html",
+            "https://docs.snowflake.com/en/user-guide/streams.html"
+        ]
+    },
+    {
+        "question_number": 2,
+        "question_area": "Data Engineering",
+        "question": "When using the Snowflake Connector for Kafka, what data formats are supported for the messages? (Choose two.)",
+        "answers": [
+            "CSV",
+            "XML",
+            "Avro",
+            "JSON",
+            "Parquet"
+        ],
+        "correct_answer": [
+            "Avro",
+            "JSON"
+        ],
+        "explanation": "\n- **✅:green[Avro y JSON]**: El conector de Snowflake para Kafka es compatible con los formatos de datos Avro y JSON para mensajes, facilitando la integración con los datos en estos formatos.\n- **❌:red[CSV, XML, y Parquet]**: Estos formatos no son compatibles con el conector de Kafka en Snowflake para mensajes, ya que Snowflake se centra en Avro y JSON como formatos de datos para este propósito.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/kafka-connector.html#supported-message-formats"
+        ]
+    },
+    {
+        "question_number": 3,
+        "question_area": "Accounts and Security",
+        "question": "At which object type level can the APPLY MASKING POLICY, APPLY ROW ACCESS POLICY and APPLY SESSION POLICY privileges be granted?",
+        "answers": [
+            "Global",
+            "Database",
+            "Schema",
+            "Table"
+        ],
+        "correct_answer": [
+            "Global"
+        ],
+        "explanation": "\n- **✅:green[Global]**: Los privilegios para aplicar políticas de enmascaramiento, políticas de acceso a filas y políticas de sesión se otorgan a nivel global en Snowflake, permitiendo una aplicación uniforme de políticas de seguridad.\n- **❌:red[Database, Schema, Table]**: Estos niveles no permiten la asignación de los privilegios de políticas de enmascaramiento, políticas de acceso de filas o de sesión de forma directa.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-access-control-privileges#global-privileges"
+        ]
+    },
+    {
+        "question_number": 4,
+        "question_area": "Data Engineering",
+        "question": "Which commands should an Architect use to load only file5.csv from the stage? (Choose two.)",
+        "answers": [
+            "COPY INTO tablea FROM @%tablea RETURN_FAILED_ONLY = TRUE;",
+            "COPY INTO tablea FROM @%tablea;",
+            "COPY INTO tablea FROM @%tablea FILES = ('file5.csv');",
+            "COPY INTO tablea FROM @%tablea FORCE = TRUE;",
+            "COPY INTO tablea FROM @%tablea NEW_FILES_ONLY = TRUE;",
+            "COPY INTO tablea FROM @%tablea MERGE = TRUE;"
+        ],
+        "correct_answer": [
+            "COPY INTO tablea FROM @%tablea;",
+            "COPY INTO tablea FROM @%tablea FILES = ('file5.csv');"
+        ],
+        "explanation": "\n- **✅:green[COPY INTO tablea FROM @%tablea; y FILES=('file5.csv')]**: Estas opciones permiten cargar 'file5.csv' especificando el archivo en particular o cargando todos los archivos pendientes.\n- **❌:red[RETURN_FAILED_ONLY y MERGE]**: No son opciones válidas para este caso; la opción 'RETURN_FAILED_ONLY' no existe en este contexto y 'MERGE' es incorrecta.\n- **❌:red[FORCE = TRUE]**: Esto recargaría todos los archivos en la etapa, no sólo 'file5.csv'.",
+        "reference": [
+            "https://docs.snowflake.com/en/sql-reference/sql/copy-into-table.html"
+        ]
+    },
+    {
+        "question_number": 5,
+        "question_area": "Data Sharing",
+        "question": "A large manufacturing company runs a dozen individual Snowflake accounts across its business divisions. The company wants to increase the level of data sharing to support supply chain optimizations and increase its purchasing leverage with multiple vendors. How should these requirements be met according to Snowflake best practices?",
+        "answers": [
+            "Migrate the European accounts in the global region and manage shares in a connected graph architecture. Deploy a Data Exchange.",
+            "Deploy a Private Data Exchange in combination with data shares for the European accounts.",
+            "Deploy to the Snowflake Marketplace making sure that invoker_share() is used in all secure views.",
+            "Deploy a Private Data Exchange and use replication to allow European data shares in the Exchange."
+        ],
+        "correct_answer": [
+            "Deploy a Private Data Exchange and use replication to allow European data shares in the Exchange."
+        ],
+        "explanation": "La mejor práctica de Snowflake recomienda desplegar un Private Data Exchange y utilizar la replicación para facilitar el intercambio de datos en Europa.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-sharing.html"
+        ]
+    },
+    {
+        "question_number": 6,
+        "question_area": "Data Security",
+        "question": "A user has the appropriate privilege to see unmasked data in a column. If the user loads this column data into another column that does not have a masking policy, what will occur?",
+        "answers": [
+            "Unmasked data will be loaded in the new column.",
+            "Masked data will be loaded into the new column.",
+            "Unmasked data will be loaded into the new column but only users with the appropriate privileges will be able to see the unmasked data.",
+            "Unmasked data will be loaded into the new column and no users will be able to see the unmasked data."
+        ],
+        "correct_answer": [
+            "Unmasked data will be loaded in the new column."
+        ],
+        "explanation": "Dado que el usuario tiene permisos para ver datos sin enmascarar, estos se cargarán sin enmascarar en la nueva columna, independientemente de la política de enmascaramiento en la columna original.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-column-intro.html"
+        ]
+    },
+    {
+        "question_number": 7,
+        "question_area": "Performance Optimization",
+        "question": "How can an Architect enable optimal clustering to enhance performance for different access paths on a given table?",
+        "answers": [
+            "Create multiple clustering keys for a table.",
+            "Create multiple materialized views with different cluster keys.",
+            "Create super projections that will automatically create clustering.",
+            "Create a clustering key that contains all columns used in the access paths."
+        ],
+        "correct_answer": [
+            "Create multiple materialized views with different cluster keys."
+        ],
+        "explanation": "Las vistas materializadas con diferentes claves de clúster permiten optimizar el rendimiento de acceso a los datos en distintas rutas.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/tables-clustering-keys.html"
+        ]
+    },
+    {
+        "question_number": 8,
+        "question_area": "Data Sharing",
+        "question": "Company A would like to share data in Snowflake with Company B. Company B is not on the same cloud platform as Company A. What is required to allow data sharing between these two companies?",
+        "answers": [
+            "Create a pipeline to write shared data to a cloud storage location in the target cloud provider.",
+            "Ensure that all views are persisted, as views cannot be shared across cloud platforms.",
+            "Setup data replication to the region and cloud platform where the consumer resides.",
+            "Company A and Company B must agree to use a single cloud platform: Data sharing is only possible if the companies share the same cloud provider."
+        ],
+        "correct_answer": [
+            "Setup data replication to the region and cloud platform where the consumer resides."
+        ],
+        "explanation": "Snowflake permite compartir datos entre diferentes plataformas en la nube mediante la replicación de datos a la región y plataforma del consumidor.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-sharing-intro.html"
+        ]
+    },
+    {
+        "question_number": 9,
+        "question_area": "Query Optimization",
+        "question": "What are some of the characteristics of result set caches? (Choose three.)",
+        "answers": [
+            "Time Travel queries can be executed against the result set cache.",
+            "Snowflake persists the data results for 24 hours.",
+            "Each time persisted results for a query are used, a 24-hour retention period is reset.",
+            "The data stored in the result cache will contribute to storage costs.",
+            "The retention period can be reset for a maximum of 31 days.",
+            "The result set cache is not shared between warehouses."
+        ],
+        "correct_answer": [
+            "Snowflake persists the data results for 24 hours.",
+            "Each time persisted results for a query are used, a 24-hour retention period is reset.",
+            "The result set cache is not shared between warehouses."
+        ],
+        "explanation": "Las características clave del almacenamiento en caché de resultados incluyen que los resultados se persisten durante 24 horas, el periodo de retención se reinicia al reutilizarse, y que esta caché no se comparte entre warehouses.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/querying-persisted-results"
+        ]
+    },
+    {
+        "question_number": 10,
+        "question_area": "Accounts and Security",
+        "question": "Which organization-related tasks can be performed by the ORGADMIN role? (Choose three.)",
+        "answers": [
+            "Changing the name of the organization",
+            "Creating an account",
+            "Viewing a list of organization accounts",
+            "Changing the name of an account",
+            "Deleting an account",
+            "Enabling the replication of a database"
+        ],
+        "correct_answer": [
+            "Creating an account",
+            "Changing the name of an account",
+            "Deleting an account"
+        ],
+        "explanation": "El rol ORGADMIN tiene privilegios especiales que incluyen la creación, eliminación y cambio de nombre de cuentas dentro de la organización.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/organizations#orgadmin-role"
+        ]
+    },
+    {
+        "question_number": 11,
+        "question_area": "Data Loading and Ingestion",
+        "question": "What are the MINIMUM object privileges required for the Snowpipe user to execute Snowpipe?",
+        "answers": [
+            "OWNERSHIP on the named pipe, USAGE on the named stage, target database, and schema, and INSERT and SELECT on the target table",
+            "OWNERSHIP on the named pipe, USAGE and READ on the named stage, USAGE on the target database and schema, and INSERT and SELECT on the target table",
+            "CREATE on the named pipe, USAGE and READ on the named stage, USAGE on the target database and schema, and INSERT and SELECT on the target table",
+            "USAGE on the named pipe, named stage, target database, and schema, and INSERT and SELECT on the target table"
+        ],
+        "correct_answer": [
+            "OWNERSHIP on the named pipe, USAGE and READ on the named stage, USAGE on the target database and schema, and INSERT and SELECT on the target table"
+        ],
+        "explanation": "Para el correcto funcionamiento de Snowpipe, es necesario que el usuario tenga OWNER en el pipe, USAGE y READ en el named stage, además de USAGE en la base de datos y esquema destino, junto con INSERT y SELECT en la tabla de destino.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro#owning-pipes"
+        ]
+    },
+    {
+        "question_number": 12,
+        "question_area": "Security and Auditing",
+        "question": "The IT Security team has identified an ongoing credential stuffing attack. What is the BEST way to find recent and ongoing login attempts to Snowflake?",
+        "answers": [
+            "Call the LOGIN_HISTORY Information Schema table function.",
+            "Query the LOGIN_HISTORY view in the ACCOUNT_USAGE schema in the SNOWFLAKE database.",
+            "View the History tab in the Snowflake UI and set up a filter for SQL text that contains the text 'LOGIN'.",
+            "View the Users section in the Account tab in the Snowflake UI and review the last login column."
+        ],
+        "correct_answer": [
+            "Query the LOGIN_HISTORY view in the ACCOUNT_USAGE schema in the SNOWFLAKE database."
+        ],
+        "explanation": "La vista LOGIN_HISTORY en el esquema ACCOUNT_USAGE permite a los administradores revisar intentos de inicio de sesión recientes, lo cual es ideal para identificar actividad inusual como ataques de credential stuffing.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-event-tracking"
+        ]
+    },
+    {
+        "question_number": 13,
+        "question_area": "Accounts and Security",
+        "question": "An Architect has a VPN_ACCESS_LOGS table in the SECURITY_LOGS schema containing timestamps of the connection and disconnection, username of the user, and summary statistics. What should the Architect do to enable the Snowflake search optimization service on this table?",
+        "answers": [
+            "Assume role with OWNERSHIP on future tables and ADD SEARCH OPTIMIZATION on the SECURITY_LOGS schema.",
+            "Assume role with ALL PRIVILEGES including ADD SEARCH OPTIMIZATION in the SECURITY LOGS schema.",
+            "Assume role with OWNERSHIP on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema.",
+            "Assume role with ALL PRIVILEGES on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema."
+        ],
+        "correct_answer": [
+            "Assume role with OWNERSHIP on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema."
+        ],
+        "explanation": "\n- **✅:green[Assume role with OWNERSHIP on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema]**: Para habilitar el servicio de optimización de búsqueda en una tabla en Snowflake, el rol debe tener propiedad en la tabla específica en cuestión.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/search-optimization-service.html"
+        ]
+    },
+    {
+        "question_number": 14,
+        "question_area": "Performance Optimization",
+        "question": "The table contains five columns and it has millions of records. The cardinality distribution of the columns is shown below: Column C4 and C5 are mostly used by SELECT queries in the GROUP BY and ORDER BY clauses. Whereas columns C1, C2 and C3 are heavily used in filter and join conditions of SELECT queries. The Architect must design a clustering key for this table to improve the query performance. Based on Snowflake recommendations, how should the clustering key columns be ordered while defining the multi-column clustering key?",
+        "answers": [
+            "C5, C4, C2",
+            "C3, C4, C5",
+            "C1, C3, C2",
+            "C2, C1, C3"
+        ],
+        "correct_answer": [
+            "C2, C1, C3"
+        ],
+        "explanation": "\n- **✅:green[C2, C1, C3]**: Para optimizar el rendimiento en consultas, las columnas más frecuentemente utilizadas en condiciones de filtro y unión deben priorizarse en las claves de clustering en Snowflake.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/tables-clustering-keys.html"
+        ]
+    },
+    {
+        "question_number": 15,
+        "question_area": "Accounts and Security",
+        "question": "Which security, governance, and data protection features require, at a MINIMUM, the Business Critical edition of Snowflake? (Choose two.)",
+        "answers": [
+            "Extended Time Travel (up to 90 days)",
+            "Customer-managed encryption keys through Tri-Secret Secure",
+            "Periodic rekeying of encrypted data",
+            "AWS, Azure, or Google Cloud private connectivity to Snowflake",
+            "Federated authentication and SSO"
+        ],
+        "correct_answer": [
+            "Customer-managed encryption keys through Tri-Secret Secure",
+            "AWS, Azure, or Google Cloud private connectivity to Snowflake"
+        ],
+        "explanation": "\n- **✅:green[Customer-managed encryption keys through Tri-Secret Secure]** y **✅:green[AWS, Azure, or Google Cloud private connectivity to Snowflake]**: Ambos requieren al menos la edición Business Critical de Snowflake para habilitar funciones avanzadas de seguridad y gobernanza.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-editions.html"
+        ]
+    },
+    {
+        "question_number": 16,
+        "question_area": "Accounts and Security",
+        "question": "A company wants to deploy its Snowflake accounts inside its corporate network with no visibility on the internet. The company is using a VPN infrastructure and Virtual Desktop Infrastructure (VDI) for its Snowflake users. The company also wants to re-use the login credentials set up for the VDI to eliminate redundancy when managing logins. What Snowflake functionality should be used to meet these requirements? (Choose two.)",
+        "answers": [
+            "Set up replication to allow users to connect from outside the company VPN.",
+            "Provision a unique company Tri-Secret Secure key.",
+            "Use private connectivity from a cloud provider.",
+            "Set up SSO for federated authentication.",
+            "Use a proxy Snowflake account outside the VPN, enabling client redirect for user logins."
+        ],
+        "correct_answer": [
+            "Provision a unique company Tri-Secret Secure key.",
+            "Use private connectivity from a cloud provider."
+        ],
+        "explanation": "\n- **✅:green[Provision a unique company Tri-Secret Secure key]** y **✅:green[Use private connectivity from a cloud provider]**: Ambas opciones cumplen los requisitos de seguridad y conectividad privada, lo que permite que las cuentas de Snowflake se implementen sin visibilidad en internet.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-private-snowflake.html"
+        ]
+    },
+    {
+        "question_number": 17,
+        "question_area": "Snowflake Architecture",
+        "question": "How do Snowflake databases that are created from shares differ from standard databases that are not created from shares? (Choose three.)",
+        "answers": [
+            "Shared databases are read-only.",
+            "Shared databases must be refreshed in order for new data to be visible.",
+            "Shared databases cannot be cloned.",
+            "Shared databases are not supported by Time Travel.",
+            "Shared databases will have the PUBLIC or INFORMATION_SCHEMA schemas without explicitly granting these schemas to the share.",
+            "Shared databases can also be created as transient databases."
+        ],
+        "correct_answer": [
+            "Shared databases are read-only.",
+            "Shared databases cannot be cloned.",
+            "Shared databases are not supported by Time Travel."
+        ],
+        "explanation": "\n- **✅:green[Shared databases are read-only]** y **✅:green[Shared databases cannot be cloned]** y **✅:green[Shared databases are not supported by Time Travel]**: Las bases de datos compartidas tienen restricciones específicas en cuanto a acceso y operaciones.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-sharing-intro.html"
+        ]
+    },
+    {
+        "question_number": 18,
+        "question_area": "Data Engineering",
+        "question": "What integration object should be used to place restrictions on where data may be exported?",
+        "answers": [
+            "Stage integration",
+            "Security integration",
+            "Storage integration",
+            "API integration"
+        ],
+        "correct_answer": [
+            "Storage integration"
+        ],
+        "explanation": "\n- **✅:green[Storage integration]**: Esta opción permite a Snowflake controlar el acceso y la exportación de datos a ubicaciones específicas, restringiendo así donde los datos pueden ser exportados.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-policies.html"
+        ]
+    },
+    {
+        "question_number": 13,
+        "question_area": "Accounts and Security",
+        "question": "An Architect has a VPN_ACCESS_LOGS table in the SECURITY_LOGS schema containing timestamps of the connection and disconnection, username of the user, and summary statistics. What should the Architect do to enable the Snowflake search optimization service on this table?",
+        "answers": [
+            "Assume role with OWNERSHIP on future tables and ADD SEARCH OPTIMIZATION on the SECURITY_LOGS schema.",
+            "Assume role with ALL PRIVILEGES including ADD SEARCH OPTIMIZATION in the SECURITY LOGS schema.",
+            "Assume role with OWNERSHIP on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema.",
+            "Assume role with ALL PRIVILEGES on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema."
+        ],
+        "correct_answer": [
+            "Assume role with OWNERSHIP on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema."
+        ],
+        "explanation": "\n- **✅:green[Assume role with OWNERSHIP on VPN_ACCESS_LOGS and ADD SEARCH OPTIMIZATION in the SECURITY_LOGS schema]**: Para habilitar el servicio de optimización de búsqueda en una tabla en Snowflake, el rol debe tener propiedad en la tabla específica en cuestión.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/search-optimization-service.html"
+        ]
+    },
+    {
+        "question_number": 14,
+        "question_area": "Performance Optimization",
+        "question": "The table contains five columns and it has millions of records. The cardinality distribution of the columns is shown below: Column C4 and C5 are mostly used by SELECT queries in the GROUP BY and ORDER BY clauses. Whereas columns C1, C2 and C3 are heavily used in filter and join conditions of SELECT queries. The Architect must design a clustering key for this table to improve the query performance. Based on Snowflake recommendations, how should the clustering key columns be ordered while defining the multi-column clustering key?",
+        "answers": [
+            "C5, C4, C2",
+            "C3, C4, C5",
+            "C1, C3, C2",
+            "C2, C1, C3"
+        ],
+        "correct_answer": [
+            "C2, C1, C3"
+        ],
+        "explanation": "\n- **✅:green[C2, C1, C3]**: Para optimizar el rendimiento en consultas, las columnas más frecuentemente utilizadas en condiciones de filtro y unión deben priorizarse en las claves de clustering en Snowflake.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/tables-clustering-keys.html"
+        ]
+    },
+    {
+        "question_number": 15,
+        "question_area": "Accounts and Security",
+        "question": "Which security, governance, and data protection features require, at a MINIMUM, the Business Critical edition of Snowflake? (Choose two.)",
+        "answers": [
+            "Extended Time Travel (up to 90 days)",
+            "Customer-managed encryption keys through Tri-Secret Secure",
+            "Periodic rekeying of encrypted data",
+            "AWS, Azure, or Google Cloud private connectivity to Snowflake",
+            "Federated authentication and SSO"
+        ],
+        "correct_answer": [
+            "Customer-managed encryption keys through Tri-Secret Secure",
+            "AWS, Azure, or Google Cloud private connectivity to Snowflake"
+        ],
+        "explanation": "\n- **✅:green[Customer-managed encryption keys through Tri-Secret Secure]** y **✅:green[AWS, Azure, or Google Cloud private connectivity to Snowflake]**: Ambos requieren al menos la edición Business Critical de Snowflake para habilitar funciones avanzadas de seguridad y gobernanza.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-editions.html"
+        ]
+    },
+    {
+        "question_number": 16,
+        "question_area": "Accounts and Security",
+        "question": "A company wants to deploy its Snowflake accounts inside its corporate network with no visibility on the internet. The company is using a VPN infrastructure and Virtual Desktop Infrastructure (VDI) for its Snowflake users. The company also wants to re-use the login credentials set up for the VDI to eliminate redundancy when managing logins. What Snowflake functionality should be used to meet these requirements? (Choose two.)",
+        "answers": [
+            "Set up replication to allow users to connect from outside the company VPN.",
+            "Provision a unique company Tri-Secret Secure key.",
+            "Use private connectivity from a cloud provider.",
+            "Set up SSO for federated authentication.",
+            "Use a proxy Snowflake account outside the VPN, enabling client redirect for user logins."
+        ],
+        "correct_answer": [
+            "Use private connectivity from a cloud provider.",
+            "Set up SSO for federated authentication."
+        ],
+        "explanation": "\n- **✅:green[Use private connectivity from a cloud provider]** y **✅:green[Set up SSO for federated authentication]**: Ambas opciones cumplen los requisitos de seguridad y conectividad privada, permitiendo a la compañía utilizar credenciales del VDI y mantener sus cuentas de Snowflake dentro de su red corporativa.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-private-snowflake.html"
+        ]
+    },
+    {
+        "question_number": 17,
+        "question_area": "Snowflake Architecture",
+        "question": "How do Snowflake databases that are created from shares differ from standard databases that are not created from shares? (Choose three.)",
+        "answers": [
+            "Shared databases are read-only.",
+            "Shared databases must be refreshed in order for new data to be visible.",
+            "Shared databases cannot be cloned.",
+            "Shared databases are not supported by Time Travel.",
+            "Shared databases will have the PUBLIC or INFORMATION_SCHEMA schemas without explicitly granting these schemas to the share.",
+            "Shared databases can also be created as transient databases."
+        ],
+        "correct_answer": [
+            "Shared databases are read-only.",
+            "Shared databases cannot be cloned.",
+            "Shared databases are not supported by Time Travel."
+        ],
+        "explanation": "\n- **✅:green[Shared databases are read-only]** y **✅:green[Shared databases cannot be cloned]** y **✅:green[Shared databases are not supported by Time Travel]**: Las bases de datos compartidas tienen restricciones específicas en cuanto a acceso y operaciones.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-sharing-intro.html"
+        ]
+    },
+    {
+        "question_number": 18,
+        "question_area": "Data Engineering",
+        "question": "What integration object should be used to place restrictions on where data may be exported?",
+        "answers": [
+            "Stage integration",
+            "Security integration",
+            "Storage integration",
+            "API integration"
+        ],
+        "correct_answer": [
+            "Storage integration"
+        ],
+        "explanation": "\n- **✅:green[Storage integration]**: Esta opción permite a Snowflake controlar el acceso y la exportación de datos a ubicaciones específicas, restringiendo así donde los datos pueden ser exportados.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-policies.html"
+        ]
+    },
+    {
+        "question_number": 19,
+        "question_area": "Snowflake Tasks and Streams",
+        "question": "The following DDL command was used to create a task based on a stream:\n\nCREATE TASK ts_insert_new_customers\n    WAREHOUSE = MY_WH\n    Schedule = '5 minute'\nWHEN\n    System$STREAM_HAS_DATA('MYSTREAM')\nAS\n    INSERT INTO new_customers(id, name)\n    SELECT id, name\n    FROM mystream WHERE METADATA$ACTION = 'INSERT';\n\nAssuming MY_WH is set to auto_suspend – 60 and used exclusively for this task, which statement is true?",
+        "answers": [
+            "The warehouse MY_WH will be made active every five minutes to check the stream.",
+            "The warehouse MY_WH will only be active when there are results in the stream.",
+            "The warehouse MY_WH will never suspend.",
+            "The warehouse MY_WH will automatically resize to accommodate the size of the stream."
+        ],
+        "correct_answer": [
+            "The warehouse MY_WH will only be active when there are results in the stream."
+        ],
+        "explanation": "✅ The warehouse MY_WH will only be active when there are results in the stream. Con esta configuración, el almacén solo se activará cuando haya datos en el flujo, optimizando el uso de recursos.",
+        "reference": [
+            "https://docs.snowflake.com/en/sql-reference/sql/create-task"
+        ]
+    },
+    {
+        "question_number": 20,
+        "question_area": "Snowflake Connector for Kafka",
+        "question": "What is a characteristic of loading data into Snowflake using the Snowflake Connector for Kafka?",
+        "answers": [
+            "The Connector only works in Snowflake regions that use AWS infrastructure.",
+            "The Connector works with all file formats, including text, JSON, Avro, Ore, Parquet, and XML.",
+            "The Connector creates and manages its own stage, file format, and pipe objects.",
+            "Loads using the Connector will have lower latency than Snowpipe and will ingest data in real time."
+        ],
+        "correct_answer": [
+            "The Connector creates and manages its own stage, file format, and pipe objects."
+        ],
+        "explanation": "✅ La Snowflake Connector para Kafka maneja automáticamente el stage, formato de archivo y objetos de pipe para la ingesta de datos.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/kafka-connector-overview"
+        ]
+    },
+    {
+        "question_number": 21,
+        "question_area": "Data Sharing",
+        "question": "A healthcare company wants to share data with a medical institute. The institute is running a Standard edition of Snowflake; the healthcare company is running a Business Critical edition.\nHow can this data be shared?",
+        "answers": [
+            "The healthcare company will need to change the institute’s Snowflake edition in the accounts panel.",
+            "By default, sharing is supported from a Business Critical Snowflake edition to a Standard edition.",
+            "Contact Snowflake and they will execute the share request for the healthcare company.",
+            "Set the share_restriction parameter on the shared object to false."
+        ],
+        "correct_answer": [
+            "Set the share_restriction parameter on the shared object to false."
+        ],
+        "explanation": "✅ La opción correcta es establecer el parámetro 'share_restriction' en falso en el objeto compartido, permitiendo la compatibilidad de compartición entre diferentes ediciones.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/override_share_restrictions"
+        ]
+    },
+    {
+        "question_number": 22,
+        "question_area": "Cost Optimization for Kafka Connector",
+        "question": "An Architect is designing a pipeline to stream event data into Snowflake using the Snowflake Kafka connector. The Architect’s highest priority is to configure the connector to stream data in the MOST cost-effective manner.\nWhich of the following is recommended for optimizing the cost associated with the Snowflake Kafka connector?",
+        "answers": [
+            "Utilize a higher Buffer.flush.time in the connector configuration.",
+            "Utilize a higher Buffer.size.bytes in the connector configuration.",
+            "Utilize a lower Buffer.size.bytes in the connector configuration.",
+            "Utilize a lower Buffer.count.records in the connector configuration."
+        ],
+        "correct_answer": [
+            "Utilize a higher Buffer.flush.time in the connector configuration."
+        ],
+        "explanation": "✅ Configurar un 'buffer.flush.time' alto permite enviar datos con menor frecuencia, lo que optimiza costos al reducir la cantidad de llamadas a Snowflake.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/kafka-connector-config"
+        ]
+    },
+    {
+        "question_number": 23,
+        "question_area": "Environment Separation in Snowflake",
+        "question": "An Architect has chosen to separate their Snowflake Production and QA environments using two separate Snowflake accounts.\nThe QA account is intended to run and test changes on data and database objects before pushing those changes to the Production account. It is a requirement that all database objects and data in the QA account need to be an exact copy of the database objects, including privileges and data in the Production account on at least a nightly basis.\nWhich is the LEAST complex approach to use to populate the QA account with the Production account’s data and database objects on a nightly basis?",
+        "answers": [
+            "Create a share in the Production account for each database, share access to the QA account, create a database from each share, clone nightly.",
+            "Create stages in both accounts and use tasks and Snowpipe for nightly replication.",
+            "Enable replication and create replica databases in QA; clone these on a nightly basis.",
+            "Create an external function for cross-account data transfers and populate QA with a stored procedure."
+        ],
+        "correct_answer": [
+            "Enable replication and create replica databases in QA; clone these on a nightly basis."
+        ],
+        "explanation": "✅ La opción de habilitar replicación y crear bases de datos replicadas en QA, clonándolas de manera nocturna, es la más simple para cumplir con los requisitos de sincronización.",
+        "reference": [
+            "https://community.snowflake.com/s/article/How-to-Copy-a-Database-from-One-account-to-Another"
+        ]
+    },
+    {
+        "question_number": 24,
+        "question_area": "Roles and Privileges",
+        "question": "A user can change object parameters using which of the following roles?",
+        "answers": [
+            "ACCOUNTADMIN, SECURITYADMIN",
+            "SYSADMIN, SECURITYADMIN",
+            "ACCOUNTADMIN, USER with PRIVILEGE",
+            "SECURITYADMIN, USER with PRIVILEGE"
+        ],
+        "correct_answer": [
+            "ACCOUNTADMIN, SECURITYADMIN"
+        ],
+        "explanation": "✅ Los roles ACCOUNTADMIN y SECURITYADMIN pueden alterar parámetros de objetos.",
+        "reference": [
+            "https://docs.snowflake.com/en/sql-reference/parameters#object-parameters"
+        ]
+    },
+    {
+        "question_number": 25,
+        "question_area": "Data Pipeline Design",
+        "question": "A media company needs a data pipeline that will ingest customer review data into a Snowflake table, apply transformations, perform sentiment analysis with Amazon Comprehend, and make the data available publicly. The pipeline should be cost-effective and maintenance should be minimal. Which design will meet these requirements?",
+        "answers": [
+            "Ingest using COPY INTO, apply transformations, export to S3, analyze with Amazon Comprehend, re-import to Snowflake, and list on Snowflake Marketplace.",
+            "Ingest with Snowpipe, use streams and tasks, create an external function for Amazon Comprehend analysis, and list on Snowflake Marketplace.",
+            "Use Amazon EMR and Snowflake Spark connector for ingestion and transformations; use Python for Amazon Comprehend; list results on Snowflake Marketplace.",
+            "Ingest with Snowpipe, export to S3 for Amazon Comprehend, re-import to Snowflake, and list on Snowflake Marketplace."
+        ],
+        "correct_answer": [
+            "Ingest with Snowpipe, use streams and tasks, create an external function for Amazon Comprehend analysis, and list on Snowflake Marketplace."
+        ],
+        "explanation": "✅ Snowpipe permite ingesta eficiente, mientras que una función externa permite integrar Amazon Comprehend.",
+        "reference": [
+            "https://resources.snowflake.com/white-paper/snowpipe-integration"
+        ]
+    },
+    {
+        "question_number": 26,
+        "question_area": "Multi-Tenancy in Snowflake",
+        "question": "A Snowflake Architect is designing an application and tenancy strategy for an organization where strong legal isolation rules as well as multi-tenancy are requirements. Which approach will meet these requirements if Role-Based Access Policies (RBAC) is a viable option for isolating tenants?",
+        "answers": [
+            "Create accounts for each tenant in the Snowflake organization.",
+            "Create an object for each tenant strategy if row level security is viable for isolating tenants.",
+            "Create an object for each tenant strategy if row level security is not viable for isolating tenants.",
+            "Create a multi-tenant table strategy if row level security is not viable for isolating tenants."
+        ],
+        "correct_answer": [
+            "Create an object for each tenant strategy if row level security is not viable for isolating tenants."
+        ],
+        "explanation": "✅ La estrategia de objetos por inquilino permite la configuración de políticas RBAC efectivas para cumplir con los requisitos de aislamiento legal.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-access-policies"
+        ]
+    },
+    {
+        "question_number": 27,
+        "question_area": "Materialized Views",
+        "question": "Which statements describe characteristics of the use of materialized views in Snowflake? (Choose two.)",
+        "answers": [
+            "They can include ORDER BY clauses.",
+            "They cannot include nested subqueries.",
+            "They can include context functions, such as CURRENT_TIME().",
+            "They can support MIN and MAX aggregates.",
+            "They can support inner joins, but not outer joins."
+        ],
+        "correct_answer": [
+            "They cannot include nested subqueries.",
+            "They can support MIN and MAX aggregates."
+        ],
+        "explanation": "✅ Las vistas materializadas pueden soportar agregados MIN y MAX, pero no pueden incluir funciones no deterministas como CURRENT_TIME.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/views-materialized#limitations-on-creating-materialized-views"
+        ]
+    },
+    {
+        "question_number": 28,
+        "question_area": "Data Modeling",
+        "question": "The Data Engineering team at a large manufacturing company needs to engineer data coming from many sources to support a wide variety of use cases and data consumer requirements which include:\n1. Finance and Vendor Management team members who require reporting and visualization\n2. Data Science team members who require access to raw data for ML model development\n3. Sales team members who require engineered and protected data for data monetization\nWhat Snowflake data modeling approaches will meet these requirements? (Choose two.)",
+        "answers": [
+            "Consolidate data in the company’s data lake and use EXTERNAL TABLES.",
+            "Create a raw database for landing and persisting raw data entering the data pipelines.",
+            "Create a set of profile-specific databases that aligns data with usage patterns.",
+            "Create a single star schema in a single database to support all consumers’ requirements.",
+            "Create a Data Vault as the sole data pipeline endpoint and have all consumers directly access the Vault."
+        ],
+        "correct_answer": [
+            "Create a raw database for landing and persisting raw data entering the data pipelines.",
+            "Create a set of profile-specific databases that aligns data with usage patterns."
+        ],
+        "explanation": "✅ Crear una base de datos para datos sin procesar y una serie de bases de datos específicas para perfiles permite satisfacer distintos patrones de uso y necesidades de los consumidores.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-modeling"
+        ]
+    },
+    {
+        "question_number": 29,
+        "question_area": "Security and Compliance",
+        "question": "An Architect on a new project has been asked to design an architecture that meets Snowflake security, compliance, and governance requirements as follows:\n1. Use Tri-Secret Secure in Snowflake\n2. Share some information stored in a view with another Snowflake customer\n3. Hide portions of sensitive information from some columns\n4. Use zero-copy cloning to refresh the non-production environment from the production environment\nTo meet these requirements, which design elements must be implemented? (Choose three.)",
+        "answers": [
+            "Define row access policies.",
+            "Use the Business Critical edition of Snowflake.",
+            "Create a secure view.",
+            "Use the Enterprise edition of Snowflake.",
+            "Use Dynamic Data Masking.",
+            "Create a materialized view."
+        ],
+        "correct_answer": [
+            "Use the Business Critical edition of Snowflake.",
+            "Create a secure view.",
+            "Use Dynamic Data Masking."
+        ],
+        "explanation": "✅ Usar la edición Business Critical permite Tri-Secret Secure, las vistas seguras permiten compartir información de manera controlada y el enmascaramiento dinámico oculta información sensible.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-access-policies"
+        ]
+    },
+    {
+        "question_number": 30,
+        "question_area": "Row Access Policies",
+        "question": "Which of the following are characteristics of how row access policies can be applied to external tables? (Choose three.)",
+        "answers": [
+            "An external table can be created with a row access policy, and the policy can be applied to the VALUE column.",
+            "A row access policy can be applied to the VALUE column of an existing external table.",
+            "A row access policy cannot be directly added to a virtual column of an external table.",
+            "External tables are supported as mapping tables in a row access policy.",
+            "While cloning a database, both the row access policy and the external table will be cloned.",
+            "A row access policy cannot be applied to a view created on top of an external table."
+        ],
+        "correct_answer": [
+            "An external table can be created with a row access policy, and the policy can be applied to the VALUE column.",
+            "A row access policy can be applied to the VALUE column of an existing external table.",
+            "A row access policy cannot be directly added to a virtual column of an external table."
+        ],
+        "explanation": "✅ Las políticas de acceso a filas se pueden aplicar a la columna VALUE de una tabla externa, pero no se pueden aplicar directamente a columnas virtuales.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-row-intro#external-tables"
+        ]
+    },
+    {
+        "question_number": 31,
+        "question_area": "Privileges and Roles",
+        "question": "An Architect needs to allow a user to create a database from an inbound share. To meet this requirement, the user’s role must have which privileges? (Choose two.)",
+        "answers": [
+            "IMPORT SHARE;",
+            "IMPORT PRIVILEGES;",
+            "CREATE DATABASE;",
+            "CREATE SHARE;",
+            "IMPORT DATABASE;"
+        ],
+        "correct_answer": [
+            "IMPORT SHARE;",
+            "CREATE DATABASE;"
+        ],
+        "explanation": "✅ Para crear una base de datos a partir de un share entrante, el rol del usuario necesita los privilegios IMPORT SHARE y CREATE DATABASE.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-share-consumers#step-1-create-a-database-from-the-share"
+        ]
+    },
+    {
+        "question_number": 32,
+        "question_area": "Data Ingestion",
+        "question": "Files arrive in an external stage every 10 seconds from a proprietary system. The files range in size from 500 K to 3 MB. The data must be accessible by dashboards as soon as it arrives. How can a Snowflake Architect meet this requirement with the LEAST amount of coding? (Choose two.)",
+        "answers": [
+            "Use Snowpipe with auto-ingest.",
+            "Use a COPY command with a task.",
+            "Use a materialized view on an external table.",
+            "Use the COPY INTO command.",
+            "Use a combination of a task and a stream."
+        ],
+        "correct_answer": [
+            "Use Snowpipe with auto-ingest.",
+            "Use a combination of a task and a stream."
+        ],
+        "explanation": "✅ Snowpipe con auto-ingest y una combinación de task y stream permite ingesta continua de datos y hace que estén disponibles rápidamente en Snowflake.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-ingestion-snowpipe"
+        ]
+    },
+    {
+        "question_number": 33,
+        "question_area": "Data Loading",
+        "question": "When loading data into a table that captures the load time in a column with a default value of either CURRENT_TIME() or CURRENT_TIMESTAMP() what will occur?",
+        "answers": [
+            "All rows loaded using a specific COPY statement will have varying timestamps based on when the rows were inserted.",
+            "Any rows loaded using a specific COPY statement will have varying timestamps based on when the rows were read from the source.",
+            "Any rows loaded using a specific COPY statement will have varying timestamps based on when the rows were created in the source.",
+            "All rows loaded using a specific COPY statement will have the same timestamp value."
+        ],
+        "correct_answer": [
+            "All rows loaded using a specific COPY statement will have the same timestamp value."
+        ],
+        "explanation": "✅ Al cargar los datos en Snowflake, todas las filas cargadas con un mismo comando COPY tendrán el mismo valor de marca de tiempo.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-loading-considerations"
+        ]
+    },
+    {
+        "question_number": 34,
+        "question_area": "Virtual Warehouses",
+        "question": "How does a standard virtual warehouse policy work in Snowflake?",
+        "answers": [
+            "It conserves credits by keeping running clusters fully loaded rather than starting additional clusters.",
+            "It starts only if the system estimates that there is a query load that will keep the cluster busy for at least 6 minutes.",
+            "It starts only if the system estimates that there is a query load that will keep the cluster busy for at least 2 minutes.",
+            "It prevents or minimizes queuing by starting additional clusters instead of conserving credits."
+        ],
+        "correct_answer": [
+            "It prevents or minimizes queuing by starting additional clusters instead of conserving credits."
+        ],
+        "explanation": "✅ Una política estándar de warehouses en Snowflake está diseñada para minimizar la espera de consultas al iniciar clústeres adicionales cuando sea necesario.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/warehouses-overview"
+        ]
+    },
+    {
+        "question_number": 35,
+        "question_area": "Table Management",
+        "question": "Which feature provides the capability to define an alternate cluster key for a table with an existing cluster key?",
+        "answers": [
+            "External table",
+            "Materialized view",
+            "Search optimization",
+            "Result cache"
+        ],
+        "correct_answer": [
+            "Materialized view"
+        ],
+        "explanation": "✅ Las vistas materializadas permiten definir una clave de clúster alternativa para una tabla que ya tiene una clave de clúster existente.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/tables-clustering-keys"
+        ]
+    },
+    {
+        "question_number": 36,
+        "question_area": "Data Retention",
+        "question": "An Architect would like to save quarter-end financial results for the previous six years. Which Snowflake feature can the Architect use to accomplish this?",
+        "answers": [
+            "Search optimization service",
+            "Materialized view",
+            "Time Travel",
+            "Zero-copy cloning",
+            "Secure views"
+        ],
+        "correct_answer": [
+            "Zero-copy cloning"
+        ],
+        "explanation": "✅ El clonado sin copia permite preservar los datos históricos al crear versiones de datos anteriores sin duplicar almacenamiento.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-sharing-zero-copy-cloning"
+        ]
+    },
+    {
+        "question_number": 37,
+        "question_area": "Network Configuration",
+        "question": "A company is using a Snowflake account in Azure. The account has SAML SSO set up using ADFS as a SCIM identity provider. To validate Private Link connectivity, an Architect performed the following steps:\nConfirmed Private Link URLs are working by logging in with a username/password account\nVerified DNS resolution by running nslookups against Private Link URLs\nValidated connectivity using SnowCD\nDisabled public access using a network policy set to use the company’s IP address range\nHowever, the following error message is received when using SSO to log into the company account:\nIP XX.XXX.XX.XX is not allowed to access Snowflake. Contact your local security administrator.\nWhat steps should the Architect take to resolve this error and ensure that the account is accessed using only Private Link? (Choose two.)",
+        "answers": [
+            "Alter the Azure security integration to use the Private Link URLs.",
+            "Add the IP address in the error message to the allowed list in the network policy.",
+            "Generate a new SCIM access token using system$generate_scim_access_token and save it to Azure AD.",
+            "Update the configuration of the Azure AD SSO to use the Private Link URLs.",
+            "Open a case with Snowflake Support to authorize the Private Link URLs’ access to the account."
+        ],
+        "correct_answer": [
+            "Add the IP address in the error message to the allowed list in the network policy.",
+            "Update the configuration of the Azure AD SSO to use the Private Link URLs."
+        ],
+        "explanation": "✅ Al agregar la IP a la lista permitida en la política de red y actualizar la configuración de Azure AD SSO para utilizar URLs de Private Link, se garantiza el acceso solo a través de Private Link.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/network-policies"
+        ]
+    },
+    {
+        "question_number": 38,
+        "question_area": "Clustering",
+        "question": "Which steps are recommended best practices for prioritizing cluster keys in Snowflake? (Choose two.)",
+        "answers": [
+            "Choose columns that are frequently used in join predicates.",
+            "Choose lower cardinality columns to support clustering keys and cost effectiveness.",
+            "Choose TIMESTAMP columns with nanoseconds for the highest number of unique rows.",
+            "Choose cluster columns that are most actively used in selective filters.",
+            "Choose cluster columns that are actively used in the GROUP BY clauses."
+        ],
+        "correct_answer": [
+            "Choose columns that are frequently used in join predicates.",
+            "Choose cluster columns that are most actively used in selective filters."
+        ],
+        "explanation": "✅ Priorizar columnas que se usan activamente en filtros selectivos y en predicados de unión mejora la efectividad de las claves de clúster.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/tables-clustering-keys"
+        ]
+    },
+    {
+        "question_number": 39,
+        "question_area": "Data Modeling",
+        "question": "Which Snowflake data modeling approach is designed for BI queries?",
+        "answers": [
+            "3 NF",
+            "Star schema",
+            "Data Vault",
+            "Snowflake schema"
+        ],
+        "correct_answer": [
+            "Snowflake schema"
+        ],
+        "explanation": "✅ El esquema de Snowflake está diseñado para consultas de BI, especialmente en entornos donde se requieren múltiples niveles de normalización.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-modeling"
+        ]
+    },
+    {
+        "question_number": 40,
+        "question_area": "Task Scheduling",
+        "question": "How is the change of local time due to daylight savings time handled in Snowflake tasks? (Choose two.)",
+        "answers": [
+            "A task scheduled in a UTC-based schedule will have no issues with the time changes.",
+            "Task schedules can be designed to follow specified or local time zones to accommodate the time changes.",
+            "A task will move to a suspended state during the daylight savings time change.",
+            "A frequent task execution schedule like minutes may not cause a problem, but will affect the task history.",
+            "A task schedule will follow only the specified time and will fail to handle lost or duplicated hours."
+        ],
+        "correct_answer": [
+            "Task schedules can be designed to follow specified or local time zones to accommodate the time changes.",
+            "A frequent task execution schedule like minutes may not cause a problem, but will affect the task history."
+        ],
+        "explanation": "✅ Diseñar los horarios de las tareas para seguir zonas horarias locales ayuda a manejar cambios en el horario de verano, aunque la ejecución frecuente podría afectar el historial.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/tasks-intro#task-scheduling-and-daylight-saving-time"
+        ]
+    },
+    {
+        "question_number": 41,
+        "question_area": "Stored Procedures",
+        "question": "An Architect needs to grant a group of ORDER_ADMIN users the ability to clean old data in an ORDERS table (deleting all records older than 5 years), without granting any privileges on the table. The group’s manager (ORDER_MANAGER) has full DELETE privileges on the table.\nHow can the ORDER_ADMIN role be enabled to perform this data cleanup, without needing the DELETE privilege held by the ORDER_MANAGER role?",
+        "answers": [
+            "Create a stored procedure that runs with caller’s rights, including the appropriate \"> 5 years\" business logic, and grant USAGE on this procedure to ORDER_ADMIN. The ORDER_MANAGER role owns the procedure.",
+            "Create a stored procedure that can be run using both caller’s and owner’s rights (allowing the user to specify which rights are used during execution), and grant USAGE on this procedure to ORDER_ADMIN. The ORDER_MANAGER role owns the procedure.",
+            "Create a stored procedure that runs with owner’s rights, including the appropriate \"> 5 years\" business logic, and grant USAGE on this procedure to ORDER_ADMIN. The ORDER_MANAGER role owns the procedure.",
+            "This scenario would actually not be possible in Snowflake – any user performing a DELETE on a table requires the DELETE privilege to be granted to the role they are using."
+        ],
+        "correct_answer": [
+            "Create a stored procedure that runs with owner’s rights, including the appropriate \"> 5 years\" business logic, and grant USAGE on this procedure to ORDER_ADMIN. The ORDER_MANAGER role owns the procedure."
+        ],
+        "explanation": "✅ Crear un procedimiento almacenado que se ejecute con derechos del propietario permite a ORDER_ADMIN realizar la limpieza sin necesitar privilegios de eliminación.",
+        "reference": [
+            "https://docs.snowflake.com/en/sql-reference/stored-procedures-rights#choosing-between-owner-s-rights-and-caller-s-rights"
+        ]
+    },
+    {
+        "question_number": 42,
+        "question_area": "Virtual Warehouse Management",
+        "question": "A company’s daily Snowflake workload consists of a huge number of concurrent queries triggered between 9pm and 11pm. At the individual level, these queries are smaller statements that get completed within a short time period.\nWhat configuration can the company’s Architect implement to enhance the performance of this workload? (Choose two.)",
+        "answers": [
+            "Enable a multi-clustered virtual warehouse in maximized mode during the workload duration.",
+            "Set the MAX_CONCURRENCY_LEVEL to a higher value than its default value of 8 at the virtual warehouse level.",
+            "Increase the size of the virtual warehouse to size X-Large.",
+            "Reduce the amount of data that is being processed through this workload.",
+            "Set the connection timeout to a higher value than its default."
+        ],
+        "correct_answer": [
+            "Enable a multi-clustered virtual warehouse in maximized mode during the workload duration.",
+            "Set the MAX_CONCURRENCY_LEVEL to a higher value than its default value of 8 at the virtual warehouse level."
+        ],
+        "explanation": "✅ Habilitar un warehouse virtual multi-clúster en modo maximizado y aumentar MAX_CONCURRENCY_LEVEL permite mejorar el rendimiento en horarios pico.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/warehouses-multi-cluster"
+        ]
+    },
+    {
+        "question_number": 43,
+        "question_area": "System Functions",
+        "question": "Which system functions does Snowflake provide to monitor clustering information within a table? (Choose two.)",
+        "answers": [
+            "SYSTEM$CLUSTERING_INFORMATION",
+            "SYSTEM$CLUSTERING_USAGE",
+            "SYSTEM$CLUSTERING_DEPTH",
+            "SYSTEM$CLUSTERING_KEYS",
+            "SYSTEM$CLUSTERING_PERCENT"
+        ],
+        "correct_answer": [
+            "SYSTEM$CLUSTERING_INFORMATION",
+            "SYSTEM$CLUSTERING_DEPTH"
+        ],
+        "explanation": "✅ Las funciones SYSTEM$CLUSTERING_INFORMATION y SYSTEM$CLUSTERING_DEPTH proporcionan información sobre la monitorización de la agrupación dentro de una tabla.",
+        "reference": [
+            "https://docs.snowflake.com/en/sql-reference/functions/system-clustering-information"
+        ]
+    },
+    {
+        "question_number": 44,
+        "question_area": "Data Recovery",
+        "question": "A company has a table with corrupted data, named Data. The company wants to recover the data as it was 5 minutes ago using cloning and Time Travel. What command will accomplish this?",
+        "answers": [
+            "CREATE CLONE TABLE Recover_Data FROM Data AT(OFFSET => -60*5);",
+            "CREATE CLONE Recover_Data FROM Data AT(OFFSET => -60*5);",
+            "CREATE TABLE Recover_Data CLONE Data AT(OFFSET => -60*5);",
+            "CREATE TABLE Recover Data CLONE Data AT(TIME => -60*5);"
+        ],
+        "correct_answer": [
+            "CREATE TABLE Recover_Data CLONE Data AT(OFFSET => -60*5);"
+        ],
+        "explanation": "✅ El comando CREATE TABLE Recover_Data CLONE Data AT(OFFSET => -60*5); permite recuperar los datos de la tabla en su estado de hace 5 minutos utilizando el clonado y Time Travel.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-time-travel#cloning-historical-objects"
+        ]
+    },
+    {
+        "question_number": 45,
+        "question_area": "Data Sharing",
+        "question": "A company has an inbound share set up with eight tables and five secure views. The company plans to make the share part of its production data pipelines. Which actions can the company take with the inbound share? (Choose two.)",
+        "answers": [
+            "Clone a table from a share.",
+            "Grant modify permissions on the share.",
+            "Create a table from the shared database.",
+            "Create additional views inside the shared database.",
+            "Create a table stream on the shared table."
+        ],
+        "correct_answer": [
+            "Create a table from the shared database.",
+            "Create a table stream on the shared table."
+        ],
+        "explanation": "✅ Crear una tabla a partir de la base de datos compartida y crear una transmisión de tabla sobre la tabla compartida son acciones posibles con un 'inbound share'.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-sharing-intro"
+        ]
+    },
+    {
+        "question_number": 46,
+        "question_area": "Data Ingestion",
+        "question": "A company has several sites in different regions from which the company wants to ingest data. Which of the following will enable this type of data ingestion?",
+        "answers": [
+            "The company must have a Snowflake account in each cloud region to be able to ingest data to that account.",
+            "The company must replicate data between Snowflake accounts.",
+            "The company should provision a reader account to each site and ingest the data through the reader accounts.",
+            "The company should use a storage integration for the external stage."
+        ],
+        "correct_answer": [
+            "The company must have a Snowflake account in each cloud region to be able to ingest data to that account."
+        ],
+        "explanation": "✅ Para poder ingerir datos desde múltiples regiones, la compañía debe tener una cuenta de Snowflake en cada región de la nube.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-ingestion"
+        ]
+    },
+    {
+        "question_number": 47,
+        "question_area": "Data Modeling",
+        "question": "What Snowflake features should be leveraged when modeling using Data Vault?",
+        "answers": [
+            "Snowflake’s support of multi-table inserts into the data model’s Data Vault tables",
+            "Data needs to be pre-partitioned to obtain a superior data access performance",
+            "Scaling up the virtual warehouses will support parallel processing of new source loads",
+            "Snowflake’s ability to hash keys so that hash key joins can run faster than integer joins"
+        ],
+        "correct_answer": [
+            "Scaling up the virtual warehouses will support parallel processing of new source loads"
+        ],
+        "explanation": "✅ Al escalar los warehouses virtuales, se facilita el procesamiento paralelo de nuevas cargas de origen en el modelo Data Vault.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-vault"
+        ]
+    },
+    {
+        "question_number": 48,
+        "question_area": "Authentication",
+        "question": "A company’s client application supports multiple authentication methods, and is using Okta. What is the best practice recommendation for the order of priority when applications authenticate to Snowflake?",
+        "answers": [
+            "1. OAuth (either Snowflake OAuth or External OAuth)\n2. External browser\n3. Okta native authentication\n4. Key Pair Authentication, mostly used for service account users\n5. Password",
+            "1. External browser, SSO\n2. Key Pair Authentication, mostly used for development environment users\n3. Okta native authentication\n4. OAuth (either Snowflake OAuth or External OAuth)\n5. Password",
+            "1. Okta native authentication\n2. Key Pair Authentication, mostly used for production environment users\n3. Password\n4. OAuth (either Snowflake OAuth or External OAuth)\n5. External browser, SSO",
+            "1. Password\n2. Key Pair Authentication, mostly used for production environment users\n3. Okta native authentication\n4. OAuth (either Snowflake OAuth or External OAuth)\n5. External browser, SSO"
+        ],
+        "correct_answer": [
+            "1. OAuth (either Snowflake OAuth or External OAuth)\n2. External browser\n3. Okta native authentication\n4. Key Pair Authentication, mostly used for service account users\n5. Password"
+        ],
+        "explanation": "✅ La recomendación de mejores prácticas para la autenticación en Snowflake coloca primero OAuth, seguido por el navegador externo para SSO y autenticación nativa de Okta, entre otros.",
+        "reference": [
+            "https://community.snowflake.com/s/article/Snowflake-Security-Overview-and-Best-Practices"
+        ]
+    },
+    {
+        "question_number": 49,
+        "question_area": "Object Hierarchy",
+        "question": "What is a valid object hierarchy when building a Snowflake environment?",
+        "answers": [
+            "Account --> Database --> Schema --> Warehouse",
+            "Organization --> Account --> Database --> Schema --> Stage",
+            "Account --> Schema > Table --> Stage",
+            "Organization --> Account --> Stage --> Table --> View"
+        ],
+        "correct_answer": [
+            "Organization --> Account --> Database --> Schema --> Stage"
+        ],
+        "explanation": "✅ La jerarquía correcta en un entorno de Snowflake es Organización > Cuenta > Base de Datos > Esquema > Stage.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/objects-overview"
+        ]
+    },
+    {
+        "question_number": 50,
+        "question_area": "Parameter Hierarchy",
+        "question": "Which of the following are characteristics of Snowflake’s parameter hierarchy?",
+        "answers": [
+            "Session parameters override virtual warehouse parameters.",
+            "Virtual warehouse parameters override user parameters.",
+            "Table parameters override virtual warehouse parameters.",
+            "Schema parameters override account parameters."
+        ],
+        "correct_answer": [
+            "Session parameters override virtual warehouse parameters."
+        ],
+        "explanation": "✅ En la jerarquía de parámetros de Snowflake, los parámetros de sesión sobrescriben los parámetros del warehouse virtual.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/parameters"
+        ]
+    },
+    {
+        "question_number": 51,
+        "question_area": "Multi-Tenant Strategy",
+        "question": "A Snowflake Architect is designing a multi-tenant application strategy for an organization in the Snowflake Data Cloud and is considering using an Account Per Tenant strategy.\nWhich requirements will be addressed with this approach? (Choose two.)",
+        "answers": [
+            "There needs to be fewer objects per tenant.",
+            "Security and Role-Based Access Control (RBAC) policies must be simple to configure.",
+            "Compute costs must be optimized.",
+            "Tenant data shape may be unique per tenant.",
+            "Storage costs must be optimized."
+        ],
+        "correct_answer": [
+            "Security and Role-Based Access Control (RBAC) policies must be simple to configure.",
+            "Tenant data shape may be unique per tenant."
+        ],
+        "explanation": "\n- **✅:green[Security and Role-Based Access Control (RBAC) policies must be simple to configure]**: Usar una cuenta por inquilino permite una configuración de seguridad y control de acceso más sencilla.\n- **✅:green[Tenant data shape may be unique per tenant]**: La estrategia de una cuenta por inquilino permite a cada cliente personalizar la estructura de sus datos, ajustándose a sus necesidades específicas.\n- ❌:red[There needs to be fewer objects per tenant]: Aunque una cuenta por inquilino reduce la cantidad de objetos compartidos, esta no es la ventaja principal.\n- ❌:red[Compute costs must be optimized]: Esta estrategia puede incrementar los costos de cómputo al tener recursos separados por inquilino.\n- ❌:red[Storage costs must be optimized]: No reduce los costos de almacenamiento ya que cada inquilino usa almacenamiento independiente.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/multi-tenant-strategies"
+        ]
+    },
+    {
+        "question_number": 52,
+        "question_area": "Schema Cloning",
+        "question": "An Architect has been asked to clone schema STAGING as it looked one week ago, Tuesday June 1st at 8:00 AM, to recover some objects.\nThe STAGING schema has 50 days of retention.\nThe Architect runs the following statement:\n\nCREATE SCHEMA STAGING_CLONE CLONE STAGING at (timestamp => '2021-06-01 08:00:00');\n\nThe Architect receives the following error: Time travel data is not available for schema STAGING. The requested time is either beyond the allowed time travel period or before the object creation time.\n\nHow can cloning the STAGING schema be achieved?",
+        "answers": [
+            "Undrop the STAGING schema and then rerun the CLONE statement.",
+            "Modify the statement: CREATE SCHEMA STAGING_CLONE CLONE STAGING at (timestamp => '2021-05-01 10:00:00');",
+            "Rename the STAGING schema and perform an UNDROP to retrieve the previous STAGING schema version, then run the CLONE statement.",
+            "Cloning cannot be accomplished because the STAGING schema version was not active during the proposed Time Travel time period."
+        ],
+        "correct_answer": [
+            "Rename the STAGING schema and perform an UNDROP to retrieve the previous STAGING schema version, then run the CLONE statement."
+        ],
+        "explanation": "\n- **✅:green[Rename the STAGING schema and perform an UNDROP]**: La opción de renombrar y luego usar UNDROP permite la recuperación de la versión pasada de STAGING antes de clonarla.\n- ❌:red[Undrop the STAGING schema and rerun the CLONE statement]: No funcionará ya que UNDROP sin renombrar puede no restaurar la versión exacta.\n- ❌:red[Modify the statement with a different timestamp]: Cambiar la fecha a una incorrecta dará otro error.\n- ❌:red[Cloning cannot be accomplished]: Snowflake permite la recuperación de datos con las estrategias correctas.",
+        "reference": [
+            "https://docs.snowflake.com/en/sql-reference/sql/undrop.html"
+        ]
+    },
+    {
+        "question_number": 53,
+        "question_area": "Storage Integration",
+        "question": "What are purposes for creating a storage integration? (Choose three.)",
+        "answers": [
+            "Control access to Snowflake data using a master encryption key that is maintained in the cloud provider’s key management service.",
+            "Store a generated identity and access management (IAM) entity for an external cloud provider regardless of the cloud provider that hosts the Snowflake account.",
+            "Support multiple external stages using one single Snowflake object.",
+            "Avoid supplying credentials when creating a stage or when loading or unloading data.",
+            "Create private VPC endpoints that allow direct, secure connectivity between VPCs without traversing the public internet.",
+            "Manage credentials from multiple cloud providers in one single Snowflake object."
+        ],
+        "correct_answer": [
+            "Store a generated identity and access management (IAM) entity for an external cloud provider regardless of the cloud provider that hosts the Snowflake account.",
+            "Support multiple external stages using one single Snowflake object.",
+            "Avoid supplying credentials when creating a stage or when loading or unloading data."
+        ],
+        "explanation": "\n- **✅:green[Store a generated identity and access management (IAM) entity]**: Almacenar identidades de IAM permite configurar un acceso sin problemas con múltiples proveedores.\n- **✅:green[Support multiple external stages using one Snowflake object]**: Una integración de almacenamiento permite gestionar varios stages externos.\n- **✅:green[Avoid supplying credentials when creating a stage]**: La integración de almacenamiento evita la repetición de credenciales.\n- ❌:red[Control access to Snowflake data with a master encryption key]: Este control pertenece a otras características de seguridad.\n- ❌:red[Create private VPC endpoints]: Este control no es una funcionalidad de la integración de almacenamiento.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-load-storage-integrations.html"
+        ]
+    },
+    {
+        "question_number": 54,
+        "question_area": "Data Protection and Compliance",
+        "question": "A healthcare company is deploying a Snowflake account that may include Personal Health Information (PHI). The company must ensure compliance with all relevant privacy standards.\nWhich best practice recommendations will meet data protection and compliance requirements? (Choose three.)",
+        "answers": [
+            "Use, at minimum, the Business Critical edition of Snowflake.",
+            "Create Dynamic Data Masking policies and apply them to columns that contain PHI.",
+            "Use the Internal Tokenization feature to obfuscate sensitive data.",
+            "Use the External Tokenization feature to obfuscate sensitive data.",
+            "Rewrite SQL queries to eliminate projections of PHI data based on current_role().",
+            "Avoid sharing data with partner organizations."
+        ],
+        "correct_answer": [
+            "Use, at minimum, the Business Critical edition of Snowflake.",
+            "Create Dynamic Data Masking policies and apply them to columns that contain PHI.",
+            "Use the External Tokenization feature to obfuscate sensitive data."
+        ],
+        "explanation": "\n- **✅:green[Use, at minimum, the Business Critical edition of Snowflake]**: Business Critical incluye características de seguridad avanzadas.\n- **✅:green[Create Dynamic Data Masking policies]**: El enmascaramiento de datos dinámico oculta PHI en tiempo real.\n- **✅:green[Use the External Tokenization feature]**: La tokenización externa cumple con estándares de privacidad.\n- ❌:red[Internal Tokenization]: La tokenización interna no cumple con todos los requisitos de protección de PHI.\n- ❌:red[Rewrite SQL queries]: Reescribir consultas para ocultar PHI no es una solución robusta de privacidad.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-data-protection.html"
+        ]
+    },
+    {
+        "question_number": 55,
+        "question_area": "Access Control",
+        "question": "There are two databases in an account, named fin_db and hr_db which contain payroll and employee data, respectively. Accountants and Analysts in the company require different permissions on the objects in these databases to perform their jobs. Accountants need read-write access to fin_db but only require read-only access to hr_db because the database is maintained by human resources personnel.\nAn Architect needs to create a read-only role for certain employees working in the human resources department.\nWhich permission sets must be granted to this role?",
+        "answers": [
+            "USAGE on database hr_db, USAGE on all schemas in database hr_db, SELECT on all tables in database hr_db",
+            "USAGE on database hr_db, SELECT on all schemas in database hr_db, SELECT on all tables in database hr_db",
+            "MODIFY on database hr_db, USAGE on all schemas in database hr_db, USAGE on all tables in database hr_db",
+            "USAGE on database hr_db, USAGE on all schemas in database hr_db, REFERENCES on all tables in database hr_db"
+        ],
+        "correct_answer": [
+            "USAGE on database hr_db, USAGE on all schemas in database hr_db, SELECT on all tables in database hr_db"
+        ],
+        "explanation": "\n- **✅:green[USAGE on database hr_db, USAGE on schemas, SELECT on tables]**: Esta configuración otorga acceso de solo lectura a los empleados.\n- ❌:red[USAGE on database, SELECT on schemas]: SELECT no se aplica a esquemas.\n- ❌:red[MODIFY permissions]: MODIFY permite escritura, no es necesario aquí.\n- ❌:red[REFERENCES permission]: REFERENCES otorga permisos para crear FOREIGN KEYS.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-access-control.html"
+        ]
+    },
+    {
+        "question_number": 56,
+        "question_area": "Data Loading",
+        "question": "An Architect runs the following SQL query:\n\nSELECT\n    METADATA$FILENAME,\n    METADATA$FILE_ROW_NUMBER\nFROM @FILEROWS/Food_Reviews.csv (file_format=CSV_N);\n\nHow can this query be interpreted?",
+        "answers": [
+            "FILEROWS is a stage. FILE_ROW_NUMBER is line number in file.",
+            "FILEROWS is the table. FILE_ROW_NUMBER is the line number in the table.",
+            "FILEROWS is a file. FILE_ROW_NUMBER is the file format location.",
+            "FILERONS is the file format location. FILE_ROW_NUMBER is a stage."
+        ],
+        "correct_answer": [
+            "FILEROWS is a stage. FILE_ROW_NUMBER is line number in file."
+        ],
+        "explanation": "✅ FILEROWS es un stage, y FILE_ROW_NUMBER representa el número de línea en el archivo de datos staged.",
+        "reference": [
+            ""
+        ]
+    },
+    {
+        "question_number": 56,
+        "question_area": "Snowpipe",
+        "question": "A company is using Snowpipe to ingest data into a Snowflake table in near real-time. The Cloud Storage bucket configured for the Snowpipe has numerous files with a varying naming convention.\nWhat must be configured to ensure that only specific files are ingested?",
+        "answers": [
+            "A Snowpipe notification queue that filters files by naming convention.",
+            "A column in the target table to store file names so that Snowpipe can skip processed files.",
+            "A file ingestion policy in Snowflake that selects specific file names.",
+            "A custom file pattern in the Cloud Storage bucket configuration."
+        ],
+        "correct_answer": [
+            "A custom file pattern in the Cloud Storage bucket configuration."
+        ],
+        "explanation": "\n- **✅:green[A custom file pattern]**: Configurar un patrón de archivo en el bucket de almacenamiento permite seleccionar archivos específicos para Snowpipe.\n- ❌:red[Snowpipe notification queue]: No es una opción que permita filtrar archivos específicos directamente.\n- ❌:red[Column in the target table]: Las columnas en la tabla de destino no son un método de filtrado en Snowpipe.\n- ❌:red[File ingestion policy in Snowflake]: Snowflake no tiene una política específica de selección de archivos, sino que depende de los patrones definidos.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro.html"
+        ]
+    },
+    {
+        "question_number": 57,
+        "question_area": "Zero-Copy Cloning",
+        "question": "A Snowflake Architect needs to deploy a Zero-Copy Clone of a production database for testing purposes. The production database has daily Time Travel retention configured for 90 days, and the clone is only needed for a one-day test.\nWhat will happen to the clone after one day if the Architect does not drop it?",
+        "answers": [
+            "The clone will remain but without Time Travel history.",
+            "The clone will be automatically dropped after one day.",
+            "The clone will accumulate its own Time Travel data for 90 days.",
+            "The clone will share the production database's Time Travel history until manually dropped."
+        ],
+        "correct_answer": [
+            "The clone will accumulate its own Time Travel data for 90 days."
+        ],
+        "explanation": "\n- **✅:green[The clone will accumulate its own Time Travel data]**: Al clonar, se crea un historial de Time Travel independiente, y el clone mantiene su retención de 90 días por defecto.\n- ❌:red[The clone will be automatically dropped after one day]: No se elimina automáticamente.\n- ❌:red[The clone will share the production database's Time Travel]: Los clones no comparten el historial de Time Travel de la base de datos original.\n- ❌:red[The clone will remain but without Time Travel history]: El clone retendrá su propio historial de Time Travel.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/timetravel-intro.html"
+        ]
+    },
+    {
+        "question_number": 58,
+        "question_area": "Secure Data Sharing",
+        "question": "An organization is using Snowflake's Secure Data Sharing to share data with external partners. However, the data contains sensitive information, and the organization wants to restrict the visibility of some columns.\nWhat should the organization implement?",
+        "answers": [
+            "A Snowflake view with Dynamic Data Masking applied to the sensitive columns.",
+            "A separate schema with limited access for external partners.",
+            "Column-level security policies configured at the database level.",
+            "External table storage with row-level filtering."
+        ],
+        "correct_answer": [
+            "A Snowflake view with Dynamic Data Masking applied to the sensitive columns."
+        ],
+        "explanation": "\n- **✅:green[A Snowflake view with Dynamic Data Masking]**: El enmascaramiento dinámico de datos permite restringir la visibilidad de columnas sensibles en los datos compartidos.\n- ❌:red[Separate schema with limited access]: Crear un esquema separado no asegura una protección granular de las columnas sensibles.\n- ❌:red[Column-level security policies at the database level]: Actualmente, las políticas de seguridad por columna no se aplican a nivel de base de datos en Snowflake.\n- ❌:red[External table storage with row-level filtering]: El filtrado a nivel de fila no proporciona enmascaramiento específico de columnas.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/security-column-level.html"
+        ]
+    },
+    {
+        "question_number": 60,
+        "question_area": "Performance Optimization",
+        "question": "A company is storing large numbers of small JSON files (ranging from 1-4 bytes) that are received from IoT devices and sent to a cloud provider. In any given hour, 100,000 files are added to the cloud provider. What is the MOST cost-effective way to bring this data into a Snowflake table?",
+        "answers": [
+            "An external table",
+            "A pipe",
+            "A stream",
+            "A copy command at regular intervals"
+        ],
+        "correct_answer": [
+            "A pipe"
+        ],
+        "explanation": "\n- **✅:green[A pipe]**: Utilizar un 'pipe' es una solución eficiente en costo y rendimiento en Snowflake para integrar un alto volumen de pequeños archivos, ya que permite la carga continua mediante Snowpipe. \n- ❌:red[An external table]: Aunque una tabla externa permite acceder a datos de almacenamiento en la nube, no optimiza la carga incremental y regular de datos IoT. \n- ❌:red[A stream]: Los streams monitorean cambios en tablas, pero no son eficientes para la carga inicial de datos desde archivos JSON. \n- ❌:red[A copy command at regular intervals]: Un comando COPY manual podría ser efectivo, pero no es tan eficiente ni automático como un pipe para cargas continuas.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-load-snowpipe.html"
+        ]
+    },
+    {
+        "question_number": 61,
+        "question_area": "Accounts and Security",
+        "question": "A company has a Snowflake account named ACCOUNTA in AWS us-east-1 region. The company stores its marketing data in a Snowflake database named MARKET_DB. One of the company’s business partners has an account named PARTNERB in Azure East US 2 region. For marketing purposes, the company has agreed to share the database MARKET_DB with the partner account. Which of the following steps MUST be performed for the account PARTNERB to consume data from the MARKET_DB database?",
+        "answers": [
+            "Create a new account (called AZABC123) in Azure East US 2 region. From account ACCOUNTA create a share of database MARKET_DB, create a new database out of this share locally in AWS us-east-1 region, and replicate this new database to AZABC123 account. Then set up data sharing to the PARTNERB account.",
+            "From account ACCOUNTA create a share of database MARKET_DB, and create a new database out of this share locally in AWS us-east-1 region. Then make this database the provider and share it with the PARTNERB account.",
+            "Create a new account (called AZABC123) in Azure East US 2 region. From account ACCOUNTA replicate the database MARKET_DB to AZABC123 and from this account set up the data sharing to the PARTNERB account.",
+            "Create a share of database MARKET_DB, and create a new database out of this share locally in AWS us-east-1 region. Then replicate this database to the partner’s account PARTNERB."
+        ],
+        "correct_answer": [
+            "Create a new account (called AZABC123) in Azure East US 2 region. From account ACCOUNTA replicate the database MARKET_DB to AZABC123 and from this account set up the data sharing to the PARTNERB account."
+        ],
+        "explanation": "\n- **✅:green[Replicating to AZABC123 and sharing from that account]**: Para habilitar el consumo de datos entre diferentes regiones y proveedores de nube, Snowflake permite la replicación de bases de datos en una cuenta de intermediación, en este caso AZABC123, desde donde se configura la compartición hacia PARTNERB en Azure. \n- ❌:red[Creating a local database in AWS us-east-1 and sharing]: Este método no facilita el acceso directo de PARTNERB en Azure. \n- ❌:red[Creating AZABC123 but creating a share in AWS us-east-1]: Un acceso en Azure requiere que la base de datos esté disponible en la región de PARTNERB, que se logra replicando primero en AZABC123. \n- ❌:red[Replicating directly to PARTNERB]: Snowflake requiere una cuenta de intermediación en la misma región de nube antes de compartir datos entre diferentes nubes.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/data-sharing-intro.html"
+        ]
+    }
+]
+

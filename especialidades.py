@@ -185,21 +185,7 @@ elif st.session_state.page == "snowflake_pro":
     # Init user
     user = h.get_user_none()
     
-    if user is not None and "Practicar" in st.session_state.get("current_page", ""):
-        # Generar el archivo de Excel y registrar la descarga
-        csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad)
-        
-        # Mensaje de advertencia
-        st.warning("Se quedará registrado cuándo se generó este excel. Recuerda que no se puede compartir la información, puesto que es propiedad de Cívica.")
-        
-        # Botón para descargar las preguntas y ejecutar la inserción en la base de datos solo al hacer clic
-        st.download_button(
-        label="Download excel",
-        data=csv_buffer,
-        file_name=nombre_fichero,
-        on_click=lambda: jtc.insert_download_db(conn, user, numero_aleatorio),  # Usamos lambda para pasar parámetros
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+
 
     st.title("SnowPro® Core Certification")
     if st.button("Back to Main", key="back-to-main-from-snowflake"):
@@ -240,21 +226,6 @@ elif st.session_state.page == "snowflake_arch":
     # Init user
     user = h.get_user_none()
 
-    if user is not None and "Practicar" in st.session_state.get("current_page", ""):
-        # Generar el archivo de Excel y registrar la descarga
-        csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad)
-        
-        # Mensaje de advertencia
-        st.warning("Se quedará registrado cuándo se generó este excel. Recuerda que no se puede compartir la información, puesto que es propiedad de Cívica.")
-        
-        # Botón para descargar las preguntas y ejecutar la inserción en la base de datos solo al hacer clic
-        st.download_button(
-        label="Download excel",
-        data=csv_buffer,
-        file_name=nombre_fichero,
-        on_click=lambda: jtc.insert_download_db(conn, user, numero_aleatorio),  # Usamos lambda para pasar parámetros
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
     st.title("SnowPro® Advanced: Architect")
     if st.button("Back to Main", key="back-to-main-from-snowflake"):
         go_to_main()
@@ -294,21 +265,7 @@ elif st.session_state.page == "dbt":
     datos = t.get_datos(especialidad)
     # Init user
     user = h.get_user_none()
-    if user is not None and "Practicar" in st.session_state.get("current_page", ""):
-        # Generar el archivo de Excel y registrar la descarga
-        csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad)
-        
-        # Mensaje de advertencia
-        st.warning("Se quedará registrado cuándo se generó este excel. Recuerda que no se puede compartir la información, puesto que es propiedad de Cívica.")
-        
-        # Botón para descargar las preguntas y ejecutar la inserción en la base de datos solo al hacer clic
-        st.download_button(
-        label="Download excel",
-        data=csv_buffer,
-        file_name=nombre_fichero,
-        on_click=lambda: jtc.insert_download_db(conn, user, numero_aleatorio),  # Usamos lambda para pasar parámetros
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+
     st.title("dbt")
     if st.button("Back to Main", key="back-to-main-from-dbt"):
         go_to_main()
@@ -350,21 +307,7 @@ elif st.session_state.page == "google":
     datos = t.get_datos(especialidad)
     # Init user
     user = h.get_user_none()
-    if user is not None and "Practicar" in st.session_state.get("current_page", ""):
-        # Generar el archivo de Excel y registrar la descarga
-        csv_buffer, nombre_fichero,numero_aleatorio = jtc.download_excel(especialidad)
-        
-        # Mensaje de advertencia
-        st.warning("Se quedará registrado cuándo se generó este excel. Recuerda que no se puede compartir la información, puesto que es propiedad de Cívica.")
-        
-        # Botón para descargar las preguntas y ejecutar la inserción en la base de datos solo al hacer clic
-        st.download_button(
-        label="Download excel",
-        data=csv_buffer,
-        file_name=nombre_fichero,
-        on_click=lambda: jtc.insert_download_db(conn, user, numero_aleatorio),  # Usamos lambda para pasar parámetros
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+
     st.title("GCP - Google")
     if st.button("Back to Main", key="back-to-main-from-google"):
         go_to_main()
