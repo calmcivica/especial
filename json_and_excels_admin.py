@@ -35,10 +35,20 @@ def log_action(action, especialidad=None, user=None, numero_aleatorio=None):
         log_message += f" | Usuario: {user}"
     if numero_aleatorio:
         log_message += f" | Número: {numero_aleatorio}"
+    
+    # Leer mensajes existentes, agregar nuevo y ordenar
+    try:
+        with open("action_log.txt", "r") as log_file:
+            logs = log_file.readlines()
+    except FileNotFoundError:
+        logs = []
 
-    # Guardar en archivo de log
-    with open("action_log.txt", "a") as log_file:
-        log_file.write(log_message + "\n")
+    # Insertar el mensaje al principio
+    logs.insert(0, log_message + "\n")
+    
+    # Guardar el archivo con los mensajes en orden descendente
+    with open("action_log.txt", "w") as log_file:
+        log_file.writelines(logs)
     
     # Imprimir en la consola para depuración
     print(log_message)
@@ -57,7 +67,7 @@ def read_action_log():
     
 # Función para realizar un SELECT en la tabla de SQL Server
 def fetch_download_records(conn):
-    query = "SELECT * FROM [esnowflake].[dbo].excel"
+    query = "SELECT TOP 10 * FROM [esnowflake].[dbo].excel"
     cursor = conn.cursor()
     cursor.execute(query)
     records = cursor.fetchall()
@@ -329,114 +339,148 @@ def show_admin_panel():
 
     # Verificar si el usuario ya está autenticado
     if not st.session_state.get("authenticated", False):
-        with st.form("login_form"):
-            st.write("Ingrese sus credenciales para acceder al panel de administración.")
-            username = st.text_input("Usuario")
-            password = st.text_input("Contraseña", type="password")
-            login_button = st.form_submit_button("Iniciar Sesión")
+        try:
+            with st.form("login_form"):
+                st.write("Ingrese sus credenciales para acceder al panel de administración.")
+                username = st.text_input("Usuario")
+                password = st.text_input("Contraseña", type="password")
+                login_button = st.form_submit_button("Iniciar Sesión")
 
-            if login_button:
-                if username == USERNAME and password == PASSWORD:
-                    st.session_state["authenticated"] = True
-                    st.success("Autenticación exitosa.")
-                    st.rerun()
-                else:
-                    st.error("Usuario o contraseña incorrectos.")
+                if login_button:
+                    if username == USERNAME and password == PASSWORD:
+                        st.session_state["authenticated"] = True
+                        st.success("Autenticación exitosa.")
+                        st.rerun()
+                    else:
+                        st.error("Usuario o contraseña incorrectos.")
+        except Exception as e:
+            st.write(f"Hay un error en el login: {e}")
 
     if st.session_state.get("authenticated", False):
         # Desplegable para añadir preguntas
         with st.expander("❇️ Añadir preguntas"):
-            st.subheader("Subir archivo de preguntas para especialidades")
+            try:
+                st.subheader("Subir archivo de preguntas para especialidades")
 
-            especialidad = st.selectbox("Selecciona la especialidad:", ["snowflake_pro", "snowflake_arch", "dbt", "google"], key='modificar')
-            
-            uploaded_file = st.file_uploader("Sube un archivo Excel/JSON con el formato requerido", type=["xlsx", "json"])
-
-            if uploaded_file is not None:
-                if uploaded_file.name.endswith(".xlsx"):
-                    # Procesar archivo Excel
-                    new_data = process_excel_file(uploaded_file)
-                elif uploaded_file.name.endswith(".json"):
-                    # Procesar archivo JSON
-                    new_data = process_json_file(uploaded_file)
-
-                st.write("Contenido del archivo subido:")
-                st.write(new_data)
+                especialidad = st.selectbox("Selecciona la especialidad:", ["snowflake_pro", "snowflake_arch", "dbt", "google"], key='modificar')
                 
-                if st.button("Guardar en JSON (modo append)"):
-                    save_to_json_append(new_data, especialidad)
+                uploaded_file = st.file_uploader("Sube un archivo Excel/JSON con el formato requerido", type=["xlsx", "json"])
+
+                if uploaded_file is not None:
+                    if uploaded_file.name.endswith(".xlsx"):
+                        # Procesar archivo Excel
+                        new_data = process_excel_file(uploaded_file)
+                    elif uploaded_file.name.endswith(".json"):
+                        # Procesar archivo JSON
+                        new_data = process_json_file(uploaded_file)
+
+                    st.write("Contenido del archivo subido:")
+                    st.write(new_data)
+                    
+                    if st.button("Guardar en JSON (modo append)"):
+                        save_to_json_append(new_data, especialidad)
+            except Exception as e:
+                st.write(f"Hay un error en el añadir preguntas: {e}")
 
         # Desplegable para descargar archivos JSON de cada especialidad
         with st.expander("❇️ Descargar archivos JSON de especialidades"):
-            st.subheader("Descargar JSON por especialidad")
-            for esp in ["snowflake_pro", "snowflake_arch", "dbt", "google"]:
-                download_buffer, file_name, mime_type = download_specialty_json(esp)
-                if download_buffer:
-                    st.download_button(
-                        label=f"Descargar {esp}",
-                        data=download_buffer,
-                        file_name=file_name,
-                        mime=mime_type
-                    )
+            try:
+                st.subheader("Descargar JSON por especialidad")
+                for esp in ["snowflake_pro", "snowflake_arch", "dbt", "google"]:
+                    download_buffer, file_name, mime_type = download_specialty_json(esp)
+                    if download_buffer:
+                        st.download_button(
+                            label=f"Descargar {esp}",
+                            data=download_buffer,
+                            file_name=file_name,
+                            mime=mime_type
+                        )
+            except Exception as e:
+                st.write(f"Hay un error en el descargar archivos JSON: {e}")
 
         # Desplegable para subir imágenes a la carpeta 'static'
         with st.expander("❇️ Añadir imágenes a la especialidad"):
-            st.subheader("Subir imágenes para la especialidad seleccionada")
+            try:
+                st.subheader("Subir imágenes para la especialidad seleccionada")
 
-            # Seleccionar la especialidad
-            especialidad_imagen = st.selectbox("Selecciona la especialidad para añadir imágenes:", ["snowflake_pro", "snowflake_arch", "dbt", "google"], key="add_image")
+                # Seleccionar la especialidad
+                especialidad_imagen = st.selectbox("Selecciona la especialidad para añadir imágenes:", ["snowflake_pro", "snowflake_arch", "dbt", "google"], key="add_image")
 
-            # Cargar la imagen
-            uploaded_image = st.file_uploader("Sube una imagen", type=["jpg", "jpeg", "png", "gif"])
+                # Cargar la imagen
+                uploaded_image = st.file_uploader("Sube una imagen", type=["jpg", "jpeg", "png", "gif"])
 
-            # Guardar la imagen al hacer clic en el botón
-            if uploaded_image is not None:
-                if st.button("Guardar imagen"):
-                    save_image(uploaded_image, especialidad_imagen)
+                # Guardar la imagen al hacer clic en el botón
+                if uploaded_image is not None:
+                    if st.button("Guardar imagen"):
+                        save_image(uploaded_image, especialidad_imagen)
+            except Exception as e:
+                st.write(f"Hay un error en el añadir imágenes: {e}")
 
         # Expander para ver el archivo de log de acciones
         with st.expander("📜 Ver log de acciones"):
-            st.subheader("Registro de acciones")
-            logs = read_action_log()
-            for log in logs:
-                st.write(log.strip())
+            try:
+                st.subheader("Registro de acciones")
+                logs = read_action_log()
+                # Crear un contenedor con un tamaño fijo y añadir scroll
+                with st.container():
+                    st.write(
+                        "<div style='max-height: 300px; overflow-y: auto;'>"
+                        + "".join(f"<p>{log.strip()}</p>" for log in logs)
+                        + "</div>",
+                        unsafe_allow_html=True,
+                    )
+            except Exception as e:
+                st.write(f"Hay un error en el ver logs de acciones: {e}")
+
 
         # Expander para ver los registros en la tabla de SQL Server
         with st.expander("📊 Ver registros de descargas en la base de datos"):
-            st.subheader("Registros de descargas")
-            conn = h.init_connection(especialidad)
-            if conn:  # Verifica si la conexión es válida
-                download_records_df = fetch_download_records(conn)
-                st.dataframe(download_records_df)
-            else:
-                st.warning("Conexión a la base de datos no disponible.")
+            try:
+                st.subheader("Registros de descargas")
+                conn = h.init_connection(especialidad)
+                if conn:  # Verifica si la conexión es válida
+                    download_records_df = fetch_download_records(conn)
+                    st.dataframe(download_records_df)
+                else:
+                    st.warning("Conexión a la base de datos no disponible.")
+            except Exception as e:
+                st.write(f"Hay un error en el ver los registros en SQL Server: {e}")
                 
         # Desplegable para borrar preguntas
         with st.expander("⛔Borrar preguntas"):
-            st.subheader("Eliminar pregunta por número")
+            try:
+                st.subheader("Eliminar pregunta por número")
 
-            # Selección de especialidad
-            especialidad_borrar = st.selectbox("Selecciona la especialidad para borrar preguntas:", ["snowflake_pro", "snowflake_arch", "dbt", "google"])
+                # Selección de especialidad
+                especialidad_borrar = st.selectbox("Selecciona la especialidad para borrar preguntas:", ["snowflake_pro", "snowflake_arch", "dbt", "google"])
 
-            # Input para el número de la pregunta
-            question_number = st.number_input("Ingrese el question_number de la pregunta a eliminar:", min_value=1, step=1)
+                # Input para el número de la pregunta
+                question_number = st.number_input("Ingrese el question_number de la pregunta a eliminar:", min_value=1, step=1)
 
-            # Botón para ejecutar la eliminación
-            if st.button("Eliminar pregunta"):
-                delete_question_by_number(especialidad_borrar, question_number)
+                # Botón para ejecutar la eliminación
+                if st.button("Eliminar pregunta"):
+                    delete_question_by_number(especialidad_borrar, question_number)
+            except Exception as e:
+                st.write(f"Hay un error en el borrar preguntas: {e}")
 
         # Desplegable para borrar todas las preguntas de una especialidad
         with st.expander("⛔Borrar todas las preguntas de una especialidad"):
-            st.subheader("Eliminar todas las preguntas")
+            try:
+                st.subheader("Eliminar todas las preguntas")
 
-            # Selección de la especialidad a borrar
-            especialidad_borrar_todas = st.selectbox("Selecciona la especialidad para borrar todas las preguntas:", ["snowflake_pro", "snowflake_arch", "dbt", "google"], key="delete_all")
+                # Selección de la especialidad a borrar
+                especialidad_borrar_todas = st.selectbox("Selecciona la especialidad para borrar todas las preguntas:", ["snowflake_pro", "snowflake_arch", "dbt", "google"], key="delete_all")
 
-            # Botón para ejecutar la eliminación de todas las preguntas
-            if st.button("Borrar todas las preguntas"):
-                delete_all_questions(especialidad_borrar_todas)
+                # Botón para ejecutar la eliminación de todas las preguntas
+                if st.button("Borrar todas las preguntas"):
+                    delete_all_questions(especialidad_borrar_todas)
+            except Exception as e:
+                st.write(f"Error al borrar todas las preguntas: {e}")
 
         # Botón para reiniciar el contenedor Docker
         with st.expander("🔄 - Reiniciar el proyecto en Docker"):
-            if st.button("Reiniciar Docker"):
-                restart_docker_container()
+            try:
+                if st.button("Reiniciar Docker"):
+                    restart_docker_container()
+            except Exception as e:
+                st.write(f"Error al reiniciar el proyecto en Dockers: {e}")

@@ -10279,7 +10279,7 @@
     {
         "question_number": 626,
         "question_area": "Performance Concepts",
-        "question": "If queries start to queue in a multi-cluster virtual warehouse an additional compute cluster starts immediately under what setting?",
+        "question": "If queries start to queue in a multi-cluster virtual warehouse, an additional compute cluster starts immediately under what setting?",
         "answers": [
             "Auto-scale mode",
             "Maximized mode",
@@ -10287,10 +10287,12 @@
             "Standard scaling policy"
         ],
         "correct_answer": [
-            "Auto-scale mode"
+            "Standard scaling policy"
         ],
-        "explanation": "In a multi-cluster virtual warehouse, when queries start to queue, an additional compute cluster starts immediately under the 'Auto-scale' mode. This mode automatically adjusts the number of clusters based on the workload, ensuring efficient resource utilization.",
-        "reference": "https://docs.snowflake.com/en/user-guide/warehouses-multicluster.html"
+        "explanation": "\n- **✅:green[Standard scaling policy]**: En un warehouse multi-clúster, cuando las consultas empiezan a hacer cola, se puede iniciar un clúster adicional de inmediato bajo la política de escalado estándar ('Standard scaling policy'). Esta política permite que el modo de autoescalado ('Auto-scale mode') reaccione automáticamente a la carga de trabajo mediante la adición de clústeres.\n\n- **❌ Auto-scale mode**: Aunque el modo Auto-scale permite ajustar los clústeres según la carga, necesita estar acompañado de una política de escalado, y la reacción inmediata no está garantizada sin la política correcta.\n\n- **❌ Maximized mode**: El Maximized mode mantiene los clústeres en el número máximo definido, pero no asegura que se inicien nuevos clústeres en respuesta inmediata a la cola de consultas.\n\n- **❌ Economy scaling policy**: Esta política prioriza el costo por sobre la capacidad de reacción inmediata y no activa nuevos clústeres automáticamente.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/warehouses-multicluster.html"
+        ]
     },
     {
         "question_number": 627,
