@@ -7,8 +7,9 @@ import subprocess
 import random
 from io import BytesIO
 import ast
-from datetime import datetime
 import helper as h
+from datetime import datetime
+from itertools import islice
 
 # Credenciales de acceso
 USERNAME = st.secrets["admin_user"]
@@ -56,13 +57,15 @@ def log_action(action, especialidad=None, user=None, numero_aleatorio=None):
 # Función para leer el archivo de log y mostrarlo
 def read_action_log():
     try:
-        with open("action_log.txt", "r", encoding="utf-8") as log_file:
-            logs = log_file.readlines()
+        # Leer solo las primeras 50 líneas del archivo de log
+        with open("action_log.txt", "r") as log_file:
+            logs = list(islice(log_file, 50))
+        return logs
+        
     except UnicodeDecodeError:
         # Fallback to latin-1 encoding if UTF-8 fails
         with open("action_log.txt", "r", encoding="latin-1") as log_file:
-            logs = log_file.readlines()
-    
+            logs = list(islice(log_file, 50))    
     return logs if logs else ["No se ha encontrado el archivo de log o está vacío."]
     
 # Función para realizar un SELECT en la tabla de SQL Server
@@ -334,6 +337,32 @@ def save_image(uploaded_file, especialidad, user=None):
     st.success(f"La imagen '{uploaded_file.name}' ha sido guardada en la carpeta '{especialidad}'.")
     log_action(f"Imagen '{uploaded_file.name}' guardada", especialidad, user)
 
+def delete_image(image_name, especialidad, user=None):
+    # Crear la ruta de la carpeta de la especialidad en la carpeta 'static'
+    folder_path = os.path.join("static", especialidad)
+
+    # Verificar si la carpeta de la especialidad existe
+    if not os.path.exists(folder_path):
+        st.error(f"La carpeta '{especialidad}' no existe.")
+        return
+
+    # Crear la ruta completa de la imagen
+    image_path = os.path.join(folder_path, image_name)
+
+    # Verificar si la imagen existe
+    if not os.path.isfile(image_path):
+        st.error(f"La imagen '{image_name}' no se encuentra en la carpeta '{especialidad}'.")
+        return
+
+    # Borrar la imagen
+    try:
+        os.remove(image_path)
+        st.success(f"La imagen '{image_name}' ha sido eliminada de la carpeta '{especialidad}'.")
+        log_action(f"Imagen '{image_name}' eliminada", especialidad, user)
+    except Exception as e:
+        st.error(f"Error al eliminar la imagen '{image_name}': {e}")
+
+
 def show_admin_panel():
     st.header("Panel de Administración")
 
@@ -432,6 +461,36 @@ def show_admin_panel():
             except Exception as e:
                 st.write(f"Hay un error en el ver logs de acciones: {e}")
 
+        # Expander para ver el archivo de log de acciones
+        with st.expander("📜 Ver imagenes dentro log de acciones"):
+            try:
+                st.subheader("Registro de acciones")
+                logs = read_action_log()
+                selected_especialidad = st.selectbox(
+                "Selecciona la especialidad para cargar imágenes:",
+                ["snowflake_pro", "snowflake_arch", "dbt", "google"]
+            )
+                # Extraer imágenes del log
+                images_info = [
+                    (log.split("'")[1], log.split(":")[-1].strip())  # (nombre_imagen, especialidad)
+                    for log in logs if "guardada" in log and selected_especialidad in log
+                ]
+                st.warning(images_info)
+
+                if images_info:
+                    for image_name, especialidad in images_info:
+                        folder_path = os.path.join("static", especialidad)
+                        image_path = os.path.join(folder_path, image_name)
+                        if os.path.isfile(image_path):
+                            st.image(image_path, caption=f"{image_name} - {especialidad}", use_column_width=False)
+                        else:
+                            st.warning(f"No se encontró la imagen '{image_name}' en la carpeta '{especialidad}'.")
+                else:
+                    st.info(f"No se encontraron imágenes para la especialidad seleccionada: {selected_especialidad}")
+
+            except Exception as e:
+                st.write(f"Hay un error en el ver logs de acciones: {e}")
+
 
         # Expander para ver los registros en la tabla de SQL Server
         with st.expander("📊 Ver registros de descargas en la base de datos"):
@@ -445,7 +504,23 @@ def show_admin_panel():
                     st.warning("Conexión a la base de datos no disponible.")
             except Exception as e:
                 st.write(f"Hay un error en el ver los registros en SQL Server: {e}")
-                
+
+        # Desplegable para borrar imagen
+        with st.expander("⛔Borrar imagen"):
+            try:
+                st.subheader("Eliminar imagen de una pregunta por número")
+                st.write("Si es la imagen en la zona de la pregunta, escribe el número de la pregunta.\n Ej: 1. Si quieres borrar la imagen en la zona de la solución, escribe el número de la pregunta, seguido por '_sol'. Ej: 1_sol.png")
+                # Selección de especialidad
+                especialidad_borrar = st.selectbox("Selecciona la especialidad para borrar preguntas:", ["snowflake_pro", "snowflake_arch", "dbt", "google"])
+
+                # Input para el número de la pregunta
+                question_number = st.number_input("Ingrese el question_number de la pregunta a eliminar:", min_value=1, step=1)
+                question_number = str(question_number) + ".png"
+                # Botón para ejecutar la eliminación
+                if st.button("Eliminar imagen de pregunta"):
+                    delete_image(question_number, especialidad_borrar)
+            except Exception as e:
+                st.write(f"Hay un error en el borrar preguntas: {e}")                
         # Desplegable para borrar preguntas
         with st.expander("⛔Borrar preguntas"):
             try:

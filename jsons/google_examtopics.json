@@ -3182,11 +3182,15 @@
             "Enable dead-lettering on the Pub/Sub topic to capture messages that aren't successfully acknowledged. If an error occurs after deployment, re-deliver any messages captured by the dead-letter queue"
         ],
         "correct_answer": [
-            "Enable dead-lettering on the Pub/Sub topic to capture messages that aren't successfully acknowledged. If an error occurs after deployment, re-deliver any messages captured by the dead-letter queue"
+            "Create a Pub/Sub snapshot before deploying new subscriber code. Use a Seek operation to re-deliver messages that became available after the snapshot was created"
         ],
-        "explanation": "\n- **✅:green[ Enable dead-lettering on the Pub/Sub topic]**: Dead-lettering es la opción adecuada para capturar mensajes que no se procesan correctamente, asegurando que no se pierdan en caso de error después del despliegue.\n- **:red[Pub/Sub emulator]**: Útil para pruebas, pero no asegura recuperación en producción.\n- **:red[Snapshot and Seek]**: Puede ser útil, pero dead-lettering es más eficiente para este escenario.\n- **:red[Cloud Build Seek]**: Cloud Build no está diseñado para la recuperación de mensajes en Pub/Sub.",
-        "reference": "https://cloud.google.com/pubsub/docs/dead-letter-topics"
-    },
+        "explanation": "\n- **✅:green[ Create a Pub/Sub snapshot before deployment]**: Un snapshot asegura que los mensajes puedan ser restaurados si son reconocidos incorrectamente. Esto evita la pérdida de mensajes y permite recuperar el flujo de mensajes desde el punto del snapshot.\n- **:red[Pub/Sub emulator]**: Es útil para pruebas locales, pero no resuelve el problema en producción.\n- **:red[Cloud Build Seek]**: Cloud Build no está diseñado para manejar recuperación de mensajes en Pub/Sub.\n- **:red[Dead-lettering]**: No captura mensajes reconocidos por error, lo que no protege contra la pérdida de mensajes en este escenario.",
+        "reference": [
+            "https://cloud.google.com/pubsub/docs/snapshots",
+            "https://cloud.google.com/pubsub/docs/replay-overview"
+        ]
+    }
+    ,
     {
         "question_number": 171,
         "question_area": "DATA ANALYTICS",
