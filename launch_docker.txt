@@ -2,16 +2,11 @@
 docker login -u irene.lopez registry.civica-soft.com:443/
 # Construir la imagen
 docker build -t registry.civica-soft.com:443/especialidad_snowflake_app:latest -f Dockerfile .
+docker build -t registry.civica-soft.com:443/sqlonfire:latest -f Dockerfile .
 # Subir la imagen al servidor
 docker push registry.civica-soft.com:443/especialidad_snowflake_app:latest
+docker push registry.civica-soft.com:443/sqlonfire:latest
 
 # Para comprobar que se han cargado los cambios en el contenedor:
 # docker run -it --entrypoint /bin/bash registry.civica-soft.com:443/especialidad_snowflake_app:latest
 # ls
-
-# Para coger los datos que han subido desde la app
-docker start 359c6a1dcb1db4cdc4af32b05e69dad67c44b08bdd3f4fc9d05ac18d8274c5a7
-# Para las nuevas imágenes subidas
-docker cp 359c6a1dcb1db4cdc4af32b05e69dad67c44b08bdd3f4fc9d05ac18d8274c5a7:/especialidades-app/static ./ 
-# Para las nuevas preguntas
-docker cp 359c6a1dcb1db4cdc4af32b05e69dad67c44b08bdd3f4fc9d05ac18d8274c5a7:/especialidades-app/jsons ./

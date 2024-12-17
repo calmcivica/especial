@@ -2668,9 +2668,12 @@
         "correct_answer": [
             "Configure the warehouse to a multi-cluster warehouse."
         ],
-        "explanation": "In a situation where the warehouse utilization is high and consistent, configuring the warehouse to a multi-cluster configuration can help manage the load more efficiently. This allows for better performance and resource management, especially during peak usage times.",
-        "reference": "https://docs.snowflake.com/en/user-guide/warehouses-multicluster.html"
-    },
+        "explanation": "\n- **✅:green[Configure the warehouse to a multi-cluster warehouse]**: Permitir múltiples clústeres ayuda a manejar la carga alta de trabajo al agregar recursos dinámicamente, eliminando las colas de consultas.\n- **:red[Increase the warehouse size from Medium to 2XL]**: Aumentar el tamaño mejora la capacidad de un clúster, pero no resuelve problemas de concurrencia en cargas simultáneas altas.\n- **:red[Increase the value for the parameter MAX_CONCURRENCY_LEVEL]**: Esto aumenta las consultas concurrentes permitidas, pero sigue limitado por los recursos de un único clúster.\n- **:red[Lower the value of the parameter STATEMENT_QUEUED_TIMEOUT_IN_SECONDS]**: Reducir este valor haría que las consultas fallaran más rápido en lugar de resolver la congestión.",
+        "reference": [
+            "https://docs.snowflake.com/en/user-guide/warehouses-multicluster.html"
+        ]
+    }
+    ,
     {
         "question_number": 168,
         "question_area": "Account Access and Security",
@@ -3273,7 +3276,7 @@
             "Compute Credits = 200 Credits Cloud Services = 26"
         ],
         "correct_answer": [
-            "Compute Credits = 100 Credits Cloud Services = 9",
+            "Compute Credits = 50 Credits Cloud Services = 10",
             "Compute Credits = 200 Credits Cloud Services = 26"
         ],
         "explanation": "Usage for cloud services is charged only if the daily consumption of cloud services exceeds 10% of the daily usage of virtual warehouses.",
@@ -3797,7 +3800,7 @@
             "SHOW GRANTS ON ROLE MY_ROLE"
         ],
         "correct_answer": [
-            "SHOW GRANTS OF ROLE MY_ROLE"
+            "SHOW GRANTS TO ROLE MY_ROLE"
         ],
         "explanation": "The SQL statement 'SHOW GRANTS TO ROLE MY_ROLE' is used in Snowflake to determine which users and roles have access to a specified role, in this case, MY_ROLE. This statement displays the grants of privileges to the role.",
         "reference": "https://docs.snowflake.com/en/sql-reference/sql/show-grants.html"
@@ -3813,7 +3816,7 @@
             "Enterprise Edition"
         ],
         "correct_answer": [
-            "Standard Edition"
+            "Enterprise Edition"
         ],
         "explanation": "The minimum edition of Snowflake required to use SCIM (System for Cross-domain Identity Management) security integration is the Enterprise Edition. This edition provides the necessary features and capabilities to support advanced security integrations like SCIM.",
         "reference": "https://docs.snowflake.com/en/user-guide/scim-intro"
