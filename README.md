@@ -1,5 +1,5 @@
-Descargar repositorio y unirlo con git
-Para crear un entorno: python -m venv env
-Para activar el entorno:.\env\Scripts\activate
-Para instalar todos los paquetes: pip install -r .\requirements.txt
-Crear una nueva rama para empezar a hacer cambios, no hacer cambios en main
+- Descargar repositorio y unirlo con git
+- Para crear un entorno: python -m venv env
+- Para activar el entorno:.\env\Scripts\activate
+- Para instalar todos los paquetes: pip install -r .\requirements.txt
+- Crear una nueva rama para empezar a hacer cambios, no hacer cambios en main
