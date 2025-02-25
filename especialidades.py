@@ -1,15 +1,30 @@
 import streamlit as st
+import logging
+from logging.handlers import RotatingFileHandler
+import os
 
-# Launching this first to avoid the calling error
-# of more than one application in the same streamlit
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        RotatingFileHandler('app.log', maxBytes=10485760, backupCount=5),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Set page config first
 st.set_page_config(page_title="Especialidades", layout="wide")
 
+# Import dependencies after page config
 import tools as t
 import sql_especialidad.tools_sql as tsql
 import helper as h
 import json_and_excels_admin as jtc
 import pandas as pd
 
+# Constants
 PAGES = [
     "Intro 🔰",
     "Practicar 🥊",
@@ -19,80 +34,109 @@ PAGES = [
     "Chatgpt"
 ]
 
-# Creating perzonalized buttons
-sn_init_button = """
-        <style>.element-container:has(#button-after-sn) + div button {"""
-sn_init_button_2 = """
-        <style>.element-container:has(#button-after-sn_2) + div button {"""
-dbt_init_button = """
-        <style>.element-container:has(#button-after-dbt) + div button {"""
-google_init_button = """
-        <style>.element-container:has(#button-after-google) + div button {"""
-sql_init_button = """
-        <style>.element-container:has(#button-after-sql) + div button {
-"""
-button = """
+# Button styling with sanitized CSS
+BUTTON_STYLES = {
+    "snowflake": """
+        <style>.element-container:has(#button-after-sn) + div button {
             border: none;
             color: white;
             padding: 60px 60px;
             cursor: pointer;
             border-radius: 5px;
             min-width: 60%;
-            """
-sn_end_button = """background-color: #1e88e5;
-        }</style>"""
-sn_end_button_2 = """background-color: #1e88e5;
-        }</style>"""
-dbt_end_button = """background-color: #f4511e;
-        }</style>"""
-google_end_button = """background-color: #ffba03;
-        }</style>"""
-sql_end_button = """background-color: #12d519;
-        }</style>"""
+            background-color: #1e88e5;
+        }</style>
+    """,
+    "snowflake_2": """
+        <style>.element-container:has(#button-after-sn_2) + div button {
+            border: none;
+            color: white;
+            padding: 60px 60px;
+            cursor: pointer;
+            border-radius: 5px;
+            min-width: 60%;
+            background-color: #1e88e5;
+        }</style>
+    """,
+    "dbt": """
+        <style>.element-container:has(#button-after-dbt) + div button {
+            border: none;
+            color: white;
+            padding: 60px 60px;
+            cursor: pointer;
+            border-radius: 5px;
+            min-width: 60%;
+            background-color: #f4511e;
+        }</style>
+    """,
+    "google": """
+        <style>.element-container:has(#button-after-google) + div button {
+            border: none;
+            color: white;
+            padding: 60px 60px;
+            cursor: pointer;
+            border-radius: 5px;
+            min-width: 60%;
+            background-color: #ffba03;
+        }</style>
+    """,
+    "sql": """
+        <style>.element-container:has(#button-after-sql) + div button {
+            border: none;
+            color: white;
+            padding: 60px 60px;
+            cursor: pointer;
+            border-radius: 5px;
+            min-width: 60%;
+            background-color: #12d519;
+        }</style>
+    """
+}
 
-
-### Session_state to:
-
-# snowflake
+# Session state navigation functions
+def go_to_page(page_name):
+    """Generic function to navigate to different pages"""
+    st.session_state.page = page_name
+    
 def go_to_snowflake():
-    st.session_state.page = "snowflake"
-# snowflake_pro
+    go_to_page("snowflake")
+
 def go_to_snowflake_pro():
-    st.session_state.page = "snowflake_pro"
+    go_to_page("snowflake_pro")
 
 def go_to_snowflake_arch():
-    st.session_state.page = "snowflake_arch"
+    go_to_page("snowflake_arch")
 
-# dbt
 def go_to_dbt():
-    st.session_state.page = "dbt"
+    go_to_page("dbt")
 
-# google
 def go_to_google():
-    st.session_state.page = "google"
+    go_to_page("google")
 
-# sql
 def go_to_sql():
-    st.session_state.page = "sql"
+    go_to_page("sql")
 
-# sql
 def go_to_admin():
-    st.session_state.page = "ADMIN"
+    go_to_page("ADMIN")
 
-# Inicializar el estado de sesión
+def go_to_main():
+    go_to_page("main")
+
+# Initialize session state
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 if "page" not in st.session_state:
     st.session_state["page"] = "main"
+if "current_page" not in st.session_state:
+    st.session_state["current_page"] = PAGES[0]
 
-### Definig Main: ESPECIALIDADES
-def go_to_main():
+def main_page():
+    """Render the main page with certification options"""
     try:
-        # Botón de administración en la parte superior izquierda
-        st.button("ADMIN",on_click=go_to_admin)
-
-        st.session_state.page = "main"
-        # # Set a title and subtitle
+        # Admin button
+        st.button("ADMIN", on_click=go_to_admin)
+        
+        # Set title and subtitle
         st.markdown(
             "<h1 style='text-align: center;'>Especialidades</h1>",
             unsafe_allow_html=True,
@@ -101,54 +145,49 @@ def go_to_main():
             "<h3 style='text-align: center;'>¿En qué especialidad quieres volverte un máquina?</h3>",
             unsafe_allow_html=True,
         )
+        
+        # First row of options
         col1_1, col1_2, col1_3 = st.columns([1, 1, 1], gap="medium")
+        
         with col1_1:
-            sn_button_complete = str(sn_init_button + button + sn_end_button)
-            st.markdown(sn_button_complete, unsafe_allow_html=True)
+            st.markdown(BUTTON_STYLES["snowflake"], unsafe_allow_html=True)
             st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
             col1_1.button(
                 "Snowflake", on_click=go_to_snowflake, use_container_width=True
             )
+        
         with col1_2:
-            dbt_button_complete = str(dbt_init_button + button + dbt_end_button)
-            st.markdown(dbt_button_complete, unsafe_allow_html=True)
+            st.markdown(BUTTON_STYLES["dbt"], unsafe_allow_html=True)
             st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
             col1_2.button("dbt", on_click=go_to_dbt, use_container_width=True)
+        
         with col1_3:
-            dbt_button_complete = str(google_init_button + button + google_end_button)
-            st.markdown(dbt_button_complete, unsafe_allow_html=True)
+            st.markdown(BUTTON_STYLES["google"], unsafe_allow_html=True)
             st.markdown(
                 '<span id="button-after-google"></span>', unsafe_allow_html=True
             )
             col1_3.button(
                 "GCP - Google", on_click=go_to_google, use_container_width=True
             )
-        # Siguiente fila
+        
+        # Second row of options
         col2_1, col2_2, col2_3 = st.columns([1, 1, 1], gap="medium")
+        
         with col2_1:
-            sql_button_complete = str(sql_init_button + button + sql_end_button)
-            st.markdown(sql_button_complete, unsafe_allow_html=True)
+            st.markdown(BUTTON_STYLES["sql"], unsafe_allow_html=True)
             st.markdown('<span id="button-after-sql"></span>', unsafe_allow_html=True)
             col2_1.button("SQL", on_click=go_to_sql, use_container_width=True)
 
     except Exception as e:
-        st.warning("Error 1: " + str(e.args))
+        logger.error(f"Error in main page: {str(e)}", exc_info=True)
+        st.warning(f"Error: {str(e)}")
 
-
-######################################################################
-######### PAGES
-######################################################################
-## Main Page
-# Initialize MAIN if session_state is not present or to return to main
-if "page" not in st.session_state or st.session_state.page == "main":   
-    go_to_main()
-
-## Snowflake Page
-elif st.session_state.page == "snowflake":
+def render_snowflake_page():
+    """Render the Snowflake certification selection page"""
     if st.button("Back to Main", key="back-to-main-from-snowflake"):
         go_to_main()
+    
     try:
-        # # Set a title and subtitle
         st.markdown(
             "<h1 style='text-align: center;'>❄️Snowflake❄️</h1>",
             unsafe_allow_html=True,
@@ -157,217 +196,120 @@ elif st.session_state.page == "snowflake":
             "<h3 style='text-align: center;'>¿Qué certificación de Snowflake quieres?</h3>",
             unsafe_allow_html=True,
         )
+        
         col1_1, col1_2, col1_3 = st.columns([1, 1, 1], gap="medium")
+        
         with col1_1:
-            sn_button_complete = str(sn_init_button + button + sn_end_button)
-            st.markdown(sn_button_complete, unsafe_allow_html=True)
+            st.markdown(BUTTON_STYLES["snowflake"], unsafe_allow_html=True)
             st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
             col1_1.button(
                 "Snowflake Pro", on_click=go_to_snowflake_pro, use_container_width=True
             )
+        
         with col1_2:
-            sn_button_complete = str(sn_init_button_2 + button + sn_end_button_2)
-            st.markdown(sn_button_complete, unsafe_allow_html=True)
+            st.markdown(BUTTON_STYLES["snowflake_2"], unsafe_allow_html=True)
             st.markdown('<span id="button-after-sn_2"></span>', unsafe_allow_html=True)
             col1_2.button(
                 "Snowflake Arch", on_click=go_to_snowflake_arch, use_container_width=True
             )
-
+    
     except Exception as e:
-        st.warning("Error 1: " + str(e.args))
+        logger.error(f"Error in Snowflake page: {str(e)}", exc_info=True)
+        st.warning(f"Error: {str(e)}")
 
-elif st.session_state.page == "snowflake_pro":
-    especialidad = "snowflake_pro"
-    # Init connection
-    conn = h.init_connection(especialidad)
-    # Init JSON
-    datos = t.get_datos(especialidad)
-    # Init user
+def render_certification_page(certification_type):
+    """
+    Generic function to render certification study pages
+    
+    Args:
+        certification_type (str): The type of certification (snowflake_pro, snowflake_arch, dbt, google)
+    """
+    # Mapping for titles
+    titles = {
+        "snowflake_pro": "SnowPro® Core Certification",
+        "snowflake_arch": "SnowPro® Advanced: Architect",
+        "dbt": "dbt",
+        "google": "GCP - Google" 
+    }
+    
+    # Initialize database connection
+    conn = h.init_connection(certification_type)
+    
+    # Initialize data
+    datos = t.get_datos(certification_type)
+    
+    # Get user
     user = h.get_user_none()
     
-
-
-    st.title("SnowPro® Core Certification")
-    if st.button("Back to Main", key="back-to-main-from-snowflake"):
+    # Title
+    st.title(titles[certification_type])
+    
+    # Back button
+    if st.button("Back to Main", key=f"back-to-main-from-{certification_type}"):
         go_to_main()
         st.rerun()
-
-    PAGES.remove("Chatgpt")
-    # Add a way to navigate within the Snowflake page
-    current_page = st.selectbox("Choose section:", PAGES, key="current_snowflake_page")
-
-    # Update the session state for the current page in Snowflake
+    
+    # Configure pages based on certification type
+    available_pages = PAGES.copy()
+    if certification_type in ["dbt", "google"]:
+        available_pages.remove("Parreitor-3000 🤖")
+    else:
+        available_pages.remove("Chatgpt")
+    
+    # Page selection
+    current_page = st.selectbox(
+        "Choose section:", 
+        available_pages, 
+        key=f"current_{certification_type}_page"
+    )
+    
+    # Update session state
     st.session_state["current_page"] = current_page
+    
+    # Render selected page
+    try:
+        if current_page == "Intro 🔰":
+            t.comienzo(conn, certification_type)
+        elif current_page == "Practicar 🥊":
+            t.practicar(conn, datos, certification_type)
+        elif current_page == "Exámenes 📄":
+            t.examen(conn, datos, certification_type)
+        elif current_page == "Progreso 📈":
+            t.progreso(conn, datos, certification_type)
+        elif current_page == "Parreitor-3000 🤖":
+            t.parreitor(conn, certification_type)
+        elif current_page == "Chatgpt":
+            st.title("No está en funcionamiento este apartado")
+    except Exception as e:
+        logger.error(f"Error in {certification_type} {current_page} page: {str(e)}", exc_info=True)
+        st.warning(f"Error: {str(e)}")
 
-    # Execute the function based on the current_page
-    if st.session_state["current_page"] == "Intro 🔰":
-        t.comienzo(conn, especialidad)
-    elif st.session_state["current_page"] == "Practicar 🥊":
-        try:
-            t.practicar(conn, datos, especialidad)
-        except Exception as e:
-            st.warning("Error 2:  " + str(e.args))
-    elif st.session_state["current_page"] == "Exámenes 📄":
-        try:
-            t.examen(conn, datos, especialidad)
-        except Exception as e:
-            st.warning("Error 3: " + str(e.args))
-    elif st.session_state["current_page"] == "Progreso 📈":
-        t.progreso(conn, datos, especialidad)
-    elif st.session_state["current_page"] == "Parreitor-3000 🤖":
-        t.parreitor(conn, especialidad)
-
-elif st.session_state.page == "snowflake_arch":
-    especialidad = "snowflake_arch"
-    # Init connection
-    conn = h.init_connection(especialidad)
-    # Init json
-    datos = t.get_datos(especialidad)
-    # Init user
-    user = h.get_user_none()
-
-    st.title("SnowPro® Advanced: Architect")
-    if st.button("Back to Main", key="back-to-main-from-snowflake"):
-        go_to_main()
-        st.rerun()
-
-    PAGES.remove("Chatgpt")
-    # Add a way to navigate within the Snowflake page
-    current_page = st.selectbox("Choose section:", PAGES, key="current_snowflake_page")
-
-    # Update the session state for the current page in Snowflake
-    st.session_state["current_page"] = current_page
-
-    # Execute the function based on the current_page
-    if st.session_state["current_page"] == "Intro 🔰":
-        t.comienzo(conn, especialidad)
-    elif st.session_state["current_page"] == "Practicar 🥊":
-        try:
-            t.practicar(conn, datos, especialidad)
-        except Exception as e:
-            st.warning("Error 2:  " + str(e.args))
-    elif st.session_state["current_page"] == "Exámenes 📄":
-        try:
-            t.examen(conn, datos, especialidad)
-        except Exception as e:
-            st.warning("Error 3: " + str(e.args))
-    elif st.session_state["current_page"] == "Progreso 📈":
-        t.progreso(conn, datos, especialidad)
-    elif st.session_state["current_page"] == "Parreitor-3000 🤖":
-        t.parreitor(conn, especialidad)
-
-## dbt Page
-elif st.session_state.page == "dbt":
-    especialidad = "dbt"
-    # Init connection
-    conn = h.init_connection(especialidad)
-    # Init json
-    datos = t.get_datos(especialidad)
-    # Init user
-    user = h.get_user_none()
-
-    st.title("dbt")
-    if st.button("Back to Main", key="back-to-main-from-dbt"):
-        go_to_main()
-        st.rerun()
-
-    PAGES.remove("Parreitor-3000 🤖")
-    # Add a way to navigate within the dbt page
-    current_page = st.selectbox("Choose section:", PAGES, key="current_dbt_page")
-
-    # Update the session state for the current page in dbt
-    st.session_state["current_page"] = current_page
-
-    # Execute the function based on the current_page
-    if st.session_state["current_page"] == "Intro 🔰":
-        t.comienzo(conn, especialidad)
-    elif st.session_state["current_page"] == "Practicar 🥊":
-        try:
-            t.practicar(conn, datos, especialidad)
-        except Exception as e:
-            st.warning("Error 4: " + str(e.args))
-    elif st.session_state["current_page"] == "Exámenes 📄":
-        try:
-            t.examen(conn, datos, especialidad)
-        except Exception as e:
-            st.warning("Error 5: " + str(e.args))
-    elif st.session_state["current_page"] == "Progreso 📈":
-        t.progreso(conn, datos, especialidad)
-    elif st.session_state["current_page"] == "Chatgpt":
-        st.title("No está en funcionamiento este apartado")
-        # t.chatgpt(conn, especialidad)
-
-
-## Google Page
-elif st.session_state.page == "google":
-    especialidad = "google"
-    # Init connection
-    conn = h.init_connection(especialidad)
-    # Init json
-    datos = t.get_datos(especialidad)
-    # Init user
-    user = h.get_user_none()
-
-    st.title("GCP - Google")
-    if st.button("Back to Main", key="back-to-main-from-google"):
-        go_to_main()
-        st.rerun()
-
-    PAGES.remove("Parreitor-3000 🤖")
-    # Add a way to navigate within the dbt page
-    current_page = st.selectbox("Choose section:", PAGES, key="current_google_page")
-
-    # Update the session state for the current page in dbt
-    st.session_state["current_page"] = current_page
-
-    # Execute the function based on the current_page
-    if st.session_state["current_page"] == "Intro 🔰":
-        t.comienzo(conn, especialidad)
-    elif st.session_state["current_page"] == "Practicar 🥊":
-        try:
-            t.practicar(conn, datos, especialidad)
-        except Exception as e:
-            st.warning("Error 6: " + str(e.args))
-    elif st.session_state["current_page"] == "Exámenes 📄":
-        try:
-            t.examen(conn, datos, especialidad)
-        except Exception as e:
-            st.warning("Error 7: " + str(e.args))
-    elif st.session_state["current_page"] == "Progreso 📈":
-        t.progreso(conn, datos, especialidad)
-    elif st.session_state["current_page"] == "Chatgpt":
-        st.title("No está en funcionamiento este apartado")
-        # t.chatgpt(conn, especialidad)
-
-## SQL Page
-elif st.session_state.page == "sql":
+def render_sql_page():
+    """Render the SQL practice page"""
     especialidad = "sql"
-    # Init connection
     engine = h.init_connection(especialidad)
-
-    ################################################################################
-    # Create the title of the website
+    
     st.title(":bar_chart: SQL Query Comparison Tool :slot_machine:")
-    # ----------------------------------------
+    
     if st.button("Back to Main", key="back-to-main-from-sql"):
         go_to_main()
         st.rerun()
-
+    
+    # Get username
     username = t.menu(engine, especialidad)
-
-    query_temp = ""
+    
+    # Initialize session state variables
     if "input_list" not in st.session_state:
         st.session_state["input_list"] = []
     if "counter" not in st.session_state:
         st.session_state["counter"] = 0
     if "show" not in st.session_state:
         st.session_state["show"] = 0
-    option_w = "Caso_0"
-    option = "Caso 0"
-    error = ""
-    # SELECT consult from user
+    
     try:
+        # Display SQL exercises
         option_w, option = tsql.display_casos_exercises(tsql.date_control(engine))
+        
         if option_w is not None:
             with st.expander(f"¿Cómo es el {option_w}? 🤔"):
                 st.info(
@@ -377,42 +319,65 @@ elif st.session_state.page == "sql":
                     "Ejemplo de consulta: SELECT * FROM CASE01.MENU;  ->  Como puedes ver todos los casos se nombran como 'CASE0' y el número que sea del caso."
                 )
                 st.image(f"./sql_especialidad/images/{option_w}.png")
+        
         if option is not None:
             st.divider()
             tsql.enunciado(engine, option)
-
-        # When exercise is select:
-        if option:
-            tsql.do_you_need("Temporary table", engine)
-            tsql.do_you_need("Function", engine)
-            tsql.do_you_need("Procedure", engine)
-            st.divider()
-            query1 = st.text_area("Enter SQL SELECT Query:", height=300)
-
-            col1, col2 = st.columns([1, 1], gap="medium")
-            with col1:
-                # User result
-                if st.button("Show result"):
-                    tsql.show_result_1()
-            with col2:
-                # Compare queries
-                if st.button("Compare YOUR SOLUTION", on_click=tsql.counter_add_1):
-                    tsql.show_result_2()
-            # Only user result
-            if st.session_state["show"] == 1:
-                tsql.show_tables(engine, query1, option, False, username)
-            # Compare solution with the user
-            if st.session_state["show"] == 2:
-                tsql.show_tables(engine, query1, option, True, username)
+            
+            # When exercise is selected
+            if option:
+                tsql.do_you_need("Temporary table", engine)
+                tsql.do_you_need("Function", engine)
+                tsql.do_you_need("Procedure", engine)
+                st.divider()
+                
+                query1 = st.text_area("Enter SQL SELECT Query:", height=300)
+                
+                col1, col2 = st.columns([1, 1], gap="medium")
+                with col1:
+                    # User result
+                    if st.button("Show result"):
+                        tsql.show_result_1()
+                with col2:
+                    # Compare queries
+                    if st.button("Compare YOUR SOLUTION", on_click=tsql.counter_add_1):
+                        tsql.show_result_2()
+                
+                # Only user result
+                if st.session_state["show"] == 1:
+                    tsql.show_tables(engine, query1, option, False, username)
+                
+                # Compare solution with the user
+                if st.session_state["show"] == 2:
+                    tsql.show_tables(engine, query1, option, True, username)
+    
     except Exception as e:
-        st.error(str(e.args))
+        logger.error(f"Error in SQL page: {str(e)}", exc_info=True)
+        st.error(str(e))
 
-#####################################
-# Página de administración
-elif st.session_state.page == "ADMIN":
+def render_admin_page():
+    """Render the admin panel"""
     jtc.show_admin_panel()
-
-    # Botón para regresar a la página principal
+    
+    # Button to return to main page
     if st.button("Volver a la página principal"):
         go_to_main()
         st.rerun()
+
+# Main application flow
+if "page" not in st.session_state or st.session_state.page == "main":
+    main_page()
+elif st.session_state.page == "snowflake":
+    render_snowflake_page()
+elif st.session_state.page == "snowflake_pro":
+    render_certification_page("snowflake_pro")
+elif st.session_state.page == "snowflake_arch":
+    render_certification_page("snowflake_arch")
+elif st.session_state.page == "dbt":
+    render_certification_page("dbt")
+elif st.session_state.page == "google":
+    render_certification_page("google")
+elif st.session_state.page == "sql":
+    render_sql_page()
+elif st.session_state.page == "ADMIN":
+    render_admin_page()
