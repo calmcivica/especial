@@ -35,3 +35,103 @@ Traceback (most recent call last):
   File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 63, in init_users
     st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)
 AttributeError: module 'helper' has no attribute 'recharge_user_list'
+2025-03-04 09:43:51,353 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:43:51,364 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:43:55,580 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:43:55,605 - tools - ERROR - Error in practice page: module 'helper' has no attribute 'orden_preguntas'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 355, in practicar
+    h.orden_preguntas(question_set)
+AttributeError: module 'helper' has no attribute 'orden_preguntas'
+2025-03-04 09:45:49,069 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:45:49,087 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:45:51,412 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:45:51,436 - tools - ERROR - Error in practice page: module 'helper' has no attribute 'orden_preguntas'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 355, in practicar
+    h.orden_preguntas(question_set)
+AttributeError: module 'helper' has no attribute 'orden_preguntas'
+2025-03-04 09:52:24,539 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:52:24,548 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:52:27,055 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:52:27,070 - tools - ERROR - Error in practice page: module 'helper' has no attribute 'orden_preguntas'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 355, in practicar
+    h.orden_preguntas(question_set)
+AttributeError: module 'helper' has no attribute 'orden_preguntas'
+2025-03-04 09:53:44,568 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:53:44,581 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:53:47,427 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 09:53:47,452 - tools - ERROR - Error in practice page: module 'helper' has no attribute 'setexam'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 360, in practicar
+    h.setexam(
+AttributeError: module 'helper' has no attribute 'setexam'
+2025-03-04 11:11:39,153 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 11:11:39,164 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 11:11:42,326 - helper_functions - ERROR - Error recharging user list: 'Engine' object has no attribute 'cursor'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper_functions.py", line 34, in recharge_user_list
+    cursor = conn.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+2025-03-04 11:11:42,347 - tools - ERROR - Error in practice page: module 'helper' has no attribute 'setexam'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 360, in practicar
+    h.setexam(
+AttributeError: module 'helper' has no attribute 'setexam'

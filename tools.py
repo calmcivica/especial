@@ -61,7 +61,7 @@ def init_users(conn, es_sql=False):
     """
     h.get_user_none()
     if "lista_plana" not in st.session_state:
-        st.session_state["lista_plana"] = hf.recharge_user_list(conn, es_sql)
+        st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)
 
 def menu(conn, especialidad):
     """
@@ -116,7 +116,7 @@ def menu(conn, especialidad):
             try:
                 # Update user list if needed
                 if st.session_state.get("user") not in st.session_state.get("lista_plana", []):
-                    st.session_state["lista_plana"] = hf.recharge_user_list(conn, es_sql)
+                    st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)
                 
                 # Find index of current user
                 indice = None

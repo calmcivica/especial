@@ -40,8 +40,8 @@ def snow_docs(question: str) -> str:
     Remember to always talk consult the doc in English!
     """
     index_name = 'snow'
-    pinecone.init(api_key="d52ba2c8-6470-4475-88ea-5de9cf2f4d12", environment="gcp-starter")
-    pineconedb = Pinecone.from_existing_index('snow', embeddings)
+    pinecone.init(api_key=os.getenv("PINECONE_API_KEY"), environment=os.getenv("PINECONE_ENVIRONMENT", "gcp-starter"))
+    pineconedb = Pinecone.from_existing_index(os.getenv("PINECONE_INDEX", "snow"), embeddings)
     resultados = pineconedb.similarity_search_with_score(query=question, k=4)
 
     return str(resultados)
