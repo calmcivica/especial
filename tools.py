@@ -90,14 +90,18 @@ def menu(conn, especialidad):
                     )
                 else:
                     if not es_sql:
-                        cursor = conn.cursor()
-                        cursor.execute(
-                            "SELECT rango FROM [esnowflake].[dbo].Dim_Users WHERE name = ?",
-                            (st.session_state['user'],)
+                        # Use cached query with SQLAlchemy engine
+                        result = h.execute_query(
+                            conn,
+                            "SELECT rango FROM [esnowflake].[dbo].Dim_Users WHERE name = :username",
+                            {"username": st.session_state['user']},
+                            fetch_all=False,
+                            as_dict=True,
+                            use_cache=True
                         )
-                        rango_v = cursor.fetchall()
-                        if rango_v:
-                            rango = rango_v[0][0]
+                        
+                        if result:
+                            rango = result.get("rango", "")
                             emoji_map = {
                                 "Iniciado": "🤓",
                                 "Padawan": "🤠",
@@ -127,16 +131,17 @@ def menu(conn, especialidad):
                 useri = st.selectbox(
                     "User name:", 
                     st.session_state.get("lista_plana", []), 
-                    index=indice
+                    index=indice,
+                    key=f"user_select_{especialidad}"
                 )
                 st.session_state["user"] = useri
                 
                 # New user creation
                 if st.session_state.get("user") is None:
-                    new_user = st.text_input("Or enter a new username:")
+                    new_user = st.text_input("Or enter a new username:", key=f"new_user_{especialidad}")
                     if new_user:
                         if new_user not in st.session_state.get("lista_plana", []):
-                            if st.button("Add new user"):
+                            if st.button("Add new user", key=f"add_user_btn_{especialidad}"):
                                 hf.new_user(conn, new_user, "message", es_sql)
                                 useri = st.session_state["user"]
                         else:
@@ -157,7 +162,7 @@ def menu(conn, especialidad):
 
                 if st.session_state.get("user"):
                     # Reset user button
-                    reset_clicked = st.button("Reset user")
+                    reset_clicked = st.button("Reset user", key=f"reset_user_{especialidad}")
                     if reset_clicked:
                         st.session_state["count_reset"] += 1
                         st.write(
@@ -172,7 +177,7 @@ def menu(conn, especialidad):
                             st.rerun()
 
                     # Delete user button
-                    delete_clicked = st.button("Delete user")
+                    delete_clicked = st.button("Delete user", key=f"delete_user_{especialidad}")
                     if delete_clicked:
                         st.session_state["count_delete"] += 1
                         st.write(
@@ -237,7 +242,7 @@ def practicar(conn, datos, especialidad):
         if "exam_mode" not in st.session_state:
             st.session_state["exam_mode"] = ""
             
-        # Display usage information
+        # Display usage information with a collapsible expander
         with st.expander("¿Cómo podría usar esta sección? 🤔"):
             st.markdown(getattr(c, f"USO_SECCION_{especialidad.upper()}"))
             
@@ -259,116 +264,60 @@ def practicar(conn, datos, especialidad):
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 )
 
-        # Filters and questions columns
-        filtros, preguntas = st.columns([1, 3], gap="large")
-        
-        # Filters section
-        with filtros:
-            st.subheader("Filtros")
+        # Add a container to reduce UI reloads
+        with st.container():
+            # Filters and questions columns
+            filtros, preguntas = st.columns([1, 3], gap="large")
             
-            # Question range slider
-            values = st.slider(
-                "Seleccione rango de preguntas en el que practicar",
-                0,
-                len(datos),
-                (0, len(datos)),
-                step=1,
-            )
-
-            # Section selection
-            secciones = st.multiselect(
-                "¿Qué secciones quieres tocar?",
-                getattr(c, f"SECCIONES_{especialidad.upper()}"),
-            )
-
-            # Other filters
-            option = st.multiselect(
-                "Otros filtros",
-                ["Todas", "Sin hacer", "Falladas en exámenes", "Falladas en práctica"],
-            )
-
-            # Apply range filter
-            preguntas_filtradas = [
-                item for item in datos if values[0] <= item["question_number"] <= values[1]
-            ]
-            
-            # Apply section filter
-            if "Todas" not in secciones and secciones:
-                preguntas_filtradas = [
-                    item
-                    for item in preguntas_filtradas
-                    if any(area in secciones for area in item["question_area"])
-                ]
-
-            # Get question history
-            if user:
-                cursor = conn.cursor()
-                cursor.execute(
-                    "EXEC GetQuestionHistory @user=?",
-                    (user,)
-                )
-                aux_opcion = cursor.fetchall()
-
-                no_hechas = []
-                opcion_examen_falsas = []
-                opcion_practicas_falsas = []
-
-                # Process filter options
-                if "Falladas en exámenes" in option and aux_opcion[0][1]:
-                    opcion_examen_falsas = list(ast.literal_eval(aux_opcion[0][1]))
-
-                if "Falladas en práctica" in option and aux_opcion[0][2]:
-                    opcion_practicas_falsas = list(ast.literal_eval(aux_opcion[0][2]))
-
-                if "Sin hacer" in option:
-                    hechas = aux_opcion[0][0]
-                    if hechas:
-                        hechas_lista = ast.literal_eval(hechas)
-                        hechas_int = [int(num) for num in list(hechas_lista)]
-                        no_hechas = [
-                            item["question_number"]
-                            for item in preguntas_filtradas
-                            if item["question_number"] not in hechas_int
-                        ]
-
-                # Combine filter options
-                opcion_final = list(
-                    set(no_hechas + opcion_examen_falsas + opcion_practicas_falsas)
-                )
-
-                # Apply combined filter if not "All"
-                if "Todas" not in option and option:
-                    preguntas_filtradas = [
-                        item
-                        for item in preguntas_filtradas
-                        if item["question_number"] in opcion_final
-                    ]
-
-            # Get question numbers
-            question_set = [item["question_number"] for item in preguntas_filtradas]
-
-            # Initialize session state for question set
-            if "question_set" not in st.session_state:
-                st.session_state["question_set"] = question_set
-
-            # Update question ordering
-            h.orden_preguntas(question_set)
-            
-        # Questions section
-        with preguntas:
-            if st.session_state["question_set"]:
-                h.setexam(
-                    st.session_state["question_set"],
-                    datos,
-                    "practicar",
-                    conn,
-                    user,
+            # Filters section
+            with filtros:
+                st.subheader("Filtros")
+                
+                # Use helper function with optimized filtering and caching
+                preguntas_filtradas = h.filtros(
                     especialidad,
+                    datos, 
+                    conn, 
+                    user,
+                    es_examen=False
                 )
-            else:
-                st.write(
-                    "No hay ninguna pregunta que cuadre con los filtros que has puesto"
-                )
+                
+                # Get question numbers
+                question_set = [item["question_number"] for item in preguntas_filtradas]
+                
+                # Store in session state with a refresh mechanism
+                if "question_set" not in st.session_state or st.session_state.get("refresh_questions", False):
+                    st.session_state["question_set"] = question_set
+                    st.session_state["refresh_questions"] = False
+                
+                # Add button to randomize order
+                if st.button("Randomizar preguntas", key="randomize_btn"):
+                    st.session_state["question_set"] = h.orden_preguntas(question_set.copy())
+                    st.rerun()
+                
+            # Questions section inside a container to reduce UI reloads
+            with preguntas:
+                if st.session_state.get("question_set", []):
+                    # Display a progress bar
+                    if "current_question" in st.session_state:
+                        question_count = len(st.session_state["question_set"])
+                        if question_count > 0:
+                            current_idx = min(st.session_state["current_question"], question_count-1)
+                            current_progress = min(current_idx / max(1, question_count), 1.0)
+                            
+                            st.progress(current_progress, text=f"Pregunta {current_idx + 1} de {question_count}")
+                    
+                    # Use enhanced setexam function with unique keys per question
+                    h.setexam(
+                        st.session_state["question_set"],
+                        datos,
+                        "practicar",
+                        conn,
+                        user,
+                        especialidad,
+                    )
+                else:
+                    st.warning("No hay ninguna pregunta que cuadre con los filtros que has puesto")
     except Exception as e:
         logger.error(f"Error in practice page: {str(e)}", exc_info=True)
         st.warning(f"Error: {str(e)}")
@@ -445,6 +394,7 @@ def examen(conn, datos, especialidad):
                                 use_container_width=True,
                                 on_click=h.aux_exam,
                                 args=("empezar", exam_duration, None),
+                                key="start_exam_button"
                             )
         
         # Exam taking mode
@@ -467,12 +417,14 @@ def examen(conn, datos, especialidad):
                 # Get exam info
                 exam_duration = st.session_state["exam_duration"]
                 
-                cursor = conn.cursor()
-                cursor.execute(
-                    "SELECT COALESCE(MAX(id_exam), 1) FROM [esnowflake].[dbo].FACT_EXAMS WHERE user_nickname = ?",
-                    (user,)
+                # Use optimized query execution
+                result = h.execute_query(
+                    conn,
+                    "SELECT COALESCE(MAX(id_exam), 1) FROM [esnowflake].[dbo].FACT_EXAMS WHERE user_nickname = :username",
+                    {"username": user},
+                    fetch_all=False
                 )
-                exam_id = cursor.fetchone()[0]
+                exam_id = result[0] if result else 1
                 
                 # Initialize review set
                 st.session_state["review_set"] = []
@@ -542,51 +494,66 @@ def examen(conn, datos, especialidad):
                 try:
                     aux_exam_insert = st.session_state.get("aux_exam_insert", 0)
                     if aux_exam_insert:
-                        # Update exam record
-                        cursor = conn.cursor()
-                        cursor.execute(
+                        # Update exam record with transaction
+                        h.execute_non_query(
+                            conn,
                             """
                             UPDATE [esnowflake].[dbo].FACT_EXAMS 
                             SET 
                                 end_time = CURRENT_TIMESTAMP,
-                                number_of_questions = ?,
-                                number_of_failed_questions = ?,
-                                number_of_correct_questions = ?
-                            WHERE id_exam = ?
+                                number_of_questions = :num_questions,
+                                number_of_failed_questions = :failed,
+                                number_of_correct_questions = :correct
+                            WHERE id_exam = :exam_id
                             """,
-                            (len(filtered_answers)-1, preguntas_falladas, preguntas_acertadas, exam_id)
+                            {
+                                "num_questions": len(filtered_answers),
+                                "failed": preguntas_falladas,
+                                "correct": preguntas_acertadas,
+                                "exam_id": exam_id
+                            }
                         )
                         
-                        # Insert answer records
+                        # Insert answer records in a batch using SQLAlchemy
                         if values_list:
-                            cursor.executemany(
-                                """
-                                INSERT INTO [esnowflake].[dbo].Fact_Answers 
-                                (question_id, user_nickname, type, exam_id, is_correct, is_answered, ANSWER_TIMESTAMP) 
-                                VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-                                """,
-                                values_list
-                            )
-                        conn.commit()
+                            # Using helper function for better transaction management
+                            for values in values_list:
+                                h.execute_non_query(
+                                    conn,
+                                    """
+                                    INSERT INTO [esnowflake].[dbo].Fact_Answers 
+                                    (question_id, user_nickname, type, exam_id, is_correct, is_answered, ANSWER_TIMESTAMP) 
+                                    VALUES (:question_id, :username, :type, :exam_id, :is_correct, :is_answered, CURRENT_TIMESTAMP)
+                                    """,
+                                    {
+                                        "question_id": values[0],
+                                        "username": values[1],
+                                        "type": values[2],
+                                        "exam_id": values[3],
+                                        "is_correct": values[4],
+                                        "is_answered": values[5]
+                                    }
+                                )
                         
                     # Reset flag
                     if "aux_exam_insert" in st.session_state:
                         st.session_state["aux_exam_insert"] = 0
                 except Exception as e:
                     logger.error(f"Error saving exam results: {str(e)}", exc_info=True)
-                    st.write(f"An error occurred while saving results: {str(e)}")
+                    st.error(f"An error occurred while saving results: {str(e)}")
                 
                 # Get failed questions
                 failed = [answer for answer in filtered_answers if answer["result"] == 0]
                 
-                # Get exam time
-                cursor.execute(
-                    "SELECT DATEDIFF(SECOND, start_time, end_time) FROM [esnowflake].[dbo].FACT_EXAMS WHERE id_exam = ?",
-                    (exam_id,)
+                # Get exam time using optimized query
+                result = h.execute_query(
+                    conn,
+                    "SELECT DATEDIFF(SECOND, start_time, end_time) FROM [esnowflake].[dbo].FACT_EXAMS WHERE id_exam = :exam_id",
+                    {"exam_id": exam_id},
+                    fetch_all=False
                 )
-                tiempo_v = cursor.fetchone()
                 
-                tiempo = tiempo_v[0] if tiempo_v else 0
+                tiempo = result[0] if result and result[0] else 0
                 minutos = tiempo // 60
                 segundos = tiempo % 60
                 tiempo_formato = f"{minutos} minutos y {segundos} segundos"
@@ -662,6 +629,7 @@ def examen(conn, datos, especialidad):
                         use_container_width=True,
                         on_click=h.aux_exam,
                         args=("Inicio", None, None),
+                        key="back_to_start_btn"
                     )
             except Exception as e:
                 logger.error(f"Error displaying exam results: {str(e)}", exc_info=True)
@@ -693,24 +661,25 @@ def progreso(conn, datos, especialidad):
             with progress_tab:
                 st.subheader("Avance por secciones")
             
-            # Get question history
-            cursor = conn.cursor()
-            cursor.execute(
+            # Get question history using optimized query
+            result = h.execute_query(
+                conn,
                 """
                 SELECT 
                     question_id, is_correct, is_answered, 
                     CAST(answer_timestamp AS date) AS Fecha 
                 FROM [esnowflake].[dbo].FACT_ANSWERS 
-                WHERE user_nickname = ? 
+                WHERE user_nickname = :username
                 ORDER BY answer_timestamp DESC
                 """,
-                (user,)
+                {"username": user},
+                fetch_all=True,
+                use_cache=True
             )
-            questions_info = cursor.fetchall()
             
             # Convert to DataFrame
             df = pd.DataFrame(
-                questions_info, 
+                result, 
                 columns=["question_id", "is_correct", "is_answered", "Fecha"]
             )
             
@@ -871,24 +840,26 @@ def progreso(conn, datos, especialidad):
                 with exams:
                     st.subheader("Historial de exámenes")
                     
-                    # Get exam data
-                    cursor.execute(
+                    # Get exam data using optimized query
+                    results = h.execute_query(
+                        conn,
                         """
                         SELECT TOP 6 
                             id_exam, start_time, duration_minutes,
                             number_of_questions, number_of_correct_questions,
                             number_of_failed_questions
                         FROM [esnowflake].[dbo].FACT_EXAMS
-                        WHERE user_nickname = ?
+                        WHERE user_nickname = :username
                         ORDER BY start_time DESC
                         """,
-                        (user,)
+                        {"username": user},
+                        fetch_all=True,
+                        use_cache=True
                     )
-                    exam_info = cursor.fetchall()
                     
                     # Convert to DataFrame
                     df_exams = pd.DataFrame(
-                        exam_info,
+                        results,
                         columns=[
                             "id_exam", "start_time", "duration_minutes",
                             "number_of_questions", "number_of_correct_questions",

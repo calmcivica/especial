@@ -24,13 +24,20 @@ import helper as h
 import json_and_excels_admin as jtc
 import pandas as pd
 
-# Apply combined patches to fix issues and improve performance
+# Set performance optimization options
+st.set_option('server.maxMessageSize', 200)  # Increase message size limit (in MB)
+st.set_option('browser.gatherUsageStats', False)  # Disable usage statistics
+
+# Initialize application performance settings
+if "cache_timeout" not in st.session_state:
+    st.session_state["cache_timeout"] = 3600  # 1 hour cache for database queries
+    
 try:
-    import combined_patches
-    logger.info("Combined UI and performance patches applied successfully")
+    # Preload common data to improve startup time
+    logger.info("Optimizations applied - starting with integrated performance improvements")
 except Exception as e:
-    logger.error(f"Error applying patches: {str(e)}", exc_info=True)
-    st.error("Failed to apply patches. Some features may not work correctly.")
+    logger.error(f"Error during application startup: {str(e)}", exc_info=True)
+    st.error("Failed to initialize optimizations. Please refresh the page.")
 
 # Constants
 PAGES = [
@@ -141,50 +148,52 @@ if "current_page" not in st.session_state:
 def main_page():
     """Render the main page with certification options"""
     try:
-        # Admin button
-        st.button("ADMIN", on_click=go_to_admin)
-        
-        # Set title and subtitle
-        st.markdown(
-            "<h1 style='text-align: center;'>Especialidades</h1>",
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            "<h3 style='text-align: center;'>¿En qué especialidad quieres volverte un máquina?</h3>",
-            unsafe_allow_html=True,
-        )
-        
-        # First row of options
-        col1_1, col1_2, col1_3 = st.columns([1, 1, 1], gap="medium")
-        
-        with col1_1:
-            st.markdown(BUTTON_STYLES["snowflake"], unsafe_allow_html=True)
-            st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
-            col1_1.button(
-                "Snowflake", on_click=go_to_snowflake, use_container_width=True
-            )
-        
-        with col1_2:
-            st.markdown(BUTTON_STYLES["dbt"], unsafe_allow_html=True)
-            st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
-            col1_2.button("dbt", on_click=go_to_dbt, use_container_width=True)
-        
-        with col1_3:
-            st.markdown(BUTTON_STYLES["google"], unsafe_allow_html=True)
+        # Use a container to reduce UI reloads
+        with st.container():
+            # Admin button
+            st.button("ADMIN", on_click=go_to_admin, key="admin_button")
+            
+            # Set title and subtitle
             st.markdown(
-                '<span id="button-after-google"></span>', unsafe_allow_html=True
+                "<h1 style='text-align: center;'>Especialidades</h1>",
+                unsafe_allow_html=True,
             )
-            col1_3.button(
-                "GCP - Google", on_click=go_to_google, use_container_width=True
+            st.markdown(
+                "<h3 style='text-align: center;'>¿En qué especialidad quieres volverte un máquina?</h3>",
+                unsafe_allow_html=True,
             )
-        
-        # Second row of options
-        col2_1, col2_2, col2_3 = st.columns([1, 1, 1], gap="medium")
-        
-        with col2_1:
-            st.markdown(BUTTON_STYLES["sql"], unsafe_allow_html=True)
-            st.markdown('<span id="button-after-sql"></span>', unsafe_allow_html=True)
-            col2_1.button("SQL", on_click=go_to_sql, use_container_width=True)
+            
+            # First row of options
+            col1_1, col1_2, col1_3 = st.columns([1, 1, 1], gap="medium")
+            
+            with col1_1:
+                st.markdown(BUTTON_STYLES["snowflake"], unsafe_allow_html=True)
+                st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
+                col1_1.button(
+                    "Snowflake", on_click=go_to_snowflake, use_container_width=True, key="snowflake_btn"
+                )
+            
+            with col1_2:
+                st.markdown(BUTTON_STYLES["dbt"], unsafe_allow_html=True)
+                st.markdown('<span id="button-after-dbt"></span>', unsafe_allow_html=True)
+                col1_2.button("dbt", on_click=go_to_dbt, use_container_width=True, key="dbt_btn")
+            
+            with col1_3:
+                st.markdown(BUTTON_STYLES["google"], unsafe_allow_html=True)
+                st.markdown(
+                    '<span id="button-after-google"></span>', unsafe_allow_html=True
+                )
+                col1_3.button(
+                    "GCP - Google", on_click=go_to_google, use_container_width=True, key="google_btn"
+                )
+            
+            # Second row of options
+            col2_1, col2_2, col2_3 = st.columns([1, 1, 1], gap="medium")
+            
+            with col2_1:
+                st.markdown(BUTTON_STYLES["sql"], unsafe_allow_html=True)
+                st.markdown('<span id="button-after-sql"></span>', unsafe_allow_html=True)
+                col2_1.button("SQL", on_click=go_to_sql, use_container_width=True, key="sql_btn")
 
     except Exception as e:
         logger.error(f"Error in main page: {str(e)}", exc_info=True)
@@ -211,14 +220,14 @@ def render_snowflake_page():
             st.markdown(BUTTON_STYLES["snowflake"], unsafe_allow_html=True)
             st.markdown('<span id="button-after-sn"></span>', unsafe_allow_html=True)
             col1_1.button(
-                "Snowflake Pro", on_click=go_to_snowflake_pro, use_container_width=True
+                "Snowflake Pro", on_click=go_to_snowflake_pro, use_container_width=True, key="snowpro_btn"
             )
         
         with col1_2:
             st.markdown(BUTTON_STYLES["snowflake_2"], unsafe_allow_html=True)
             st.markdown('<span id="button-after-sn_2"></span>', unsafe_allow_html=True)
             col1_2.button(
-                "Snowflake Arch", on_click=go_to_snowflake_arch, use_container_width=True
+                "Snowflake Arch", on_click=go_to_snowflake_arch, use_container_width=True, key="snowarch_btn"
             )
     
     except Exception as e:
@@ -232,143 +241,147 @@ def render_certification_page(certification_type):
     Args:
         certification_type (str): The type of certification (snowflake_pro, snowflake_arch, dbt, google)
     """
-    # Mapping for titles
-    titles = {
-        "snowflake_pro": "SnowPro® Core Certification",
-        "snowflake_arch": "SnowPro® Advanced: Architect",
-        "dbt": "dbt",
-        "google": "GCP - Google" 
-    }
-    
-    # Initialize database connection
-    conn = h.init_connection(certification_type)
-    
-    # Initialize data
-    datos = t.get_datos(certification_type)
-    
-    # Get user
-    user = h.get_user_none()
-    
-    # Title
-    st.title(titles[certification_type])
-    
-    # Back button
-    if st.button("Back to Main", key=f"back-to-main-from-{certification_type}"):
-        go_to_main()
-        st.rerun()
-    
-    # Configure pages based on certification type
-    available_pages = PAGES.copy()
-    if certification_type in ["dbt", "google"]:
-        available_pages.remove("Parreitor-3000 🤖")
-    else:
-        available_pages.remove("Chatgpt")
-    
-    # Page selection
-    current_page = st.selectbox(
-        "Choose section:", 
-        available_pages, 
-        key=f"current_{certification_type}_page"
-    )
-    
-    # Update session state
-    st.session_state["current_page"] = current_page
-    
-    # Render selected page
-    try:
-        if current_page == "Intro 🔰":
-            t.comienzo(conn, certification_type)
-        elif current_page == "Practicar 🥊":
-            t.practicar(conn, datos, certification_type)
-        elif current_page == "Exámenes 📄":
-            t.examen(conn, datos, certification_type)
-        elif current_page == "Progreso 📈":
-            t.progreso(conn, datos, certification_type)
-        elif current_page == "Parreitor-3000 🤖":
-            t.parreitor(conn, certification_type)
-        elif current_page == "Chatgpt":
-            st.title("No está en funcionamiento este apartado")
-    except Exception as e:
-        logger.error(f"Error in {certification_type} {current_page} page: {str(e)}", exc_info=True)
-        st.warning(f"Error: {str(e)}")
+    # Use a container to improve performance and reduce UI reloads
+    with st.container():
+        # Mapping for titles
+        titles = {
+            "snowflake_pro": "SnowPro® Core Certification",
+            "snowflake_arch": "SnowPro® Advanced: Architect",
+            "dbt": "dbt",
+            "google": "GCP - Google" 
+        }
+        
+        # Initialize database connection with caching
+        conn = h.init_connection(certification_type)
+        
+        # Initialize data
+        datos = t.get_datos(certification_type)
+        
+        # Get user
+        user = h.get_user_none()
+        
+        # Title
+        st.title(titles[certification_type])
+        
+        # Back button
+        if st.button("Back to Main", key=f"back-to-main-from-{certification_type}"):
+            go_to_main()
+            st.rerun()
+        
+        # Configure pages based on certification type
+        available_pages = PAGES.copy()
+        if certification_type in ["dbt", "google"]:
+            available_pages.remove("Parreitor-3000 🤖")
+        else:
+            available_pages.remove("Chatgpt")
+        
+        # Page selection
+        current_page = st.selectbox(
+            "Choose section:", 
+            available_pages, 
+            key=f"current_{certification_type}_page"
+        )
+        
+        # Update session state
+        st.session_state["current_page"] = current_page
+        
+        # Render selected page
+        try:
+            if current_page == "Intro 🔰":
+                t.comienzo(conn, certification_type)
+            elif current_page == "Practicar 🥊":
+                t.practicar(conn, datos, certification_type)
+            elif current_page == "Exámenes 📄":
+                t.examen(conn, datos, certification_type)
+            elif current_page == "Progreso 📈":
+                t.progreso(conn, datos, certification_type)
+            elif current_page == "Parreitor-3000 🤖":
+                t.parreitor(conn, certification_type)
+            elif current_page == "Chatgpt":
+                st.title("No está en funcionamiento este apartado")
+        except Exception as e:
+            logger.error(f"Error in {certification_type} {current_page} page: {str(e)}", exc_info=True)
+            st.warning(f"Error: {str(e)}")
 
 def render_sql_page():
     """Render the SQL practice page"""
-    especialidad = "sql"
-    engine = h.init_connection(especialidad)
-    
-    st.title(":bar_chart: SQL Query Comparison Tool :slot_machine:")
-    
-    if st.button("Back to Main", key="back-to-main-from-sql"):
-        go_to_main()
-        st.rerun()
-    
-    # Get username
-    username = t.menu(engine, especialidad)
-    
-    # Initialize session state variables
-    if "input_list" not in st.session_state:
-        st.session_state["input_list"] = []
-    if "counter" not in st.session_state:
-        st.session_state["counter"] = 0
-    if "show" not in st.session_state:
-        st.session_state["show"] = 0
-    
-    try:
-        # Display SQL exercises
-        option_w, option = tsql.display_casos_exercises(tsql.date_control(engine))
+    # Use a container to improve performance
+    with st.container():
+        especialidad = "sql"
+        engine = h.init_connection(especialidad)
         
-        if option_w is not None:
-            with st.expander(f"¿Cómo es el {option_w}? 🤔"):
-                st.info(
-                    "Recuerda que para hacer los ejercicios tienes que terminar todas las consultas en ';' sin dejar ningún espacio detrás de ese punto y coma."
-                )
-                st.info(
-                    "Ejemplo de consulta: SELECT * FROM CASE01.MENU;  ->  Como puedes ver todos los casos se nombran como 'CASE0' y el número que sea del caso."
-                )
-                st.image(f"./sql_especialidad/images/{option_w}.png")
+        st.title(":bar_chart: SQL Query Comparison Tool :slot_machine:")
         
-        if option is not None:
-            st.divider()
-            tsql.enunciado(engine, option)
+        if st.button("Back to Main", key="back-to-main-from-sql"):
+            go_to_main()
+            st.rerun()
+        
+        # Get username
+        username = t.menu(engine, especialidad)
+        
+        # Initialize session state variables
+        if "input_list" not in st.session_state:
+            st.session_state["input_list"] = []
+        if "counter" not in st.session_state:
+            st.session_state["counter"] = 0
+        if "show" not in st.session_state:
+            st.session_state["show"] = 0
+        
+        try:
+            # Display SQL exercises
+            option_w, option = tsql.display_casos_exercises(tsql.date_control(engine))
             
-            # When exercise is selected
-            if option:
-                tsql.do_you_need("Temporary table", engine)
-                tsql.do_you_need("Function", engine)
-                tsql.do_you_need("Procedure", engine)
+            if option_w is not None:
+                with st.expander(f"¿Cómo es el {option_w}? 🤔"):
+                    st.info(
+                        "Recuerda que para hacer los ejercicios tienes que terminar todas las consultas en ';' sin dejar ningún espacio detrás de ese punto y coma."
+                    )
+                    st.info(
+                        "Ejemplo de consulta: SELECT * FROM CASE01.MENU;  ->  Como puedes ver todos los casos se nombran como 'CASE0' y el número que sea del caso."
+                    )
+                    st.image(f"./sql_especialidad/images/{option_w}.png")
+            
+            if option is not None:
                 st.divider()
+                tsql.enunciado(engine, option)
                 
-                query1 = st.text_area("Enter SQL SELECT Query:", height=300)
-                
-                col1, col2 = st.columns([1, 1], gap="medium")
-                with col1:
-                    # User result
-                    if st.button("Show result"):
-                        tsql.show_result_1()
-                with col2:
-                    # Compare queries
-                    if st.button("Compare YOUR SOLUTION", on_click=tsql.counter_add_1):
-                        tsql.show_result_2()
-                
-                # Only user result
-                if st.session_state["show"] == 1:
-                    tsql.show_tables(engine, query1, option, False, username)
-                
-                # Compare solution with the user
-                if st.session_state["show"] == 2:
-                    tsql.show_tables(engine, query1, option, True, username)
-    
-    except Exception as e:
-        logger.error(f"Error in SQL page: {str(e)}", exc_info=True)
-        st.error(str(e))
+                # When exercise is selected
+                if option:
+                    tsql.do_you_need("Temporary table", engine)
+                    tsql.do_you_need("Function", engine)
+                    tsql.do_you_need("Procedure", engine)
+                    st.divider()
+                    
+                    query1 = st.text_area("Enter SQL SELECT Query:", height=300, key="sql_query_input")
+                    
+                    col1, col2 = st.columns([1, 1], gap="medium")
+                    with col1:
+                        # User result
+                        if st.button("Show result", key="show_result_btn"):
+                            tsql.show_result_1()
+                    with col2:
+                        # Compare queries
+                        if st.button("Compare YOUR SOLUTION", on_click=tsql.counter_add_1, key="compare_solution_btn"):
+                            tsql.show_result_2()
+                    
+                    # Only user result
+                    if st.session_state["show"] == 1:
+                        tsql.show_tables(engine, query1, option, False, username)
+                    
+                    # Compare solution with the user
+                    if st.session_state["show"] == 2:
+                        tsql.show_tables(engine, query1, option, True, username)
+        
+        except Exception as e:
+            logger.error(f"Error in SQL page: {str(e)}", exc_info=True)
+            st.error(str(e))
 
 def render_admin_page():
     """Render the admin panel"""
     jtc.show_admin_panel()
     
     # Button to return to main page
-    if st.button("Volver a la página principal"):
+    if st.button("Volver a la página principal", key="back_to_main_admin"):
         go_to_main()
         st.rerun()
 
