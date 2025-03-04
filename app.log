@@ -1,0 +1,37 @@
+2025-03-04 08:40:53,011 - helper - ERROR - Error recharging user list: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]La conexión está ocupada con los resultados de otro comando (0) (SQLExecDirectW)')
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper.py", line 140, in recharge_user_list
+    user_list_v = conn.cursor().execute(query).fetchall()
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]La conexión está ocupada con los resultados de otro comando (0) (SQLExecDirectW)')
+2025-03-04 08:40:53,024 - helper - ERROR - Error recharging user list: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]La conexión está ocupada con los resultados de otro comando (0) (SQLExecDirectW)')
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\helper.py", line 140, in recharge_user_list
+    user_list_v = conn.cursor().execute(query).fetchall()
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]La conexión está ocupada con los resultados de otro comando (0) (SQLExecDirectW)')
+2025-03-04 09:30:22,784 - tools - ERROR - Error in introduction page: module 'helper' has no attribute 'recharge_user_list'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 214, in comienzo
+    menu(conn, especialidad)
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 80, in menu
+    init_users(conn, es_sql)
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 63, in init_users
+    st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)
+AttributeError: module 'helper' has no attribute 'recharge_user_list'
+2025-03-04 09:30:32,228 - tools - ERROR - Error in practice page: module 'helper' has no attribute 'recharge_user_list'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 232, in practicar
+    menu(conn, especialidad)
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 80, in menu
+    init_users(conn, es_sql)
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 63, in init_users
+    st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)
+AttributeError: module 'helper' has no attribute 'recharge_user_list'
+2025-03-04 09:30:52,238 - tools - ERROR - Error in introduction page: module 'helper' has no attribute 'recharge_user_list'
+Traceback (most recent call last):
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 214, in comienzo
+    menu(conn, especialidad)
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 80, in menu
+    init_users(conn, es_sql)
+  File "C:\Users\carlos.alemany\OneDrive - civica-soft.com\Documentos\new especialidades\especialidades-app\tools.py", line 63, in init_users
+    st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)
+AttributeError: module 'helper' has no attribute 'recharge_user_list'

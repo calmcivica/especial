@@ -1,3 +1,4 @@
+import helper_functions as hf
 import time
 import logging
 import streamlit as st
@@ -12,6 +13,7 @@ import pandas as pd
 import os
 import json_and_excels_admin as jtc
 from openai import OpenAI
+import gamification as gamify
 from typing import Dict, List, Any, Optional, Union
 
 # Configure logging
@@ -59,7 +61,7 @@ def init_users(conn, es_sql=False):
     """
     h.get_user_none()
     if "lista_plana" not in st.session_state:
-        st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)
+        st.session_state["lista_plana"] = hf.recharge_user_list(conn, es_sql)
 
 def menu(conn, especialidad):
     """
@@ -114,7 +116,7 @@ def menu(conn, especialidad):
             try:
                 # Update user list if needed
                 if st.session_state.get("user") not in st.session_state.get("lista_plana", []):
-                    st.session_state["lista_plana"] = h.recharge_user_list(conn, es_sql)
+                    st.session_state["lista_plana"] = hf.recharge_user_list(conn, es_sql)
                 
                 # Find index of current user
                 indice = None
@@ -135,7 +137,7 @@ def menu(conn, especialidad):
                     if new_user:
                         if new_user not in st.session_state.get("lista_plana", []):
                             if st.button("Add new user"):
-                                h.new_user(conn, new_user, "message", es_sql)
+                                hf.new_user(conn, new_user, "message", es_sql)
                                 useri = st.session_state["user"]
                         else:
                             st.error("Username already exists.")
@@ -162,7 +164,7 @@ def menu(conn, especialidad):
                             ":red[Are you sure? Click again if you want to reset your user]"
                         )
                         if st.session_state["count_reset"] >= 2:
-                            h.reset_delete_user(conn, useri, False, es_sql)
+                            hf.reset_delete_user(conn, useri, False, es_sql)
                             useri = st.session_state["user"]
                             st.success(f"User {useri} reset successfully.")
                             st.session_state["count_reset"] = 0
@@ -177,7 +179,7 @@ def menu(conn, especialidad):
                             ":red[Are you sure? Click again if you want to delete your user]"
                         )
                         if st.session_state["count_delete"] >= 2:
-                            h.reset_delete_user(conn, useri, True, es_sql)
+                            hf.reset_delete_user(conn, useri, True, es_sql)
                             useri = None
                             time.sleep(1)
                             st.rerun()
@@ -685,7 +687,11 @@ def progreso(conn, datos, especialidad):
         if user is None:
             st.write("Elige tu usuario para ver tu progreso")
         else:
-            st.subheader("Avance por secciones")
+            # Create tabs for different progress sections
+            progress_tab, gamification_tab = st.tabs(["Progreso de Estudio", "Gamificación"])
+            
+            with progress_tab:
+                st.subheader("Avance por secciones")
             
             # Get question history
             cursor = conn.cursor()
@@ -961,6 +967,12 @@ def progreso(conn, datos, especialidad):
                                         st.success("APROBADO")
                                     else:
                                         st.error("SUSPENSO")
+            
+            # Display gamification tab content
+            with gamification_tab:
+                # Display gamification features
+                is_sql = (especialidad == "sql")
+                gamify.gamification_tab(conn, user, is_sql)
     except Exception as e:
         logger.error(f"Error in progress page: {str(e)}", exc_info=True)
         st.error(f"Error: {str(e)}")
