@@ -16,28 +16,31 @@ def recharge_user_list(conn, es_sql=False):
     Get the list of users from the database.
     
     Args:
-        conn: Database connection
+        conn: Database connection (either pyodbc connection or SQLAlchemy engine)
         es_sql (bool): Whether this is for SQL specialization
         
     Returns:
         List[str]: List of usernames
     """
     try:
-        if es_sql:
-            # For SQLAlchemy connection
+        # Check if connection is SQLAlchemy engine
+        if hasattr(conn, 'connect'):  # SQLAlchemy Engine
             with conn.connect() as connection:
-                query = "SELECT username FROM [dbo].Dim_Users ORDER BY username"
+                if es_sql:
+                    query = "SELECT username FROM [dbo].Dim_Users ORDER BY username"
+                else:
+                    query = "SELECT name FROM [esnowflake].[dbo].Dim_Users ORDER BY name"
                 result = connection.execute(text(query))
-                lista_plana = [row[0] for row in result.fetchall()]
-        else:
-            # For pyodbc connection
+                return [row[0] for row in result.fetchall()]
+        else:  # pyodbc connection
             cursor = conn.cursor()
-            query = "SELECT name FROM [esnowflake].[dbo].Dim_Users ORDER BY name"
+            if es_sql:
+                query = "SELECT username FROM [dbo].Dim_Users ORDER BY username"
+            else:
+                query = "SELECT name FROM [esnowflake].[dbo].Dim_Users ORDER BY name"
             cursor.execute(query)
             user_list_v = cursor.fetchall()
-            lista_plana = [item[0] for item in user_list_v]
-        
-        return lista_plana
+            return [item[0] for item in user_list_v]
     except Exception as e:
         logger.error(f"Error recharging user list: {str(e)}", exc_info=True)
         return []
@@ -53,21 +56,31 @@ def new_user(conn, new_user, message=None, es_sql=False):
         es_sql (bool): Whether this is for SQL specialization
     """
     try:
-        if es_sql:
-            # For SQLAlchemy connection
+        if hasattr(conn, 'connect'):  # SQLAlchemy Engine
             with conn.connect() as connection:
                 with connection.begin():
-                    connection.execute(
-                        text("INSERT INTO [dbo].Dim_Users (username) VALUES (:username)"),
-                        {'username': new_user}
-                    )
-        else:
-            # For pyodbc connection
+                    if es_sql:
+                        connection.execute(
+                            text("INSERT INTO [dbo].Dim_Users (username) VALUES (:username)"),
+                            {'username': new_user}
+                        )
+                    else:
+                        connection.execute(
+                            text("INSERT INTO [esnowflake].[dbo].Dim_Users (name, rango) VALUES (:name, :rango)"),
+                            {'name': new_user, 'rango': 'Iniciado'}
+                        )
+        else:  # pyodbc connection
             cursor = conn.cursor()
-            cursor.execute(
-                "INSERT INTO [esnowflake].[dbo].Dim_Users (name, rango) VALUES (?, ?)",
-                (new_user, 'Iniciado')
-            )
+            if es_sql:
+                cursor.execute(
+                    "INSERT INTO [dbo].Dim_Users (username) VALUES (?)",
+                    (new_user,)
+                )
+            else:
+                cursor.execute(
+                    "INSERT INTO [esnowflake].[dbo].Dim_Users (name, rango) VALUES (?, ?)",
+                    (new_user, 'Iniciado')
+                )
             conn.commit()
 
         if message:
@@ -98,33 +111,59 @@ def reset_delete_user(conn, useri, delete, es_sql=False):
     action = 'delete' if delete else 'reset'
     
     try:
-        if es_sql:
-            # For SQLAlchemy connection
+        if hasattr(conn, 'connect'):  # SQLAlchemy Engine
             with conn.connect() as connection:
                 with connection.begin():
-                    connection.execute(
-                        text("DELETE FROM [dbo].Dim_Users WHERE username = :username"),
-                        {'username': useri}
-                    )
-                    connection.execute(
-                        text("DELETE FROM [dbo].Fact_Answers WHERE username = :username"),
-                        {'username': useri}
-                    )
-        else:
-            # For pyodbc connection
+                    if es_sql:
+                        connection.execute(
+                            text("DELETE FROM [dbo].Fact_Answers WHERE username = :username"),
+                            {'username': useri}
+                        )
+                        if delete:
+                            connection.execute(
+                                text("DELETE FROM [dbo].Dim_Users WHERE username = :username"),
+                                {'username': useri}
+                            )
+                    else:
+                        connection.execute(
+                            text("DELETE FROM [esnowflake].[dbo].FACT_ANSWERS WHERE user_nickname = :username"),
+                            {'username': useri}
+                        )
+                        connection.execute(
+                            text("DELETE FROM [esnowflake].[dbo].FACT_EXAMS WHERE user_nickname = :username"),
+                            {'username': useri}
+                        )
+                        if delete:
+                            connection.execute(
+                                text("DELETE FROM [esnowflake].[dbo].Dim_Users WHERE name = :username"),
+                                {'username': useri}
+                            )
+        else:  # pyodbc connection
             cursor = conn.cursor()
-            cursor.execute(
-                "DELETE FROM [esnowflake].[dbo].Dim_Users WHERE name = ?",
-                (useri,)
-            )
-            cursor.execute(
-                "DELETE FROM [esnowflake].[dbo].FACT_ANSWERS WHERE user_nickname = ?",
-                (useri,)
-            )
-            cursor.execute(
-                "DELETE FROM [esnowflake].[dbo].FACT_EXAMS WHERE user_nickname = ?",
-                (useri,)
-            )
+            if es_sql:
+                cursor.execute(
+                    "DELETE FROM [dbo].Fact_Answers WHERE username = ?",
+                    (useri,)
+                )
+                if delete:
+                    cursor.execute(
+                        "DELETE FROM [dbo].Dim_Users WHERE username = ?",
+                        (useri,)
+                    )
+            else:
+                cursor.execute(
+                    "DELETE FROM [esnowflake].[dbo].FACT_ANSWERS WHERE user_nickname = ?",
+                    (useri,)
+                )
+                cursor.execute(
+                    "DELETE FROM [esnowflake].[dbo].FACT_EXAMS WHERE user_nickname = ?",
+                    (useri,)
+                )
+                if delete:
+                    cursor.execute(
+                        "DELETE FROM [esnowflake].[dbo].Dim_Users WHERE name = ?",
+                        (useri,)
+                    )
             conn.commit()
         
         st.success("Action completed!")

@@ -24,6 +24,14 @@ import helper as h
 import json_and_excels_admin as jtc
 import pandas as pd
 
+# Apply combined patches to fix issues and improve performance
+try:
+    import combined_patches
+    logger.info("Combined UI and performance patches applied successfully")
+except Exception as e:
+    logger.error(f"Error applying patches: {str(e)}", exc_info=True)
+    st.error("Failed to apply patches. Some features may not work correctly.")
+
 # Constants
 PAGES = [
     "Intro 🔰",
